@@ -29,6 +29,8 @@ export default function App() {
     const images = cacheImages([
       "https://images.unsplash.com/photo-1592194850468-e42df770454b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60",
       require("./assets/splash.png"),
+      require("./assets/food1.jpg"),
+      require("./assets/food2.jpg"),
     ]);
     const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
     return Promise.all([...images, ...fonts]);

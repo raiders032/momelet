@@ -6,9 +6,9 @@ import AsyncStorage from "@react-native-community/async-storage";
 import * as Location from "expo-location";
 import Test from "../Test";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-console.log(WIDTH, HEIGHT);
+
 export default () => {
-  const [restaurant, setRestaurant] = useState({
+  const [restaurantLoading, setRestaurantLoading] = useState({
     loading: true,
     restaurant: [],
   });
@@ -23,12 +23,7 @@ export default () => {
         37.553292,
         126.9125836
       );
-      setRestaurant({ loading: false, restaurant: response.data });
-
-      // setTimeout(async () => {
-      //   await setRestaurant({ loading: false, restaurant: [] });
-      //   console.log(restaurant);
-      // }, 5000);
+      setRestaurantLoading({ restaurant: response.data });
     } catch (e) {
       console.error("error In HomeContainer", e);
     }
@@ -36,20 +31,25 @@ export default () => {
 
   useEffect(() => {
     getUserRestaurant();
+    return setRestaurantLoading((before) => ({
+      loading: true,
+      restaurant: before.restaurant,
+    }));
   }, []);
 
-  return restaurant.loading ? (
+  return restaurantLoading.loading ? (
     <Test style={[styles.container]} />
   ) : (
-    <HomePresenter style={[styles.container]} />
+    <HomePresenter
+      restaurants={restaurantLoading.restaurant}
+      style={[styles.container]}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: WIDTH / 1.2,
-    height: HEIGHT / 1.2,
-
-    borderRadius: 50,
+    width: WIDTH,
+    height: HEIGHT,
   },
 });
