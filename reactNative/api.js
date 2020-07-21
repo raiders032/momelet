@@ -11,5 +11,7 @@ const makeRequest = (path, config) => {
 };
 export const apis = {
   getRestaurant: (latitude, longitude) =>
-    makeRequest(`/restaurant`, { params: { latitude, longitude } }),
+    makeRequest(`/restaurant`, {
+      params: { latitude, longitude, radius: 0.1 },
+    }),
 };

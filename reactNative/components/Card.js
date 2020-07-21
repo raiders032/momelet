@@ -49,7 +49,7 @@ export default ({ restaurant }) => {
   };
   return (
     <>
-      <Text>hello</Text>
+      <Text>hekki</Text>
       <View
         style={{
           flex: 1,
@@ -85,7 +85,7 @@ export default ({ restaurant }) => {
                 borderTopLeftRadius: 50,
                 borderTopRightRadius: 50,
               }}
-              source={require("../assets/food1.jpg")}
+              source={require("../assets/food2.jpg")}
             />
           </Animated.View>
           <Animated.View
@@ -106,7 +106,7 @@ export default ({ restaurant }) => {
                 borderTopLeftRadius: 50,
                 borderTopRightRadius: 50,
               }}
-              source={require("../assets/food2.jpg")}
+              source={{ uri: restaurant.thumUrl }}
             />
           </Animated.View>
           <TouchableOpacity
@@ -126,7 +126,9 @@ export default ({ restaurant }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ flex: 1, backgroundColor: "red" }}></View>
+        <View style={{ flex: 1, backgroundColor: "red" }}>
+          <Text>{restaurant.name}</Text>
+        </View>
       </View>
     </>
   );
