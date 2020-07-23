@@ -11,23 +11,9 @@ import {
 import Card from "../../components/Card";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 export default ({ restaurants, style }) => {
-  // restaurants.map((res) => {
-  //   console.log(res.name);
-  // });
-  // let tenRestaurants = [];
-  // for (let i = 0; i < 10; i++) {
-  //   tenRestaurants.push(<Card key={i} restaurant={restaurants[i]} />);
-  // }
   const [topIndex, setTopIndex] = useState(0);
   const [restaurantArray, setRestaurantArray] = useState(restaurants);
   const nextCard = () => setTopIndex((currentValue) => currentValue + 1);
-  // const nextCard = () => {
-  //   setRestaurantArray((currentValue) => {
-  //     const abc = currentValue.slice(0, -1);
-  //     console.log("Abc", restaurantArray.length);
-  //     return [...abc];
-  //   });
-  // };
   const position = new Animated.ValueXY();
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -78,70 +64,75 @@ export default ({ restaurants, style }) => {
     extrapolate: "clamp",
   });
   return (
-    <View style={[{ width: "100%", height: "100%" }, styles.cardContainer]}>
-      {restaurantArray.map((obj, index) => {
-        if (index < topIndex) {
-          return null;
-        }
+    <View style={[styles.Container]}>
+      <Text style={{ ...styles.category }}>내 정보</Text>
+      <View style={[styles.CardContainer]}>
+        {restaurantArray.map((obj, index) => {
+          if (index < topIndex) {
+            return null;
+          }
 
-        if (index === topIndex) {
-          return (
-            <Animated.View
-              key={index}
-              style={{
-                position: "absolute",
-                zIndex: 1,
-                width: "100%",
-                height: "100%",
-                transform: [
-                  { rotate: rotationValues },
-                  ...position.getTranslateTransform(),
-                ],
-              }}
-              {...panResponder.panHandlers}
-            >
-              <Card key={index} restaurant={restaurants[index]} />
-            </Animated.View>
-          );
-        } else if (index === topIndex + 1) {
-          return (
-            <Animated.View
-              key={index}
-              style={{
-                position: "absolute",
-                zIndex: -index,
-                width: "100%",
-                height: "100%",
-                opacity: secondCardOpacity,
-                transform: [{ scale: secondCardScale }],
-              }}
-              {...panResponder.panHandlers}
-            >
-              <Card key={index} restaurant={restaurants[index]} />
-            </Animated.View>
-          );
-        } else {
-          // <Animated.View
-          //   key={index}
-          //   style={{
-          //     position: "absolute",
-          //     zIndex: -index,
-          //     width: "100%",
-          //     height: "100%",
-          //     opacity: 0,
-          //   }}
-          //   {...panResponder.panHandlers}
-          // >
-          //   <Card key={index} restaurant={restaurants[index]} />
-          // </Animated.View>;
-        }
-      })}
+          if (index === topIndex) {
+            return (
+              <Animated.View
+                key={index}
+                style={{
+                  ...styles.cardBasic,
+                  zIndex: 1,
+                  transform: [
+                    { rotate: rotationValues },
+                    ...position.getTranslateTransform(),
+                  ],
+                }}
+                {...panResponder.panHandlers}
+              >
+                <Card key={index} restaurant={restaurants[index]} />
+              </Animated.View>
+            );
+          } else if (index === topIndex + 1) {
+            return (
+              <Animated.View
+                key={index}
+                style={{
+                  ...styles.cardBasic,
+                  position: "absolute",
+                  zIndex: -index,
+                  opacity: secondCardOpacity,
+                  transform: [{ scale: secondCardScale }],
+                }}
+                {...panResponder.panHandlers}
+              >
+                <Card key={index} restaurant={restaurants[index]} />
+              </Animated.View>
+            );
+          }
+        })}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
+  Container: {
     backgroundColor: "cyan", //색깔 없애주기
+    width: "100%",
+    height: "100%",
+  },
+  CardContainer: {
+    width: "100%",
+    height: "100%",
+
+    alignItems: "center",
+  },
+  cardBasic: {
+    width: "90%",
+    height: "90%",
+    position: "absolute",
+  },
+  category: {
+    alignSelf: "flex-end",
+    marginTop: 50,
+    marginRight: 15,
+    fontSize: 15,
   },
 });

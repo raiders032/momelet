@@ -14,4 +14,10 @@ export const apis = {
     makeRequest(`/restaurant`, {
       params: { latitude, longitude, radius: 0.1 },
     }),
+  getUserMe: (token) =>
+    makeRequest("/user/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 };

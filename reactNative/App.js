@@ -1,12 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Image, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Image, View, AsyncStorage } from "react-native";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import Home from "./screens/Home";
 import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
+import Login from "./screens/Login";
+import { apis } from "./api";
 
 const cacheImages = (images) => {
   return images.map((image) => {
@@ -23,7 +25,8 @@ const cacheFonts = (fonts) => {
 };
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userToken, setUserToken] = useState(null);
 
   const loadAssets = () => {
     const images = cacheImages([
@@ -36,17 +39,37 @@ export default function App() {
     return Promise.all([...images, ...fonts]);
   };
 
-  const onFinish = () => setIsReady(true);
-  return isReady ? (
-    <View style={[styles.container]}>
-      <Home />
-    </View>
-  ) : (
+  const onFinish = () => setIsLoading(true);
+
+  useEffect(() => {
+    const _retrieveData = async () => {
+      try {
+        const value = await AsyncStorage.getItem("@userToken");
+
+        if (value !== null) {
+          setUserToken(value);
+        }
+      } catch (error) {
+        console.error("error in retrieveData at App.js", error);
+      }
+    };
+    _retrieveData();
+  }, []);
+
+  return isLoading ? (
     <AppLoading
       startAsync={loadAssets}
       onFinish={onFinish}
       onError={console.error}
     />
+  ) : userToken ? (
+    <View style={[styles.container]}>
+      <Home userToken={userToken} />
+    </View>
+  ) : (
+    <View style={[styles.container]}>
+      <Login setToken={setUserToken} />
+    </View>
   );
 }
 

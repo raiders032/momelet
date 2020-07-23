@@ -49,7 +49,6 @@ export default ({ restaurant }) => {
   };
   return (
     <>
-      <Text>hekki</Text>
       <View
         style={{
           flex: 1,
@@ -126,7 +125,14 @@ export default ({ restaurant }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{ flex: 1, backgroundColor: "red" }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "red",
+            borderBottomLeftRadius: 50,
+            borderBottomRightRadius: 50,
+          }}
+        >
           <Text>{restaurant.name}</Text>
         </View>
       </View>
