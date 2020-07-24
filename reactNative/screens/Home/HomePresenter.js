@@ -9,8 +9,9 @@ import {
   Dimensions,
 } from "react-native";
 import Card from "../../components/Card";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ restaurants, style }) => {
+export default ({ navigation, restaurants, style, user }) => {
   const [topIndex, setTopIndex] = useState(0);
   const [restaurantArray, setRestaurantArray] = useState(restaurants);
   const nextCard = () => setTopIndex((currentValue) => currentValue + 1);
@@ -65,7 +66,13 @@ export default ({ restaurants, style }) => {
   });
   return (
     <View style={[styles.Container]}>
-      <Text style={{ ...styles.category }}>내 정보</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("MyPage", { ...user });
+        }}
+      >
+        <Text style={{ ...styles.category }}>내 정보</Text>
+      </TouchableOpacity>
       <View style={[styles.CardContainer]}>
         {restaurantArray.map((obj, index) => {
           if (index < topIndex) {

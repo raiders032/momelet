@@ -9,6 +9,7 @@ import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "./screens/Login";
 import { apis } from "./api";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const cacheImages = (images) => {
   return images.map((image) => {
@@ -63,13 +64,17 @@ export default function App() {
       onError={console.error}
     />
   ) : userToken ? (
+    // <SafeAreaProvider style={{ flex: 1 }}>
     <View style={[styles.container]}>
-      <Home userToken={userToken} />
+      <Home style={{ width: "100%", height: "100%" }} userToken={userToken} />
     </View>
   ) : (
-    <View style={[styles.container]}>
-      <Login setToken={setUserToken} />
-    </View>
+    // </SafeAreaProvider>
+    <SafeAreaProvider style={{ width: "100%", height: "100%" }}>
+      <View style={[styles.container]}>
+        <Login setToken={setUserToken} />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -77,7 +82,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

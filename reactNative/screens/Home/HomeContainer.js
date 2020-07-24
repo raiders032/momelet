@@ -1,36 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import HomePresenter from "./HomePresenter";
 import { apis } from "../../api";
 import AsyncStorage from "@react-native-community/async-storage";
 import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 import Test from "../Test";
+import HomePresenter from "./HomePresenter";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
-export default ({ userToken }) => {
+export default ({ navigation, route }) => {
+  const userToken = route.params.userToken;
   const [user, setUser] = useState(() => {
-    const getUser = async () => {
-      const result = await apis.getUserMe(userToken);
-      return result.data;
-    };
-    getUser();
+    console.log("userToken", userToken);
   });
+
   const [restaurantLoading, setRestaurantLoading] = useState({
     loading: true,
     restaurant: [],
   });
 
+  const getUser = async () => {
+    const result = await apis.getUserMe(userToken);
+    setUser(result.data);
+    return { ...result.data };
+  };
+
   const getUserRestaurant = async () => {
     try {
-      const location = await Location.getCurrentPositionAsync({});
-      const response = await apis.getRestaurant(
-        // location.coords.latitude,
-        // location.coords.longitude
-        37.553292,
-        126.9125836
+      const { status, permissions } = await Permissions.askAsync(
+        Permissions.LOCATION
       );
-      setRestaurantLoading({ restaurant: response.data });
+      if (status === "granted") {
+        const location = await Location.getCurrentPositionAsync({});
+        const response = await apis.getRestaurant(
+          // location.coords.latitude,
+          // location.coords.longitude
+          37.553292,
+          126.9125836
+        );
+        setRestaurantLoading({ loading: false, restaurant: response.data });
+      } else {
+        throw new Error("Location permission not granted");
+      }
     } catch (e) {
       console.error("error In HomeContainer", e);
     }
@@ -38,16 +50,13 @@ export default ({ userToken }) => {
 
   useEffect(() => {
     getUserRestaurant();
-    setRestaurantLoading((before) => ({
-      loading: true,
-      restaurant: before.restaurant,
-    }));
+    getUser();
   }, []);
-
   return restaurantLoading.loading ? (
     <Test style={[styles.container]} />
   ) : (
     <HomePresenter
+      navigation={navigation}
       restaurants={restaurantLoading.restaurant}
       style={[styles.container]}
       user={user}
