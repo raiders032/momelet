@@ -14,11 +14,7 @@ export default ({ userToken }) => {
           headerShown: false,
         }}
       >
-        <Stack.Screen
-          name="HomeContainer"
-          component={HomeContainer}
-          initialParams={{ userToken: userToken }}
-        />
+        <Stack.Screen name="HomeContainer" component={HomeContainer} />
         <Stack.Screen name="MyPage" component={MyPage} />
       </Stack.Navigator>
     </NavigationContainer>

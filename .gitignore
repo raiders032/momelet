@@ -1,5 +1,5 @@
 **/node_modules/**/*
-.expo/*
+**/.expo/*
 npm-debug.*
 *.jks
 *.p8
@@ -11,6 +11,7 @@ web-build/
 
 # macOS
 .DS_Store
+
 
 ### Java-Spring ###
 backend/sprint1/src/main/resources/application-oauth.properties
@@ -46,3 +47,4 @@ backend/sprint1/spy.log
 **/.nb-gradle/
 
 **/.vscode/
+
