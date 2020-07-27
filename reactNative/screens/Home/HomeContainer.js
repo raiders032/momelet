@@ -22,6 +22,7 @@ export default ({ navigation, route }) => {
 
   const getUser = async () => {
     const result = await apis.getUserMe(userToken);
+    console.log(result.data);
     setUser(result.data);
     return { ...result.data };
   };

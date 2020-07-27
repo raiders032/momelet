@@ -63,7 +63,7 @@ export default function App() {
       onFinish={onFinish}
       onError={console.error}
     />
-  ) : userToken ? (
+  ) : !userToken ? (
     // <SafeAreaProvider style={{ flex: 1 }}>
     <View style={[styles.container]}>
       <Home style={{ width: "100%", height: "100%" }} userToken={userToken} />
