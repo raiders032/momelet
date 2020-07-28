@@ -1,6 +1,5 @@
 package com.swm.sprint1.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +20,12 @@ public class Restaurant {
     @Column(name = "restaurant_id")
     private Long id;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<RestaurantPhoto> photos = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "restaurant")
     private List<RestaurantCategory> restaurantCategories = new ArrayList<>();
 

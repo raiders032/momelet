@@ -72,6 +72,4 @@ public class UserController {
     public List<User> getUserList(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findAllCustom();
     }
-
-
 }
