@@ -23,17 +23,17 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectedListener(SessionConnectedEvent event) {
-        logger.info("User conneted ");
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        String username = headerAccessor.getUser().getName();
+        logger.info("User conneted : " + username);
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String username = headerAccessor.getUser().getName();
         if(username != null) {
             logger.info("User Disconnected : " + username);
-            logger.info("Online User : ");
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
             chatMessage.setSender(username);

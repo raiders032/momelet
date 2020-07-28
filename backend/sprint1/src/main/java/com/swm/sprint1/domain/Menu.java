@@ -1,6 +1,5 @@
 package com.swm.sprint1.domain;
 
-import com.swm.sprint1.domain.base.DateEntity;
 import com.swm.sprint1.domain.base.UserDateEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Menu extends UserDateEntity {
+public class Menu{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id")

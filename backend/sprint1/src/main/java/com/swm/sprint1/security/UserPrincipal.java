@@ -1,6 +1,5 @@
 package com.swm.sprint1.security;
 
-
 import com.swm.sprint1.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class UserPrincipal implements OAuth2User, UserDetails, Principal {
+public class UserPrincipal implements OAuth2User, UserDetails {
     private Long id;
     private String email;
     private String username;

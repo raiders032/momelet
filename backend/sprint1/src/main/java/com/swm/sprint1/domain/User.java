@@ -1,6 +1,7 @@
 package com.swm.sprint1.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.swm.sprint1.domain.base.DateEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +13,10 @@ import java.util.Set;
 
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
-public class User extends DateEntity {
+public class User extends DateEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -45,9 +46,6 @@ public class User extends DateEntity {
     @OneToMany(mappedBy = "user")
     private Set<UserCategory> userCategories = new HashSet<>();
 
-    public User(String name, String email, String password) {
-
-    }
 
     public User(String name, String email, String password, AuthProvider provider) {
         this.name=name;

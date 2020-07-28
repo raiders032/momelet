@@ -1,5 +1,9 @@
 package com.swm.sprint1.websocket;
 
+import com.swm.sprint1.domain.User;
+import com.swm.sprint1.exception.JwtTokenNotFoundInStompHeaderException;
+import com.swm.sprint1.exception.ResourceNotFoundException;
+import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.CustomUserDetailsService;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
@@ -10,11 +14,10 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -22,7 +25,7 @@ public class UserInterceptor extends ChannelInterceptorAdapter {
 
     private final TokenProvider tokenProvider;
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -31,14 +34,29 @@ public class UserInterceptor extends ChannelInterceptorAdapter {
                 MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                List<String> authorization1 = accessor.getNativeHeader("Authorization");
-                String jwt = authorization1.get(0).substring(6);
-                Long userIdFromToken = tokenProvider.getUserIdFromToken(jwt);
-                UserPrincipal userDetails = (UserPrincipal)customUserDetailsService.loadUserById(userIdFromToken);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                accessor.setUser(userDetails);
+            try {
+                String jwt = getJwt(accessor);
+                Long userID = tokenProvider.getUserIdFromToken(jwt);
+                User user = userRepository.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User", "ID", userID));
+                accessor.setUser(new WebSocketUser(user));
+            }
+            catch (JwtTokenNotFoundInStompHeaderException e){
+                e.printStackTrace();
+            }
         }
         return message;
+    }
+
+    private String getJwt(StompHeaderAccessor accessor) throws  JwtTokenNotFoundInStompHeaderException{
+        if(accessor.containsNativeHeader("Authorization")){
+            String bearerToken = accessor.getNativeHeader("Authorization").get(0);
+            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                return bearerToken.substring(6, bearerToken.length());
+            }
+        }
+        else{
+            throw new JwtTokenNotFoundInStompHeaderException("Stopm Header에 Authorization가 없습니다.");
+        }
+        return null;
     }
 }
