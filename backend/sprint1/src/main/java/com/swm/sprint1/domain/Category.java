@@ -1,7 +1,5 @@
 package com.swm.sprint1.domain;
 
-
-import com.swm.sprint1.domain.base.DateEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +17,7 @@ public class Category{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private String id;
+    private Long id;
 
-    @Column(unique = true)
     private String name;
 }

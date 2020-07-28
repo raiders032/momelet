@@ -1,16 +1,17 @@
 package com.swm.sprint1.domain;
 
-import com.swm.sprint1.domain.base.UserDateEntity;
+import com.swm.sprint1.domain.base.DateEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Bookmark extends UserDateEntity {
+@Table(name = "bookmark")
+public class Bookmark extends DateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookmark_id")

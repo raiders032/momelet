@@ -25,15 +25,10 @@ public class UserCategory extends DateEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public UserCategory(Category category) {
-        this.category = category;
-    }
-
     public UserCategory(User user, Category category) {
         this.user=user;
         this.category=category;
     }
-
 
     public void changeUser(User user){
         this.user=user;

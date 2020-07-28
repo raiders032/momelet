@@ -1,13 +1,9 @@
 package com.swm.sprint1.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.swm.sprint1.domain.base.DateEntity;
-import com.swm.sprint1.domain.base.UserDateEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
