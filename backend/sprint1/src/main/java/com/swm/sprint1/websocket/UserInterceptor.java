@@ -4,24 +4,20 @@ import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.JwtTokenNotFoundInStompHeaderException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.repository.user.UserRepository;
-import com.swm.sprint1.security.CustomUserDetailsService;
 import com.swm.sprint1.security.TokenProvider;
-import com.swm.sprint1.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Component
-public class UserInterceptor extends ChannelInterceptorAdapter {
+public class UserInterceptor implements ChannelInterceptor {
 
     private final TokenProvider tokenProvider;
 
