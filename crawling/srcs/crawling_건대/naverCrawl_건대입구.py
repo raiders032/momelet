@@ -22,7 +22,7 @@ def createMenu(menus):
     return results
 
 
-def naver_crawling(query, fileName, rId):
+def naver_crawling(query, fileName, restaurantId):
     utils.logging("======== \'", query,
                   "\'의 json을 긁어오기 시작함 ========")
 
@@ -49,7 +49,7 @@ def naver_crawling(query, fileName, rId):
 
         for restaurant in response:
             tmp = {}
-            tmp["rId"] = rId
+            tmp["restaurantId"] = restaurantId
             tmp["naverId"] = restaurant["id"]
             tmp["name"] = restaurant["name"]
             tmp["numberOfNaverReviews"] = restaurant["reviewCount"]
@@ -63,8 +63,10 @@ def naver_crawling(query, fileName, rId):
             tmp["openTime"] = restaurant["bizhourInfo"]
             tmp["menuInfo"] = createMenu(restaurant["menuInfo"])
             array.append(tmp)
-            rId += 1
-        with open(f"./restaurant_건대입구역/{fileName}.json", "w") as json_file:
+            restaurantId += 1
+
+        # 크롤링 결과 저장 경로
+        with open(f"./restaurant_화양동/{fileName}.json", "w") as json_file:
             json.dump(array, json_file, ensure_ascii=False)
 
         utils.logging(f"({page} / 3)page 긁기 성공!")
@@ -74,29 +76,29 @@ def naver_crawling(query, fileName, rId):
             time.sleep(sleepTime)
         else:
             utils.logging("======== \'", query, "\' 긁기 완료 ========")
-            return rId-1
+            return restaurantId-1
         # if page >= 3:
         #     utils.logging("======== \'", query, "\' 긁기 완료 ========")
-        #     return rId - 1
+        #     return restaurantId - 1
 
 
 def set_crawling_query():
     # PK
-    rId = 1
+    restaurantId = 1
 
-    qrys = ["건대입구역 맛집", "건대입구역 식당", "건대입구역 카페", "건대입구역 점심",
-            "건대입구역 저녁", "화양동 맛집", "화양동 식당", "화양동 카페", "화양동 점심", "화양동 저녁"]
+    qrys = ["화양동 맛집", "화양동 저녁", "화양동 한식", "화양동 일식", "화양동 중식",
+            "화양동 양식", "화양동 카페", "화양동 치킨", "화양동 족발", "화양동 피자",
+            "화양동 분식", "화양동 고기", "화양동 파스타", "화양동 술집"]
 
     utils.logging("크롤링 시작!")
     for qry in qrys:
+        restaurantId = 1
 
-        fileName = qry[:qry.find(" ")] + "_" + qry[qry.find(" "):]
-        rId = naver_crawling(qry, fileName, rId)
-
-        rId += 1
+        fileName = qry[:qry.find(" ")] + "_" + qry[qry.find(" ") + 1:]
+        restaurantId = naver_crawling(qry, fileName, restaurantId)
 
         utils.logging(qry, "긁어오기 성공")
-        utils.saveFilename(fileName)
+        utils.saveFilename(fileName, "./restaurant_화양동/filename")
 
         termTime = 45
         utils.logging("다음 동을 긁기 전", str(termTime), "초 기다리는 중...")

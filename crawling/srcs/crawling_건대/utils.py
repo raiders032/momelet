@@ -44,11 +44,11 @@ def readCrawlIndex():
     return data
 
 
-def saveFilename(name):
+def saveFilename(name, path):
     if name == None:
         return
 
-    f = open("./filename", "a")
+    f = open(path, "w")
     data = name + ".json "
     f.write(data)
     f.close()
