@@ -41,7 +41,7 @@ export default function App() {
   };
 
   const onFinish = () => setIsLoading(true);
-
+  console.log(userToken);
   useEffect(() => {
     const _retrieveData = async () => {
       try {
@@ -56,7 +56,6 @@ export default function App() {
     };
     _retrieveData();
   }, []);
-
   return isLoading ? (
     <AppLoading
       startAsync={loadAssets}

@@ -1,9 +1,12 @@
 import axios from "axios";
 
+import getEnvVars from "./enviroment";
+const { apiUrl } = getEnvVars();
+
 const makeRequest = (path, config) => {
   return axios.get(
     // "http://www.naver.com"
-    `http://ec2-13-125-90-157.ap-northeast-2.compute.amazonaws.com:8080/api/v1${path}`,
+    `${apiUrl}/api/v1${path}`,
     {
       ...config,
     }
