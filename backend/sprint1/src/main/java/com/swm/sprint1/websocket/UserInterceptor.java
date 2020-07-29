@@ -44,7 +44,6 @@ public class UserInterceptor implements ChannelInterceptor {
         if(accessor.containsNativeHeader("Authorization")){
             String bearerToken = Objects.requireNonNull(accessor.getNativeHeader("Authorization")).get(0);
             if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                String substring = bearerToken.substring(7);
                 return bearerToken.substring(7);
             }
         }
