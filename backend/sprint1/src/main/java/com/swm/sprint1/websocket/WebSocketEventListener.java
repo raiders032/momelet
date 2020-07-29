@@ -18,27 +18,21 @@ public class WebSocketEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
 
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+    private final WebSocketUserRepository webSocketUserRepository;
+
+    private final SimpMessageSendingOperations messagingTemplate;
 
     @EventListener
     public void handleWebSocketConnectedListener(SessionConnectedEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String username = headerAccessor.getUser().getName();
-        logger.info("User conneted : " + username);
+        WebSocketUser savedUser = webSocketUserRepository.save((WebSocketUser) headerAccessor.getUser());
+        logger.info("User conneted : " + savedUser.getName() + "(" +savedUser.getId()+")");
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String username = headerAccessor.getUser().getName();
-        if(username != null) {
-            logger.info("User Disconnected : " + username);
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setType(ChatMessage.MessageType.LEAVE);
-            chatMessage.setSender(username);
-
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
-        }
+        webSocketUserRepository.delete((WebSocketUser) headerAccessor.getUser());
+        logger.info("User disconnected : " + headerAccessor.getUser().getName());
     }
 }

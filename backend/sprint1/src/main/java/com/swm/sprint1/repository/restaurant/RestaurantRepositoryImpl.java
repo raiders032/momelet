@@ -2,7 +2,6 @@ package com.swm.sprint1.repository.restaurant;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.Restaurant;
