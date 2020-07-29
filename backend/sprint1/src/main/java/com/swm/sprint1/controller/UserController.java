@@ -20,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Api(value = "user")
@@ -32,7 +33,7 @@ public class UserController {
     private final UserCategoryRepository userCategoryRepository;
 
     @ApiOperation(value = "유저의 정보를 반환")
-    @GetMapping("/user/me")
+    @GetMapping("/users/me")
     @PreAuthorize("hasRole('USER')")
     public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
@@ -40,25 +41,24 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저의 정보를 수정", notes = "유저의 이름을 변경한다")
-    @PutMapping("/api/v1/user/name")
+    @PutMapping("/api/v1/users/name")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateUserName(@CurrentUser UserPrincipal userPrincipal
-            , @Valid @RequestBody UserUpdateRequest request){
+    public ResponseEntity<?> updateUserName(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UserUpdateRequest request){
         userService.updateUser(userPrincipal.getId(),request.getName());
-        return ResponseEntity.ok(new ApiResponse(true,"nickname 수정 완료"));
+        return ResponseEntity.ok(new ApiResponse(LocalDateTime.now(),true,"이 수정 완료"));
     }
 
     @ApiOperation(value = "유저의 카테고리 수정")
-    @PutMapping("/api/v1/user/category")
+    @PutMapping("/api/v1/users/categories")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserCategories(@CurrentUser UserPrincipal userPrincipal
             , @Valid @RequestBody UpdateUserCategoryRequest updateUserCategoryRequest){
-        ApiResponse response = userService.updateUserCategories(userPrincipal.getUser(), updateUserCategoryRequest);
-        return ResponseEntity.ok(response);
+        userService.updateUserCategories(userPrincipal.getUser(), updateUserCategoryRequest);
+        return ResponseEntity.ok(new ApiResponse(LocalDateTime.now(),true,"카테고리 수정 완료"));
     }
 
     @ApiOperation(value = "유저의 정보를 반환")
-    @GetMapping("/api/v1/user/me")
+    @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();

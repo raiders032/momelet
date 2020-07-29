@@ -36,22 +36,19 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long id, String name) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", id));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         user.changeName(name);
     }
 
     @Transactional
-    public ApiResponse updateUserCategories(User user , UpdateUserCategoryRequest request) {
+    public void updateUserCategories(User user , UpdateUserCategoryRequest request) {
         List<Category> categoryByCategoryName = categoryRepository.findCategoryByCategoryName(request.getCategories());
-        if(categoryByCategoryName.isEmpty()){
-            return new ApiResponse(false,"카테고리를 찾을 수 없습니다");
-        }
+        if(categoryByCategoryName.isEmpty())
+            throw new ResourceNotFoundException("Category","Category name", request.getCategories());
         userCategoryRepository.deleteUserCategory(user.getId());
         Set<UserCategory> userCategories = categoryByCategoryName.stream().map(category -> new UserCategory(user, category)).collect(Collectors.toSet());
         user.changeUserCategory(userCategories);
-        userCategories.forEach(userCategory -> userCategoryRepository.save(userCategory));
-        return new ApiResponse(true,"카테고리 수정 완료");
+        userCategories.forEach(userCategoryRepository::save);
     }
 
     public List<String> getUserCategoryName(Long id) {

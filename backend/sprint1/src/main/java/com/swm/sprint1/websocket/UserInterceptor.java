@@ -15,6 +15,8 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Component
 public class UserInterceptor implements ChannelInterceptor {
@@ -30,24 +32,19 @@ public class UserInterceptor implements ChannelInterceptor {
                 MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            try {
-                String jwt = getJwt(accessor);
-                Long userID = tokenProvider.getUserIdFromToken(jwt);
-                User user = userRepository.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User", "ID", userID));
-                accessor.setUser(new WebSocketUser(user));
-            }
-            catch (JwtTokenNotFoundInStompHeaderException e){
-                e.printStackTrace();
-            }
+            String jwt = getJwt(accessor);
+            Long userID = tokenProvider.getUserIdFromToken(jwt);
+            User user = userRepository.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User", "ID", userID));
+            accessor.setUser(new WebSocketUser(user));
         }
         return message;
     }
 
-    private String getJwt(StompHeaderAccessor accessor) throws  JwtTokenNotFoundInStompHeaderException{
+    private String getJwt(StompHeaderAccessor accessor){
         if(accessor.containsNativeHeader("Authorization")){
-            String bearerToken = accessor.getNativeHeader("Authorization").get(0);
+            String bearerToken = Objects.requireNonNull(accessor.getNativeHeader("Authorization")).get(0);
             if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                return bearerToken.substring(6, bearerToken.length());
+                return bearerToken.substring(6);
             }
         }
         else{
