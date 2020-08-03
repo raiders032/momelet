@@ -98,9 +98,13 @@ def set_crawling_query(dongName, dirPath):
         restaurantId = naver_crawling(qry, fileName, restaurantId, dirPath)
 
         utils.logging(qry, "긁어오기 성공")
-        utils.saveFilename(fileName, "./restaurant_화양동/filename")
+        utils.saveFilename(fileName, dirPath)
 
         termTime = 45
         utils.logging("다음 동을 긁기 전", str(termTime), "초 기다리는 중...")
         time.sleep(termTime)
     utils.logging("쿼리문 = ", str(qrys), "에 대해 요청한 크롤링 완료")
+
+
+def startCrawling(dongName, dirPath):
+    set_crawling_query(dongName, dirPath)

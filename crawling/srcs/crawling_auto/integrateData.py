@@ -36,9 +36,10 @@ def readFilePath():
     return data
 
 
-def makeIntegrateData():
-    # 파일이름 읽는 경로
-    f = open('./restaurant_화양동/filename', 'r')
+def makeIntegrateData(dirPath):
+    # 파일이름들이 저장된 filename
+    filenamePath = dirPath + "/filename"
+    f = open(filenamePath, 'r')
     names = f.read().split()
     f.close()
 
@@ -48,7 +49,7 @@ def makeIntegrateData():
     for filename in names:
         print(filename, "합치는 중...")
         # 파일 읽는 경로
-        fpath = "./restaurant_화양동/" + filename
+        fpath = dirPath + "/" + filename
         jsonData = readJsonFile(fpath)
 
         for data in jsonData:
@@ -59,15 +60,10 @@ def makeIntegrateData():
                 validRestaurants.append(data)
         print(filename, "합치기 완료")
 
-    # 파일 저장 경로
-    writeFilePath = f"./integratedRestaurants/화양동_{restaurantId - 1}.json"
-    saveFilePath(
-        f"./integratedRestaurants/화양동_{restaurantId - 1}.json")
+    # 파일 저장 경로. dirPath + /xx동_2323개.json
+    writeFilePath = dirPath + "/" + \
+        dirPath[6:dirPath.find('.', 6)] + f"_{restaurantId - 1}.json"
     print(writeFilePath, "작성 중...")
     writeJsonFile(writeFilePath, validRestaurants)
     print(writeFilePath, "작성 완료")
     print("총", restaurantId, "개의 식당이 합쳐졌습니다")
-
-
-if __name__ == "__main__":
-    makeIntegrateData()

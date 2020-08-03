@@ -48,7 +48,7 @@ def saveFilename(name, path):
     if name == None:
         return
 
-    f = open(path, "a")
+    f = open(path + "filename", "a")
     data = name + ".json "
     f.write(data)
     f.close()
