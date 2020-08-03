@@ -24,16 +24,24 @@ def writeJsonFile(filepath, arrayJson):
 
 
 def saveFilePath(data):
-    f = open("./integratedRestaurants/화양동path.txt", "w")
-    f.write(data)
-    f.close()
+    try:
+        f = open("./integratedRestaurants/화양동path.txt", "w")
+        f.write(data)
+        f.close()
+    except:
+        print("filename 저장에 문제가 생겼습니다")
+        sys.exit()
 
 
 def readFilePath():
-    f = open("./integratedRestaurants/화양동Path.txt", "w")
-    data = f.read()
-    f.close()
-    return data
+    try:
+        f = open("./integratedRestaurants/화양동Path.txt", "w")
+        data = f.read()
+        f.close()
+        return data
+    except:
+        print("filename 읽기에 문제가 생겼습니다")
+        sys.exit()
 
 
 def makeIntegrateData(dirPath):
