@@ -1,5 +1,6 @@
 package com.swm.sprint1.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class RestaurantPhoto {
     @Column(name = "restaurant_photo_id")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
