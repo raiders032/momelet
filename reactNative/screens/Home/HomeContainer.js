@@ -55,14 +55,13 @@ export default ({ navigation, route }) => {
   return restaurantLoading.loading ? (
     <Test style={[styles.container]} />
   ) : (
-    // <HomePresenter
-    //   navigation={navigation}
-    //   restaurants={restaurantLoading.restaurant}
-    //   style={[styles.container]}
-    //   user={user}
-    //   setUser={setUser}
-    // />
-    <Test2></Test2>
+    <HomePresenter
+      navigation={navigation}
+      restaurants={restaurantLoading.restaurant}
+      style={[styles.container]}
+      user={user}
+      setUser={setUser}
+    />
   );
 };
 

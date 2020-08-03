@@ -20,7 +20,9 @@ const cacheImages = (images) => {
     }
   });
 };
-
+const setAsyncStorage = () => {
+  AsyncStorage.setItem("userToken", null);
+};
 const cacheFonts = (fonts) => {
   return fonts.map((font) => Font.loadAsync(font));
 };
@@ -46,7 +48,7 @@ export default function App() {
     const _retrieveData = async () => {
       try {
         const value = await AsyncStorage.getItem("@userToken");
-
+        console.log("userToekn", value);
         if (value !== null) {
           setUserToken(value);
         }
@@ -76,7 +78,6 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

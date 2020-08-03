@@ -21,13 +21,14 @@ const onPress = async (setToken, where) => {
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
     ""
   )}`;
+  console.log(URL);
   const supported = await Linking.canOpenURL(URL);
   console.log(URL, supported);
   if (supported) {
     try {
       console.log("helo");
       const result = await WebBrowser.openAuthSessionAsync(URL);
-
+      
       await _storeData(Linking.parse(result.url).queryParams.token);
       await setToken(Linking.parse(result.url).queryParams.token);
     } catch (error) {
