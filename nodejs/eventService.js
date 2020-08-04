@@ -1,10 +1,12 @@
-const app = require("./app.js");
+const { userList } = require("./app.js");
 const { findUserLocation } = require("./Domains/findUserLocation.js");
 // 같이하기
 const togetherService = (socket, msg) => {
   var echo = "together 이벤트. 받은 msg: " + msg;
   console.log(echo);
   socket.emit("together", echo);
+  console.log("서비스에서 userList출력");
+  console.log(userList);
   return echo;
 };
 
@@ -65,7 +67,7 @@ const disconnectService = (socket) => {
   console.log("user disconnected");
 
   // return true or false
-  app.userList.delete(socket.id);
+  userList.delete(socket.id);
 };
 
 module.exports = {
