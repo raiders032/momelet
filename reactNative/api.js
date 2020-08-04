@@ -2,7 +2,7 @@ import axios from "axios";
 
 import getEnvVars from "./enviroment";
 const { apiUrl } = getEnvVars();
-
+console.log(apiUrl);
 const makeRequest = (path, config) => {
   return axios.get(
     // "http://www.naver.com"
@@ -14,11 +14,11 @@ const makeRequest = (path, config) => {
 };
 export const apis = {
   getRestaurant: (latitude, longitude) =>
-    makeRequest(`/restaurant`, {
+    makeRequest(`/restaurants`, {
       params: { latitude, longitude, radius: 0.1 },
     }),
   getUserMe: (token) =>
-    makeRequest("/user/me", {
+    makeRequest("/users/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

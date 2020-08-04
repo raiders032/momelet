@@ -19,10 +19,13 @@ export default ({ navigation, route }) => {
   });
 
   const getUser = async () => {
-    const result = await apis.getUserMe(userToken);
-
-    setUser(result.data);
-    return { ...result.data };
+    try {
+      const result = await apis.getUserMe(userToken);
+      setUser(result.data);
+      return { ...result.data };
+    } catch (error) {
+      console.log("error in get user", error);
+    }
   };
 
   const getUserRestaurant = async () => {
