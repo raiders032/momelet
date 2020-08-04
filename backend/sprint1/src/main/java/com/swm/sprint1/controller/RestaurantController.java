@@ -1,5 +1,6 @@
 package com.swm.sprint1.controller;
 
+import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.security.CurrentUser;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,20 +29,24 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantList);
     }
 
-    @GetMapping("/api/v1/restaurants/users/categories")
+    @GetMapping("/api/v1/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurantWithUserCategory(
             @RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal){
+            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
+        if(!id.equals(userPrincipal.getId()))
+            throw new BadRequestException("유효하지 않은 id : " + id);
         List<RetrieveRestaurantResponseV1> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, userPrincipal.getId());
         return ResponseEntity.ok(restaurants);
     }
 
-    @GetMapping("/api/v2/restaurants/users/categories")
+    @GetMapping("/api/v2/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurantWithUserCategoryV2(
             @RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal){
+            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
+        if(!id.equals(userPrincipal.getId()))
+            throw new BadRequestException("유효하지 않은 id : " + id);
         List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV2(latitude, longitude, radius, userPrincipal.getId());
         return ResponseEntity.ok(restaurants);
     }
