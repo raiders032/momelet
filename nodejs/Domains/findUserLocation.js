@@ -1,4 +1,4 @@
-const app = require("../app.js");
+const singleObject = require("../singleObjects");
 
 const findUserLocation = (lat, long) => {
   var aroundUser = [];
