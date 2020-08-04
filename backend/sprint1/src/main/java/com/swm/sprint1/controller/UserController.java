@@ -39,14 +39,12 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저의 정보를 반환")
-    @GetMapping("/api/v1/users/{id}")
+    @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable Long id) {
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
+    public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();
-        List<String> categories = userService.getUserCategoryName(id);
-        return ResponseEntity.ok(new RetrieveUserResponse(id,user.getName(), user.getEmail(), user.getImageUrl(), categories));
+        List<String> categories = userService.getUserCategoryName(user.getId());
+        return ResponseEntity.ok(new RetrieveUserResponse(user.getId(),user.getName(), user.getEmail(), user.getImageUrl(), categories));
     }
 
     @ApiOperation(value = "유저의 목록을 반환")
@@ -58,10 +56,12 @@ public class UserController {
 
 
     @ApiOperation(value = "유저 정보 수정")
-    @PutMapping("/api/v1/users/me")
+    @PutMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request){
-        userService.updateUser(userPrincipal.getId(), request);
+    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id){
+        if(!id.equals(userPrincipal.getId()))
+            throw new BadRequestException("유효하지 않은 id : " + id);
+        userService.updateUser(id, request);
         return ResponseEntity.ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
     }
 }
