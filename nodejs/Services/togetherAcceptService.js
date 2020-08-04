@@ -1,7 +1,7 @@
 const togetherAcceptService = (socket, msg) => {
-  var echo = "together-accept 이벤트. 받은 msg: " + msg;
+  var echo = "togetherAccept 이벤트. 받은 msg: " + msg;
   console.log(echo);
-  socket.emit("together-accept", echo);
+  socket.emit("togetherAccept", echo);
   return echo;
 };
 

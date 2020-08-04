@@ -19,27 +19,27 @@ const frontController = () => {
     });
 
     // 같이하기-초대하기
-    socket.on("together-invite", (msg) => {
+    socket.on("togetherInvite", (msg) => {
       ctr.togetherInviteController(socket, msg);
     });
 
     // 초대수락
-    socket.on("together-accept", (msg) => {
+    socket.on("togetherAccept", (msg) => {
       ctr.togetherAcceptController(socket, msg);
     });
 
     // 게임시작
-    socket.on("game-start", (msg) => {
+    socket.on("gameStart", (msg) => {
       ctr.gameStartController(socket, msg);
     });
 
     // 게임종료
-    socket.on("game-finish", (msg) => {
+    socket.on("gameFinish", (msg) => {
       ctr.gameFinishController(socket, msg);
     });
 
     // 다시하기
-    socket.on("game-restart", (msg) => {
+    socket.on("gameRestart", (msg) => {
       ctr.gameRestartController(socket, msg);
     });
 
