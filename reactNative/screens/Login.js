@@ -28,7 +28,7 @@ const onPress = async (setToken, where) => {
     try {
       console.log("helo");
       const result = await WebBrowser.openAuthSessionAsync(URL);
-      
+
       await _storeData(Linking.parse(result.url).queryParams.token);
       await setToken(Linking.parse(result.url).queryParams.token);
     } catch (error) {
