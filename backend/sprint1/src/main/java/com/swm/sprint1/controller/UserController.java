@@ -58,7 +58,7 @@ public class UserController {
 
 
     @ApiOperation(value = "유저 정보 수정")
-    @PutMapping("/api/v1/users/{id}")
+    @PutMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id){
         if(!id.equals(userPrincipal.getId()))
