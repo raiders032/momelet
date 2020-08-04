@@ -8,11 +8,14 @@ const io = require("socket.io")(server, {
 });
 const request = require("request");
 const ctr = require("./Controllers/index");
+const { kMaxLength } = require("buffer");
 // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Map
 
 const userList = new Map();
+const userListId = new Map();
 
 module.exports.app = app;
 module.exports.server = server;
 module.exports.io = io;
 module.exports.userList = userList;
+module.exports.userListId = userListId;

@@ -1,11 +1,15 @@
-const { disconnectService } = require("../Services/index");
+const service = require("../Services/index");
 
 const disconnectController = (socket) => {
-  // 모든 방에서 나가는 로직 추가 필요
-  //
-  return disconnectService(socket);
+  // 연결이 끊어지려 하지만 방은 아직 안나감
+  socket.on("disconnecting", (reason) => {
+    service.disconnectingService(socket, reason);
+  });
+
+  // 연결 해제
+  socket.on("disconnect", () => {
+    service.disconnectService(socket);
+  });
 };
 
-module.exports = {
-  disconnectController,
-};
+module.exports.disconnectController = disconnectController;
