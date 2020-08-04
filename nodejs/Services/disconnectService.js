@@ -1,10 +1,10 @@
-const app = require("../app");
+const appication = require("../app");
 
 const disconnectService = (socket) => {
   console.log("user disconnected");
 
   // return true or false
-  app.userList.delete(socket.id);
+  appication.userList.delete(socket.id);
 };
 
 module.exports = {

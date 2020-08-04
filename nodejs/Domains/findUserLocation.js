@@ -1,4 +1,4 @@
-const { userList } = require("../app.js");
+const app = require("../app.js");
 
 const findUserLocation = (lat, long) => {
   var aroundUser = [];
@@ -6,7 +6,7 @@ const findUserLocation = (lat, long) => {
   var min_lat = lat - 0.0025;
   var max_long = long + 0.0025;
   var min_long = long - 0.0025;
-  userList.forEach((value, key) => {
+  app.userList.forEach((value, key) => {
     // 위도는 0.0025 경도는 0.0025 차이가 각각 약 250m, 240m 의 차이임
     // 그래서 500m 직사각형 정도
     if (

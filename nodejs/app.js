@@ -1,24 +1,25 @@
-const app = require("express")();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server, {
-  // path: "/momulet",
-  serverClient: false, // 클라이언트 파일 제공 여부
-  pingInterval: 20000, // 20초에 한 번씩 핑 보내기
-  pingTimeout: 10000, // 10초 동안 퐁 기다리기
-});
-const request = require("request");
+// const app = require("express")();
+// const server = require("http").createServer(app);
+// const io = require("socket.io")(server, {
+//   // path: "/momulet",
+//   serverClient: false, // 클라이언트 파일 제공 여부
+//   pingInterval: 20000, // 20초에 한 번씩 핑 보내기
+//   pingTimeout: 10000, // 10초 동안 퐁 기다리기
+// });
+// const request = require("request");
+// // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+// const userList = new Map();
+
 const ctr = require("./Controllers/index");
-// https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Map
-
-const userList = new Map();
-
+const singleObject = require("./singleObjects");
 // // 디버깅 용
-app.get("/", (req, res) => {
+singleObject.app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-io.on("connection", (socket) => {
-  userList.set(socket.id, {
+singleObject.io.on("connection", (socket) => {
+  singleObject.userList.set(socket.id, {
     socketId: socket.id,
     name: "jeong",
     latitude: 33.123,
@@ -26,7 +27,7 @@ io.on("connection", (socket) => {
   });
   socket.join(socket.id + " room");
   console.log("a user connected");
-  console.log(userList);
+  console.log(singleObject.userList);
 
   // 같이하기;
   socket.on("together", (msg) => {
@@ -69,8 +70,11 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
+singleObject.server.listen(3000, () => {
   console.log("listening on *:3000");
 });
 
-module.exports.userList = userList;
+// module.exports.app = app;
+// module.exports.server = server;
+// module.exports.io = io;
+// module.exports.userList = userList;
