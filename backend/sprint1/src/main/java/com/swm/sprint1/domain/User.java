@@ -29,7 +29,6 @@ public class User extends DateEntity{
     @Email
     private String email;
 
-    @JsonIgnore
     private String password;
 
     @Column(length = 500)
@@ -44,9 +43,8 @@ public class User extends DateEntity{
 
     private String providerId;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCategory> userCategories = new HashSet<>();
-
 
     public User(String name, String email, String password, AuthProvider provider) {
         this.name=name;
@@ -70,7 +68,7 @@ public class User extends DateEntity{
 
     public void updateUserInfo(String name, String imageUrl, List<Category> categories) {
         this.name = name;
-        this.imageUrl=imageUrl;
+        this.imageUrl= imageUrl;
         this.userCategories.clear();
         categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
     }

@@ -36,9 +36,7 @@ public class UserService {
     public void updateUser(Long id, UpdateUserRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
-        userCategoryRepository.deleteUserCategory(id);
         user.updateUserInfo(request.getName(), request.getImageUrl(), categories);
-        userCategoryRepository.saveAll(user.getUserCategories());
     }
 
     public List<String> getUserCategoryName(Long id) {
