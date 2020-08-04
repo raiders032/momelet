@@ -1,32 +1,17 @@
-const singleObject = require("../singleObjects");
+const SingleObject = require("../SingleObjects");
 const ctr = require("../Controllers/index");
+const { togetherController } = require("./togetherController");
 
 const frontController = () => {
-  singleObject.io.on("connection", (socket) => {
+  SingleObject.io.on("connection", (socket) => {
     const { id, email, name, imageUrl, JWT } = socket.handshake.query;
-    singleObject.userList.set(socket.id, { id, email, name, imageUrl, JWT });
+    SingleObject.userList.set(socket.id, { id, email, name, imageUrl, JWT });
 
     socket.join(socket.id + "_room");
     console.log("a user connected");
-    console.log(singleObject.userList);
+    console.log(SingleObject.userList);
 
-    // 같이하기;
-    socket.on("together", (msg) => {
-      const ret = ctr.togetherController(socket, msg);
-      socket.emit("together", ret);
-    });
-
-    // 같이하기-초대하기
-    socket.on("togetherInvite", (msg) => {
-      const ret = ctr.togetherInviteController(socket, msg);
-      socket.emit("togetherInvite", ret);
-    });
-
-    // 초대수락
-    socket.on("togetherAccept", (msg) => {
-      const ret = ctr.togetherAcceptController(socket, msg);
-      socket.emit("togetherAccept", ret);
-    });
+    togetherController(socket);
 
     // 게임시작
     socket.on("gameStart", (msg) => {

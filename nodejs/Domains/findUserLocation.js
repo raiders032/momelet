@@ -1,4 +1,4 @@
-const singleObject = require("../singleObjects");
+const singleObject = require("../SingleObjects");
 
 const findUserLocation = (lat, long) => {
   var aroundUser = [];
@@ -18,6 +18,7 @@ const findUserLocation = (lat, long) => {
       aroundUser.push({
         socketId: value["socketId"],
         name: value["name"],
+        imageUril: value["imageUrl"],
       });
     }
   });
