@@ -60,10 +60,8 @@ public class UserController {
     @ApiOperation(value = "유저 정보 수정")
     @PutMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id){
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
-        userService.updateUser(id, request);
+    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request){
+        userService.updateUser(userPrincipal.getId(), request);
         return ResponseEntity.ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
     }
 }
