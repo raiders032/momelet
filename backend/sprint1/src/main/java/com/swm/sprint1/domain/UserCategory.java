@@ -29,8 +29,4 @@ public class UserCategory extends DateEntity {
         this.user=user;
         this.category=category;
     }
-
-    public void changeUser(User user){
-        this.user=user;
-    }
 }
