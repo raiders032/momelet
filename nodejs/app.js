@@ -7,8 +7,7 @@ SingleObject.app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-frontController();
-
 SingleObject.server.listen(3000, () => {
   console.log("listening on *:3000");
 });
+frontController();

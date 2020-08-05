@@ -5,26 +5,8 @@ const { disconnectController } = require("./disconnectController");
 
 const frontController = () => {
   SingleObject.io.on("connection", (socket) => {
-    // const {
-    //   id,
-    //   email,
-    //   name,
-    //   imageUrl,
-    //   JWT,
-    //   latitude,
-    //   longitude,
-    // } = socket.handshake.query;
-    // SingleObject.userList.set(socket.id, {
-    //   id,
-    //   email,
-    //   name,
-    //   imageUrl,
-    //   JWT,
-    //   latitude,
-    //   longitude,
-    // });
-    SingleObject.Users.addConnectedUser(socket.id, socket.handshake.query);
-    socket.join(socket.id + "_room");
+    // 중복 접속 체크. 지금은 결과만 출력하고 중복 접속을 막지 않음.
+    SingleObject.Users.updateConnectedUser(socket.id, socket.handshake.query);
     console.log("a user connected");
     console.log(SingleObject.Users.connectedUsers);
     console.log(SingleObject.Users.connectedUsersForCheck);
@@ -32,10 +14,6 @@ const frontController = () => {
     togetherController(socket);
     gameController(socket);
     disconnectController(socket);
-  });
-
-  SingleObject.io.on("together", (socket) => {
-    console.log("메시지 받기 성공");
   });
 };
 
