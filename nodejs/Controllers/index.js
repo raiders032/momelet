@@ -1,18 +1,9 @@
+const { frontController } = require("./frontController");
 const { togetherController } = require("./togetherController");
-const { togetherInviteController } = require("./togetherInviteController");
-const { togetherAcceptController } = require("./togetherAcceptController");
-const { gameStartController } = require("./gameStartController");
-const { gameFinishController } = require("./gameFinishController");
-const { gameRestartController } = require("./gameRestartController");
-const { disconnectingController } = require("./disconnectingController");
+const { gameController } = require("./gameController");
 const { disconnectController } = require("./disconnectController");
-module.exports = {
-  togetherController,
-  togetherInviteController,
-  togetherAcceptController,
-  gameStartController,
-  gameFinishController,
-  gameRestartController,
-  disconnectingController,
-  disconnectController,
-};
+
+module.exports.frontController = frontController;
+module.exports.togetherController = togetherController;
+module.exports.gameController = gameController;
+module.exports.disconnectController = disconnectController;
