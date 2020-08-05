@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Image, View, AsyncStorage } from "react-native";
 import * as Font from "expo-font";
@@ -8,7 +7,6 @@ import Home from "./screens/Home";
 import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "./screens/Login";
-import { apis } from "./api";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const cacheImages = (images) => {
@@ -37,13 +35,13 @@ export default function App() {
       require("./assets/splash.png"),
       require("./assets/food1.jpg"),
       require("./assets/food2.jpg"),
+      require("./assets/loginImage.png"),
     ]);
     const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
     return Promise.all([...images, ...fonts]);
   };
 
   const onFinish = () => setIsLoading(true);
-  console.log(userToken);
   useEffect(() => {
     const _retrieveData = async () => {
       try {
