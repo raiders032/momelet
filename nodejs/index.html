@@ -55,11 +55,11 @@
         var socket = io();
         $("form").submit(function (e) {
           e.preventDefault(); // prevents page reloading
-          socket.emit("gameStart", $("#m").val());
+          socket.emit("together", $("#m").val());
           $("#m").val("");
           return false;
         });
-        socket.on("gameStart", function (msg) {
+        socket.on("together", function (msg) {
           $("#messages").append($("<li>").text(msg));
           var obj = JSON.stringify(msg);
           $("#messages").append($("<li>").text("메시지 타입: " + typeof obj));

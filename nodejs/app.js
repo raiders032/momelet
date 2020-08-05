@@ -1,6 +1,6 @@
-const ctr = require("./Controllers/index");
 const SingleObject = require("./SingleObjects");
 const { frontController } = require("./Controllers/index");
+const ctr = require("./Controllers/index");
 
 // 디버깅 용
 SingleObject.app.get("/", (req, res) => {

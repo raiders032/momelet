@@ -3,8 +3,10 @@ const service = require("../Services/index");
 const gameController = (socket) => {
   // 게임시작
   socket.on("gameStart", (msg) => {
+    console.time("시작");
     const ret = service.gameStartService(socket, msg);
     socket.emit("gameStart", ret);
+    console.timeEnd("시작");
   });
 
   // 게임종료
