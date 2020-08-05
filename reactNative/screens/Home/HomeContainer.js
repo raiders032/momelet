@@ -11,19 +11,21 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ navigation, route }) => {
   const userToken = route.params.userToken;
-
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState(async () => {
     const getUser = async () => {
       try {
         const result = await apis.getUserMe(userToken);
-        setUser(result.data);
         console.log("get User : ", result.data);
-        return { ...result.data };
+        return result.data;
       } catch (error) {
         console.log("error in get user", error);
       }
     };
-    getUser();
+    const abc = await getUser();
+    console.log("Abc", abc);
+    return abc;
+
+    // return getUser();
   });
 
   const [restaurants, setRestaurants] = useState({
