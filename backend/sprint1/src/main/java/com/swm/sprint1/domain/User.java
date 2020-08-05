@@ -61,6 +61,11 @@ public class User extends DateEntity{
         this.providerId=providerId;
     }
 
+    public User(String name, AuthProvider provider) {
+        this.name=name;
+        this.provider=provider;
+    }
+
     public void update(String name, String imageUrl) {
         this.name=name;
         this.imageUrl=imageUrl;
