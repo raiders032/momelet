@@ -6,26 +6,30 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import Test from "../Test";
 import HomePresenter from "./HomePresenter";
-
+import Test2 from "../Test2";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ navigation, route }) => {
   const userToken = route.params.userToken;
+
   const [user, setUser] = useState(() => {
-    console.log("userToken", userToken);
+    const getUser = async () => {
+      try {
+        const result = await apis.getUserMe(userToken);
+        setUser(result.data);
+        console.log("get User : ", result.data);
+        return { ...result.data };
+      } catch (error) {
+        console.log("error in get user", error);
+      }
+    };
+    getUser();
   });
 
-  const [restaurantLoading, setRestaurantLoading] = useState({
+  const [restaurants, setRestaurants] = useState({
     loading: true,
-    restaurant: [],
+    restaurants: [],
   });
-
-  const getUser = async () => {
-    const result = await apis.getUserMe(userToken);
-    console.log(result.data);
-    setUser(result.data);
-    return { ...result.data };
-  };
 
   const getUserRestaurant = async () => {
     try {
@@ -40,25 +44,25 @@ export default ({ navigation, route }) => {
           37.553292,
           126.9125836
         );
-        setRestaurantLoading({ loading: false, restaurant: response.data });
+        console.log("get Restaurant");
+        setRestaurants({ loading: false, restaurants: response.data });
       } else {
         throw new Error("Location permission not granted");
       }
     } catch (e) {
-      console.error("error In HomeContainer", e);
+      console.log("error In HomeContainer", e);
     }
   };
 
   useEffect(() => {
     getUserRestaurant();
-    getUser();
-  }, []);
-  return restaurantLoading.loading ? (
+  }, [user]);
+  return restaurants.loading ? (
     <Test style={[styles.container]} />
   ) : (
     <HomePresenter
       navigation={navigation}
-      restaurants={restaurantLoading.restaurant}
+      restaurants={restaurants.restaurants}
       style={[styles.container]}
       user={user}
       setUser={setUser}

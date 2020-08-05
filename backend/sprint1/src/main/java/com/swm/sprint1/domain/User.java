@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -28,7 +29,6 @@ public class User extends DateEntity{
     @Email
     private String email;
 
-    @JsonIgnore
     private String password;
 
     @Column(length = 500)
@@ -43,9 +43,8 @@ public class User extends DateEntity{
 
     private String providerId;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCategory> userCategories = new HashSet<>();
-
 
     public User(String name, String email, String password, AuthProvider provider) {
         this.name=name;
@@ -62,17 +61,20 @@ public class User extends DateEntity{
         this.providerId=providerId;
     }
 
+    public User(String name, AuthProvider provider) {
+        this.name=name;
+        this.provider=provider;
+    }
+
     public void update(String name, String imageUrl) {
         this.name=name;
         this.imageUrl=imageUrl;
     }
 
-    public void changeName(String name) {
-        this.name=name;
-    }
-
-    public void changeUserCategory(Set<UserCategory> userCategories) {
-        this.userCategories=userCategories;
-        userCategories.forEach(userCategory -> userCategory.changeUser(this));
+    public void updateUserInfo(String name, String imageUrl, List<Category> categories) {
+        this.name = name;
+        this.imageUrl= imageUrl;
+        this.userCategories.clear();
+        categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
     }
 }

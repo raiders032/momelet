@@ -74,7 +74,7 @@ export default ({ navigation, restaurants, style, user }) => {
         <Text style={{ ...styles.category }}>내 정보</Text>
       </TouchableOpacity>
       <View style={[styles.CardContainer]}>
-        {restaurantArray.map((obj, index) => {
+        {restaurantArray?.map((obj, index) => {
           if (index < topIndex) {
             return null;
           }

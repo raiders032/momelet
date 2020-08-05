@@ -11,12 +11,13 @@ export default ({ title, onPress }) => (
 
 const styles = StyleSheet.create({
   LoginButton: {
-    width: 200,
+    width: 300,
     height: 50,
     backgroundColor: "#61DAFB",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50,
     marginVertical: 10,
+    marginBottom: 40,
   },
 });

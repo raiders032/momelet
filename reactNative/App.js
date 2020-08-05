@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Image, View, AsyncStorage } from "react-native";
 import * as Font from "expo-font";
@@ -8,7 +7,6 @@ import Home from "./screens/Home";
 import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "./screens/Login";
-import { apis } from "./api";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const cacheImages = (images) => {
@@ -20,7 +18,9 @@ const cacheImages = (images) => {
     }
   });
 };
-
+const setAsyncStorage = () => {
+  AsyncStorage.setItem("userToken", null);
+};
 const cacheFonts = (fonts) => {
   return fonts.map((font) => Font.loadAsync(font));
 };
@@ -35,18 +35,18 @@ export default function App() {
       require("./assets/splash.png"),
       require("./assets/food1.jpg"),
       require("./assets/food2.jpg"),
+      require("./assets/loginImage.png"),
     ]);
     const fonts = cacheFonts([Ionicons.font, FontAwesome.font]);
     return Promise.all([...images, ...fonts]);
   };
 
   const onFinish = () => setIsLoading(true);
-
   useEffect(() => {
     const _retrieveData = async () => {
       try {
         const value = await AsyncStorage.getItem("@userToken");
-
+        console.log("userToekn", value);
         if (value !== null) {
           setUserToken(value);
         }
@@ -56,7 +56,6 @@ export default function App() {
     };
     _retrieveData();
   }, []);
-
   return isLoading ? (
     <AppLoading
       startAsync={loadAssets}
@@ -77,7 +76,6 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
