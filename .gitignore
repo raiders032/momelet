@@ -8,6 +8,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+reactNative/yarn-error.log
 
 # macOS
 .DS_Store
