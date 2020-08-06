@@ -1,44 +1,51 @@
 const SingleObject = require("../SingleObjects");
 
-const findUserLocation = (socketId, lat, long) => {
-  const aroundUser = [];
+const findAroundUsers = (mySocketId, lat, long) => {
+  const aroundUsers = [];
   const max_lat = lat + 0.0025;
   const min_lat = lat - 0.0025;
   const max_long = long + 0.0025;
   const min_long = long - 0.0025;
-  SingleObject.userList.forEach((value, key) => {
-    // 위도는 0.0025 경도는 0.0025 차이가 각각 약 250m, 240m 의 차이임
-    // 그래서 500m 직사각형 정도
-    if (socketId !== key) {
+
+  // 클래스의 프로퍼티에 직접접근하고 있음
+  for (let socketId of SingleObject.UserList.canPlayGameUserList) {
+    const aroundUser = SingleObject.UserList.connectedUserList.get(socketId);
+
+    if (mySocketId !== socketId) {
       if (
-        value["latitude"] >= min_lat &&
-        value["latitude"] <= max_lat &&
-        value["longitude"] >= min_long &&
-        value["longitude"] <= max_long
+        aroundUser["latitude"] >= min_lat &&
+        aroundUser["latitude"] <= max_lat &&
+        aroundUser["longitude"] >= min_long &&
+        aroundUser["longitude"] <= max_long
       ) {
-        aroundUser.push({
-          socketId: value["socketId"],
-          name: value["name"],
-          imageUrl: value["imageUrl"],
+        aroundUsers.push({
+          socketId: aroundUser["socketId"],
+          name: aroundUser["name"],
+          imageUrl: aroundUser["imageUrl"],
         });
       }
     }
-  });
-
-  return aroundUser;
+  }
+  return aroundUsers;
 };
 
 // 같이하기
 const togetherService = (socket, msg) => {
   var echo = "together 이벤트. 받은 msg: " + msg;
   console.log(echo);
-  const msgSplit = msg.split(" ");
-  const latitude = msgSplit[0];
-  const longitude = msgSplit[1];
 
-  const aroundUser = findUserLocation(socket.id, latitude, longitude);
+  // 수정되어야 하는 부분. 이제 msg의 형식을 JSON으로 통일할 예정이기 때문
+  // const msgSplit = msg.split(" ");
+  // const latitude = msgSplit[0];
+  // const longitude = msgSplit[1];
 
-  return aroundUser;
+  // 테스팅용. index.html 의 형식에 맞춤.
+  const latitude = msg[0];
+  const longitude = msg[1];
+
+  const aroundUsers = findAroundUsers(socket.id, latitude, longitude);
+
+  return aroundUsers;
 };
 
 module.exports = {
