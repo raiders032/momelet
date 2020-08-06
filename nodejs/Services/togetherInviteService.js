@@ -1,12 +1,18 @@
-const togetherInviteService = (socket, msg) => {
-  var echo = "together-invite 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+const SingleObject = require("../SingleObjects");
 
-  // 방이름 스트링으로 보내기
-  // var roomName = socket.id + " room";
-  // socket.join(roomName);
-  // socket.emit("togetherInvite", roomName);
-  return echo;
+const togetherInviteService = (socket, msg) => {
+  const socketId = socket.id;
+  const roomName = socketId + "_room";
+  const inviteUsers = msg;
+
+  // 방장 접속
+  socket.join(roomName);
+  SingleObject.UserList.updateUserJoinedRoomName(socketId, roomName);
+
+  for (let user of inviteUsers) {
+    socket.to(user).emit("togetherInvite", roomName);
+  }
+  return roomName;
 };
 
 module.exports = {
