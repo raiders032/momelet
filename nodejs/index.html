@@ -53,11 +53,38 @@
     <script>
       $(function () {
         var socket = io();
+        var socketId;
+        socket.on("connect", () => {
+          socketId = socket.id;
+          $("#messages").append($('<li id="sId">').text(socketId));
+        });
         $("form").submit(function (e) {
           e.preventDefault(); // prevents page reloading
-          socket.emit("together", $("#m").val());
+          var value = $("#m").val();
+          var texts = value.split(" ");
+          var channel = texts[0];
+          var msg = texts.slice(1);
+
+          socket.emit(channel, msg);
           $("#m").val("");
           return false;
+        });
+
+        // temp = (sId) => {
+        //   console.log("temp 함수 시작");
+        //   socket.on(sId, (msg) => {
+        //     $("#messages").append($("<li>").text(msg));
+        //   });
+        // };
+        // setTimeout(() => {
+        //   console.log("시작");
+        //   const sId = document.getElementById("sId").innerText;
+        //   console.log("가져온 socketId : " + sId);
+        //   console.log("typeof text: " + typeof sId);
+        //   temp(sId);
+        // }, 3000);
+        socket.on("togetherInvite", (msg) => {
+          $("#messages").append($("<li>").text(msg));
         });
         socket.on("together", function (msg) {
           $("#messages").append($("<li>").text(msg));

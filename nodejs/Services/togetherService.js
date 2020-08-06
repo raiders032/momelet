@@ -7,8 +7,9 @@ const findUserLocation = (socketId, lat, long) => {
   const max_long = long + 0.0025;
   const min_long = long - 0.0025;
 
-  for (let key of SingleObject.Users.canPlayGameUsers) {
-    const user = SingleObject.Users.connectedUsers.get(key);
+  // 클래스의 프로퍼티에 직접접근하고 있음
+  for (let key of SingleObject.UserList.canPlayGameUserList) {
+    const user = SingleObject.UserList.connectedUserList.get(key);
 
     if (socketId !== key) {
       if (

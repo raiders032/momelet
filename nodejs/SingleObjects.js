@@ -12,11 +12,11 @@ const { kMaxLength } = require("buffer");
 // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Map
 
 // const userList = new Map();
-const usersDomain = require("./Domains/Users");
-const Users = new usersDomain.Users();
+const userListDomain = require("./Domains/UserList");
+const UserList = new userListDomain.UserList();
 
 module.exports.app = app;
 module.exports.server = server;
 module.exports.io = io;
 // module.exports.userList = userList;
-module.exports.Users = Users;
+module.exports.UserList = UserList;
