@@ -1,23 +1,14 @@
+const { User } = require("./User");
+
 class UserList {
   constructor() {
-    this.connectedUserList = new Map(); // key: socketId, value: userInfo
+    this.connectedUserList = new Map(); // key: socketId, value: User
     this.canPlayGameUserList = new Set(); // value: socketId
     this.connectedUserListForCheck = new Set(); // value: id
   }
 
-  addConnectedUser = (
-    socketId,
-    { id, email, name, imageUrl, JWT, latitude, longitude }
-  ) => {
-    this.connectedUserList.set(socketId, {
-      id,
-      email,
-      name,
-      imageUrl,
-      JWT,
-      latitude,
-      longitude,
-    });
+  addConnectedUser = (socketId, userInfo) => {
+    this.connectedUserList.set(socketId, new User(socketId, userInfo));
   };
   addCanPlayGameUser = (socketId) => this.canPlayGameUserList.add(socketId);
   addConnectedUserForCheck = (id) => this.connectedUserListForCheck.add(id);
@@ -44,6 +35,20 @@ class UserList {
   };
 
   checkUserAlreadyConnected = (id) => !this.connectedUserListForCheck.has(id);
+
+  setUserConnectedRoomName = (socketId, roomName) => {
+    let user = this.connectedUserList.get(socketId);
+
+    if (roomName === undefined) {
+      return false;
+    } else if (roomName === null) {
+      user.setConnectedRoomName(socketId, null);
+    } else {
+      user.setConnectedRoomName(socketId, roomName);
+    }
+
+    return true;
+  };
 }
 
 module.exports.UserList = UserList;
