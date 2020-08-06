@@ -11,23 +11,15 @@ class User {
     this.JWT = JWT;
     this.latitude = latitude;
     this.longitude = longitude;
-    this.connectedRoomName = null;
+    this.joinedRoomName = null;
   }
 
-  setConnectedRoomName = (roomName) => {
-    try {
-      this.connectedRoomName = roomName;
-      return true;
-    } catch (e) {
-      console.log(
-        "ERROR: User class' method setConnectedRoomName error. Return false."
-      );
-      return false;
-    }
+  updateJoinedRoomName = (roomName) => {
+    this.joinedRoomName = roomName;
   };
 
-  getConnectedRoomName = () => {
-    return this.connectedRoomName;
+  getJoinedRoomName = () => {
+    return this.joinedRoomName;
   };
 }
 

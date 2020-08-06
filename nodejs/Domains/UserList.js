@@ -19,14 +19,14 @@ class UserList {
   deleteConnectedUserForCheck = (id) =>
     this.connectedUserListForCheck.delete(id);
 
-  // 새로운 유저 접속시 수행하는 메소드
+  // 새로운 유저 접속시 수행하는 메소드(wrapper 메소드)
   updateConnectedUser = (socketId, userInfo) => {
     let { id } = userInfo;
     this.addConnectedUser(socketId, userInfo);
     this.addCanPlayGameUser(socketId);
     this.addConnectedUserForCheck(id);
   };
-  // 유저가 접속이 끊기면 수행하는 메소드. 하나의 소켓에 대해서 마치 disctructor 처럼 동작
+  // 유저가 접속이 끊기면 수행하는 메소드(wrapper 메소드). 하나의 소켓에 대해서 마치 disctructor 처럼 동작
   updateDisconnectedUser = (socketId) => {
     let { id } = this.connectedUserList.get(socketId);
     this.deleteConnectedUser(socketId);
@@ -34,17 +34,18 @@ class UserList {
     this.deleteConnectedUserForCheck(id);
   };
 
-  checkUserAlreadyConnected = (id) => !this.connectedUserListForCheck.has(id);
+  checkUserAlreadyConnected = (id) => this.connectedUserListForCheck.has(id);
 
-  setUserConnectedRoomName = (socketId, roomName) => {
+  // 유저가 접속해있는 방이름 변경
+  updateUserJoinedRoomName = (socketId, roomName) => {
     let user = this.connectedUserList.get(socketId);
 
     if (roomName === undefined) {
       return false;
     } else if (roomName === null) {
-      user.setConnectedRoomName(socketId, null);
+      user.updateJoinedRoomName(socketId, null);
     } else {
-      user.setConnectedRoomName(socketId, roomName);
+      user.updateJoinedRoomName(socketId, roomName);
     }
 
     return true;

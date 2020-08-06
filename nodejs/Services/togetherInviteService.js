@@ -7,7 +7,7 @@ const togetherInviteService = (socket, msg) => {
 
   // 방장 접속
   socket.join(roomName);
-  SingleObject.UserList.setUserConnectedRoomName(socketId, roomName);
+  SingleObject.UserList.updateUserJoinedRoomName(socketId, roomName);
 
   for (let user of inviteUsers) {
     socket.to(user).emit("togetherInvite", roomName);
