@@ -1,21 +1,42 @@
 const SingleObject = require("../../SingleObjects");
 
+// const makeAndJoinRoom = (socket, roomName, socketId) => {
+//   RoomList.makeRoom(roomName, socketId);
+//   socket.join(roomName);
+// };
+
 const togetherInviteService = (socket, msg) => {
   const echo = "togetherInviteService 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
-  const socketId = socket.id;
-  const roomName = socketId + "_room";
-  const inviteUsers = msg;
+  const { inviteTheseUsers } = JSON.parse(msg);
 
-  for (let user of inviteUsers) {
-    socket.to(user).emit("togetherInvite", roomName);
+  const msgSender = SingleObject.UserRepository.connectedUserRepository.get(
+    socket.Id
+  );
+  const roomName = msgSender.socketId + "_room";
+  // makeAndJoinRoom(socket, roomName, msgSender.socketId);
+  const inviteMsg = JSON.stringify({
+    roomName,
+    hostName: msgSender.name,
+  });
+
+  for (let user of inviteTheseUsers) {
+    socket.to(user).emit("togetherInvitation", inviteMsg);
   }
 
-  const ret = JSON.stringify({
+  const retMsg = JSON.stringify({
     roomName,
+    gameRoomUserList: [
+      {
+        socketId: msgSender.socketId,
+        name: msgSender.name,
+        imageUrl: msgSender.imageUrl,
+      },
+    ],
+    hostSocketId: msgSender.socketId,
   });
-  return ret;
+  return retMsg;
 };
 
 module.exports = {
