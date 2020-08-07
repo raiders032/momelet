@@ -70,27 +70,57 @@
           return false;
         });
 
-        // temp = (sId) => {
-        //   console.log("temp 함수 시작");
-        //   socket.on(sId, (msg) => {
-        //     $("#messages").append($("<li>").text(msg));
-        //   });
-        // };
-        // setTimeout(() => {
-        //   console.log("시작");
-        //   const sId = document.getElementById("sId").innerText;
-        //   console.log("가져온 socketId : " + sId);
-        //   console.log("typeof text: " + typeof sId);
-        //   temp(sId);
-        // }, 3000);
-        socket.on("togetherInvite", (msg) => {
-          $("#messages").append($("<li>").text(msg));
-        });
         socket.on("together", function (msg) {
-          $("#messages").append($("<li>").text(msg));
-          var obj = JSON.stringify(msg);
-          $("#messages").append($("<li>").text("메시지 타입: " + typeof obj));
-          $("#messages").append($("<li>").text(obj));
+          $("#messages").append(
+            $("<li>").text("together 이벤트. 받은 msg: " + msg)
+          );
+          //var obj = JSON.stringify(msg);
+        });
+        socket.on("togetherInvite", (msg) => {
+          $("#messages").append(
+            $("<li>").text("togetherInvite 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("togetherInvitation", (msg) => {
+          $("#messages").append(
+            $("<li>").text("togetherInvitation 이벤트. 받은 msg: " + msg)
+          );
+        });
+
+        socket.on("gameRoomJoin", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomJoin 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRoomUpdate", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomUpdate 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRoomLeave", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomLeave 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameStart", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameStart 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameUserFinish", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameUserFinish 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameAllFinish", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameAllFinish 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRestart", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRestart 이벤트. 받은 msg: " + msg)
+          );
         });
       });
     </script>
