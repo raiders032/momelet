@@ -41,6 +41,7 @@ public class User extends DateEntity{
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
+    @NotNull
     private String providerId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,18 +54,15 @@ public class User extends DateEntity{
         this.provider=provider;
     }
 
-    public User(String name, String email, String imageUrl, AuthProvider provider, String providerId) {
+    public User(String name, String email, String imageUrl, AuthProvider provider, String providerId, List<Category> categories) {
         this.name=name;
         this.email=email;
         this.imageUrl=imageUrl;
-        this.provider=provider;
-        this.providerId=providerId;
+        this.provider = provider;
+        this.providerId= providerId;
+        categories.forEach(category->userCategories.add(new UserCategory(this,category)));
     }
 
-    public User(String name, AuthProvider provider) {
-        this.name=name;
-        this.provider=provider;
-    }
 
     public void update(String name, String imageUrl) {
         this.name=name;
