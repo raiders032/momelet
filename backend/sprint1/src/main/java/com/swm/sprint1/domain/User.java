@@ -63,6 +63,12 @@ public class User extends DateEntity{
         categories.forEach(category->userCategories.add(new UserCategory(this,category)));
     }
 
+    public User(String name, AuthProvider provider, String providerId) {
+        this.name = name;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
 
     public void update(String name, String imageUrl) {
         this.name=name;

@@ -33,7 +33,7 @@ public class UserServiceTest {
         //given
         String name = "김민수";
         String imageUrl ="123";
-        Long userId = userRepository.save(new User(name, AuthProvider.local)).getId();
+        Long userId = userRepository.save(new User(name, AuthProvider.local, "localTest")).getId();
 
         String newName = "김민수2";
         String newImageUrl = "456";
