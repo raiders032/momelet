@@ -4,18 +4,31 @@ const togetherInviteService = (socket, msg) => {
   const echo = "togetherInviteService 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
-  const socketId = socket.id;
-  const roomName = socketId + "_room";
-  const inviteUsers = msg;
+  const { inviteTheseUsers } = JSON.parse(msg);
 
-  for (let user of inviteUsers) {
-    socket.to(user).emit("togetherInvite", roomName);
+  const msgSender = SingleObject.UserList.connectedUserList.get(socket.Id);
+  const roomName = msgSender.socketId + "_room";
+
+  const inviteMsg = JSON.stringify({
+    roomName,
+    invitorName: msgSender.name,
+  });
+
+  for (let user of inviteTheseUsers) {
+    socket.to(user).emit("togetherInvitation", inviteMsg);
   }
 
-  const ret = JSON.stringify({
+  const retMsg = JSON.stringify({
     roomName,
+    gameRoomUserList: [
+      {
+        socketId: msgSender.socketId,
+        name: msgSender.name,
+        imageUrl: msgSender.imageUrl,
+      },
+    ],
   });
-  return ret;
+  return retMsg;
 };
 
 module.exports = {
