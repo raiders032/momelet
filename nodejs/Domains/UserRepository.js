@@ -47,9 +47,9 @@ class UserRepository {
     if (roomName === undefined) {
       return false;
     } else if (roomName === null) {
-      user.updateJoinedRoomName(socketId, null);
+      user.updateJoinedRoomName(null);
     } else {
-      user.updateJoinedRoomName(socketId, roomName);
+      user.updateJoinedRoomName(roomName);
     }
 
     return true;
