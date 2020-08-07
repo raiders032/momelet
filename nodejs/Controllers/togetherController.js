@@ -14,9 +14,9 @@ const togetherController = (socket) => {
   });
 
   // 초대수락
-  socket.on("togetherAccept", (msg) => {
-    const ret = service.togetherAcceptService(socket, msg);
-    socket.emit("togetherAccept", ret);
+  socket.on("togetherInvitation", (msg) => {
+    const ret = service.togetherInvitationService(socket, msg);
+    socket.emit("togetherInvitation", ret);
   });
 };
 

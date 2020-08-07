@@ -1,4 +1,4 @@
-const SingleObject = require("../SingleObjects");
+const SingleObject = require("../../SingleObjects");
 
 const disconnectService = (socket) => {
   console.log("user disconnected");

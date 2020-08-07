@@ -1,4 +1,4 @@
-const SingleObject = require("../SingleObjects");
+const SingleObject = require("../../SingleObjects");
 
 const findAroundUsers = (mySocketId, lat, long) => {
   const aroundUsers = [];
@@ -45,7 +45,8 @@ const togetherService = (socket, msg) => {
 
   const aroundUsers = findAroundUsers(socket.id, latitude, longitude);
 
-  return aroundUsers;
+  const ret = JSON.stringify({ aroundUsers });
+  return ret;
 };
 
 module.exports = {
