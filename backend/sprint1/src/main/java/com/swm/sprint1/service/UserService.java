@@ -39,8 +39,11 @@ public class UserService {
         user.updateUserInfo(request.getName(), request.getImageUrl(), categories);
     }
 
-    public List<String> getUserCategoryName(Long id) {
+    public List<String> findCategoryNameByUserId(Long id) {
         return userCategoryRepository.findCategoryNameByUserId(id);
     }
 
+    public Map<String, Integer> findAllCategoryNameByUserId(Long id) {
+        return userCategoryRepository.findAllCategoryNameByUserId(id);
+    }
 }

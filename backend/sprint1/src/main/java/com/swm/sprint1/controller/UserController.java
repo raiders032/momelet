@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "user")
 @RequiredArgsConstructor
@@ -43,7 +44,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();
-        List<String> categories = userService.getUserCategoryName(user.getId());
+        Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
         return ResponseEntity.ok(new RetrieveUserResponse(user.getId(),user.getName(), user.getEmail(), user.getImageUrl(), categories));
     }
 
