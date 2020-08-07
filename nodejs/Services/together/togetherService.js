@@ -8,8 +8,10 @@ const findAroundUsers = (mySocketId, lat, long) => {
   const min_long = long - 0.0025;
 
   // 클래스의 프로퍼티에 직접접근하고 있음
-  for (let socketId of SingleObject.UserList.canPlayGameUserList) {
-    const aroundUser = SingleObject.UserList.connectedUserList.get(socketId);
+  for (let socketId of SingleObject.UserRepository.canPlayGameUserRepository) {
+    const aroundUser = SingleObject.UserRepository.connectedUserRepository.get(
+      socketId
+    );
 
     if (mySocketId !== socketId) {
       if (
