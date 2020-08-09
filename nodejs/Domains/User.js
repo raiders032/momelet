@@ -15,13 +15,13 @@ class User {
     this.canReceive = false;
   }
 
-  updateJoinedRoomName = (roomName) => {
+  updateJoinedRoomName(roomName) {
     this.joinedRoomName = roomName;
-  };
+  }
 
-  getJoinedRoomName = () => {
+  getJoinedRoomName() {
     return this.joinedRoomName;
-  };
+  }
 }
 
 module.exports.User = User;

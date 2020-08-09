@@ -8,15 +8,15 @@ class Room {
     this.maxHeadCount = 8;
   }
 
-  addUser = (user) => {
+  addUser(user) {
     if (this.headCount >= this.maxHeadCount) return false;
 
     this.userList.push(user.socketId, user);
     this.headCount++;
     return true;
-  };
+  }
 
-  deleteUser = (user) => {
+  deleteUser(user) {
     this.userList.forEach((value, index) => {
       if (this.userList.length <= 0)
         throw new Error("방 인원이 0명 이므로 삭제할 수 없습니다.");
@@ -35,9 +35,9 @@ class Room {
       if (this.headCount <= 0) return true;
       else return false;
     });
-  };
+  }
 
-  startGame = () => {
+  startGame() {
     this.isStarted = true;
-  };
+  }
 }
