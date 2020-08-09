@@ -12,6 +12,7 @@ class User {
     this.latitude = latitude;
     this.longitude = longitude;
     this.joinedRoomName = null;
+    this.canReceive = false;
   }
 
   updateJoinedRoomName = (roomName) => {

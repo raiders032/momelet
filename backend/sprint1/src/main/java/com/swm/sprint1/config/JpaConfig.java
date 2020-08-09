@@ -2,6 +2,7 @@ package com.swm.sprint1.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.security.UserPrincipal;
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -29,6 +30,11 @@ public class JpaConfig {
     @Bean
     public AuditorAware<Long> auditorProvider() {
         return new SpringSecurityAuditAwareImpl();
+    }
+
+    @Bean
+    public JpaResultMapper jpaResultMapper(){
+        return new JpaResultMapper();
     }
 
     class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {

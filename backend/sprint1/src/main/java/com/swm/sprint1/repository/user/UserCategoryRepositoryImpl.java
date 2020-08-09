@@ -38,5 +38,4 @@ public class UserCategoryRepositoryImpl implements UserCategoryRepositoryCustom 
         return queryFactory.delete(userCategory).where(userCategory.user.id.eq(userId)).execute();
     }
 
-
 }
