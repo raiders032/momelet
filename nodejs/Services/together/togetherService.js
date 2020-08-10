@@ -32,12 +32,16 @@ const togetherService = (socket, msg) => {
   var echo = "together 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
-  const { id, latitude, longitude } = JSON.parse(msg);
+  try {
+    const { id, latitude, longitude } = JSON.parse(msg);
 
-  const aroundUsers = findAroundUsers(id, latitude, longitude);
+    const aroundUsers = findAroundUsers(id, latitude, longitude);
 
-  const ret = JSON.stringify({ aroundUsers });
-  return ret;
+    const ret = JSON.stringify({ aroundUsers });
+    return ret;
+  } catch (e) {
+    return echo;
+  }
 };
 
 module.exports = {
