@@ -2,7 +2,6 @@ package com.swm.sprint1.repository.user;
 
 import com.swm.sprint1.domain.Category;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 public interface UserCategoryRepositoryCustom {

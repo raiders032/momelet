@@ -11,7 +11,7 @@ web-build/
 reactNative/yarn-error.log
 reactNative/enviroment.js
 reactNative/yarn.lock
-
+reactNative/.expo/
 # macOS
 .DS_Store
 

@@ -1,4 +1,4 @@
-package com.swm.sprint1.repository;
+package com.swm.sprint1.repository.category;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
