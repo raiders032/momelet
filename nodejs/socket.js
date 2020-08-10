@@ -14,7 +14,7 @@ module.exports = (server, app) => {
   app.set("io", io);
 
   io.use((socket, next) => {
-    userFiter(socket.request, socket.request.res, next, socket, io);
+    userFilter(socket.request, socket.request.res, next, socket, io);
   });
 
   io.on("connection", (socket) => {
