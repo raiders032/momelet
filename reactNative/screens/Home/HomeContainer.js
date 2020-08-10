@@ -4,32 +4,30 @@ import { apis } from "../../api";
 import AsyncStorage from "@react-native-community/async-storage";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import Test from "../Test";
+import Test from "../Loading";
 import HomePresenter from "./HomePresenter";
-import Test2 from "../Test2";
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ navigation, route }) => {
   const userToken = route.params.userToken;
-
-  const [user, setUser] = useState(() => {
-    const getUser = async () => {
-      try {
-        const result = await apis.getUserMe(userToken);
-        setUser(result.data);
-        console.log("get User : ", result.data);
-        return { ...result.data };
-      } catch (error) {
-        console.log("error in get user", error);
-      }
-    };
-    getUser();
-  });
-
+  const isChanged = route.params.isChanged ? route.params.isChanged : 1;
+  const [user, setUser] = useState(() => {});
+  console.log(isChanged);
   const [restaurants, setRestaurants] = useState({
     loading: true,
     restaurants: [],
   });
+  const getUser = async () => {
+    try {
+      const result = await apis.getUserMe(userToken);
+      setUser(result.data);
+      console.log("get User : ", result.data);
+      return { ...result.data };
+    } catch (error) {
+      console.log("error in get user", error);
+    }
+  };
 
   const getUserRestaurant = async () => {
     try {
@@ -56,7 +54,8 @@ export default ({ navigation, route }) => {
 
   useEffect(() => {
     getUserRestaurant();
-  }, [user]);
+    getUser();
+  }, [isChanged]);
   return restaurants.loading ? (
     <Test style={[styles.container]} />
   ) : (
@@ -65,7 +64,7 @@ export default ({ navigation, route }) => {
       restaurants={restaurants.restaurants}
       style={[styles.container]}
       user={user}
-      setUser={setUser}
+      isChanged={isChanged}
     />
   );
 };

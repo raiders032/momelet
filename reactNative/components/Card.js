@@ -84,7 +84,7 @@ export default ({ restaurant }) => {
                 borderTopLeftRadius: 50,
                 borderTopRightRadius: 50,
               }}
-              source={require("../assets/food2.jpg")}
+              source={{ uri: restaurant.thumUrl }}
             />
           </Animated.View>
           <Animated.View
@@ -105,7 +105,7 @@ export default ({ restaurant }) => {
                 borderTopLeftRadius: 50,
                 borderTopRightRadius: 50,
               }}
-              source={{ uri: restaurant.thumUrl }}
+              source={require("../assets/food2.jpg")}
             />
           </Animated.View>
           <TouchableOpacity
