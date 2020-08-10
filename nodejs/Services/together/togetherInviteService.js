@@ -12,7 +12,7 @@ const togetherInviteService = (socket, msg) => {
   const { inviteTheseUsers } = JSON.parse(msg);
 
   const msgSender = SingleObject.UserRepository.connectedUserRepository.get(
-    socket.Id
+    socket.id
   );
   const roomName = msgSender.socketId + "_room";
   // makeAndJoinRoom(socket, roomName, msgSender.socketId);
