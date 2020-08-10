@@ -24,3 +24,5 @@ class RoomRepository {
     return this.roomRepository.get(roomName);
   }
 }
+
+module.exports.RoomRepository = RoomRepository;
