@@ -3,23 +3,23 @@ class RoomRepository {
     this.roomRepository = new Map();
   }
 
-  addRoom(hostSocketId) {
-    const roomName = hostSocketId + Date.now();
-    const newRoom = new Room(roomName, hostSocketId);
+  add(id) {
+    const roomName = id + Date.now();
+    const newRoom = new Room(roomName, id);
 
-    if (this.roomRepository.has(room.roomName)) return null;
+    if (this.roomRepository.has(roomName)) return null;
 
     this.roomRepository.set(newRoom);
     return roomName;
   }
 
-  deleteRoom(roomName) {
+  delete(roomName) {
     if (!this.roomRepository.has(roomName)) return false;
     this.roomRepository.delete(roomName);
     return true;
   }
 
-  findRoomByRoomName(roomName) {
+  findByRoomName(roomName) {
     if (!this.roomRepository.has(roomName)) return false;
     return this.roomRepository.get(roomName);
   }
