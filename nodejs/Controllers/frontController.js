@@ -5,18 +5,10 @@ const { disconnectController } = require("./disconnectController");
 
 const frontController = () => {
   SingleObject.io.on("connection", (socket) => {
-    // 중복 접속 체크. 지금은 결과만 출력하고 중복 접속을 막지 않음.
-    let { id } = socket.handshake.query;
-    console.log(SingleObject.UserRepository.checkUserAlreadyConnected(id));
-    // 중복 체크 끝
-    SingleObject.UserRepository.updateConnectedUser(
-      socket.id,
-      socket.handshake.query
-    );
+    SingleObject.UserRepository.add(socket.id, socket.handshake.query);
 
     console.log("a user connected");
-    console.log(SingleObject.UserRepository.connectedUserRepository);
-    console.log(SingleObject.UserRepository.connectedUserRepositoryForCheck);
+    console.log(SingleObject.UserRepository.userRepository);
 
     togetherController(socket);
     gameController(socket);

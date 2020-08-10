@@ -9,12 +9,10 @@ const togetherInviteService = (socket, msg) => {
   const echo = "togetherInviteService 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
-  const { inviteTheseUsers } = JSON.parse(msg);
+  const { id, inviteTheseUsers } = JSON.parse(msg);
 
-  const msgSender = SingleObject.UserRepository.connectedUserRepository.get(
-    socket.id
-  );
-  const roomName = msgSender.socketId + "_room";
+  const msgSender = SingleObject.UserRepository.userRepository.get(id);
+  const roomName = msgSender.id + "_room";
   // makeAndJoinRoom(socket, roomName, msgSender.socketId);
   const inviteMsg = JSON.stringify({
     roomName,
@@ -29,12 +27,12 @@ const togetherInviteService = (socket, msg) => {
     roomName,
     gameRoomUserList: [
       {
-        socketId: msgSender.socketId,
+        id: msgSender.id,
         name: msgSender.name,
         imageUrl: msgSender.imageUrl,
       },
     ],
-    hostSocketId: msgSender.socketId,
+    hostId: msgSender.id,
   });
   return retMsg;
 };
