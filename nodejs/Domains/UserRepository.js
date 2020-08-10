@@ -7,7 +7,8 @@ class UserRepository {
   }
 
   add(socketId, userInfo) {
-    this.userRepository.set(new User(socketId, userInfo));
+    let { id } = userInfo;
+    this.userRepository.set(id, new User(socketId, userInfo));
     this.socketIdMapper.set(socketId, userInfo.id);
   }
 

@@ -1,12 +1,10 @@
 const app = require("express")();
-//const server = require("http").createServer(app);
 const logger = require("morgan");
 const webSocket = require("./socket");
-const userFilter = require("./Middleware/userFilter");
 require("dotenv").config();
 
 app.use(logger("dev"));
-app.use(userFilter);
+
 // 디버깅 용
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
