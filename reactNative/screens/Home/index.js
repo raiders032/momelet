@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeContainer from "./HomeContainer";
 import MyPage from "../MyPage";
-
+import EditName from "../EditName";
 const Stack = createStackNavigator();
 
 export default ({ userToken }) => {
@@ -20,6 +20,7 @@ export default ({ userToken }) => {
           initialParams={{ userToken: userToken }}
         />
         <Stack.Screen name="MyPage" component={MyPage} />
+        <Stack.Screen name="EditName" component={EditName} />
       </Stack.Navigator>
     </NavigationContainer>
   );

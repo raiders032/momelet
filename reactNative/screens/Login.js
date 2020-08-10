@@ -5,6 +5,7 @@ import LoginButton from "../components/LoginButton";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import getEnvVars from "../enviroment";
+import Constants from "expo-constants";
 
 const _storeData = async (token) => {
   try {
@@ -19,13 +20,36 @@ const onPress = async (setToken, where) => {
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
     ""
   )}`;
+  console.log(Linking.makeUrl(""));
+  const _removeLinkingListener = () => {
+    Linking.removeEventListener("url", _handleRedirect);
+  };
+  const _handleRedirect = async (event) => {
+    if (Constants.platform.ios) {
+      WebBrowser.dismissBrowser();
+    } else {
+      _removeLinkingListener();
+    }
+
+    let data = Linking.parse(event.url);
+    console.log("hoxy?", event.url);
+    await _storeData(data.queryParams.token);
+    setToken(data.queryParams.token);
+  };
+  const addLinkingListener = () => {
+    Linking.addEventListener("url", _handleRedirect);
+  };
   const supported = await Linking.canOpenURL(URL);
   if (supported) {
     try {
-      const result = await WebBrowser.openAuthSessionAsync(URL);
-
-      await _storeData(Linking.parse(result.url).queryParams.token);
-      setToken(Linking.parse(result.url).queryParams.token);
+      addLinkingListener();
+      const result = await WebBrowser.openBrowserAsync(URL);
+      if (Constants.platform.ios) {
+        _removeLinkingListener();
+      }
+      // await _storeData(Linking.parse(result.url).queryParams.token);
+      // setToken(Linking.parse(result.url).queryParams.token);
+      console.log("abc", { result });
       console.log("Login Success");
     } catch (error) {
       console.error("error in login", error);
@@ -49,7 +73,7 @@ export default ({ setToken }) => {
           title="GOOGLE LOGIN"
           onPress={() => onPress(setToken, "google")}
         />
-        {/* <LoginButton
+        <LoginButton
           title="Naver Login"
           onPress={() => onPress(setToken, "naver")}
         />
@@ -60,7 +84,7 @@ export default ({ setToken }) => {
         <LoginButton
           title="KaKao Login"
           onPress={() => onPress(setToken, "kakao")}
-        /> */}
+        />
       </ImageBackground>
     </View>
   );

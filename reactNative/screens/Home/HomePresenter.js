@@ -11,7 +11,7 @@ import {
 import Card from "../../components/Card";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ navigation, restaurants, style, user }) => {
+export default ({ navigation, restaurants, user, isChanged }) => {
   const [topIndex, setTopIndex] = useState(0);
   const [restaurantArray, setRestaurantArray] = useState(restaurants);
   const nextCard = () => setTopIndex((currentValue) => currentValue + 1);
@@ -68,11 +68,12 @@ export default ({ navigation, restaurants, style, user }) => {
     <View style={[styles.Container]}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("MyPage", { ...user });
+          navigation.navigate("MyPage", { ...user, isChanged });
         }}
       >
         <Text style={{ ...styles.category }}>내 정보</Text>
       </TouchableOpacity>
+
       <View style={[styles.CardContainer]}>
         {restaurantArray?.map((obj, index) => {
           if (index < topIndex) {
@@ -112,6 +113,19 @@ export default ({ navigation, restaurants, style, user }) => {
                 <Card key={index} restaurant={restaurants[index]} />
               </Animated.View>
             );
+          } else {
+            <Animated.View
+              key={index}
+              style={{
+                ...styles.cardBasic,
+                position: "absolute",
+                zIndex: -1000,
+                opacity: 0,
+              }}
+              {...panResponder.panHandlers}
+            >
+              <Card key={index} restaurant={restaurants[index]} />
+            </Animated.View>;
           }
         })}
       </View>
@@ -127,7 +141,7 @@ const styles = StyleSheet.create({
   },
   CardContainer: {
     width: "100%",
-    height: "100%",
+    height: "90%",
 
     alignItems: "center",
   },
