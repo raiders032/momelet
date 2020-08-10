@@ -52,7 +52,21 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
       $(function () {
-        var socket = io();
+        var socket = io({
+          //path: "/momulet",
+          extraHeaders: {
+            "x-id": "jsjphone123123",
+          },
+          query: {
+            id: "jsjphone",
+            email: "jsjphone@naver.com",
+            name: "Seonghoon",
+            imageUrl: "naver.com",
+            JWT: "@#$@FDSF",
+            latitude: "33.2",
+            longitude: "123.3",
+          },
+        });
         var socketId;
         socket.on("connect", () => {
           socketId = socket.id;
