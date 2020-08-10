@@ -51,3 +51,5 @@ backend/sprint1/spy.log
 
 **/.vscode/
 
+### nodejs
+nodejs/package-lock.json
