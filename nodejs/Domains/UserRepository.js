@@ -13,7 +13,7 @@ class UserRepository {
   }
 
   delete(socketId) {
-    this.userRepository.delete(this.findBySocketId(socketId));
+    this.userRepository.delete(this.findBySocketId(socketId).id);
     this.socketIdMapper.delete(socketId);
   }
 
