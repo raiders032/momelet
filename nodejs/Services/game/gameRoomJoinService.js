@@ -25,7 +25,7 @@ const gameRoomJoinService = (socket, msg) => {
     const users = findRoom.getUserList();
 
     users
-      .filter((user) => user.canReceive())
+      .filter((user) => user.canReceive() && id !== user.id)
       .forEach((user) => {
         socket.to(user.socketId).emit(
           "gameRoomUpdate",
