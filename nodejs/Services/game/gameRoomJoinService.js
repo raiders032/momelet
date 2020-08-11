@@ -21,17 +21,24 @@ const gameRoomJoinService = (socket, msg) => {
   room.addUser(user);
 
   socket.join(roomName, () => {
-    socket.to(roomName).emit(
-      "gameRoomUpdate",
-      JSON.stringify({
-        gameRoomUserList: room.getUserList().map((user) => {
-          const { id, name, imageUrl } = user;
-          const userDto = { id, name, imageUrl };
-          return userDto;
-        }),
-        hostId: room.getHostId(),
-      })
-    );
+    const findRoom = SingleObject.RoomRepository.findByRoomName(roomName);
+    const users = findRoom.getUserList();
+
+    users
+      .filter((user) => user.canReceive() && id !== user.id)
+      .forEach((user) => {
+        socket.to(user.socketId).emit(
+          "gameRoomUpdate",
+          JSON.stringify({
+            gameRoomUserList: room.getUserList().map((user) => {
+              const { id, name, imageUrl } = user;
+              const userDto = { id, name, imageUrl };
+              return userDto;
+            }),
+            hostId: room.getHostId(),
+          })
+        );
+      });
   });
 
   const ret = JSON.stringify({
