@@ -10,7 +10,6 @@ module.exports = (req, res, next, socket, io) => {
     user.disconnect(true);
   }
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
-  console.log("a user connected");
-  console.log(SingleObject.UserRepository.userRepository);
+  console.log("a user connected. id: " + id);
   next();
 };

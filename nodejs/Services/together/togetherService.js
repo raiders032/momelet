@@ -2,10 +2,10 @@ const SingleObject = require("../../SingleObjects");
 
 const findAroundUsers = (myId, lat, long) => {
   const aroundUsers = [];
-  const max_lat = lat + 0.0025;
-  const min_lat = lat - 0.0025;
-  const max_long = long + 0.0025;
-  const min_long = long - 0.0025;
+  const max_lat = Number(lat) + 0.0025;
+  const min_lat = Number(lat) - 0.0025;
+  const max_long = Number(long) + 0.0025;
+  const min_long = Number(long) - 0.0025;
 
   // 클래스의 프로퍼티에 직접접근하고 있음
   for (let user of SingleObject.UserRepository.findAll()) {
@@ -16,6 +16,7 @@ const findAroundUsers = (myId, lat, long) => {
         user["longitude"] >= min_long &&
         user["longitude"] <= max_long
       ) {
+        console.log("이 유저 추가요!: " + user["id"]);
         aroundUsers.push({
           id: user["id"],
           name: user["name"],
