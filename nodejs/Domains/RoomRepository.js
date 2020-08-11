@@ -1,5 +1,5 @@
 const ResourceNotFoundError = require("../Errors/ResourceNotFoundError");
-
+const Room = require("./Room");
 class RoomRepository {
   constructor() {
     this.roomRepository = new Map();

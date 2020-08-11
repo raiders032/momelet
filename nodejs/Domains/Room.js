@@ -55,3 +55,5 @@ class Room {
     return this.isStarted;
   }
 }
+
+module.exports = Room;

@@ -2,6 +2,7 @@ const SingleObject = require("../SingleObjects");
 
 module.exports = (req, res, next, socket, io) => {
   const { id } = socket.handshake.query;
+  console.log("id 타입: " + typeof id);
   if (SingleObject.UserRepository.existsById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
     console.log("중복유저찾았다!");
