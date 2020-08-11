@@ -52,6 +52,10 @@ class Room {
     return this.hostId;
   }
 
+  getHeadCount() {
+    return this.headCount;
+  }
+
   isStarted() {
     return this.isStarted;
   }
