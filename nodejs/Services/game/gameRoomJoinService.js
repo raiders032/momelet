@@ -7,7 +7,6 @@ const gameRoomJoinService = (socket, msg) => {
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
-  const roomName = room.getRoomName();
 
   if (room.isStarted()) {
     const ret = JSON.stringify({
