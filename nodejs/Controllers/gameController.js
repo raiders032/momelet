@@ -7,12 +7,6 @@ const gameController = (socket) => {
     socket.emit("gameRoomJoin", ret);
   });
 
-  // 게임방 유저 목록 업데이트
-  socket.on("gameRoomUpdate", (msg) => {
-    const ret = service.gameRoomUpdateService(socket, msg);
-    socket.emit("gameRoomUpdate", ret);
-  });
-
   // 게임방 퇴장
   socket.on("gameRoomLeave", (msg) => {
     const ret = service.gameRoomLeaveService(socket, msg);
