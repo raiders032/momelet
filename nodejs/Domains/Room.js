@@ -52,7 +52,7 @@ class Room {
     return this.hostId;
   }
 
-  isStarted() {
+  getIsStarted() {
     return this.isStarted;
   }
 }

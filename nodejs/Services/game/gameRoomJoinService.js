@@ -8,7 +8,7 @@ const gameRoomJoinService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  if (room.isStarted()) {
+  if (room.getIsStarted()) {
     const ret = JSON.stringify({
       status: "fail",
       roomName: null,
@@ -25,7 +25,7 @@ const gameRoomJoinService = (socket, msg) => {
     const users = findRoom.getUserList();
 
     users
-      .filter((user) => user.canReceive() && id !== user.id)
+      .filter((user) => user.getCanReceive() && id !== user.id)
       .forEach((user) => {
         socket.to(user.socketId).emit(
           "gameRoomUpdate",

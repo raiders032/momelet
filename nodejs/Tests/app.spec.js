@@ -15,6 +15,7 @@ describe("Conneting Server", () => {
   let sender1;
   let sender2;
   let sender3;
+  let roomName;
   before(() => {
     sender1 = ioClient("http://localhost:3000", ioOptions[0]);
     sender2 = ioClient("http://localhost:3000", ioOptions[1]);
@@ -51,7 +52,7 @@ describe("Conneting Server", () => {
     sender1.on("together", (msg) => {
       msg.should.be.type("string");
 
-      msgObject = JSON.parse(msg);
+      const msgObject = JSON.parse(msg);
       msgObject.should.have.property("aroundUsers");
 
       msgObject["aroundUsers"].length.should.not.equal(0);
@@ -71,7 +72,7 @@ describe("Conneting Server", () => {
     sender1.on("togetherInvite", (msg) => {
       msg.should.be.type("string");
 
-      msgObject = JSON.parse(msg);
+      const msgObject = JSON.parse(msg);
 
       // roomName 프로퍼티가 있는지, roomName이 "id"로 시작하는지 확인
       msgObject.should.have.property("roomName");
@@ -87,17 +88,57 @@ describe("Conneting Server", () => {
     sender2.on("togetherInvitation", (msg) => {
       msg.should.be.type("string");
 
-      msgObject = JSON.parse(msg);
+      const msgObject = JSON.parse(msg);
 
       // roomName, hostName 프로퍼티가 있는지 확인
-      msgObject.should.have.property("roomName");
-      msgObject.should.have.property("hostName");
+      msgObject.should.have.properties("roomName", "hostName");
 
       // roomName이 "id"로 시작하는지 확인
       msgObject["roomName"].should.startWith(ioOptions[0].myId);
 
       // hostName이 제대로 들어왔는지 확인
       msgObject["hostName"].should.equal(ioOptions[0].query.name);
+
+      roomName = msgObject["roomName"];
+      done();
+    });
+  });
+
+  it("gameRoomJoin, gameRoomUpdate 테스트", (done) => {
+    sender2.emit(
+      "gameRoomJoin",
+      JSON.stringify({
+        id: ioOptions[1].myId,
+        roomName,
+      })
+    );
+    sender3.emit(
+      "gameRoomJoin",
+      JSON.stringify({
+        id: ioOptions[2].myId,
+        roomName,
+      })
+    );
+
+    sender2.on("gameRoomJoin", (msg) => {
+      msg.should.be.type("string");
+
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties(
+        "status",
+        "roomName",
+        "gameRoomUserList",
+        "hostId"
+      );
+      msgObject["gameRoomUserList"].should.have.lengthOf(2);
+    });
+
+    sender2.on("gameRoomUpdate", (msg) => {
+      msg.should.be.type("string");
+
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties("gameRoomUserList", "hostId");
+      msgObject["gameRoomUserList"].should.have.lengthOf(3);
       done();
     });
   });
