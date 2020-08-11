@@ -46,4 +46,12 @@ class Room {
   getRoomName() {
     return this.roomName;
   }
+
+  getHostId() {
+    return this.hostId;
+  }
+
+  isStarted() {
+    return this.isStarted;
+  }
 }
