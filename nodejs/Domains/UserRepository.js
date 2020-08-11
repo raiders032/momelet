@@ -1,5 +1,5 @@
 const { User } = require("./User");
-
+const ResourceNotFoundError = require("../Errors/ResourceNotFoundError");
 class UserRepository {
   constructor() {
     this.userRepository = new Map(); // key: id, value: User

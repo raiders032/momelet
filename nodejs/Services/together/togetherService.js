@@ -16,7 +16,6 @@ const findAroundUsers = (myId, lat, long) => {
         user["longitude"] >= min_long &&
         user["longitude"] <= max_long
       ) {
-        console.log("이 유저 추가요!: " + user["id"]);
         aroundUsers.push({
           id: user["id"],
           name: user["name"],
