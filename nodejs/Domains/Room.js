@@ -10,6 +10,7 @@ class Room {
 
   addUser(user) {
     if (this.headCount >= this.maxHeadCount) return false;
+    user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
     return true;
