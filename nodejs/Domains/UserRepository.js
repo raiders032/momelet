@@ -28,6 +28,10 @@ class UserRepository {
   existsById(id) {
     return this.userRepository.has(id);
   }
+
+  findAll() {
+    return Array.from(this.userRepository.values());
+  }
 }
 
 module.exports.UserRepository = UserRepository;

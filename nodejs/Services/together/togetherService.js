@@ -8,8 +8,8 @@ const findAroundUsers = (myId, lat, long) => {
   const min_long = long - 0.0025;
 
   // 클래스의 프로퍼티에 직접접근하고 있음
-  for (let [id, user] of SingleObject.UserRepository.userRepository) {
-    if (myId !== id) {
+  for (let user of SingleObject.UserRepository.findAll()) {
+    if (myId !== user.id) {
       if (
         user["latitude"] >= min_lat &&
         user["latitude"] <= max_lat &&
