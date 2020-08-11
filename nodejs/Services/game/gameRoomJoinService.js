@@ -12,9 +12,9 @@ const gameRoomJoinService = (socket, msg) => {
   if (room.isStarted()) {
     const ret = JSON.stringify({
       status: "fail",
-      roomName: roomName,
-      gameRoomUserList: room.getUserList(),
-      hostId: room.getHostId(),
+      roomName: null,
+      gameRoomUserList: null,
+      hostId: null,
     });
     return ret;
   }
@@ -22,7 +22,17 @@ const gameRoomJoinService = (socket, msg) => {
   room.addUser(user);
 
   socket.join(roomName, () => {
-    socket.to(roomName).emit("gameRoomUpdate", room.getUserList());
+    socket.to(roomName).emit(
+      "gameRoomUpdate",
+      JSON.stringify({
+        gameRoomUserList: room.getUserList().map((user) => {
+          const { id, name, imageUrl } = user;
+          const userDto = { id, name, imageUrl };
+          return userDto;
+        }),
+        hostId: room.getHostId(),
+      })
+    );
   });
 
   const ret = JSON.stringify({
