@@ -10,7 +10,7 @@ class RoomRepository {
     if (this.roomRepository.has(roomName)) return null;
 
     this.roomRepository.set(newRoom);
-    return roomName;
+    return newRoom;
   }
 
   delete(roomName) {

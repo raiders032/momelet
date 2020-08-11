@@ -38,4 +38,12 @@ class Room {
   startGame() {
     this.isStarted = true;
   }
+
+  getUserList() {
+    return this.userList;
+  }
+
+  getRoomName() {
+    return this.roomName;
+  }
 }
