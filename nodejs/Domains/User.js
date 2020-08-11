@@ -23,7 +23,7 @@ class User {
     return this.joinedRoomName;
   }
 
-  canReceive() {
+  getCanReceive() {
     return this.canReceive;
   }
 

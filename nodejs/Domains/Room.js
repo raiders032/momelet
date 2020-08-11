@@ -56,7 +56,7 @@ class Room {
     return this.headCount;
   }
 
-  isStarted() {
+  getIsStarted() {
     return this.isStarted;
   }
 }

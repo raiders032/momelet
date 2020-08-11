@@ -9,7 +9,7 @@ const gameRoomJoinService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  if (room.isStarted()) {
+  if (room.getIsStarted()) {
     const ret = JSON.stringify({
       status: "fail",
       roomName: null,
