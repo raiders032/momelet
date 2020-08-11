@@ -8,7 +8,8 @@ const togetherInviteService = (socket, msg) => {
     const { id, inviteTheseUsers } = JSON.parse(msg);
 
     const msgSender = SingleObject.UserRepository.findById(id);
-    const roomName = SingleObject.RoomRepository.add(id);
+    const newRoom = SingleObject.RoomRepository.add(id);
+    const roomName = newRoom.getRoomName();
     const inviteMsg = JSON.stringify({
       roomName,
       hostName: msgSender.name,
@@ -20,13 +21,7 @@ const togetherInviteService = (socket, msg) => {
 
     const retMsg = JSON.stringify({
       roomName,
-      gameRoomUserList: [
-        {
-          id: msgSender.id,
-          name: msgSender.name,
-          imageUrl: msgSender.imageUrl,
-        },
-      ],
+      gameRoomUserList: newRoom.getUserList(),
       hostId: msgSender.id,
     });
     return retMsg;
