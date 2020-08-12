@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
+import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     }
 
     @Override
-    public List<RetrieveRestaurantResponse> findRestaurantByLatitudeAndLongitudeAndUserCategoryV2(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+    public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         String sql =
                 "   select r.restaurant_id, r.name, r.thum_url, group_concat(c.name order by c.category_id) as categories, " +
                         " r.google_rating, r.google_review_count, r.opening_hours, r.price_level, r.address, r.road_address, " +
@@ -62,7 +63,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "           from user_category " +
                 "           where user_category.user_id = ? ) " +
                 "       group by rc.restaurant_id) " +
-                "   group by r.restaurant_id ";
+                "   group by r.restaurant_id" +
+                        " order by r.google_rating ";
         Query query = em.createNativeQuery(sql)
                 .setParameter(1, latitude.subtract(radius))
                 .setParameter(2, latitude.add(radius))
@@ -70,6 +72,46 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .setParameter(4, longitude.add(radius))
                 .setParameter(5, id);
         return jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
+    }
+
+    @Override
+    public List<Restaurant> findRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+        String sql =
+                "   select r.* " +
+                        "   from( " +
+                        "       select restaurant.* " +
+                        "       from restaurant  " +
+                        "       where (restaurant.latitude between ? and ?) and (restaurant.longitude between ? and ?)) r " +
+                        "   join restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
+                        "   join category c on rc.category_id = c.category_id " +
+                        "   where r.restaurant_id in ( " +
+                        "       select rc.restaurant_id " +
+                        "       from restaurant_category rc " +
+                        "       where rc.category_id in ( " +
+                        "           select user_category.category_id " +
+                        "           from user_category " +
+                        "           where user_category.user_id = ? ) " +
+                        "       group by rc.restaurant_id) " +
+                        "   group by r.restaurant_id ";
+
+        return em.createNativeQuery(sql, Restaurant.class)
+                .setParameter(1, latitude.subtract(radius))
+                .setParameter(2, latitude.add(radius))
+                .setParameter(3, longitude.subtract(radius))
+                .setParameter(4, longitude.add(radius))
+                .setParameter(5, id)
+                .getResultList();
+    }
+
+    @Override
+    public List<Restaurant> findRestaurantByLatitudeAndLongitudeAndCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long category_id, Integer limit) {
+        return queryFactory.select(restaurant)
+                .from(restaurant)
+                .join(restaurant.restaurantCategories, restaurantCategory)
+                .where(restaurantCategory.category.id.eq(category_id), longitudeBetween(longitude,radius), latitudeBetween(latitude,radius))
+                .limit(limit)
+                .orderBy(restaurant.googleRating.desc())
+                .fetch();
     }
 
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){

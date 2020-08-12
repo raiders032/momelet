@@ -1,18 +1,19 @@
 package com.swm.sprint1.service;
 
 import com.swm.sprint1.domain.Category;
+import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.repository.category.CategoryRepository;
 import com.swm.sprint1.repository.restaurant.RestaurantRepository;
 import com.swm.sprint1.repository.user.UserCategoryRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -20,15 +21,66 @@ import java.util.List;
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final UserCategoryRepository userCategoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public List<RetrieveRestaurantResponseV1> findRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+    public List<RetrieveRestaurantResponseV1> findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         if(id == null)
             return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, new ArrayList<>());
         List<Category> categoryByUserId = userCategoryRepository.findCategoryByUserId(id);
         return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, categoryByUserId);
     }
 
-    public List<RetrieveRestaurantResponse> findRestaurantByLatitudeAndLongitudeAndUserCategoryV2(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
-        return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategoryV2(latitude,longitude,radius,id);
+    public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponse(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+        return restaurantRepository.findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
+    }
+
+    public List<Restaurant> findRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+        return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
+    }
+
+    public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
+        List<CategoryCount> categoryCounts = categoryRepository.findAll().stream().sorted(Comparator.comparing(Category::getId))
+                .map(CategoryCount::new).collect(Collectors.toList());
+        Set<Restaurant> restaurantSet = new HashSet<>();
+
+        ids.forEach((id)->{
+            userCategoryRepository.findCategoryByUserId(id).forEach(category -> {
+                categoryCounts.get(Math.toIntExact(category.getId() - 1)).countUp(1);
+            });
+        });
+
+        categoryCounts.stream().sorted().filter(categoryCount -> categoryCount.getCount() > 0).collect(Collectors.toList())
+                .forEach(category ->{
+                    List<Restaurant> restaurants = restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(latitude, longitude, radius, category.getCategory().getId(), category.getCount() + 7);
+                    restaurantSet.addAll(restaurants);
+        });
+
+        List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
+        Collections.shuffle(restaurants);
+        restaurants = restaurants.subList(0,7);
+        List<RetrieveRestaurantResponse> result = restaurants.stream().map(restaurant -> {
+            return new RetrieveRestaurantResponse(restaurant);
+        }).collect(Collectors.toList());
+        return result;
+    }
+
+    @Getter
+    @Setter
+    class CategoryCount implements Comparable<CategoryCount>{
+        Category category;
+        Integer count = 0;
+
+        public CategoryCount(Category category) {
+            this.category = category;
+        }
+
+        public void countUp(Integer count){
+            this.count += count;
+        }
+
+        @Override
+        public int compareTo(CategoryCount o) {
+            return Integer.compare(o.getCount(),this.count);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.swm.sprint1.controller;
 
+import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,7 +28,7 @@ public class RestaurantController {
 
     @GetMapping("/api/v1/restaurants")
     public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,@RequestParam BigDecimal radius){
-        List<RetrieveRestaurantResponseV1> restaurantList =restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude,radius, null);
+        List<RetrieveRestaurantResponseV1> restaurantList =restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude,radius, null);
         return ResponseEntity.ok(restaurantList);
     }
 
@@ -36,7 +39,7 @@ public class RestaurantController {
             @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
-        List<RetrieveRestaurantResponseV1> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, userPrincipal.getId());
+        List<RetrieveRestaurantResponseV1> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude, radius, userPrincipal.getId());
         return ResponseEntity.ok(restaurants);
     }
 
@@ -47,7 +50,16 @@ public class RestaurantController {
             @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
-        List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV2(latitude, longitude, radius, userPrincipal.getId());
+        List<RetrieveRestaurantResponse> restaurants = restaurantService.findRetrieveRestaurantResponse(latitude, longitude, radius, userPrincipal.getId());
+        return ResponseEntity.ok(restaurants);
+    }
+
+    @GetMapping("/api/v1/restaurants7")
+    //@PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam String id
+            ,@RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude, @RequestParam BigDecimal radius){
+        List<Long> ids = Arrays.stream(id.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
         return ResponseEntity.ok(restaurants);
     }
 }
