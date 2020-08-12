@@ -1,11 +1,11 @@
 const SingleObject = require("../../SingleObjects");
 
 const gameRoomUpdateService = (socket, roomName, id) => {
-  const findRoom = SingleObject.RoomRepository.findByRoomName(roomName);
-  const users = findRoom.getUserList();
+  const room = SingleObject.RoomRepository.findByRoomName(roomName);
+  const users = room.getUserList();
 
   users
-    .filter((user) => user.canReceive() && id !== user.id)
+    .filter((user) => user.getCanReceive() && id !== user.id)
     .forEach((user) => {
       socket.to(user.socketId).emit(
         "gameRoomUpdate",
