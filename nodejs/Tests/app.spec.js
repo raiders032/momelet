@@ -69,7 +69,7 @@ describe("Connecting Server", () => {
         const msgObject = JSON.parse(msg);
         msgObject.should.have.property("aroundUsers");
 
-        msgObject["aroundUsers"].length.should.not.equal(0);
+        msgObject["aroundUsers"].length.should.equal(2);
 
         offEventAll("together", senders);
         done();

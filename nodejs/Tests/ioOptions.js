@@ -43,8 +43,8 @@ const ioOptions = [
       name: "Kim",
       imageUrl: "naver.com",
       JWT: "adffgf",
-      latitude: "33.2025",
-      longitude: "123.2975",
+      latitude: "33.20251",
+      longitude: "123.29749",
     },
   },
 ];
