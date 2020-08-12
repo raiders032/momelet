@@ -1,4 +1,5 @@
 const SingleObject = require("../../SingleObjects");
+const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 
 const gameRoomJoinService = (socket, msg) => {
   var echo = "gameRoomJoin 이벤트. 받은 msg: " + msg;
@@ -8,7 +9,7 @@ const gameRoomJoinService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  if (room.isStarted()) {
+  if (room.getIsStarted()) {
     const ret = JSON.stringify({
       status: "fail",
       roomName: null,
@@ -21,24 +22,7 @@ const gameRoomJoinService = (socket, msg) => {
   room.addUser(user);
 
   socket.join(roomName, () => {
-    const findRoom = SingleObject.RoomRepository.findByRoomName(roomName);
-    const users = findRoom.getUserList();
-
-    users
-      .filter((user) => user.canReceive() && id !== user.id)
-      .forEach((user) => {
-        socket.to(user.socketId).emit(
-          "gameRoomUpdate",
-          JSON.stringify({
-            gameRoomUserList: room.getUserList().map((user) => {
-              const { id, name, imageUrl } = user;
-              const userDto = { id, name, imageUrl };
-              return userDto;
-            }),
-            hostId: room.getHostId(),
-          })
-        );
-      });
+    gameRoomUpdateService(socket, roomName, id);
   });
 
   const ret = JSON.stringify({

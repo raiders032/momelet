@@ -35,6 +35,18 @@ const ioOptions = [
       longitude: "123.2999",
     },
   },
+  {
+    myId: "78",
+    query: {
+      id: "78",
+      email: "78@naver.com",
+      name: "Kim",
+      imageUrl: "naver.com",
+      JWT: "adffgf",
+      latitude: "33.20251",
+      longitude: "123.29749",
+    },
+  },
 ];
 
 module.exports = ioOptions;

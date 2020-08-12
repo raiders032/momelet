@@ -30,9 +30,6 @@ class Room {
       if (this.headCount > 0 && user.id === this.hostId) {
         this.hostId = this.userList[0].id;
       }
-
-      if (this.headCount <= 0) return true;
-      else return false;
     });
   }
 
@@ -52,7 +49,11 @@ class Room {
     return this.hostId;
   }
 
-  isStarted() {
+  getHeadCount() {
+    return this.headCount;
+  }
+
+  getIsStarted() {
     return this.isStarted;
   }
 }

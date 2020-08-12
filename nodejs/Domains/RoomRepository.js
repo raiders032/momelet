@@ -11,7 +11,7 @@ class RoomRepository {
 
     if (this.roomRepository.has(roomName)) return null;
 
-    this.roomRepository.set(newRoom);
+    this.roomRepository.set(roomName, newRoom);
     return newRoom;
   }
 
