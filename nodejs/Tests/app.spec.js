@@ -183,6 +183,9 @@ describe("Connecting Server", () => {
           let msgObject = JSON.parse(msg);
 
           msgObject.should.have.property("status").with.equal("ok");
+          SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
+            false
+          );
         }
       );
     });
@@ -232,6 +235,9 @@ describe("Connecting Server", () => {
         let msgObject = JSON.parse(msg);
 
         msgObject.should.have.property("status").with.equal("ok");
+        SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
+          false
+        );
       }
     );
   });
