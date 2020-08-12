@@ -16,9 +16,10 @@ const gameController = (socket) => {
   });
 
   // 게임시작
-  socket.on("gameStart", (msg) => {
-    const ret = service.gameStartService(socket, msg);
-    socket.emit("gameStart", ret);
+  socket.on("gameStart", async (msg, fn) => {
+    const ret = await service.gameStartService(socket, msg);
+    // socket.emit("gameStart", ret);
+    fn(ret);
   });
 
   // 유저 한명 게임 종료

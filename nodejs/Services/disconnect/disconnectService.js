@@ -4,7 +4,7 @@ const disconnectService = (socket) => {
   console.log(
     "user disconnected " +
       SingleObject.UserRepository.findById(
-        SingleObject.UserRepository.findBySocketId(socket.id)
+        SingleObject.UserRepository.findBySocketId(socket.id).id
       )
   );
 

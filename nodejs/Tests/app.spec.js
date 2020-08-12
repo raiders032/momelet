@@ -4,6 +4,7 @@ const app = require("../app");
 const ioClient = require("socket.io-client");
 const ioOptions = require("./ioOptions");
 const SingleObject = require("../SingleObjects");
+const socket = require("../socket");
 
 const disconnectAll = (senders) => {
   for (let i = 0; i < senders.length; i++) {
@@ -238,6 +239,111 @@ describe("Connecting Server", () => {
         SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
           false
         );
+      }
+    );
+  });
+
+  it("gameStart 테스트 - 방장이 아닌 사람이 스타트했을 때", (done) => {
+    //given
+    sender1.emit(
+      "togetherInvite",
+      JSON.stringify({
+        id: ioOptions[0].myId,
+        inviteTheseUsers: [sender2.id, sender3.id],
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.property("roomName");
+        msgObject["roomName"].should.startWith(ioOptions[0].myId);
+        msgObject.should.have.property("gameRoomUserList").with.lengthOf(1);
+        msgObject["hostId"].should.equal(ioOptions[0].myId);
+
+        roomName = msgObject["roomName"];
+        sender2.emit(
+          "gameRoomJoin",
+          JSON.stringify({
+            id: ioOptions[1].myId,
+            roomName,
+          }),
+          (msg) => {
+            msg.should.be.type("string");
+            const msgObject = JSON.parse(msg);
+            msgObject.should.have.properties(
+              "status",
+              "roomName",
+              "gameRoomUserList",
+              "hostId"
+            );
+            msgObject["gameRoomUserList"].should.have.lengthOf(2);
+            sender3.emit(
+              "gameRoomJoin",
+              JSON.stringify({
+                id: ioOptions[2].myId,
+                roomName,
+              }),
+              (msg) => {
+                msg.should.be.type("string");
+
+                const msgObject = JSON.parse(msg);
+                msgObject.should.have.properties("gameRoomUserList", "hostId");
+                msgObject["gameRoomUserList"].should.have.lengthOf(3);
+
+                // when
+                sender2.emit(
+                  "gameStart",
+                  JSON.stringify({
+                    id: ioOptions[1].myId,
+                    roomName,
+                  }),
+                  (msg) => {
+                    // then
+                    msg.should.be.type("string");
+                    const msgObject = JSON.parse(msg);
+                    msgObject.should.have.property("status").with.equal("fail");
+
+                    offEventAll("gameStart", senders);
+                    done();
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+
+  it("gameStart 테스트 - 방장이 스타트했을 때", (done) => {
+    sender2.on("gameStart", (msg) => {
+      msg.should.be.type("string");
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties("status", "restaurants");
+      msgObject.status.should.equal("ok");
+      msgObject.restaurants.should.have.lengthOf(7);
+    });
+    sender3.on("gameStart", (msg) => {
+      msg.should.be.type("string");
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties("status", "restaurants");
+      msgObject.status.should.equal("ok");
+      msgObject.restaurants.should.have.lengthOf(7);
+    });
+    sender1.emit(
+      "gameStart",
+      JSON.stringify({
+        id: ioOptions[0].myId,
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.properties("status", "restaurants");
+        msgObject.status.should.equal("ok");
+        msgObject.restaurants.should.have.lengthOf(7);
+
+        offEventAll("gameStart", senders);
+        done();
       }
     );
   });
