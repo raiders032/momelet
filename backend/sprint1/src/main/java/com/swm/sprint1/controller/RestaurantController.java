@@ -1,6 +1,5 @@
 package com.swm.sprint1.controller;
 
-import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -28,7 +27,7 @@ public class RestaurantController {
 
     @GetMapping("/api/v1/restaurants")
     public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,@RequestParam BigDecimal radius){
-        List<RetrieveRestaurantResponseV1> restaurantList =restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude,radius, null);
+        List<RetrieveRestaurantResponseV1> restaurantList = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude,radius, null);
         return ResponseEntity.ok(restaurantList);
     }
 

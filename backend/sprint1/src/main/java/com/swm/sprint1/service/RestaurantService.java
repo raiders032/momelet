@@ -34,26 +34,25 @@ public class RestaurantService {
         return restaurantRepository.findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
     }
 
-    public List<Restaurant> findRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
-        return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
-    }
-
     public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
-        List<CategoryCount> categoryCounts = categoryRepository.findAll().stream().sorted(Comparator.comparing(Category::getId))
+        /*List<CategoryCount> categoryCounts = categoryRepository.findAll().stream().sorted(Comparator.comparing(Category::getId))
                 .map(CategoryCount::new).collect(Collectors.toList());
-        Set<Restaurant> restaurantSet = new HashSet<>();
+
 
         ids.forEach((id)->{
             userCategoryRepository.findCategoryByUserId(id).forEach(category -> {
                 categoryCounts.get(Math.toIntExact(category.getId() - 1)).countUp(1);
             });
-        });
+        });*/
 
-        categoryCounts.stream().sorted().filter(categoryCount -> categoryCount.getCount() > 0).collect(Collectors.toList())
+        List<CategoryCount> categoryCounts = userCategoryRepository.findCategoryAndCountByUserId(ids);
+        Set<Restaurant> restaurantSet = new HashSet<>();
+
+        /*categoryCounts.stream().sorted().filter(categoryCount -> categoryCount.getCount() > 0).collect(Collectors.toList())
                 .forEach(category ->{
-                    List<Restaurant> restaurants = restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(latitude, longitude, radius, category.getCategory().getId(), category.getCount() + 7);
+                    List<Restaurant> restaurants = restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(latitude, longitude, radius, category.getCategory().getId(), category.getCount() + 7L);
                     restaurantSet.addAll(restaurants);
-        });
+        });*/
 
         List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
         Collections.shuffle(restaurants);
@@ -66,21 +65,14 @@ public class RestaurantService {
 
     @Getter
     @Setter
-    class CategoryCount implements Comparable<CategoryCount>{
+    @NoArgsConstructor
+    public static class CategoryCount {
         Category category;
-        Integer count = 0;
+        Long count = 0L;
 
-        public CategoryCount(Category category) {
+        public CategoryCount(Category category, Long count) {
             this.category = category;
-        }
-
-        public void countUp(Integer count){
-            this.count += count;
-        }
-
-        @Override
-        public int compareTo(CategoryCount o) {
-            return Integer.compare(o.getCount(),this.count);
+            this.count = count;
         }
     }
 }
