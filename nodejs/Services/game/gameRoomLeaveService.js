@@ -9,14 +9,12 @@ const gameRoomLeaveService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  room.deleteUser(user);
-
-  if (room.getHeadCount() <= 0) {
-    SingleObject.RoomRepository.delete(room.getRoomName());
-    return;
-  }
-
   socket.leave(roomName, () => {
+    room.deleteUser(user);
+    if (room.getHeadCount() <= 0) {
+      SingleObject.RoomRepository.delete(room.getRoomName());
+      return;
+    }
     gameRoomUpdateService(socket, roomName, id);
   });
 

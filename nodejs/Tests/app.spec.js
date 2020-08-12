@@ -223,18 +223,16 @@ describe("Connecting Server", () => {
 
     sender1.emit(
       "gameRoomLeave",
-      JSON.stringify(
-        {
-          id: ioOptions[0].myId,
-          roomName,
-        },
-        (msg) => {
-          msg.should.be.type("string");
-          let msgObject = JSON.parse(msg);
+      JSON.stringify({
+        id: ioOptions[0].myId,
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        let msgObject = JSON.parse(msg);
 
-          msgObject.should.have.property("status").with.equal("ok");
-        }
-      )
+        msgObject.should.have.property("status").with.equal("ok");
+      }
     );
   });
 });

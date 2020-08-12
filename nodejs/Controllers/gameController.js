@@ -9,7 +9,7 @@ const gameController = (socket) => {
   });
 
   // 게임방 퇴장
-  socket.on("gameRoomLeave", (msg) => {
+  socket.on("gameRoomLeave", (msg, fn) => {
     const ret = service.gameRoomLeaveService(socket, msg);
     // socket.emit("gameRoomLeave", ret);
     fn(ret);
