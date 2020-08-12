@@ -1,6 +1,5 @@
 const SingleObject = require("../../SingleObjects");
 const { gameRoomUpdateService } = require("./gameRoomUpdateService");
-const { json } = require("express");
 
 const gameRoomLeaveService = (socket, msg) => {
   var echo = "gameRoomLeave 이벤트. 받은 msg: " + msg;
@@ -21,8 +20,8 @@ const gameRoomLeaveService = (socket, msg) => {
     gameRoomUpdateService(socket, roomName, id);
   });
 
-  // const ret = JSON.stringify({ status: "ok" });
-  // return ret;
+  const retMsg = JSON.stringify({ status: "ok" });
+  return retMsg;
 };
 
 module.exports = {

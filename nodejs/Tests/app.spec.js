@@ -123,104 +123,118 @@ describe("Connecting Server", () => {
     );
   });
 
-  // it("gameRoomJoin, gameRoomUpdate 테스트", (done) => {
-  //   sender2.emit(
-  //     "gameRoomJoin",
-  //     JSON.stringify({
-  //       id: ioOptions[1].myId,
-  //       roomName,
-  //     }),
-  //     (msg) => {
-  //       msg.should.be.type("string");
+  it("gameRoomJoin, gameRoomUpdate 테스트", (done) => {
+    sender2.emit(
+      "gameRoomJoin",
+      JSON.stringify({
+        id: ioOptions[1].myId,
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
 
-  //       const msgObject = JSON.parse(msg);
-  //       msgObject.should.have.properties(
-  //         "status",
-  //         "roomName",
-  //         "gameRoomUserList",
-  //         "hostId"
-  //       );
-  //       msgObject["gameRoomUserList"].should.have.lengthOf(2);
-  //     }
-  //   );
-  //   sender3.emit(
-  //     "gameRoomJoin",
-  //     JSON.stringify({
-  //       id: ioOptions[2].myId,
-  //       roomName,
-  //     }),
-  //     (msg) => {
-  //       msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.properties(
+          "status",
+          "roomName",
+          "gameRoomUserList",
+          "hostId"
+        );
+        msgObject["gameRoomUserList"].should.have.lengthOf(2);
+      }
+    );
+    sender3.emit(
+      "gameRoomJoin",
+      JSON.stringify({
+        id: ioOptions[2].myId,
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
 
-  //       const msgObject = JSON.parse(msg);
-  //       msgObject.should.have.properties("gameRoomUserList", "hostId");
-  //       msgObject["gameRoomUserList"].should.have.lengthOf(3);
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.properties("gameRoomUserList", "hostId");
+        msgObject["gameRoomUserList"].should.have.lengthOf(3);
 
-  //       offEventAll("gameRoomJoin", senders);
-  //       offEventAll("gameRoomUpdate", senders);
-  //       done();
-  //     }
-  //   );
-  // });
+        offEventAll("gameRoomJoin", senders);
+        offEventAll("gameRoomUpdate", senders);
+        done();
+      }
+    );
+  });
 
-  // it("gameRoomLeave 테스트", (done) => {
-  //   sender2.on("gameRoomUpdate", (msg) => {
-  //     msg.should.be.type("string");
+  it("gameRoomLeave 테스트", (done) => {
+    sender2.on("gameRoomUpdate", (msg) => {
+      msg.should.be.type("string");
 
-  //     const msgObject = JSON.parse(msg);
-  //     msgObject.should.have.properties("gameRoomUserList", "hostId");
-  //     msgObject.gameRoomUserList.should.have.lengthOf(2);
-  //     msgObject.hostId.should.not.equal(ioOptions[0].myId);
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties("gameRoomUserList", "hostId");
+      msgObject.gameRoomUserList.should.have.lengthOf(2);
+      msgObject.hostId.should.not.equal(ioOptions[0].myId);
 
-  //     sender2.emit(
-  //       "gameRoomLeave",
-  //       JSON.stringify({
-  //         id: ioOptions[1].myId,
-  //         roomName,
-  //       })
-  //     );
-  //   });
+      sender2.emit(
+        "gameRoomLeave",
+        JSON.stringify({
+          id: ioOptions[1].myId,
+          roomName,
+        }),
+        (msg) => {
+          msg.should.be.type("string");
+          let msgObject = JSON.parse(msg);
 
-  //   let updateCount = 0;
-  //   sender3.on("gameRoomUpdate", (msg) => {
-  //     updateCount += 1;
-  //     msg.should.be.type("string");
+          msgObject.should.have.property("status").with.equal("ok");
+        }
+      );
+    });
 
-  //     const msgObject = JSON.parse(msg);
-  //     msgObject.should.have.properties("gameRoomUserList", "hostId");
-  //     if (updateCount === 1) {
-  //       msgObject.gameRoomUserList.should.have.lengthOf(2);
-  //       msgObject.hostId.should.not.equal(ioOptions[0].myId);
-  //     } else {
-  //       msgObject.gameRoomUserList.should.have.lengthOf(1);
-  //       msgObject.hostId.should.not.equal(ioOptions[1].myId);
-  //       msgObject.hostId.should.equal(ioOptions[2].myId);
+    let updateCount = 0;
+    sender3.on("gameRoomUpdate", (msg) => {
+      updateCount += 1;
+      msg.should.be.type("string");
 
-  //       // sender3.emit(
-  //       //   "gameRoomLeave",
-  //       //   JSON.stringify({ id: ioOptions[2].myId, roomName }),
-  //       //   (msg) => {
-  //       //     msg.should.be.type("string");
-  //       //     let msgObject = JSON.parse(msg);
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.properties("gameRoomUserList", "hostId");
+      if (updateCount === 1) {
+        msgObject.gameRoomUserList.should.have.lengthOf(2);
+        msgObject.hostId.should.not.equal(ioOptions[0].myId);
+      } else {
+        msgObject.gameRoomUserList.should.have.lengthOf(1);
+        msgObject.hostId.should.not.equal(ioOptions[1].myId);
+        msgObject.hostId.should.equal(ioOptions[2].myId);
 
-  //       //     msgObject.should.have.property("status").with.equal("ok");
+        sender3.emit(
+          "gameRoomLeave",
+          JSON.stringify({ id: ioOptions[2].myId, roomName }),
+          (msg) => {
+            msg.should.be.type("string");
+            let msgObject = JSON.parse(msg);
 
-  //       //     SingleObject.RoomRepository.findByRoomName(roomName).should.equal(
-  //       //       false
-  //       //     );
-  //       //     offEventAll("gameRoomUpdate", senders);
-  //       //     done();
-  //       //   }
-  //       // );
-  //     }
-  //   });
+            msgObject.should.have.property("status").with.equal("ok");
 
-  //   sender1.emit(
-  //     "gameRoomLeave",
-  //     JSON.stringify({
-  //       id: ioOptions[0].myId,
-  //       roomName,
-  //     })
-  //   );
-  // });
+            SingleObject.RoomRepository.findByRoomName(roomName).should.equal(
+              false
+            );
+            offEventAll("gameRoomUpdate", senders);
+            done();
+          }
+        );
+      }
+    });
+
+    sender1.emit(
+      "gameRoomLeave",
+      JSON.stringify(
+        {
+          id: ioOptions[0].myId,
+          roomName,
+        },
+        (msg) => {
+          msg.should.be.type("string");
+          let msgObject = JSON.parse(msg);
+
+          msgObject.should.have.property("status").with.equal("ok");
+        }
+      )
+    );
+  });
 });
