@@ -52,8 +52,3 @@ const ioOptions = [
 ];
 
 module.exports = ioOptions;
-
-//http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/api/v1/restaurants7?id=1,&longitude=37.5444086&latitude=127.0654405&radius=0.01
-//http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/api/v1/restaurants7?id=1,4&latitude=37.553292&longitude=126.9125836&radius=0.01
-
-//http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/api/v1/restaurants7?id=1,4&latitude=37.553292&longitude=126.9125836&radius=0.01&Authorization=Barer%20eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk2NDMzNTYzLCJleHAiOjE1OTcyOTc1NjN9.uqOTc8S6dJiEJT1_nQQQ-sg8vFw6NWGMBkqbKI7Egt-exQ-NYWrwSfIPEHzkI_fI5t4oHXiyTDViIVx7cJgQUQ
