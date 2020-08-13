@@ -7,7 +7,6 @@ const {
 
 // game
 const { gameRoomJoinService } = require("./game/gameRoomJoinService");
-const { gameRoomUpdateService } = require("./game/gameRoomUpdateService");
 const { gameRoomLeaveService } = require("./game/gameRoomLeaveService");
 const { gameStartService } = require("./game/gameStartService");
 const { gameUserFinishService } = require("./game/gameUserFinishService");
@@ -22,7 +21,6 @@ module.exports.togetherService = togetherService;
 module.exports.togetherInviteService = togetherInviteService;
 module.exports.togetherInvitationService = togetherInvitationService;
 module.exports.gameRoomJoinService = gameRoomJoinService;
-module.exports.gameRoomUpdateService = gameRoomUpdateService;
 module.exports.gameRoomLeaveService = gameRoomLeaveService;
 module.exports.gameStartService = gameStartService;
 module.exports.gameUserFinishService = gameUserFinishService;

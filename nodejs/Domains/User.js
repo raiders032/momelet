@@ -22,6 +22,14 @@ class User {
   getJoinedRoomName() {
     return this.joinedRoomName;
   }
+
+  getCanReceive() {
+    return this.canReceive;
+  }
+
+  updateCanReceive(canReceive) {
+    this.canReceive = canReceive;
+  }
 }
 
 module.exports.User = User;

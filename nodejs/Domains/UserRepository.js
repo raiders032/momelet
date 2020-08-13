@@ -1,5 +1,5 @@
 const { User } = require("./User");
-
+const ResourceNotFoundError = require("../Errors/ResourceNotFoundError");
 class UserRepository {
   constructor() {
     this.userRepository = new Map(); // key: id, value: User
@@ -18,6 +18,8 @@ class UserRepository {
   }
 
   findById(id) {
+    if (!this.userRepository.has(id))
+      throw new ResourceNotFoundError(404, "해당 유저를 찾을 수 없습니다.");
     return this.userRepository.get(id);
   }
 
@@ -27,6 +29,10 @@ class UserRepository {
 
   existsById(id) {
     return this.userRepository.has(id);
+  }
+
+  findAll() {
+    return Array.from(this.userRepository.values());
   }
 }
 
