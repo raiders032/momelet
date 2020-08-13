@@ -75,7 +75,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     }
 
     @Override
-    public List<Restaurant> findByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList) {
+    public List<Restaurant> findByLatitudeAndLongitudeAndCategories(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList) {
         return queryFactory.select(restaurant)
                 .from(restaurantCategory)
                 .join(restaurantCategory.category, category)
@@ -83,6 +83,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .where(latitudeBetween(latitude, radius), longitudeBetween(longitude, radius), restaurantInUserCategory(categoryList))
                 .groupBy(restaurant.id)
                 .orderBy(restaurant.googleRating.desc())
+                .limit(100)
                 .fetch();
     }
 
