@@ -1,5 +1,6 @@
 const axios = require("axios");
 const SingleObject = require("../../SingleObjects");
+const radius = 1;
 
 const getCard = async (users, myId) => {
   let id = "";
@@ -10,18 +11,33 @@ const getCard = async (users, myId) => {
       id += users[i].id + ",";
     }
   }
-  const { longitude, latitude } = SingleObject.UserRepository.findById(myId);
-  const cards = await axios.get(
-    process.env.DATA_STORAGE_URL + "api/v1/restaurants7",
-    {
-      params: {
-        id,
-        longitude,
-        latitude,
-        radius: 0.01,
-      },
+  const { longitude, latitude, JWT } = SingleObject.UserRepository.findById(
+    myId
+  );
+
+  const cards = [];
+  try {
+    const { data } = await axios.get(
+      process.env.DATA_STORAGE_URL + "api/v1/restaurants7",
+      {
+        headers: {
+          Authorization: JWT,
+        },
+        params: {
+          id,
+          longitude,
+          latitude,
+          radius, // 전역 선언해둠
+        },
+      }
+    );
+    for (let i in data) {
+      cards.push(data[i]);
     }
-  ); // array
+  } catch (err) {
+    console.log("서버에서 카드 7장 가져오기 실패");
+  }
+
   return cards;
 };
 
