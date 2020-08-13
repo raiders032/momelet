@@ -65,7 +65,9 @@ public class RetrieveRestaurantResponse {
         this.naverId = BigInteger.valueOf(restaurant.getNaverId());
         this.googleId = null;
         this.phoneNumber = restaurant.getPhoneNumber();
-        System.out.println("categoty???");
-        this.categories = restaurant.getRestaurantCategories().stream().map(restaurantCategory -> { return restaurantCategory.getCategory().getName();}).collect(Collectors.joining(","));
+        this.categories = restaurant
+                .getRestaurantCategories().stream()
+                .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
+                .collect(Collectors.joining(","));
     }
 }

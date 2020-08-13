@@ -2,17 +2,18 @@ package com.swm.sprint1.repository.user;
 
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.*;
-import com.swm.sprint1.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.swm.sprint1.domain.QCategory.*;
 import static com.swm.sprint1.domain.QUserCategory.*;
@@ -56,15 +57,14 @@ public class UserCategoryRepositoryImpl implements UserCategoryRepositoryCustom 
     }
 
     @Override
-    public List<RestaurantService.CategoryCount> findCategoryAndCountByUserId(List<Long> ids) {
-        List<Tuple> fetch = queryFactory.select(category, category.count().as("count"))
+    public List<CategoryNumber> findCategoryAndCountByUserId(List<Long> ids) {
+        NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "number");
+        return queryFactory.select(Projections.constructor(CategoryNumber.class, category, category.count().as(aliasCount)))
                 .from(userCategory)
                 .join(userCategory.category, category)
                 .where(userCategory.user.id.in(ids))
                 .groupBy(category.id)
-                .orderBy("count")
+                .orderBy(aliasCount.desc())
                 .fetch();
-        return fetch.stream().map(tuple -> new RestaurantService.CategoryCount(tuple.get(category), tuple.get(category.count())))
-                .collect(Collectors.toList());
     }
 }

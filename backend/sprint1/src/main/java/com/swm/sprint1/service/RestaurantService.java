@@ -1,6 +1,7 @@
 package com.swm.sprint1.service;
 
 import com.swm.sprint1.domain.Category;
+import com.swm.sprint1.domain.CategoryNumber;
 import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -35,44 +36,24 @@ public class RestaurantService {
     }
 
     public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
-        /*List<CategoryCount> categoryCounts = categoryRepository.findAll().stream().sorted(Comparator.comparing(Category::getId))
-                .map(CategoryCount::new).collect(Collectors.toList());
-
-
-        ids.forEach((id)->{
-            userCategoryRepository.findCategoryByUserId(id).forEach(category -> {
-                categoryCounts.get(Math.toIntExact(category.getId() - 1)).countUp(1);
-            });
-        });*/
-
-        List<CategoryCount> categoryCounts = userCategoryRepository.findCategoryAndCountByUserId(ids);
+        List<CategoryNumber> categoryNumbers = userCategoryRepository.findCategoryAndCountByUserId(ids);
         Set<Restaurant> restaurantSet = new HashSet<>();
 
-        /*categoryCounts.stream().sorted().filter(categoryCount -> categoryCount.getCount() > 0).collect(Collectors.toList())
-                .forEach(category ->{
-                    List<Restaurant> restaurants = restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(latitude, longitude, radius, category.getCategory().getId(), category.getCount() + 7L);
-                    restaurantSet.addAll(restaurants);
-        });*/
+        categoryNumbers.forEach(categoryNumber ->{
+                    restaurantSet.addAll(
+                            restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(
+                                    latitude,
+                                    longitude,
+                                    radius,
+                                    categoryNumber.getCategory().getId(),
+                                    categoryNumber.getNumber() + 7L));
+        });
 
         List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
         Collections.shuffle(restaurants);
         restaurants = restaurants.subList(0,7);
-        List<RetrieveRestaurantResponse> result = restaurants.stream().map(restaurant -> {
-            return new RetrieveRestaurantResponse(restaurant);
-        }).collect(Collectors.toList());
-        return result;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class CategoryCount {
-        Category category;
-        Long count = 0L;
-
-        public CategoryCount(Category category, Long count) {
-            this.category = category;
-            this.count = count;
-        }
+        return restaurants.stream()
+                .map(restaurant -> new RetrieveRestaurantResponse(restaurant))
+                .collect(Collectors.toList());
     }
 }
