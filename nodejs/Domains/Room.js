@@ -10,6 +10,7 @@ class Room {
 
   addUser(user) {
     if (this.headCount >= this.maxHeadCount) return false;
+    user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
     return true;
@@ -29,13 +30,32 @@ class Room {
       if (this.headCount > 0 && user.id === this.hostId) {
         this.hostId = this.userList[0].id;
       }
-
-      if (this.headCount <= 0) return true;
-      else return false;
     });
   }
 
   startGame() {
     this.isStarted = true;
   }
+
+  getUserList() {
+    return this.userList;
+  }
+
+  getRoomName() {
+    return this.roomName;
+  }
+
+  getHostId() {
+    return this.hostId;
+  }
+
+  getHeadCount() {
+    return this.headCount;
+  }
+
+  getIsStarted() {
+    return this.isStarted;
+  }
 }
+
+module.exports = Room;

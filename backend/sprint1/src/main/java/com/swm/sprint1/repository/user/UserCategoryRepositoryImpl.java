@@ -2,7 +2,10 @@ package com.swm.sprint1.repository.user;
 
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.*;
@@ -51,5 +54,17 @@ public class UserCategoryRepositoryImpl implements UserCategoryRepositoryCustom 
         Map<String,Integer> result = new HashMap<>();
         tuples.forEach(tuple -> result.put((String)tuple.get(0, Object.class), tuple.get(1, Integer.class)));
         return result;
+    }
+
+    @Override
+    public List<CategoryNumber> findCategoryAndCountByUserId(List<Long> ids) {
+        NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "number");
+        return queryFactory.select(Projections.constructor(CategoryNumber.class, category, category.count().as(aliasCount)))
+                .from(userCategory)
+                .join(userCategory.category, category)
+                .where(userCategory.user.id.in(ids))
+                .groupBy(category.id)
+                .orderBy(aliasCount.desc())
+                .fetch();
     }
 }

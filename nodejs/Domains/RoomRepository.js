@@ -1,3 +1,5 @@
+const ResourceNotFoundError = require("../Errors/ResourceNotFoundError");
+const Room = require("./Room");
 class RoomRepository {
   constructor() {
     this.roomRepository = new Map();
@@ -9,12 +11,13 @@ class RoomRepository {
 
     if (this.roomRepository.has(roomName)) return null;
 
-    this.roomRepository.set(newRoom);
-    return roomName;
+    this.roomRepository.set(roomName, newRoom);
+    return newRoom;
   }
 
   delete(roomName) {
-    if (!this.roomRepository.has(roomName)) return false;
+    if (!this.roomRepository.has(roomName))
+      throw new ResourceNotFoundError(404, "해당 방을 찾을 수 없습니다.");
     this.roomRepository.delete(roomName);
     return true;
   }

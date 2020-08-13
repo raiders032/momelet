@@ -1,5 +1,6 @@
 package com.swm.sprint1.payload.response;
 
+import com.swm.sprint1.domain.Restaurant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -46,5 +48,26 @@ public class RetrieveRestaurantResponse {
         this.naverId = naverId;
         this.googleId = googleId;
         this.phoneNumber = phoneNumber;
+    }
+
+    public RetrieveRestaurantResponse(Restaurant restaurant){
+        this.id = BigInteger.valueOf(restaurant.getId());
+        this.name = restaurant.getName() ;
+        this.thumUrl = restaurant.getThumUrl();
+        this.googleRating = restaurant.getGoogleRating();
+        this.googleReviewCount = restaurant.getGoogleReviewCount();
+        this.openingHours = restaurant.getOpeningHours();
+        this.priceLevel = restaurant.getPriceLevel();
+        this.address = restaurant.getAddress();
+        this.roadAddress = restaurant.getRoadAddress();
+        this.longitude = restaurant.getLongitude();
+        this.latitude = restaurant.getLatitude();
+        this.naverId = BigInteger.valueOf(restaurant.getNaverId());
+        this.googleId = null;
+        this.phoneNumber = restaurant.getPhoneNumber();
+        this.categories = restaurant
+                .getRestaurantCategories().stream()
+                .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
+                .collect(Collectors.joining(","));
     }
 }
