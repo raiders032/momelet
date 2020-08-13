@@ -427,6 +427,7 @@ describe("Connecting Server", () => {
             sign: "s",
           },
         ],
+        roomName,
       }),
       (msg) => {
         msg.should.be.type("string");

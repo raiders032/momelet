@@ -3,9 +3,11 @@ class Room {
     this.roomName = roomName;
     this.hostId = userId;
     this.headCount = 0;
+    this.finishCount = 0;
     this.userList = new Array();
     this.isStarted = false;
     this.maxHeadCount = 8;
+    this.cardList = new Map();
   }
 
   addUser(user) {
@@ -33,6 +35,22 @@ class Room {
     });
   }
 
+  addCard(id, scores) {
+    this.cardList.set(id, scores);
+  }
+
+  addScore(id, like) {
+    const card = this.cardList.get(id);
+    if (like === "y") {
+      card.like += 1;
+      card.score += 10;
+    } else if (like === "n") {
+      card.score -= 5;
+    } else if (like === "s") {
+      card.score += 5;
+    }
+  }
+
   startGame() {
     this.isStarted = true;
   }
@@ -53,10 +71,22 @@ class Room {
     return this.headCount;
   }
 
+  getFinishCount() {
+    return this.finishCount;
+  }
+
   getIsStarted() {
     return this.isStarted;
   }
 
+  addFinish(userId) {
+    const user = this.userList.get(userId);
+    if (user.getCanReceive()) {
+      user.updateCanReceive(false);
+      return ++this.finishCount;
+    }
+    return this.finishCount;
+  }
   startGame() {
     return (this.isStarted = true);
   }

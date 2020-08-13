@@ -57,7 +57,12 @@ const gameStartService = async (socket, msg) => {
   if (room !== false && room.getHostId() === id) {
     const users = room.getUserList();
     const cards = await getCard(users, id);
-    if (cards.length === 7) retMsg.status = "ok";
+    if (cards.length === 7) {
+      retMsg.status = "ok";
+      for (let i = 0; i < 7; i++) {
+        room.addCard(cards[i].id, { score: 0, like: 0 });
+      }
+    }
     retMsg.restaurants = cards;
     retMsg = JSON.stringify(retMsg);
 
@@ -71,6 +76,7 @@ const gameStartService = async (socket, msg) => {
   }
 
   if (typeof retMsg !== "string") {
+    retMsg.status = "no";
     retMsg = JSON.stringify(retMsg);
   }
   return retMsg;
