@@ -26,9 +26,9 @@ public class RestaurantService {
 
     public List<RetrieveRestaurantResponseV1> findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         if(id == null)
-            return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, new ArrayList<>());
+            return restaurantRepository.findRetrieveRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, new ArrayList<>());
         List<Category> categoryByUserId = userCategoryRepository.findCategoryByUserId(id);
-        return restaurantRepository.findRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, categoryByUserId);
+        return restaurantRepository.findRetrieveRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, categoryByUserId);
     }
 
     public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponse(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
@@ -38,10 +38,12 @@ public class RestaurantService {
     public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
         List<CategoryNumber> categoryNumbers = userCategoryRepository.findCategoryAndCountByUserId(ids);
         Set<Restaurant> restaurantSet = new HashSet<>();
+        List<Category> categories = categoryNumbers.stream().map(CategoryNumber::getCategory).collect(Collectors.toList());
+        restaurantRepository.findByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, categories);
 
         categoryNumbers.forEach(categoryNumber ->{
                     restaurantSet.addAll(
-                            restaurantRepository.findRestaurantByLatitudeAndLongitudeAndCategory(
+                            restaurantRepository.findByLatitudeAndLongitudeAndCategory(
                                     latitude,
                                     longitude,
                                     radius,

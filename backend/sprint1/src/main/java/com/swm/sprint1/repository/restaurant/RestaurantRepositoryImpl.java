@@ -29,7 +29,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     private final JpaResultMapper jpaResultMapper;
 
     @Override
-    public List<RetrieveRestaurantResponseV1> findRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList) {
+    public List<RetrieveRestaurantResponseV1> findRetrieveRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList) {
        return queryFactory.select(Projections.fields(RetrieveRestaurantResponseV1.class,
                 restaurant.id, restaurant.name, restaurant.thumUrl ,restaurant.address, restaurant.roadAddress
                 , restaurant.googleId, restaurant.naverId, restaurant.googleRating, restaurant.openingHours
@@ -75,7 +75,19 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     }
 
     @Override
-    public List<Restaurant> findRestaurantByLatitudeAndLongitudeAndCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long category_id, Long limit) {
+    public List<Restaurant> findByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList) {
+        return queryFactory.select(restaurant)
+                .from(restaurantCategory)
+                .join(restaurantCategory.category, category)
+                .join(restaurantCategory.restaurant, restaurant)
+                .where(latitudeBetween(latitude, radius), longitudeBetween(longitude, radius), restaurantInUserCategory(categoryList))
+                .groupBy(restaurant.id)
+                .orderBy(restaurant.googleRating.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Restaurant> findByLatitudeAndLongitudeAndCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long category_id, Long limit) {
         return queryFactory.select(restaurant)
                 .from(restaurant)
                 .join(restaurant.restaurantCategories, restaurantCategory).fetchJoin()
