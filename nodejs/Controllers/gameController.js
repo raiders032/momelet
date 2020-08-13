@@ -2,45 +2,45 @@ const service = require("../Services/index");
 
 const gameController = (socket) => {
   // 게임방 입장
-  socket.on("gameRoomJoin", (msg, fn) => {
+  socket.on("gameRoomJoin", (msg, ack) => {
     const ret = service.gameRoomJoinService(socket, msg);
     // socket.emit("gameRoomJoin", ret);
-    fn(ret);
+    ack(ret);
   });
 
   // 게임방 퇴장
-  socket.on("gameRoomLeave", (msg, fn) => {
+  socket.on("gameRoomLeave", (msg, ack) => {
     const ret = service.gameRoomLeaveService(socket, msg);
     // socket.emit("gameRoomLeave", ret);
-    fn(ret);
+    ack(ret);
   });
 
   // 게임시작
-  socket.on("gameStart", (msg, fn) => {
-    const ret = service.gameStartService(socket, msg);
+  socket.on("gameStart", async (msg, ack) => {
+    const ret = await service.gameStartService(socket, msg);
     // socket.emit("gameStart", ret);
-    fn(ret);
+    ack(ret);
   });
 
   // 유저 한명 게임 종료
-  socket.on("gameUserFinish", (msg, fn) => {
+  socket.on("gameUserFinish", (msg, ack) => {
     const ret = service.gameUserFinishService(socket, msg);
     // socket.emit("gameUserFinish", ret);
-    fn(ret);
+    ack(ret);
   });
 
   // 전체 유저 게임 종료
-  socket.on("gameAllFinish", (msg, fn) => {
+  socket.on("gameAllFinish", (msg, ack) => {
     const ret = service.gameAllFinishService(socket, msg);
     // socket.emit("gameAllFinish", ret);
-    fn(ret);
+    ack(ret);
   });
 
   // 다시하기
-  socket.on("gameRestart", (msg, fn) => {
+  socket.on("gameRestart", (msg, ack) => {
     const ret = service.gameRestartService(socket, msg);
     // socket.emit("gameRestart", ret);
-    fn(ret);
+    ack(ret);
   });
 };
 
