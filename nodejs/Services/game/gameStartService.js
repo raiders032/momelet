@@ -37,6 +37,7 @@ const gameStartService = async (socket, msg) => {
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
 
+  // 에러 취약함. 처리해줘야 함.
   if (room !== false && room.getHostId() === id) {
     const users = room.getUserList();
     const cards = await getCard(users, id);
@@ -49,6 +50,8 @@ const gameStartService = async (socket, msg) => {
       .forEach((user) => {
         socket.to(user.socketId).emit("gameRoomUpdate"), retMsg;
       });
+
+    room.startGame();
   }
 
   if (typeof retMsg !== "string") {

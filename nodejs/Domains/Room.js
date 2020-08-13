@@ -56,6 +56,14 @@ class Room {
   getIsStarted() {
     return this.isStarted;
   }
+
+  startGame() {
+    return (this.isStarted = true);
+  }
+
+  endGame() {
+    return !(this.isStarted = false);
+  }
 }
 
 module.exports = Room;

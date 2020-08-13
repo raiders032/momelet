@@ -302,6 +302,9 @@ describe("Connecting Server", () => {
                     const msgObject = JSON.parse(msg);
                     msgObject.should.have.property("status").with.equal("fail");
 
+                    SingleObject.RoomRepository.findByRoomName(roomName)
+                      .getIsStarted()
+                      .should.equal(false);
                     offEventAll("gameStart", senders);
                     done();
                   }
@@ -342,6 +345,9 @@ describe("Connecting Server", () => {
         msgObject.status.should.equal("ok");
         msgObject.restaurants.should.have.lengthOf(7);
 
+        SingleObject.RoomRepository.findByRoomName(roomName)
+          .getIsStarted()
+          .should.equal(true);
         offEventAll("gameStart", senders);
         done();
       }
