@@ -19,18 +19,12 @@ const offEventAll = (event, senders) => {
 };
 
 describe("Connecting Server", () => {
-  let senders;
-  let sender1;
-  let sender2;
-  let sender3;
-  let sender4;
   let roomName;
+  let senders = [];
   before(() => {
-    sender1 = ioClient("http://localhost:3000", ioOptions[0]);
-    sender2 = ioClient("http://localhost:3000", ioOptions[1]);
-    sender3 = ioClient("http://localhost:3000", ioOptions[2]);
-    sender4 = ioClient("http://localhost:3000", ioOptions[3]);
-    senders = [sender1, sender2, sender3, sender4];
+    for (let i = 0; i < ioOptions.length; i++) {
+      senders.push(ioClient("http://localhost:3000", ioOptions[i]));
+    }
   });
   after(() => {
     app.server.close();
@@ -38,17 +32,17 @@ describe("Connecting Server", () => {
   });
 
   it("connect 테스트", (done) => {
-    sender1.on("connect", () => {
-      sender1.id.should.be.type("string");
+    senders[0].on("connect", () => {
+      senders[0].id.should.be.type("string");
 
-      sender2.on("connect", () => {
-        sender2.id.should.be.type("string");
+      senders[1].on("connect", () => {
+        senders[1].id.should.be.type("string");
 
-        sender3.on("connect", () => {
-          sender3.id.should.be.type("string");
+        senders[2].on("connect", () => {
+          senders[2].id.should.be.type("string");
 
-          sender4.on("connect", () => {
-            sender4.id.should.be.type("string");
+          senders[3].on("connect", () => {
+            senders[3].id.should.be.type("string");
             offEventAll("connect", senders);
             done();
           });
@@ -57,7 +51,7 @@ describe("Connecting Server", () => {
     });
   });
   it("together 테스트", (done) => {
-    sender1.emit(
+    senders[0].emit(
       "together",
       JSON.stringify({
         id: ioOptions[0]["query"]["id"],
@@ -79,7 +73,7 @@ describe("Connecting Server", () => {
   });
 
   it("togetherInvite, togetherInvitation 테스트", (done) => {
-    sender2.on("togetherInvitation", (msg) => {
+    senders[1].on("togetherInvitation", (msg) => {
       msg.should.be.type("string");
 
       const msgObject = JSON.parse(msg);
@@ -100,11 +94,11 @@ describe("Connecting Server", () => {
       done();
     });
 
-    sender1.emit(
+    senders[0].emit(
       "togetherInvite",
       JSON.stringify({
         id: ioOptions[0].myId,
-        inviteTheseUsers: [sender2.id, sender3.id],
+        inviteTheseUsers: [senders[1].id, senders[2].id],
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -125,7 +119,7 @@ describe("Connecting Server", () => {
   });
 
   it("gameRoomJoin, gameRoomUpdate 테스트", (done) => {
-    sender2.emit(
+    senders[1].emit(
       "gameRoomJoin",
       JSON.stringify({
         id: ioOptions[1].myId,
@@ -144,7 +138,7 @@ describe("Connecting Server", () => {
         msgObject["gameRoomUserList"].should.have.lengthOf(2);
       }
     );
-    sender3.emit(
+    senders[2].emit(
       "gameRoomJoin",
       JSON.stringify({
         id: ioOptions[2].myId,
@@ -165,7 +159,7 @@ describe("Connecting Server", () => {
   });
 
   it("gameRoomLeave 테스트", (done) => {
-    sender2.on("gameRoomUpdate", (msg) => {
+    senders[1].on("gameRoomUpdate", (msg) => {
       msg.should.be.type("string");
 
       const msgObject = JSON.parse(msg);
@@ -173,7 +167,7 @@ describe("Connecting Server", () => {
       msgObject.gameRoomUserList.should.have.lengthOf(2);
       msgObject.hostId.should.not.equal(ioOptions[0].myId);
 
-      sender2.emit(
+      senders[1].emit(
         "gameRoomLeave",
         JSON.stringify({
           id: ioOptions[1].myId,
@@ -192,7 +186,7 @@ describe("Connecting Server", () => {
     });
 
     let updateCount = 0;
-    sender3.on("gameRoomUpdate", (msg) => {
+    senders[2].on("gameRoomUpdate", (msg) => {
       updateCount += 1;
       msg.should.be.type("string");
 
@@ -206,7 +200,7 @@ describe("Connecting Server", () => {
         msgObject.hostId.should.not.equal(ioOptions[1].myId);
         msgObject.hostId.should.equal(ioOptions[2].myId);
 
-        sender3.emit(
+        senders[2].emit(
           "gameRoomLeave",
           JSON.stringify({ id: ioOptions[2].myId, roomName }),
           (msg) => {
@@ -225,7 +219,7 @@ describe("Connecting Server", () => {
       }
     });
 
-    sender1.emit(
+    senders[0].emit(
       "gameRoomLeave",
       JSON.stringify({
         id: ioOptions[0].myId,
@@ -245,11 +239,11 @@ describe("Connecting Server", () => {
 
   it("gameStart 테스트 - 방장이 아닌 사람이 스타트했을 때", (done) => {
     //given
-    sender1.emit(
+    senders[0].emit(
       "togetherInvite",
       JSON.stringify({
         id: ioOptions[0].myId,
-        inviteTheseUsers: [sender2.id, sender3.id],
+        inviteTheseUsers: [senders[1].id, senders[2].id],
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -260,7 +254,7 @@ describe("Connecting Server", () => {
         msgObject["hostId"].should.equal(ioOptions[0].myId);
 
         roomName = msgObject["roomName"];
-        sender2.emit(
+        senders[1].emit(
           "gameRoomJoin",
           JSON.stringify({
             id: ioOptions[1].myId,
@@ -276,7 +270,7 @@ describe("Connecting Server", () => {
               "hostId"
             );
             msgObject["gameRoomUserList"].should.have.lengthOf(2);
-            sender3.emit(
+            senders[2].emit(
               "gameRoomJoin",
               JSON.stringify({
                 id: ioOptions[2].myId,
@@ -290,7 +284,7 @@ describe("Connecting Server", () => {
                 msgObject["gameRoomUserList"].should.have.lengthOf(3);
 
                 // when
-                sender2.emit(
+                senders[1].emit(
                   "gameStart",
                   JSON.stringify({
                     id: ioOptions[1].myId,
@@ -318,21 +312,21 @@ describe("Connecting Server", () => {
   });
 
   it("gameStart 테스트 - 방장이 스타트했을 때", (done) => {
-    sender2.on("gameStart", (msg) => {
+    senders[1].on("gameStart", (msg) => {
       msg.should.be.type("string");
       const msgObject = JSON.parse(msg);
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
     });
-    sender3.on("gameStart", (msg) => {
+    senders[2].on("gameStart", (msg) => {
       msg.should.be.type("string");
       const msgObject = JSON.parse(msg);
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
     });
-    sender1.emit(
+    senders[0].emit(
       "gameStart",
       JSON.stringify({
         id: ioOptions[0].myId,
@@ -349,6 +343,96 @@ describe("Connecting Server", () => {
           .getIsStarted()
           .should.equal(true);
         offEventAll("gameStart", senders);
+        done();
+      }
+    );
+  });
+
+  it("gameUserFinish 테스트", (done) => {
+    for (let i = 0; i < 2; i++) {
+      senders[i].emit(
+        "gameUserFinish",
+        JSON.stringify({
+          id: ioOptions[i].myId,
+          userGameResult: [
+            {
+              id: 1,
+              sign: "y",
+            },
+            {
+              id: 2,
+              sign: "y",
+            },
+            {
+              id: 3,
+              sign: "y",
+            },
+            {
+              id: 4,
+              sign: "n",
+            },
+            {
+              id: 5,
+              sign: "n",
+            },
+            {
+              id: 6,
+              sign: "s",
+            },
+            {
+              id: 7,
+              sign: "s",
+            },
+          ],
+        }),
+        (msg) => {
+          msg.should.be.type("string");
+          const msgObject = JSON.parse(msg);
+          msgObject.should.have.property("status").with.equal("wait");
+        }
+      );
+    }
+
+    senders[2].emit(
+      "gameUserFinish",
+      JSON.stringify({
+        id: ioOptions[2].myId,
+        userGameResult: [
+          {
+            id: 1,
+            sign: "y",
+          },
+          {
+            id: 2,
+            sign: "y",
+          },
+          {
+            id: 3,
+            sign: "y",
+          },
+          {
+            id: 4,
+            sign: "n",
+          },
+          {
+            id: 5,
+            sign: "n",
+          },
+          {
+            id: 6,
+            sign: "s",
+          },
+          {
+            id: 7,
+            sign: "s",
+          },
+        ],
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.property("status").with.equal("wait");
+
         done();
       }
     );
