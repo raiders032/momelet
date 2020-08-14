@@ -37,8 +37,8 @@ const gameController = (socket) => {
   });
 
   // 다시하기
-  socket.on("gameRestart", (msg, ack) => {
-    const ret = service.gameRestartService(socket, msg);
+  socket.on("gameRoomJoinAgain", (msg, ack) => {
+    const ret = service.gameRoomJoinAgainService(socket, msg);
     // socket.emit("gameRestart", ret);
     ack(ret);
   });

@@ -1,4 +1,4 @@
-const gameRestartService = (socket, msg) => {
+const gameRoomJoinAgainService = (socket, msg) => {
   var echo = "gameRestart 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
@@ -6,5 +6,5 @@ const gameRestartService = (socket, msg) => {
 };
 
 module.exports = {
-  gameRestartService,
+  gameRoomJoinAgainService,
 };

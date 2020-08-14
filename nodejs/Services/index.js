@@ -11,7 +11,7 @@ const { gameRoomLeaveService } = require("./game/gameRoomLeaveService");
 const { gameStartService } = require("./game/gameStartService");
 const { gameUserFinishService } = require("./game/gameUserFinishService");
 const { gameAllFinishService } = require("./game/gameAllFinishService");
-const { gameRestartService } = require("./game/gameRestartService");
+const { gameRoomJoinAgainService } = require("./game/gameRoomJoinAgainService");
 
 // disconnect
 const { disconnectingService } = require("./disconnect/disconnectingService");
@@ -25,6 +25,6 @@ module.exports.gameRoomLeaveService = gameRoomLeaveService;
 module.exports.gameStartService = gameStartService;
 module.exports.gameUserFinishService = gameUserFinishService;
 module.exports.gameAllFinishService = gameAllFinishService;
-module.exports.gameRestartService = gameRestartService;
+module.exports.gameRoomJoinAgainService = gameRoomJoinAgainService;
 module.exports.disconnectingService = disconnectingService;
 module.exports.disconnectService = disconnectService;
