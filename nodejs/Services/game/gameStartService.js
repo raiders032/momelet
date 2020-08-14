@@ -17,20 +17,19 @@ const getCard = async (users, myId) => {
 
   const cards = [];
   try {
-    const { data } = await axios.get(
-      process.env.DATA_STORAGE_URL + "api/v1/restaurants7",
-      {
-        headers: {
-          Authorization: JWT,
-        },
-        params: {
-          id,
-          longitude,
-          latitude,
-          radius, // 전역 선언해둠
-        },
-      }
-    );
+    const {
+      data: { restaurants },
+    } = await axios.get(process.env.DATA_STORAGE_URL + "api/v1/restaurants7", {
+      headers: {
+        Authorization: JWT,
+      },
+      params: {
+        id,
+        longitude,
+        latitude,
+        radius, // 전역 선언해둠
+      },
+    });
     for (let i in data) {
       cards.push(data[i]);
     }
@@ -47,14 +46,14 @@ const gameStartService = async (socket, msg) => {
 
   let retMsg = {
     status: "fail",
-    restaurants: [],
+    restaurants: null,
   };
 
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
 
   // 에러 취약함. 처리해줘야 함.
-  if (room !== false && room.getIsStarted() && room.getHostId() === id) {
+  if (room !== false && !room.getIsStarted() && room.getHostId() === id) {
     // lock 역할로 room.isStarted를 사용
     room.startGame();
     const users = room.getUserList();
@@ -88,6 +87,7 @@ const gameStartService = async (socket, msg) => {
       // 게임이 시작된 후에 gameRoomUpdate, gameStart에 대해서 메시지를 보낼 일이 없기에
       // 유저들의 canReceive를 false로 업데이트 해준다.
       // canReceive가 false인 유저는 방에서 삭제되었기 때문에 filter를 쓰지 않음.
+      let headCount;
       users.forEach((user) => {
         if (user.getId() !== room.getHostId()) {
           socket.to(user.socketId).emit("gameStart", retMsg);
@@ -97,12 +97,14 @@ const gameStartService = async (socket, msg) => {
       });
       room.updateHeadCount(headCount);
     } catch (err) {
+      console.log(err);
       console.log("카드 가져오기 실패 / 게임시작 실패");
+
+      retMsg.status = "fail";
+      retMsg = JSON.stringify(retMsg);
       room.endGame();
     }
-  }
-
-  if (typeof retMsg !== "string") {
+  } else {
     retMsg.status = "no";
     retMsg = JSON.stringify(retMsg);
   }

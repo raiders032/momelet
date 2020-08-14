@@ -10,7 +10,6 @@ const gameUserFinishService = (socket, msg) => {
 
   const { id, userGameResult, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  // const user = SingleObject.
 
   if (room.getHeadCount() <= room.getFinishCount()) {
     gameAllFinishService(socket, "게임 다 끝났음");
