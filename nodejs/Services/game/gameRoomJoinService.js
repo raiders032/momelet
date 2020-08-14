@@ -9,30 +9,24 @@ const gameRoomJoinService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  if (room.getIsStarted()) {
-    const ret = JSON.stringify({
-      status: "fail",
-      roomName: null,
-      gameRoomUserList: null,
-      hostId: null,
-    });
-    return ret;
+  let retMsg = {
+    status: "fail",
+    roomName: null,
+    gameRoomUserList: null,
+    hostId: null,
+  };
+
+  if (room.addUser(user)) {
+    gameRoomUpdateService(socket, roomName, id);
+    user.updateJoinedRoomName(roomName);
+    retMsg.status = "success";
+    retMsg.roomName = roomName;
+    retMsg.gameRoomUserList = room.getUserList();
+    retMsg.hostId = room.getHostId();
   }
 
-  room.addUser(user);
-
-  socket.join(roomName, () => {
-    gameRoomUpdateService(socket, roomName, id);
-  });
-
-  const ret = JSON.stringify({
-    status: "success",
-    roomName: roomName,
-    gameRoomUserList: room.getUserList(),
-    hostId: room.getHostId(),
-  });
-
-  return ret;
+  retMsg = JSON.stringify(retMsg);
+  return retMsg;
 };
 
 module.exports = {

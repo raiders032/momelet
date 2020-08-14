@@ -11,7 +11,7 @@ class Room {
   }
 
   addUser(user) {
-    if (this.headCount >= this.maxHeadCount) return false;
+    if (this.isStarted || this.headCount >= this.maxHeadCount) return false;
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
@@ -33,6 +33,8 @@ class Room {
         this.hostId = this.userList[0].id;
       }
     });
+
+    return this.headCount;
   }
 
   addCard(id, scores) {
@@ -93,6 +95,10 @@ class Room {
 
   endGame() {
     return !(this.isStarted = false);
+  }
+
+  updateHeadCount(newHeadCount) {
+    return (this.headCount = newHeadCount);
   }
 }
 

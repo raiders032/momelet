@@ -35,7 +35,7 @@ const getCard = async (users, myId) => {
       cards.push(data[i]);
     }
   } catch (err) {
-    console.log("서버에서 카드 7장 가져오기 실패");
+    throw err;
   }
 
   return cards;
@@ -54,25 +54,52 @@ const gameStartService = async (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
 
   // 에러 취약함. 처리해줘야 함.
-  if (room !== false && room.getHostId() === id) {
+  if (room !== false && room.getIsStarted() && room.getHostId() === id) {
+    // lock 역할로 room.isStarted를 사용
+    room.startGame();
     const users = room.getUserList();
-    const cards = await getCard(users, id);
-    if (cards.length === 7) {
-      retMsg.status = "ok";
-      for (let i = 0; i < 7; i++) {
-        room.addCard(cards[i].id, { score: 0, like: 0 });
-      }
-    }
-    retMsg.restaurants = cards;
-    retMsg = JSON.stringify(retMsg);
 
-    users
-      .filter((user) => user.getCanReceive() && id !== user.id)
-      .forEach((user) => {
-        socket.to(user.socketId).emit("gameRoomUpdate"), retMsg;
+    try {
+      const cards = await getCard(
+        users.filter((user) => user.getCanReceive()),
+        id
+      );
+      if (cards.length === 7) {
+        retMsg.status = "ok";
+        for (let i = 0; i < 7; i++) {
+          room.addCard(cards[i].id, { score: 0, like: 0 });
+        }
+      } else {
+        throw err;
+      }
+      retMsg.restaurants = cards;
+      retMsg = JSON.stringify(retMsg);
+
+      // room.userList가 Array이기 때문에 순회하며 delete를 할 수 없음
+      // 따라서 userList에서 삭제될 유저만 Array로 새로 만들어서 삭제를 진행함.
+      const leaveUsers = users.filter((user) => !user.getCanReceive());
+      leaveUsers.forEach((user) => {
+        SingleObject.RoomRepository.findByRoomName(
+          user.getJoinedRoomName()
+        ).deleteUser(user);
+        user.updateJoinedRoomName(null);
       });
 
-    room.startGame();
+      // 게임이 시작된 후에 gameRoomUpdate, gameStart에 대해서 메시지를 보낼 일이 없기에
+      // 유저들의 canReceive를 false로 업데이트 해준다.
+      // canReceive가 false인 유저는 방에서 삭제되었기 때문에 filter를 쓰지 않음.
+      users.forEach((user) => {
+        if (user.getId() !== room.getHostId()) {
+          socket.to(user.socketId).emit("gameStart", retMsg);
+        }
+        user.updateCanReceive(false);
+        headCount++;
+      });
+      room.updateHeadCount(headCount);
+    } catch (err) {
+      console.log("카드 가져오기 실패 / 게임시작 실패");
+      room.endGame();
+    }
   }
 
   if (typeof retMsg !== "string") {

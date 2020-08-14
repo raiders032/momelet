@@ -294,7 +294,7 @@ describe("Connecting Server", () => {
                     // then
                     msg.should.be.type("string");
                     const msgObject = JSON.parse(msg);
-                    msgObject.should.have.property("status").with.equal("fail");
+                    msgObject.should.have.property("status").with.equal("no");
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
@@ -318,6 +318,7 @@ describe("Connecting Server", () => {
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
+      senders[1].off("gameStart");
     });
     senders[2].on("gameStart", (msg) => {
       msg.should.be.type("string");
@@ -325,6 +326,8 @@ describe("Connecting Server", () => {
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
+      senders[2].off("gameStart");
+      done();
     });
     senders[0].emit(
       "gameStart",
@@ -342,8 +345,6 @@ describe("Connecting Server", () => {
         SingleObject.RoomRepository.findByRoomName(roomName)
           .getIsStarted()
           .should.equal(true);
-        offEventAll("gameStart", senders);
-        done();
       }
     );
   });
