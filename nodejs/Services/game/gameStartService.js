@@ -18,7 +18,9 @@ const getCard = async (users, myId) => {
   const cards = [];
   try {
     const {
-      data: { restaurants },
+      data: {
+        data: { restaurants },
+      },
     } = await axios.get(process.env.DATA_STORAGE_URL + "api/v1/restaurants7", {
       headers: {
         Authorization: JWT,
@@ -30,10 +32,12 @@ const getCard = async (users, myId) => {
         radius, // 전역 선언해둠
       },
     });
-    for (let i in data) {
-      cards.push(data[i]);
+
+    for (let i in restaurants) {
+      cards.push(restaurants[i]);
     }
   } catch (err) {
+    console.log("데이타 fetch 오류");
     throw err;
   }
 
@@ -69,7 +73,7 @@ const gameStartService = async (socket, msg) => {
           room.addCard(cards[i].id, { score: 0, like: 0 });
         }
       } else {
-        throw err;
+        throw new Error("카드가 7장이 아님");
       }
       retMsg.restaurants = cards;
       retMsg = JSON.stringify(retMsg);
@@ -87,7 +91,7 @@ const gameStartService = async (socket, msg) => {
       // 게임이 시작된 후에 gameRoomUpdate, gameStart에 대해서 메시지를 보낼 일이 없기에
       // 유저들의 canReceive를 false로 업데이트 해준다.
       // canReceive가 false인 유저는 방에서 삭제되었기 때문에 filter를 쓰지 않음.
-      let headCount;
+      let headCount = 0;
       users.forEach((user) => {
         if (user.getId() !== room.getHostId()) {
           socket.to(user.socketId).emit("gameStart", retMsg);

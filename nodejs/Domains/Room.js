@@ -15,6 +15,7 @@ class Room {
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
+
     return true;
   }
 
@@ -81,14 +82,10 @@ class Room {
     return this.isStarted;
   }
 
-  addFinish(userId) {
-    const user = this.userList.get(userId);
-    if (user.getCanReceive()) {
-      user.updateCanReceive(false);
-      return ++this.finishCount;
-    }
-    return this.finishCount;
+  addFinishCount() {
+    return ++this.finishCount;
   }
+
   startGame() {
     return (this.isStarted = true);
   }
