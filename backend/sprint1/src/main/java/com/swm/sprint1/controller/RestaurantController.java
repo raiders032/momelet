@@ -1,12 +1,14 @@
 package com.swm.sprint1.controller;
 
 import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.UserPrincipal;
 import com.swm.sprint1.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,11 +57,13 @@ public class RestaurantController {
     }
 
     @GetMapping("/api/v1/restaurants7")
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam String id
-            ,@RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude, @RequestParam BigDecimal radius){
+            , @RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude, @RequestParam BigDecimal radius){
         List<Long> ids = Arrays.stream(id.split(",")).map(Long::parseLong).collect(Collectors.toList());
         List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
-        return ResponseEntity.ok(restaurants);
+        ApiResponse response = new ApiResponse(LocalDateTime.now(), true);
+        response.putData("restaurants", restaurants);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }
