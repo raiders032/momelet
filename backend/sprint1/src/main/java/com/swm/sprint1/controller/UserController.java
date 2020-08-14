@@ -6,7 +6,7 @@ import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.UpdateUserRequest;
 import com.swm.sprint1.payload.response.ApiResponse;
-import com.swm.sprint1.payload.response.RetrieveUserResponse;
+import com.swm.sprint1.payload.response.UserInfoDto;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.UserPrincipal;
@@ -43,9 +43,15 @@ public class UserController {
     @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal) {
+
         User user = userPrincipal.getUser();
         Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
-        return ResponseEntity.ok(new RetrieveUserResponse(user.getId(),user.getName(), user.getEmail(), user.getImageUrl(), categories));
+
+        UserInfoDto userInfoDto = new UserInfoDto(user.getId(), user.getName(), user.getEmail(), user.getImageUrl(), categories);
+        ApiResponse response = new ApiResponse(LocalDateTime.now(), true);
+        response.putData("userInfo", userInfoDto);
+
+        return ResponseEntity.ok(response);
     }
 
     @ApiOperation(value = "유저의 목록을 반환")
