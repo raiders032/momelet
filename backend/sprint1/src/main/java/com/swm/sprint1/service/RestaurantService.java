@@ -3,6 +3,7 @@ package com.swm.sprint1.service;
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.CategoryNumber;
 import com.swm.sprint1.domain.Restaurant;
+import com.swm.sprint1.exception.RestaurantLessThan7Exception;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.repository.category.CategoryRepository;
@@ -50,7 +51,8 @@ public class RestaurantService {
                                     categoryNumber.getCategory().getId(),
                                     categoryNumber.getNumber() + 7L));
         });
-
+        if(restaurantSet.size() < 7)
+            throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
         List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
         Collections.shuffle(restaurants);
         restaurants = restaurants.subList(0,7);
