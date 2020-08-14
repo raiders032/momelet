@@ -1,6 +1,7 @@
 package com.swm.sprint1.exception;
 
 import com.swm.sprint1.payload.response.ApiResponse;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +41,12 @@ public class CustomizedResponseEntityExceptionHandler {
 
     @ExceptionHandler(RestaurantLessThan7Exception.class)
     public final ResponseEntity<ApiResponse> handleRestaurantLessThan7Exceptions(Exception ex, WebRequest request) {
+        ApiResponse response = new ApiResponse(LocalDateTime.now(),false,ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public final ResponseEntity<ApiResponse> handleJwtExceptions(Exception ex, WebRequest request) {
         ApiResponse response = new ApiResponse(LocalDateTime.now(),false,ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
