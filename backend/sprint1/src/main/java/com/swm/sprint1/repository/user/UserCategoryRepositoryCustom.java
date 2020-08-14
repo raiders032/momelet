@@ -14,4 +14,6 @@ public interface UserCategoryRepositoryCustom {
     Map<String,Integer> findAllCategoryNameByUserId(Long userId);
 
     List<CategoryNumber> findCategoryAndCountByUserId(List<Long> ids);
+
+    List<String> findAllCategoryNameByUserIds(List<Long> ids);
 }

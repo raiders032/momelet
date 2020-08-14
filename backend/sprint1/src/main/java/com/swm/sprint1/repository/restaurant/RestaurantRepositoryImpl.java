@@ -99,6 +99,34 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .fetch();
     }
 
+    @Override
+    public List<?> findtest(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids, List<String> categoryList) {
+        String sql =
+                "   SELECT c.category_id, c.name, rnum  " +
+                "   FROM (  " +
+                "       SELECT " +
+                "           a.*, " +
+                "           (CASE @vcar WHEN a.category_id THEN @rownum:=@rownum+1 ELSE @rownum:=1 END) rnum, " +
+                "           (@vcar:=a.category_id) " +
+                "       FROM(  " +
+                "           SELECT rc.*, r.name " +
+                "           FROM restaurant r " +
+                "           JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
+                "           WHERE rc.category_id in(1,2,3,4)) a, (SELECT @vcar:= 0, @rownum:= 0 FROM DUAL) b " +
+                "           ORDER BY a.category_id " +
+                "           ) c  " +
+                "   WHERE c.rnum <=(select count(uc.category_id) " +
+                "                   from user_category uc " +
+                "                   where uc.category_id = c.category_id  " +
+                "                   and uc.user_id in (1,4) " +
+                "                   group by uc.category_id) * 2 ";
+        return em.createNativeQuery(sql)
+                .setParameter("categories",categoryList)
+                .setParameter("ids",ids)
+                .getResultList();
+    }
+
+
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){
         return latitude != null ? restaurant.latitude.between(latitude.subtract(length), latitude.add(length)) : null;
     }
