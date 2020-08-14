@@ -21,6 +21,7 @@ const offEventAll = (event, senders) => {
 describe("Connecting Server", () => {
   let roomName;
   let senders = [];
+  let restaurantsId = [];
   before(() => {
     for (let i = 0; i < ioOptions.length; i++) {
       senders.push(ioClient("http://localhost:3000", ioOptions[i]));
@@ -294,7 +295,7 @@ describe("Connecting Server", () => {
                     // then
                     msg.should.be.type("string");
                     const msgObject = JSON.parse(msg);
-                    msgObject.should.have.property("status").with.equal("fail");
+                    msgObject.should.have.property("status").with.equal("no");
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
@@ -318,6 +319,7 @@ describe("Connecting Server", () => {
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
+      senders[1].off("gameStart");
     });
     senders[2].on("gameStart", (msg) => {
       msg.should.be.type("string");
@@ -325,6 +327,13 @@ describe("Connecting Server", () => {
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
+
+      // gameUserFinish 테스트를 위한 것.
+      for (let r of msgObject.restaurants) {
+        restaurantsId.push(r.id);
+      }
+      senders[2].off("gameStart");
+      done();
     });
     senders[0].emit(
       "gameStart",
@@ -342,8 +351,6 @@ describe("Connecting Server", () => {
         SingleObject.RoomRepository.findByRoomName(roomName)
           .getIsStarted()
           .should.equal(true);
-        offEventAll("gameStart", senders);
-        done();
       }
     );
   });
@@ -356,34 +363,35 @@ describe("Connecting Server", () => {
           id: ioOptions[i].myId,
           userGameResult: [
             {
-              id: 1,
+              id: restaurantsId[0],
               sign: "y",
             },
             {
-              id: 2,
+              id: restaurantsId[1],
               sign: "y",
             },
             {
-              id: 3,
+              id: restaurantsId[2],
               sign: "y",
             },
             {
-              id: 4,
+              id: restaurantsId[3],
               sign: "n",
             },
             {
-              id: 5,
+              id: restaurantsId[4],
               sign: "n",
             },
             {
-              id: 6,
+              id: restaurantsId[5],
               sign: "s",
             },
             {
-              id: 7,
+              id: restaurantsId[6],
               sign: "s",
             },
           ],
+          roomName,
         }),
         (msg) => {
           msg.should.be.type("string");
@@ -399,34 +407,35 @@ describe("Connecting Server", () => {
         id: ioOptions[2].myId,
         userGameResult: [
           {
-            id: 1,
+            id: restaurantsId[0],
             sign: "y",
           },
           {
-            id: 2,
+            id: restaurantsId[1],
             sign: "y",
           },
           {
-            id: 3,
+            id: restaurantsId[2],
             sign: "y",
           },
           {
-            id: 4,
+            id: restaurantsId[3],
             sign: "n",
           },
           {
-            id: 5,
+            id: restaurantsId[4],
             sign: "n",
           },
           {
-            id: 6,
+            id: restaurantsId[5],
             sign: "s",
           },
           {
-            id: 7,
+            id: restaurantsId[6],
             sign: "s",
           },
         ],
+        roomName,
       }),
       (msg) => {
         msg.should.be.type("string");

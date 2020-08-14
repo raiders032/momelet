@@ -5,20 +5,23 @@ const gameRoomLeaveService = (socket, msg) => {
   var echo = "gameRoomLeave 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
+  let retMsg = { status: "fail" };
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  socket.leave(roomName, () => {
-    room.deleteUser(user);
-    if (room.getHeadCount() <= 0) {
+  try {
+    if (room.deleteUser(user) === 0) {
       SingleObject.RoomRepository.delete(room.getRoomName());
-      return;
+    } else {
+      gameRoomUpdateService(socket, roomName, id);
     }
-    gameRoomUpdateService(socket, roomName, id);
-  });
+    retMsg.status = "ok";
+  } catch (err) {
+    console.log(err);
+  }
 
-  const retMsg = JSON.stringify({ status: "ok" });
+  retMsg = JSON.stringify(retMsg);
   return retMsg;
 };
 

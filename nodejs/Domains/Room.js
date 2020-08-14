@@ -3,16 +3,19 @@ class Room {
     this.roomName = roomName;
     this.hostId = userId;
     this.headCount = 0;
+    this.finishCount = 0;
     this.userList = new Array();
     this.isStarted = false;
     this.maxHeadCount = 8;
+    this.cardList = new Map();
   }
 
   addUser(user) {
-    if (this.headCount >= this.maxHeadCount) return false;
+    if (this.isStarted || this.headCount >= this.maxHeadCount) return false;
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
+
     return true;
   }
 
@@ -31,6 +34,24 @@ class Room {
         this.hostId = this.userList[0].id;
       }
     });
+
+    return this.headCount;
+  }
+
+  addCard(id, scores) {
+    this.cardList.set(id, scores);
+  }
+
+  addScore(id, like) {
+    const card = this.cardList.get(id);
+    if (like === "y") {
+      card.like += 1;
+      card.score += 10;
+    } else if (like === "n") {
+      card.score -= 5;
+    } else if (like === "s") {
+      card.score += 5;
+    }
   }
 
   startGame() {
@@ -53,8 +74,16 @@ class Room {
     return this.headCount;
   }
 
+  getFinishCount() {
+    return this.finishCount;
+  }
+
   getIsStarted() {
     return this.isStarted;
+  }
+
+  addFinishCount() {
+    return ++this.finishCount;
   }
 
   startGame() {
@@ -63,6 +92,10 @@ class Room {
 
   endGame() {
     return !(this.isStarted = false);
+  }
+
+  updateHeadCount(newHeadCount) {
+    return (this.headCount = newHeadCount);
   }
 }
 
