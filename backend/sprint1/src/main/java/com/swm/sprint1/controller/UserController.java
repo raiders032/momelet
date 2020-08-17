@@ -4,12 +4,14 @@ package com.swm.sprint1.controller;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
+import com.swm.sprint1.payload.request.CreateUserLikingDto;
 import com.swm.sprint1.payload.request.UpdateUserRequest;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.UserInfoDto;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.UserPrincipal;
+import com.swm.sprint1.service.UserLikingService;
 import com.swm.sprint1.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +32,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final UserLikingService userLikingService;
 
     @ApiOperation(value = "유저의 정보를 반환")
     @GetMapping("/users/me")
@@ -65,10 +68,28 @@ public class UserController {
     @ApiOperation(value = "유저 정보 수정")
     @PutMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id){
+    public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
+                                            @Valid @RequestBody UpdateUserRequest request,
+                                            @PathVariable Long id){
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, request);
-        return ResponseEntity.ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
+        return ResponseEntity
+                .ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
+    }
+
+    @ApiOperation(value ="유저 의사표현 저장")
+    @PostMapping("/api/v1/users/{id}/liking")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> createUserLiking(@CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable Long id,
+                                              @Valid @RequestBody CreateUserLikingDto userLikingDto){
+
+        if(!id.equals(userPrincipal.getId()))
+            throw new BadRequestException("유효하지 않은 id : " + id);
+
+        userLikingService.saveUserLiking(userLikingDto);
+        return ResponseEntity.created(null)
+                .body(new ApiResponse(LocalDateTime.now(),true,"유저 의사 표현 저장 완료"));
     }
 }

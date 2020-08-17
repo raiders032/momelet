@@ -29,16 +29,20 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/api/v1/restaurants")
-    public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,@RequestParam BigDecimal radius){
+    public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude,
+                                           @RequestParam BigDecimal latitude,
+                                           @RequestParam BigDecimal radius){
         List<RetrieveRestaurantResponseV1> restaurantList = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude,radius, null);
         return ResponseEntity.ok(restaurantList);
     }
 
     @GetMapping("/api/v1/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getRestaurantWithUserCategory(
-            @RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
+    public ResponseEntity<?> getRestaurantWithUserCategory(@CurrentUser UserPrincipal userPrincipal,
+                                                           @RequestParam BigDecimal longitude,
+                                                           @RequestParam BigDecimal latitude,
+                                                           @RequestParam BigDecimal radius,
+                                                           @PathVariable Long id){
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         List<RetrieveRestaurantResponseV1> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude, radius, userPrincipal.getId());
@@ -47,9 +51,11 @@ public class RestaurantController {
 
     @GetMapping("/api/v2/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getRestaurantWithUserCategoryV2(
-            @RequestParam BigDecimal longitude, @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal radius, @CurrentUser UserPrincipal userPrincipal, @PathVariable Long id){
+    public ResponseEntity<?> getRestaurantWithUserCategoryV2(@CurrentUser UserPrincipal userPrincipal,
+                                                             @RequestParam BigDecimal longitude,
+                                                             @RequestParam BigDecimal latitude,
+                                                             @RequestParam BigDecimal radius,
+                                                             @PathVariable Long id){
 
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
@@ -63,8 +69,10 @@ public class RestaurantController {
 
     @GetMapping("/api/v1/restaurants7")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam String id, @RequestParam BigDecimal longitude
-            , @RequestParam BigDecimal latitude, @RequestParam BigDecimal radius){
+    public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam String id,
+                                                               @RequestParam BigDecimal longitude,
+                                                               @RequestParam BigDecimal latitude,
+                                                               @RequestParam BigDecimal radius){
 
         List<Long> ids = Arrays.stream(id.split(",")).map(Long::parseLong).collect(Collectors.toList());
         List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
