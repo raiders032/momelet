@@ -20,9 +20,6 @@ const gameUserFinishService = (socket, msg) => {
   retMsg.status = "wait";
   room.addFinishCount();
 
-  if (room.getHeadCount() <= room.getFinishCount()) {
-    gameAllFinishService(socket, "게임 다 끝났음");
-  }
   retMsg = JSON.stringify(retMsg);
   return retMsg;
 };

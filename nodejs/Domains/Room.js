@@ -46,11 +46,11 @@ class Room {
     const card = this.cardList.get(id);
     if (like === "y") {
       card.like += 1;
-      card.score += 10;
+      card.score += 2;
     } else if (like === "n") {
-      card.score -= 5;
+      card.score += 0;
     } else if (like === "s") {
-      card.score += 5;
+      card.score += 1;
     }
   }
 
@@ -72,6 +72,10 @@ class Room {
 
   getHeadCount() {
     return this.headCount;
+  }
+
+  getCardList() {
+    return this.cardList;
   }
 
   getFinishCount() {
