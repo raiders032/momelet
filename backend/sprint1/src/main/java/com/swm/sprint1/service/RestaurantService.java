@@ -42,22 +42,20 @@ public class RestaurantService {
         /*  List<Category> categories = categoryNumbers.stream().map(CategoryNumber::getCategory).collect(Collectors.toList());
         List<Restaurant> restaurantList = restaurantRepository.findByLatitudeAndLongitudeAndCategories(latitude, longitude, radius, categories);
         */
-        categoryNumbers.forEach(categoryNumber ->{
-                    restaurantSet.addAll(
-                            restaurantRepository.findByLatitudeAndLongitudeAndCategory(
-                                    latitude,
-                                    longitude,
-                                    radius,
-                                    categoryNumber.getCategory().getId(),
-                                    categoryNumber.getNumber() + 7L));
-        });
+        categoryNumbers.forEach(categoryNumber -> restaurantSet.addAll(
+                restaurantRepository.findByLatitudeAndLongitudeAndCategory(
+                        latitude,
+                        longitude,
+                        radius,
+                        categoryNumber.getCategory().getId(),
+                        categoryNumber.getNumber() * 7L)));
         if(restaurantSet.size() < 7)
             throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
         List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
         Collections.shuffle(restaurants);
         restaurants = restaurants.subList(0,7);
         return restaurants.stream()
-                .map(restaurant -> new RetrieveRestaurantResponse(restaurant))
+                .map(RetrieveRestaurantResponse::new)
                 .collect(Collectors.toList());
     }
 }
