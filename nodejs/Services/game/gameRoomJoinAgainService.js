@@ -1,7 +1,7 @@
 const SingleObject = require("../../SingleObjects");
 
 const gameRoomJoinAgainService = (socket, msg) => {
-  var echo = "gameRestart 이벤트. 받은 msg: " + msg;
+  var echo = "gameRoomJoinAgain 이벤트. 받은 msg: " + msg;
   console.log(echo);
 
   const { id, roomName } = JSON.parse(msg);
@@ -23,8 +23,8 @@ const gameRoomJoinAgainService = (socket, msg) => {
     });
   }
 
-  const retMsg = JSON.stringify(retMsg);
-  return echo;
+  retMsg = JSON.stringify(retMsg);
+  return retMsg;
 };
 
 module.exports = {
