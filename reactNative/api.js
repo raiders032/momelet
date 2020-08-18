@@ -1,9 +1,7 @@
 import axios from "axios";
 
 import getEnvVars from "./enviroment";
-import Category from "./components/Category";
 const { apiUrl } = getEnvVars();
-console.log(apiUrl);
 const makeRequest = async (method, path, config, data = "") => {
   try {
     return await axios({
