@@ -27,7 +27,7 @@ const gameController = (socket) => {
     const ret = service.gameUserFinishService(socket, msg);
     // socket.emit("gameUserFinish", ret);
     ack(ret);
-    const ret = service.gameAllFinishService(socket, msg);
+    service.gameAllFinishService(socket, msg);
   });
 
   // 전체 유저 게임 종료

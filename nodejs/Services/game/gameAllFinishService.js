@@ -1,5 +1,5 @@
 const SingleObject = require("../../SingleObjects");
-const gameAllFinishService = (socket) => {
+const gameAllFinishService = (socket, msg) => {
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   if (room.getHeadCount() > room.getFinishCount()) {
@@ -8,7 +8,7 @@ const gameAllFinishService = (socket) => {
 
   const users = room.getUserList();
   const cardList = room.getCardList();
-  let bestCard = {id: null, like: 0, score: 0 };
+  let bestCard = { id: null, like: 0, score: 0 };
   let isLike = false;
   let retMsg = {
     roomGameResult: {
@@ -22,19 +22,17 @@ const gameAllFinishService = (socket) => {
   room.endGame();
 
   cardList.forEach((card, key) => {
-    if(card.score > bestCard.score){
+    if (card.score > bestCard.score) {
       bestCard.score = card.score;
       bestCard.like = card.like;
       bestCard.id = key;
     }
-    if(card.like > 0)
-      isLike = true;
-  };
+    if (card.like > 0) isLike = true;
+  });
 
-  if(!isLike){
+  if (!isLike) {
     retMsg.roomGameResult.result = "fail";
-  }
-  else{
+  } else {
     retMsg.roomGameResult.id = bestCard.id;
     retMsg.roomGameResult.headCount = room.getHeadCount();
     retMsg.roomGameResult.likeCount = bestCard.like;
@@ -45,10 +43,7 @@ const gameAllFinishService = (socket) => {
   users
     .filter((user) => id !== user.id)
     .forEach((user) => {
-      socket.to(user.socketId).emit(
-        "gameAllFinish",
-        retMsg
-      );
+      socket.to(user.socketId).emit("gameAllFinish", retMsg);
     });
 
   return retMsg;
@@ -57,7 +52,3 @@ const gameAllFinishService = (socket) => {
 module.exports = {
   gameAllFinishService,
 };
-
-socket.emit("gameRoomUpdate", 메시지, (msg) => {
-  msg
-})
