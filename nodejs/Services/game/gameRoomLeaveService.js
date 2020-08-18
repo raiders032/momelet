@@ -16,6 +16,7 @@ const gameRoomLeaveService = (socket, msg) => {
     } else {
       gameRoomUpdateService(socket, roomName, id);
     }
+    user.updateJoinedRoomName(null);
     retMsg.status = "ok";
   } catch (err) {
     console.log(err);
