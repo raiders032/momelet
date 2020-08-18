@@ -16,23 +16,25 @@ public class UserLiking extends DateEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(precision = 10, scale = 7)
+    @Column(precision = 10, scale = 7, nullable = false)
     private BigDecimal userLongitude;
 
-    @Column(precision = 10, scale = 7)
+    @Column(precision = 10, scale = 7, nullable = false)
     private BigDecimal userLatitude;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    private Integer liking;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Liking liking;
 
     @Builder
-    public UserLiking(User user, BigDecimal userLongitude, BigDecimal userLatitude, Restaurant restaurant, Integer liking) {
+    public UserLiking(User user, BigDecimal userLongitude, BigDecimal userLatitude, Restaurant restaurant, Liking liking) {
         this.user = user;
         this.userLongitude = userLongitude;
         this.userLatitude = userLatitude;

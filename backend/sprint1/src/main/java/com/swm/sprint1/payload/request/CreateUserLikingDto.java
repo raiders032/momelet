@@ -1,5 +1,6 @@
 package com.swm.sprint1.payload.request;
 
+import com.swm.sprint1.domain.Liking;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,6 @@ public class CreateUserLikingDto {
     @NotNull @Min(-90) @Max(90)
     private BigDecimal userLatitude;
 
-    @NotNull @Min(0) @Max(2)
-    private Integer liking;
+    @NotNull
+    private Liking liking;
 }
