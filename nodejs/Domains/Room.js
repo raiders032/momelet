@@ -59,7 +59,10 @@ class Room {
   }
 
   getUserList() {
-    return this.userList;
+    const availableUserList = this.userList.filter((user) =>
+      user.getCanReceive()
+    );
+    return availableUserList;
   }
 
   getRoomName() {
@@ -100,6 +103,13 @@ class Room {
 
   updateHeadCount(newHeadCount) {
     return (this.headCount = newHeadCount);
+  }
+
+  findUserById(userId) {
+    for (let user of this.userList) {
+      if (user.getId() === userId) return true;
+    }
+    return false;
   }
 }
 

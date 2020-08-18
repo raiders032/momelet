@@ -52,6 +52,8 @@ describe("Connecting Server", () => {
     });
   });
   it("together 테스트", (done) => {
+    // 0이 together를 보내면
+    // 알맞은 값을 받음
     senders[0].emit(
       "together",
       JSON.stringify({
@@ -74,6 +76,8 @@ describe("Connecting Server", () => {
   });
 
   it("togetherInvite, togetherInvitation 테스트", (done) => {
+    // 0이 초대메시지를 보내면
+    // 1이 받음
     senders[1].on("togetherInvitation", (msg) => {
       msg.should.be.type("string");
 
@@ -120,6 +124,23 @@ describe("Connecting Server", () => {
   });
 
   it("gameRoomJoin, gameRoomUpdate 테스트", (done) => {
+    // 1이 방에 입장하고 0이 gameRoomUpdate를 받고
+    // 2가 방에 입장하고 0, 1이 gameRoomUpdate를 받음
+    let updateCount = 0;
+    senders[0].on("gameRoomUpdate", (msg) => {
+      updateCount += 1;
+      msg.should.be.type("string");
+      const msgObject = JSON.parse(msg);
+      if (updateCount == 1) {
+        msgObject.should.have
+          .property("gameRoomUserList")
+          .with.have.lengthOf(2);
+      } else if (updateCount == 2) {
+        msgObject.should.have
+          .property("gameRoomUserList")
+          .with.have.lengthOf(3);
+      }
+    });
     senders[1].emit(
       "gameRoomJoin",
       JSON.stringify({
@@ -137,36 +158,51 @@ describe("Connecting Server", () => {
           "hostId"
         );
         msgObject["gameRoomUserList"].should.have.lengthOf(2);
-      }
-    );
-    senders[2].emit(
-      "gameRoomJoin",
-      JSON.stringify({
-        id: ioOptions[2].myId,
-        roomName,
-      }),
-      (msg) => {
-        msg.should.be.type("string");
 
-        const msgObject = JSON.parse(msg);
-        msgObject.should.have.properties("gameRoomUserList", "hostId");
-        msgObject["gameRoomUserList"].should.have.lengthOf(3);
+        senders[1].on("gameRoomUpdate", (msg) => {
+          msg.should.be.type("string");
+          const msgObject = JSON.parse(msg);
+          msgObject.should.have
+            .property("gameRoomUserList")
+            .with.have.lengthOf(3);
+        });
 
-        offEventAll("gameRoomJoin", senders);
-        offEventAll("gameRoomUpdate", senders);
-        done();
+        senders[2].emit(
+          "gameRoomJoin",
+          JSON.stringify({
+            id: ioOptions[2].myId,
+            roomName,
+          }),
+          (msg) => {
+            msg.should.be.type("string");
+
+            const msgObject = JSON.parse(msg);
+            msgObject.should.have.properties("gameRoomUserList", "hostId");
+            msgObject["gameRoomUserList"].should.have.lengthOf(3);
+
+            offEventAll("gameRoomJoin", senders);
+            offEventAll("gameRoomUpdate", senders);
+            done();
+          }
+        );
       }
     );
   });
 
   it("gameRoomLeave 테스트", (done) => {
+    // 0이 먼저 방에서 나가면
+    // 1, 2가 gameRoomUpdate를 받고 1은 방장이 되고
+    // 1이 방을 나가면 2만 gameRoomUpdate를 받고 2가 방장이 되고
+    // 2가 방을 나가면 방이 삭제됨
     senders[1].on("gameRoomUpdate", (msg) => {
       msg.should.be.type("string");
 
       const msgObject = JSON.parse(msg);
       msgObject.should.have.properties("gameRoomUserList", "hostId");
       msgObject.gameRoomUserList.should.have.lengthOf(2);
-      msgObject.hostId.should.not.equal(ioOptions[0].myId);
+      msgObject.hostId.should.not
+        .equal(ioOptions[0].myId)
+        .with.equal(ioOptions[1].myId);
 
       senders[1].emit(
         "gameRoomLeave",
@@ -195,11 +231,14 @@ describe("Connecting Server", () => {
       msgObject.should.have.properties("gameRoomUserList", "hostId");
       if (updateCount === 1) {
         msgObject.gameRoomUserList.should.have.lengthOf(2);
-        msgObject.hostId.should.not.equal(ioOptions[0].myId);
+        msgObject.hostId.should.not
+          .equal(ioOptions[0].myId)
+          .with.equal(ioOptions[1].myId);
       } else {
         msgObject.gameRoomUserList.should.have.lengthOf(1);
-        msgObject.hostId.should.not.equal(ioOptions[1].myId);
-        msgObject.hostId.should.equal(ioOptions[2].myId);
+        msgObject.hostId.should.not
+          .equal(ioOptions[1].myId)
+          .with.equal(ioOptions[2].myId);
 
         senders[2].emit(
           "gameRoomLeave",
@@ -239,7 +278,9 @@ describe("Connecting Server", () => {
   });
 
   it("gameStart 테스트 - 방장이 아닌 사람이 스타트했을 때", (done) => {
-    //given
+    // 0이 1, 2를 초대하고
+    // 1, 2가 방에 접속한 뒤
+    // 1이 게임을 시작하면 실패
     senders[0].emit(
       "togetherInvite",
       JSON.stringify({
@@ -313,6 +354,8 @@ describe("Connecting Server", () => {
   });
 
   it("gameStart 테스트 - 방장이 스타트했을 때", (done) => {
+    // 방장인 0이 게임을 시작하고
+    // 1, 2가 시작 메시지를 받기
     senders[1].on("gameStart", (msg) => {
       msg.should.be.type("string");
       const msgObject = JSON.parse(msg);
@@ -356,6 +399,7 @@ describe("Connecting Server", () => {
   });
 
   it("gameUserFinish 테스트", (done) => {
+    // 0, 1, 2 가 게임을 마친 결과를 각각 전송
     for (let i = 0; i < 2; i++) {
       senders[i].emit(
         "gameUserFinish",
@@ -443,6 +487,72 @@ describe("Connecting Server", () => {
         msgObject.should.have.property("status").with.equal("wait");
 
         done();
+      }
+    );
+  });
+
+  it("gameRoomJoinAgain 테스트", (done) => {
+    // 0, 1 이 게임방에 재접속
+    // 0은 gameRoomUpdate 확인
+    // 0 이 게임시작
+    // 2 가 재접속 시도 후 실패
+    SingleObject.RoomRepository.findByRoomName(roomName).endGame();
+
+    senders[0].on("gameRoomUpdate", (msg) => {
+      msg.should.be.type("string");
+      const msgObject = JSON.parse(msg);
+      msgObject.should.have.property("gameRoomUserList").with.lengthOf(2);
+    });
+    senders[0].emit(
+      "gameRoomJoinAgain",
+      JSON.stringify({ id: ioOptions[0].myId, roomName }),
+      (msg) => {
+        msg.should.be.type("string");
+
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.property("status").with.equal("ok");
+        msgObject.should.have.property("gameUserList").with.have.lengthOf(1);
+
+        senders[1].emit(
+          "gameRoomJoinAgain",
+          JSON.stringify({ id: ioOptions[1].myId, roomName }),
+          (msg) => {
+            msg.should.be.type("string");
+
+            const msgObject = JSON.parse(msg);
+            msgObject.should.have.property("status").with.equal("ok");
+            msgObject.should.have
+              .property("gameUserList")
+              .with.have.lengthOf(2);
+
+            senders[0].emit(
+              "gameStart",
+              JSON.stringify({ id: ioOptions[0].myId, roomName }),
+              (msg) => {
+                msg.should.be.type("string");
+                const msgObject = JSON.parse(msg);
+                msgObject.should.have.property("status").with.equal("ok");
+                msgObject.should.have.property("restaurants").with.lengthOf(7);
+
+                senders[2].emit(
+                  "gameRoomJoinAgain",
+                  JSON.stringify({ id: ioOptions[2].myId, roomName }),
+                  (msg) => {
+                    msg.should.be.type("string");
+                    const msgObject = JSON.parse(msg);
+                    msgObject.should.have.property("status").with.equal("fail");
+                    msgObject.should.have
+                      .property("gameUserList")
+                      .with.equal(null);
+
+                    offEventAll("gameRoomUpdate", senders);
+                    done();
+                  }
+                );
+              }
+            );
+          }
+        );
       }
     );
   });
