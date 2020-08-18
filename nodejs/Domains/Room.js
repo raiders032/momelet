@@ -59,6 +59,7 @@ class Room {
   }
 
   getUserList() {
+    const userList = this.userList.filter((user) => user.getCanReceive());
     return this.userList;
   }
 
@@ -96,6 +97,13 @@ class Room {
 
   updateHeadCount(newHeadCount) {
     return (this.headCount = newHeadCount);
+  }
+
+  findUserById(userID) {
+    this.userList.forEach((user) => {
+      if (user.getId() === userId) return true;
+    });
+    return false;
   }
 }
 
