@@ -21,7 +21,7 @@ const onPress = async (setUserToken, where) => {
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
     ""
   )}`;
-  console.log(Linking.makeUrl(""));
+
   const _removeLinkingListener = () => {
     Linking.removeEventListener("url", _handleRedirect);
   };
@@ -152,13 +152,17 @@ export default function App({ setUserToken }) {
               justifyContent: "space-around",
             }}
           >
-            <View style={{ ...styles.loginButton, borderColor: "red" }}>
-              <Text>G</Text>
-            </View>
-            <View style={{ ...styles.loginButton, borderColor: "orange" }}>
-              <Text>K</Text>
-            </View>
             <TouchableOpacity onPress={() => onPress(setUserToken, "google")}>
+              <View style={{ ...styles.loginButton, borderColor: "red" }}>
+                <Text>G</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress(setUserToken, "kakao")}>
+              <View style={{ ...styles.loginButton, borderColor: "orange" }}>
+                <Text>K</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress(setUserToken, "naver")}>
               {/* <TouchableOpacity onPress={() => setUserToken("google")}> */}
               <View style={{ ...styles.loginButton, borderColor: "green" }}>
                 <Text>N</Text>
