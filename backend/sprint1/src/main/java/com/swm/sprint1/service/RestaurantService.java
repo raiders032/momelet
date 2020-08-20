@@ -39,9 +39,6 @@ public class RestaurantService {
     public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
         List<CategoryNumber> categoryNumbers = userCategoryRepository.findCategoryAndCountByUserId(ids);
         Set<Restaurant> restaurantSet = new HashSet<>();
-        /*  List<Category> categories = categoryNumbers.stream().map(CategoryNumber::getCategory).collect(Collectors.toList());
-        List<Restaurant> restaurantList = restaurantRepository.findByLatitudeAndLongitudeAndCategories(latitude, longitude, radius, categories);
-        */
         categoryNumbers.forEach(categoryNumber -> restaurantSet.addAll(
                 restaurantRepository.findByLatitudeAndLongitudeAndCategory(
                         latitude,

@@ -1,5 +1,6 @@
 package com.swm.sprint1.payload.response;
 
+import com.swm.sprint1.domain.Menu;
 import com.swm.sprint1.domain.Restaurant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class RetrieveRestaurantResponse {
     private BigInteger id;
     private String name;
     private String thumUrl;
-    private List<String> menuList = new ArrayList<>();
+    private String menu;
     private String categories;
     private BigDecimal googleRating;
     private Integer googleReviewCount;
@@ -32,10 +33,11 @@ public class RetrieveRestaurantResponse {
     private BigInteger googleId;
     private String phoneNumber;
 
-    public RetrieveRestaurantResponse(BigInteger id, String name, String thumUrl, String categories, BigDecimal googleRating, Integer googleReviewCount, String openingHours, Integer priceLevel, String address, String roadAddress, BigDecimal longitude, BigDecimal latitude, BigInteger naverId, BigInteger googleId, String phoneNumber) {
+    public RetrieveRestaurantResponse(BigInteger id, String name, String thumUrl, String menu, String categories, BigDecimal googleRating, Integer googleReviewCount, String openingHours, Integer priceLevel, String address, String roadAddress, BigDecimal longitude, BigDecimal latitude, BigInteger naverId, BigInteger googleId, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.thumUrl = thumUrl;
+        this.menu = menu;
         this.categories = categories;
         this.googleRating = googleRating;
         this.googleReviewCount = googleReviewCount;
@@ -69,5 +71,8 @@ public class RetrieveRestaurantResponse {
                 .getRestaurantCategories().stream()
                 .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
                 .collect(Collectors.joining(","));
+        this.menu = restaurant.getMenuList()
+                .stream().map(menu1 -> menu1.getName() + " : " + menu1.getPrice())
+                .collect(Collectors.joining(" | "));
     }
 }

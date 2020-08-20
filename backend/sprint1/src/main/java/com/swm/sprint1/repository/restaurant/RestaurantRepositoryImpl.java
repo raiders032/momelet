@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
+import com.swm.sprint1.domain.QMenu;
 import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static com.swm.sprint1.domain.QCategory.category;
+import static com.swm.sprint1.domain.QMenu.*;
 import static com.swm.sprint1.domain.QRestaurant.*;
 import static com.swm.sprint1.domain.QRestaurantCategory.*;
 
@@ -46,31 +48,37 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     @Override
     public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         String sql =
-                "   select r.restaurant_id, r.name, r.thum_url, group_concat(c.name order by c.category_id) as categories, " +
-                        " r.google_rating, r.google_review_count, r.opening_hours, r.price_level, r.address, r.road_address, " +
-                        " r.longitude, r.latitude, r.naver_id, r.google_id, r.phone_number " +
-                "   from( " +
-                "       select restaurant.* " +
-                "       from restaurant  " +
-                "       where (restaurant.latitude between ? and ?) and (restaurant.longitude between ? and ?)) r " +
-                "   join restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
-                "   join category c on rc.category_id = c.category_id " +
-                "   where r.restaurant_id in ( " +
-                "       select rc.restaurant_id " +
-                "       from restaurant_category rc " +
-                "       where rc.category_id in ( " +
-                "           select user_category.category_id " +
-                "           from user_category " +
-                "           where user_category.user_id = ? ) " +
-                "       group by rc.restaurant_id) " +
-                "   group by r.restaurant_id" +
-                        " order by r.google_rating ";
+                "   SELECT  " +
+                "       r.restaurant_id, r.name, r.thum_url, " +
+                "       group_concat(DISTINCT concat(m.name,':', m.price)  order by m.menu_id SEPARATOR  ' | ') as menu, " +
+                "       group_concat(DISTINCT c.name order by c.category_id SEPARATOR  ' | ') as categories, " +
+                "       r.google_rating, r.google_review_count, r.opening_hours, r.price_level, r.address, r.road_address, " +
+                "       r.longitude, r.latitude, r.naver_id, r.google_id, r.phone_number " +
+                "   FROM( " +
+                "       SELECT restaurant.* " +
+                "       FROM restaurant  " +
+                "       WHERE (restaurant.latitude between ? and ?) and (restaurant.longitude between ? and ?)) r " +
+                "   JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
+                "   JOIN category c on rc.category_id = c.category_id " +
+                "   JOIN menu m on r.restaurant_id = m.restaurant_id " +
+                "   WHERE r.restaurant_id in ( " +
+                "       SELECT rc.restaurant_id " +
+                "       FROM restaurant_category rc " +
+                "       WHERE rc.category_id in ( " +
+                "           SELECT user_category.category_id " +
+                "           FROM user_category " +
+                "           WHERE user_category.user_id = ? ) " +
+                "       GROUP by rc.restaurant_id) " +
+                "   GROUP by r.restaurant_id " +
+                "   ORDER by r.google_rating ";
+
         Query query = em.createNativeQuery(sql)
                 .setParameter(1, latitude.subtract(radius))
                 .setParameter(2, latitude.add(radius))
                 .setParameter(3, longitude.subtract(radius))
                 .setParameter(4, longitude.add(radius))
                 .setParameter(5, id);
+
         return jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
     }
 
@@ -92,7 +100,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
         return queryFactory.select(restaurant)
                 .from(restaurant)
                 .join(restaurant.restaurantCategories, restaurantCategory).fetchJoin()
-                .join(restaurantCategory.category, category).fetchJoin()
+                .join(restaurantCategory.category, category)
+                .join(restaurant.menuList, menu)
                 .where(restaurantCategory.category.id.eq(category_id), longitudeBetween(longitude,radius), latitudeBetween(latitude,radius))
                 .limit(limit)
                 .orderBy(restaurant.googleRating.desc())
@@ -125,7 +134,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .setParameter("ids",ids)
                 .getResultList();
     }
-
 
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){
         return latitude != null ? restaurant.latitude.between(latitude.subtract(length), latitude.add(length)) : null;
