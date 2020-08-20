@@ -158,8 +158,8 @@ export default function App({ setUserToken }) {
             <View style={{ ...styles.loginButton, borderColor: "orange" }}>
               <Text>K</Text>
             </View>
-            {/* <TouchableOpacity onPress={() => onPress(setUserToken, "google")}> */}
-            <TouchableOpacity onPress={() => setUserToken("google")}>
+            <TouchableOpacity onPress={() => onPress(setUserToken, "google")}>
+              {/* <TouchableOpacity onPress={() => setUserToken("google")}> */}
               <View style={{ ...styles.loginButton, borderColor: "green" }}>
                 <Text>N</Text>
               </View>

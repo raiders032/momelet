@@ -102,13 +102,16 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe(userToken);
       console.log("get User Success ");
+      setUser(result.data);
       return { ...result.data };
     } catch (error) {
       console.log("error in get user", error);
     }
   };
+  useEffect(() => {
+    getUser();
+  }, []);
 
-  // getUser();
   const getUserRestaurant = async () => {
     try {
       const { status, permissions } = await Permissions.askAsync(
@@ -142,6 +145,7 @@ export default ({ navigation, route }) => {
         navigation={navigation}
         route={route}
         restaurants={restaurants.restaurants}
+        user={user}
       />
     );
   }
