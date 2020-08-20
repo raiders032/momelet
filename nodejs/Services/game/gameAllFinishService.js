@@ -33,6 +33,7 @@ const gameAllFinishService = (socket, msg) => {
   if (!isLike) {
     retMsg.roomGameResult.result = "fail";
   } else {
+    retMsg.roomGameResult.result = "success";
     retMsg.roomGameResult.id = bestCard.id;
     retMsg.roomGameResult.headCount = room.getHeadCount();
     retMsg.roomGameResult.likeCount = bestCard.like;
@@ -40,11 +41,9 @@ const gameAllFinishService = (socket, msg) => {
 
   retMsg = JSON.stringify(retMsg);
 
-  users
-    .filter((user) => id !== user.id)
-    .forEach((user) => {
-      socket.to(user.socketId).emit("gameAllFinish", retMsg);
-    });
+  users.forEach((user) => {
+    socket.to(user.socketId).emit("gameAllFinish", retMsg);
+  });
 
   return retMsg;
 };
