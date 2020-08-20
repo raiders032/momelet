@@ -15,11 +15,10 @@ import { StackActions } from "@react-navigation/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
-export default ({ restaurants, navigation, route }) => {
+export default ({ restaurants, navigation, user }) => {
   const sendTogetherMessage = () => {
-    console.log("android test");
     socket.emit("together", "together msg from client", (msg) => {
-      navigation.navigate("Together", { msg: msg });
+      navigation.navigate("Together", { msg, user: user.data.userInfo });
       // navigation.dispatch(StackActions.replace("Together", { msg: msg }));
     });
   };

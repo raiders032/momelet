@@ -24,7 +24,8 @@ export default ({ navigation, route }) => {
         name="WaitingRoomForStart"
         component={WaitingRoomForStart}
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: "대기실",
         }}
       />
       <Stack.Screen

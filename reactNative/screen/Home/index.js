@@ -18,7 +18,7 @@ function App({ userToken }) {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
+          name="Alone"
           component={Alone}
           options={{
             headerShown: false,
