@@ -39,14 +39,16 @@ const gameAllFinishService = (socket, msg) => {
     retMsg.roomGameResult.likeCount = bestCard.like;
   }
 
-  retMsg = JSON.stringify(retMsg);
+  setTimeout(() => {
+    retMsg = JSON.stringify(retMsg);
 
-  users.forEach((user) => {
-    socket.to(user.socketId).emit("gameAllFinish", retMsg);
-  });
-  socket.emit("gameAllFinish", retMsg);
+    users.forEach((user) => {
+      socket.to(user.socketId).emit("gameAllFinish", retMsg);
+    });
+    socket.emit("gameAllFinish", retMsg);
 
-  return retMsg;
+    return retMsg;
+  }, 2000);
 };
 
 module.exports = {
