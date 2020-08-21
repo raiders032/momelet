@@ -46,11 +46,11 @@ public class RestaurantService {
                         radius,
                         categoryNumber.getCategory().getId(),
                         categoryNumber.getNumber() * 7L)));
-        if(restaurantSet.size() < 7)
-            throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
+        //if(restaurantSet.size() < 7)
+        //    throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
         List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
         Collections.shuffle(restaurants);
-        restaurants = restaurants.subList(0,7);
+        //restaurants = restaurants.subList(0,7);
         return restaurants.stream()
                 .map(RetrieveRestaurantResponse::new)
                 .collect(Collectors.toList());

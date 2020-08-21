@@ -50,8 +50,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
         String sql =
                 "   SELECT  " +
                 "       r.restaurant_id, r.name, r.thum_url, " +
-                "       group_concat(DISTINCT concat(m.name,':', m.price)  order by m.menu_id SEPARATOR  ' | ') as menu, " +
-                "       group_concat(DISTINCT c.name order by c.category_id SEPARATOR  ' | ') as categories, " +
+                "       group_concat(DISTINCT concat(m.name,':', m.price)  order by m.menu_id) as menu, " +
+                "       group_concat(DISTINCT c.name order by c.category_id) as categories, " +
                 "       r.google_rating, r.google_review_count, r.opening_hours, r.price_level, r.address, r.road_address, " +
                 "       r.longitude, r.latitude, r.naver_id, r.google_id, r.phone_number " +
                 "   FROM( " +

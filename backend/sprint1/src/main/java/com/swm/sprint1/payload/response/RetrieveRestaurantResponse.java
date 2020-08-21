@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class RetrieveRestaurantResponse {
     private BigInteger id;
     private String name;
     private String thumUrl;
-    private String menu;
+    private List<MenuDto> menu = new ArrayList<>();
     private String categories;
     private BigDecimal googleRating;
     private Integer googleReviewCount;
@@ -37,7 +38,6 @@ public class RetrieveRestaurantResponse {
         this.id = id;
         this.name = name;
         this.thumUrl = thumUrl;
-        this.menu = menu;
         this.categories = categories;
         this.googleRating = googleRating;
         this.googleReviewCount = googleReviewCount;
@@ -50,6 +50,7 @@ public class RetrieveRestaurantResponse {
         this.naverId = naverId;
         this.googleId = googleId;
         this.phoneNumber = phoneNumber;
+        this.menu = Arrays.stream(menu.split(",")).map(MenuDto::new).collect(Collectors.toList());
     }
 
     public RetrieveRestaurantResponse(Restaurant restaurant){
@@ -72,7 +73,7 @@ public class RetrieveRestaurantResponse {
                 .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
                 .collect(Collectors.joining(","));
         this.menu = restaurant.getMenuList()
-                .stream().map(menu1 -> menu1.getName() + " : " + menu1.getPrice())
-                .collect(Collectors.joining(" | "));
+                .stream().map(MenuDto::new)
+                .collect(Collectors.toList());
     }
 }
