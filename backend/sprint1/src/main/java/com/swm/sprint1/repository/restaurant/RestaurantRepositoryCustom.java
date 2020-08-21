@@ -18,5 +18,5 @@ public interface RestaurantRepositoryCustom {
 
     List<Restaurant> findByLatitudeAndLongitudeAndCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long category_id, Long limit);
 
-    List<?> findtest (BigDecimal latitude, BigDecimal longitude, BigDecimal radius,List<Long> ids, List<String> categoryList);
+    List<RetrieveRestaurantResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids);
 }

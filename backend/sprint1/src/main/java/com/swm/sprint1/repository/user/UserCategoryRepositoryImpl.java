@@ -69,12 +69,14 @@ public class UserCategoryRepositoryImpl implements UserCategoryRepositoryCustom 
     }
 
     @Override
-    public List<String> findAllCategoryNameByUserIds(List<Long> ids) {
+    public List<Category> findByUserIds(List<Long> ids) {
         return queryFactory
-                .select(category.name).distinct()
+                .select(category).distinct()
                 .from(userCategory)
                 .join(userCategory.category, category)
                 .where(userCategory.user.id.in(ids))
                 .fetch();
     }
+
+
 }

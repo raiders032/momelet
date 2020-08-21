@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
-import com.swm.sprint1.domain.QMenu;
 import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -19,7 +18,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static com.swm.sprint1.domain.QCategory.category;
-import static com.swm.sprint1.domain.QMenu.*;
 import static com.swm.sprint1.domain.QRestaurant.*;
 import static com.swm.sprint1.domain.QRestaurantCategory.*;
 
@@ -101,38 +99,68 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .from(restaurant)
                 .join(restaurant.restaurantCategories, restaurantCategory).fetchJoin()
                 .join(restaurantCategory.category, category)
-                .join(restaurant.menuList, menu)
-                .where(restaurantCategory.category.id.eq(category_id), longitudeBetween(longitude,radius), latitudeBetween(latitude,radius))
+                .where(restaurantCategory.category.id.eq(category_id)
+                        , longitudeBetween(longitude,radius)
+                        , latitudeBetween(latitude,radius)
+                        ,  restaurant.id.lt(30))
                 .limit(limit)
                 .orderBy(restaurant.googleRating.desc())
                 .fetch();
     }
 
     @Override
-    public List<?> findtest(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids, List<String> categoryList) {
+    public List<RetrieveRestaurantResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids) {
         String sql =
-                "   SELECT c.category_id, c.name, rnum  " +
-                "   FROM (  " +
-                "       SELECT " +
-                "           a.*, " +
-                "           (CASE @vcar WHEN a.category_id THEN @rownum:=@rownum+1 ELSE @rownum:=1 END) rnum, " +
-                "           (@vcar:=a.category_id) " +
-                "       FROM(  " +
-                "           SELECT rc.*, r.name " +
-                "           FROM restaurant r " +
-                "           JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
-                "           WHERE rc.category_id in(1,2,3,4)) a, (SELECT @vcar:= 0, @rownum:= 0 FROM DUAL) b " +
-                "           ORDER BY a.category_id " +
-                "           ) c  " +
-                "   WHERE c.rnum <=(select count(uc.category_id) " +
-                "                   from user_category uc " +
-                "                   where uc.category_id = c.category_id  " +
-                "                   and uc.user_id in (1,4) " +
-                "                   group by uc.category_id) * 2 ";
-        return em.createNativeQuery(sql)
-                .setParameter("categories",categoryList)
-                .setParameter("ids",ids)
-                .getResultList();
+                "   SELECT " +
+                "       f.restaurant_id, f.name, f.thum_url, " +
+                "       group_concat(DISTINCT concat(m.name,':', m.price)  order by m.menu_id) as menu, " +
+                "       f.categories,    " +
+                "       f.google_rating, f.google_review_count, f.opening_hours, f.price_level, f.address, f.road_address, " +
+                "       f.longitude, f.latitude, f.naver_id, f.google_id, f.phone_number " +
+                "   FROM(   " +
+                "       SELECT   " +
+                "           c.*,    " +
+                "           group_concat(DISTINCT c.category_name order by c.category_id) as categories " +
+                "       FROM (  " +
+                "           SELECT " +
+                "               a.*, " +
+                "               (CASE @vcar WHEN a.category_id THEN @rownum \\:=@rownum+1 ELSE @rownum \\:=1 END) rnum,  " +
+                "               (@vcar \\:=a.category_id) vcar  " +
+                "           from(  " +
+                "               select " +
+                "                   r.*, category.name as category_name, " +
+                "                   category.category_id  " +
+                "               from (  " +
+                "                   select restaurant.*   " +
+                "                   from restaurant    " +
+                "                   where (restaurant.latitude between 37.5396665 and 37.5596665) and (restaurant.longitude between 126.9004545 and 126.9204545)  " +
+                "                   ) r  " +
+                "               JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id  " +
+                "               JOIN category on rc.category_id =category.category_id  " +
+                "               where rc.category_id in(  " +
+                "                   select distinct uc.category_id  " +
+                "                   from user_category uc  " +
+                "                   where uc.user_id in (:ids)  " +
+                "                   )   " +
+                "                ) a, (SELECT @vcar \\:=0, @rownum \\:=0 FROM DUAL) b  " +
+                "       ORDER BY a.category_id, a.google_rating desc  " +
+                "       ) c  " +
+                "       where c.rnum <=(select count(uc.user_category_id)  " +
+                "           from user_category uc  " +
+                "           where uc.category_id = c.category_id   " +
+                "           and uc.user_id in (:ids)  " +
+                "           group by uc.category_id) * 7  " +
+                "       GROUP by c.restaurant_id   " +
+                "       ORDER by rand()  " +
+                "       limit 7  " +
+                "   ) f  " +
+                "   join menu m on m.restaurant_id = f.restaurant_id  " +
+                "   group by f.restaurant_id ";
+
+        Query query = em.createNativeQuery(sql)
+                .setParameter("ids", ids);
+
+        return jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
     }
 
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){
