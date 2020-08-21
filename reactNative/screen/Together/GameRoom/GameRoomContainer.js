@@ -29,7 +29,10 @@ export default ({ navigation, route }) => {
     };
 
     socket.emit("gameUserFinish", JSON.stringify(sendMsg), (msg) => {
-      navigation.navigate("WaitingRoomForResult", { msg: msg });
+      navigation.navigate("WaitingRoomForResult", {
+        msg: msg,
+        restaurant: restaurant,
+      });
     });
   };
   return (
