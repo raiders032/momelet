@@ -16,6 +16,7 @@ const togetherInviteService = (socket, msg) => {
     });
 
     newRoom.addUser(msgSender);
+    msgSender.updateJoinedRoomName(roomName);
 
     for (let user of inviteTheseUsers) {
       socket.to(user).emit("togetherInvitation", inviteMsg);

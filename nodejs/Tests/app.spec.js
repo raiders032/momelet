@@ -498,7 +498,7 @@ describe("Connecting Server", () => {
 
     let doneCount = 0;
     for (let i = 0; i < 3; i++) {
-      senders[1].on("gameAllFinish", (msg) => {
+      senders[i].on("gameAllFinish", (msg) => {
         doneCount += 1;
         msg.should.be.type("string");
         const msgObject = JSON.parse(msg);
