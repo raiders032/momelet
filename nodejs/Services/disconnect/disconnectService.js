@@ -14,7 +14,9 @@ const disconnectService = (socket) => {
   SingleObject.UserRepository.delete(socket.id);
 
   const userId = SingleObject.UserRepository.findAll().map((user) => user.id);
-  logger.info("a user disconnected. id: " + id + "userList: " + userList);
+  logger.info(
+    "a user disconnected. id: " + socket.id + "userList: " + userList
+  );
 };
 
 module.exports = {
