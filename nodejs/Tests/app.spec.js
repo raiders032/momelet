@@ -32,28 +32,28 @@ describe("Connecting Server", () => {
     disconnectAll(senders);
   });
 
-  it("connect 테스트", (done) => {
-    for (let i = 0; i < ioOptions.length; i++) {
-      senders[i].on("connect", () => {
-        senders[i].id.should.be.type("string");
-        if (i === ioOptions.length - 1) done();
-      });
-    }
-    // senders[0].on("connect", () => {
-    //   senders[0].id.should.be.type("string");
-    //   senders[1].on("connect", () => {
-    //     senders[1].id.should.be.type("string");
-    //     senders[2].on("connect", () => {
-    //       senders[2].id.should.be.type("string");
-    //       senders[3].on("connect", () => {
-    //         senders[3].id.should.be.type("string");
-    //         offEventAll("connect", senders);
-    //         done();
-    //       });
-    //     });
-    //   });
-    // });
-  });
+  // it("connect 테스트", (done) => {
+  //   for (let i = 0; i < ioOptions.length; i++) {
+  //     senders[i].on("connect", () => {
+  //       senders[i].id.should.be.type("string");
+  //       if (i === ioOptions.length - 1) done();
+  //     });
+  //   }
+  //   senders[0].on("connect", () => {
+  //     senders[0].id.should.be.type("string");
+  //     senders[1].on("connect", () => {
+  //       senders[1].id.should.be.type("string");
+  //       senders[2].on("connect", () => {
+  //         senders[2].id.should.be.type("string");
+  //         senders[3].on("connect", () => {
+  //           senders[3].id.should.be.type("string");
+  //           offEventAll("connect", senders);
+  //           done();
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
   it("together 테스트", (done) => {
     // 0이 together를 보내면
     // 알맞은 값을 받음

@@ -1,4 +1,5 @@
 // 37.5444086,127.0654405,17.9z
+
 const ioOptions = [
   {
     myId: 1,
@@ -147,4 +148,19 @@ const ioOptions = [
   },
 ];
 
+for (let i = 15; i < 100; i++) {
+  ioOptions.push({
+    myId: i,
+    query: {
+      id: i,
+      email: "jeong@naver.com",
+      name: "Seonghoon",
+      imageUrl: "naver.com",
+      JWT:
+        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk3MzA1NzgzLCJleHAiOjE1OTgxNjk3ODN9.7beQjaodFkouUfTNoCDj9KKJ1qKnwmcBabvT1nDDFrtO3oLfxFbMct475bcgw9Ewzka1vaeT3m8S8zvtE4yNpg",
+      latitude: "35.1000000",
+      longitude: "125.1000000",
+    },
+  });
+}
 module.exports = ioOptions;

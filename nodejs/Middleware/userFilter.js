@@ -11,6 +11,9 @@ module.exports = (req, res, next, socket, io) => {
     user.disconnect(true);
   }
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
-  console.log("a user connected. id: " + id);
+  console.log(
+    "유저 접속함. 현재 접속 유저 수: " +
+      SingleObject.UserRepository.userRepository.size
+  );
   next();
 };

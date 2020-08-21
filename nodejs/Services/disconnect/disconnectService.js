@@ -10,7 +10,10 @@ const disconnectService = (socket) => {
   SingleObject.UserRepository.delete(socket.id);
 
   const userId = SingleObject.UserRepository.findAll().map((user) => user.id);
-  console.log("나간 후 유저리스트: " + userId);
+  console.log(
+    "유저 나감. 나간 후 유저수: " +
+      SingleObject.UserRepository.userRepository.size
+  );
 };
 
 module.exports = {
