@@ -59,10 +59,7 @@ class Room {
   }
 
   getUserList() {
-    const availableUserList = this.userList.filter((user) =>
-      user.getCanReceive()
-    );
-    return availableUserList;
+    return this.userList;
   }
 
   getRoomName() {

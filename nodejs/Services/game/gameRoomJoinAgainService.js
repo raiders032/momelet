@@ -16,11 +16,14 @@ const gameRoomJoinAgainService = (socket, msg) => {
   if (room.getIsStarted() === false && room.findUserById(user.getId())) {
     user.updateCanReceive(true);
     retMsg.status = "ok";
-    retMsg.gameUserList = room.getUserList().map((user) => {
-      const { id, name, imageUrl } = user;
-      const userDto = { id, name, imageUrl };
-      return userDto;
-    });
+    retMsg.gameUserList = room
+      .getUserList()
+      .filter((user) => user.getCanReceive())
+      .map((user) => {
+        const { id, name, imageUrl } = user;
+        const userDto = { id, name, imageUrl };
+        return userDto;
+      });
   }
 
   retMsg = JSON.stringify(retMsg);

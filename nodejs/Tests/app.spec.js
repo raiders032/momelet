@@ -399,51 +399,49 @@ describe("Connecting Server", () => {
   });
 
   it("gameUserFinish 테스트", (done) => {
-    // 0, 1, 2 가 게임을 마친 결과를 각각 전송
-    for (let i = 0; i < 2; i++) {
-      senders[i].emit(
-        "gameUserFinish",
-        JSON.stringify({
-          id: ioOptions[i].myId,
-          userGameResult: [
-            {
-              id: restaurantsId[0],
-              sign: "y",
-            },
-            {
-              id: restaurantsId[1],
-              sign: "y",
-            },
-            {
-              id: restaurantsId[2],
-              sign: "y",
-            },
-            {
-              id: restaurantsId[3],
-              sign: "n",
-            },
-            {
-              id: restaurantsId[4],
-              sign: "n",
-            },
-            {
-              id: restaurantsId[5],
-              sign: "s",
-            },
-            {
-              id: restaurantsId[6],
-              sign: "s",
-            },
-          ],
-          roomName,
-        }),
-        (msg) => {
-          msg.should.be.type("string");
-          const msgObject = JSON.parse(msg);
-          msgObject.should.have.property("status").with.equal("wait");
-        }
-      );
-    }
+    // 1, 2 가 게임을 마친 결과를 각각 전송
+    senders[1].emit(
+      "gameUserFinish",
+      JSON.stringify({
+        id: ioOptions[1].myId,
+        userGameResult: [
+          {
+            id: restaurantsId[0],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[1],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[2],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[3],
+            sign: "n",
+          },
+          {
+            id: restaurantsId[4],
+            sign: "n",
+          },
+          {
+            id: restaurantsId[5],
+            sign: "s",
+          },
+          {
+            id: restaurantsId[6],
+            sign: "s",
+          },
+        ],
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.property("status").with.equal("wait");
+      }
+    );
 
     senders[2].emit(
       "gameUserFinish",
@@ -491,6 +489,79 @@ describe("Connecting Server", () => {
     );
   });
 
+  it("gameAllFinish 테스트", (done) => {
+    // 0이 마지막으로 게임 완료 메시지를 보내고
+    // 0, 1, 2 가 gameAllFinish 결과 받기
+
+    let doneCount = 0;
+    for (let i = 0; i < 3; i++) {
+      senders[1].on("gameAllFinish", (msg) => {
+        doneCount += 1;
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+
+        msgObject.should.have.property("roomGameResult");
+        msgObject["roomGameResult"].should.have.properties(
+          "result",
+          "id",
+          "headCount",
+          "likeCount"
+        );
+
+        msgObject["roomGameResult"]["result"].should.equal("success");
+        msgObject["roomGameResult"]["id"].should.equal(restaurantsId[0]);
+        msgObject["roomGameResult"]["headCount"].should.equal(3);
+        msgObject["roomGameResult"]["likeCount"].should.equal(3);
+
+        if (doneCount === 3) {
+          done();
+        }
+      });
+    }
+
+    senders[0].emit(
+      "gameUserFinish",
+      JSON.stringify({
+        id: ioOptions[0].myId,
+        userGameResult: [
+          {
+            id: restaurantsId[0],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[1],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[2],
+            sign: "y",
+          },
+          {
+            id: restaurantsId[3],
+            sign: "n",
+          },
+          {
+            id: restaurantsId[4],
+            sign: "n",
+          },
+          {
+            id: restaurantsId[5],
+            sign: "s",
+          },
+          {
+            id: restaurantsId[6],
+            sign: "s",
+          },
+        ],
+        roomName,
+      }),
+      (msg) => {
+        msg.should.be.type("string");
+        const msgObject = JSON.parse(msg);
+        msgObject.should.have.property("status").with.equal("wait");
+      }
+    );
+  });
   it("gameRoomJoinAgain 테스트", (done) => {
     // 0, 1 이 게임방에 재접속
     // 0은 gameRoomUpdate 확인
