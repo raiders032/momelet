@@ -23,7 +23,7 @@ const getCard = async (users, myId) => {
       },
     } = await axios.get(process.env.DATA_STORAGE_URL + "api/v1/restaurants7", {
       headers: {
-        Authorization: JWT,
+        Authorization: "Bearer " + JWT,
       },
       params: {
         id,
