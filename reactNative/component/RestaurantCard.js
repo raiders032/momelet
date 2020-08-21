@@ -14,8 +14,7 @@ import RestaurantBasicInfo from "./RestaurantBasicInfo";
 import PresentMenu from "./PresentMenu";
 import CardBack from "./CardBack";
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ restaurant, header }) => {
+export default ({ restaurant, header, cover }) => {
   // console.log("RestaurantCard rendered");
 
   let changeValue = 0;
@@ -81,6 +80,18 @@ export default ({ restaurant, header }) => {
         <View style={{ height: "65%" }}>
           <Animated.View
             style={{
+              width: "100%",
+              height: "100%",
+
+              transform: [{ rotateY: backInterpolate }],
+              backfaceVisibility: "hidden",
+              position: "absolute",
+            }}
+          >
+            <CardBack />
+          </Animated.View>
+          <Animated.View
+            style={{
               transform: [{ rotateY: frontInterpolate }],
               backfaceVisibility: "hidden",
             }}
@@ -88,18 +99,7 @@ export default ({ restaurant, header }) => {
             {header}
 
             <CardImage />
-          </Animated.View>
-          <Animated.View
-            style={{
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-              transform: [{ rotateY: backInterpolate }],
-              backfaceVisibility: "hidden",
-              position: "absolute",
-            }}
-          >
-            <CardBack />
+            {cover}
           </Animated.View>
         </View>
         <View style={{ height: "35%", paddingHorizontal: 15 }}>

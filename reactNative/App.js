@@ -51,6 +51,8 @@ export default function App() {
       require("./assets/likeOut.png"),
       require("./assets/sosoOut.png"),
       require("./assets/dislikeOut.png"),
+      require("./assets/momulet.png"),
+      require("./assets/home.png"),
     ]);
 
     const fontAssets = cacheFonts([FontAwesome.font]);
