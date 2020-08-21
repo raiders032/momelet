@@ -230,7 +230,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
             {...panResponder.panHandlers}
           >
             {secondRestaurant ? (
-              <RestaurantCard restaurant={secondRestaurant} header={header} />
+              <RestaurantCard restaurant={secondRestaurant} />
             ) : (
               <View />
             )}
@@ -250,7 +250,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
             {...panResponder.panHandlers}
           >
             {firstRestaurant ? (
-              <RestaurantCard restaurant={firstRestaurant} />
+              <RestaurantCard restaurant={firstRestaurant} header={header} />
             ) : (
               <View />
             )}

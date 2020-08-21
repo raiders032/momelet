@@ -20,7 +20,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
         style={{
           height: WIDTH / 4.5,
           width: WIDTH / 4.5,
-          opacity: 1,
+
           alignItems: "flex-start",
           opacity: dislikeOpacity,
         }}
@@ -60,7 +60,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
         style={{
           height: WIDTH / 4.5,
           width: WIDTH / 4.5,
-          opacity: 1,
+
           alignItems: "flex-start",
           opacity: likeOpacity,
         }}

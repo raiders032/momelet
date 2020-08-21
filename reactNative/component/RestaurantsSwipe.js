@@ -4,7 +4,7 @@ import Basic from "./Basic";
 import RestaurantCard from "./RestaurantCard";
 import RestaurantHeader from "./RestaurantHeader";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-const header = <RestaurantHeader />;
+
 export default ({ restaurants }) => {
   // console.log("RestaurantSwipeRender");
   const [restaurant, setRestaurant] = useState(restaurants);
@@ -104,7 +104,7 @@ export default ({ restaurants }) => {
         {...panResponder.panHandlers}
       >
         {secondRestaurant ? (
-          <RestaurantCard restaurant={secondRestaurant} header={header} />
+          <RestaurantCard restaurant={secondRestaurant} />
         ) : (
           <View></View>
         )}
