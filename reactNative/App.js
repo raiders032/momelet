@@ -40,7 +40,18 @@ export default function App() {
     }
   };
   const _loadAssetsAsync = async () => {
-    const imageAssets = cacheImages([require("./assets/bg.jpg")]);
+    const imageAssets = cacheImages([
+      require("./assets/bg.jpg"),
+      require("./assets/like.png"),
+      require("./assets/soso.png"),
+      require("./assets/dislike.png"),
+      require("./assets/likeIn.png"),
+      require("./assets/sosoIn.png"),
+      require("./assets/dislikeIn.png"),
+      require("./assets/likeOut.png"),
+      require("./assets/sosoOut.png"),
+      require("./assets/dislikeOut.png"),
+    ]);
 
     const fontAssets = cacheFonts([FontAwesome.font]);
     await Promise.all([...imageAssets, ...fontAssets]);
@@ -69,12 +80,3 @@ export default function App() {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

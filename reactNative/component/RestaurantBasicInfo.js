@@ -4,7 +4,7 @@ import { View, Text } from "react-native";
 export default ({ title, distance, point }) => {
   return (
     <View>
-      <View style={{ flexDirection: "row", marginBottom: 15 }}>
+      <View style={{ flexDirection: "row", marginTop: 5 }}>
         <View style={{ marginRight: 4 }}>
           <Text style={{ fontFamily: "Godo", fontSize: 20 }}>{title}</Text>
         </View>

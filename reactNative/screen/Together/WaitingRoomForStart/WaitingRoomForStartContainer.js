@@ -4,14 +4,31 @@ import WaitingRoomForStartPresenter from "./WaitingRoomForStartPresenter";
 import socket from "../../../socket";
 
 export default ({ navigation, route }) => {
-  const [users, setUsers] = useState(
-    JSON.parse(route.params.msg)["gameRoomUserList"]
-  );
+  const msg = JSON.parse(route.params.msg);
+
+  const [users, setUsers] = useState(msg.gameRoomUserList);
+  const roomName = msg.roomName;
+  const id = msg.gameRoomUserList[0].id;
   useEffect(() => {
     socket.on("gameRoomUpdate", (msg) => {
       setUsers(JSON.parse(msg).gameRoomUserList);
     });
   }, []);
-
-  return <WaitingRoomForStartPresenter users={users} />;
+  const onClick = () => {
+    socket.emit(
+      "gameStart",
+      JSON.stringify({
+        id: msg.gameRoomUserList[0].id,
+        roomName: msg.roomName,
+      }),
+      (msg) => {
+        navigation.navigate("GameRoom", {
+          msg: msg,
+          roomName: roomName,
+          userId: id,
+        });
+      }
+    );
+  };
+  return <WaitingRoomForStartPresenter users={users} onClick={onClick} />;
 };

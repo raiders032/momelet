@@ -1,7 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import Menu from "./Menu";
 import ExtraIcon from "./ExtraIcon";
+import fontNormalize from "../utils/fontNormalize";
+console.log(fontNormalize(20));
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 export default () => {
   return (
     <View>
@@ -10,9 +13,10 @@ export default () => {
           height: "70%",
           alignItems: "center",
           padding: 15,
+          // backgroundColor: "blue",
         }}
       >
-        <Text style={{ fontSize: 20, marginBottom: 25 }}>메뉴판</Text>
+        <Text style={{ fontSize: HEIGHT / 30, marginBottom: 25 }}>메뉴판</Text>
 
         <Menu menu={"삼겹살"} price={"25,000"} />
         <Menu menu={"삼겹살"} price={"25,000"} />
@@ -26,6 +30,7 @@ export default () => {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
+          // backgroundColor: "yellow",
         }}
       >
         <ExtraIcon

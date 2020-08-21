@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
-export default ({ text, onClick }) => {
+export default ({ text, onClick, style }) => {
   return (
     <View
       style={{
@@ -8,6 +8,7 @@ export default ({ text, onClick }) => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#fff271",
+        ...style,
       }}
     >
       <TouchableOpacity onPress={onClick}>

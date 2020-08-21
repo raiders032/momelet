@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Basic from "../../component/Basic";
 import Card from "../../component/Card";
 import socket from "../../socket";
+import Footer from "../../component/Footer";
 
 export default ({ navigation, route }) => {
   useEffect(() => {
@@ -12,14 +13,17 @@ export default ({ navigation, route }) => {
       navigation.navigate("GameResult", { msg });
     });
   });
+  // const footer = (
+  //   <View
+  //     style={{ height: "100%", justifyContent: "center", alignItems: "center" }}
+  //   >
+  //     <TouchableOpacity>
+  //       <Text style={{ fontFamily: "Godo", fontSize: 24 }}>기다리는중 ...</Text>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
   const footer = (
-    <View
-      style={{ height: "100%", justifyContent: "center", alignItems: "center" }}
-    >
-      <TouchableOpacity>
-        <Text style={{ fontFamily: "Godo", fontSize: 24 }}>기다리는중 ...</Text>
-      </TouchableOpacity>
-    </View>
+    <Footer text="기다리는중 ..." style={{ backgroundColor: "white" }} />
   );
   return (
     <Basic footer={footer}>
