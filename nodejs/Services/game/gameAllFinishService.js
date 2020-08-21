@@ -6,6 +6,9 @@ const gameAllFinishService = (socket, msg) => {
     return;
   }
 
+  setTimeout(() => {
+    console.log("게임 끝!");
+  }, 3000);
   const users = room.getUserList();
   const cardList = room.getCardList();
   let bestCard = { id: null, like: 0, score: 0 };
