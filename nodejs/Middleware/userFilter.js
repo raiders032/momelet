@@ -14,6 +14,6 @@ module.exports = (req, res, next, socket, io) => {
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
 
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
-  logger.info("a user connected. id: " + id + "userList: " + userList);
+  logger.info("a user connected. id: " + id + ", userList: (" + userList + ")");
   next();
 };
