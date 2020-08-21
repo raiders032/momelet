@@ -8,7 +8,7 @@ const ioOptions = [
       name: "Seonghoon",
       imageUrl: "naver.com",
       JWT:
-        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk3MzA1NzgzLCJleHAiOjE1OTgxNjk3ODN9.7beQjaodFkouUfTNoCDj9KKJ1qKnwmcBabvT1nDDFrtO3oLfxFbMct475bcgw9Ewzka1vaeT3m8S8zvtE4yNpg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk3MzA1NzgzLCJleHAiOjE1OTgxNjk3ODN9.7beQjaodFkouUfTNoCDj9KKJ1qKnwmcBabvT1nDDFrtO3oLfxFbMct475bcgw9Ewzka1vaeT3m8S8zvtE4yNpg",
       latitude: "37.5444086",
       longitude: "127.0654405",
     },
