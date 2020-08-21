@@ -1,6 +1,7 @@
 const SingleObject = require("../SingleObjects");
 
 module.exports = (req, res, next, socket, io) => {
+  socket.handshake.query.id = Number(socket.handshake.query.id);
   const { id } = socket.handshake.query;
   if (SingleObject.UserRepository.existsById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
