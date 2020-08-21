@@ -8,7 +8,8 @@ const findAroundUsers = (myId, lat, long) => {
   const min_long = Number(long) - 0.0025;
 
   // 클래스의 프로퍼티에 직접접근하고 있음
-  for (let user of SingleObject.UserRepository.findAll()) {
+  const users = SingleObject.UserRepository.findAll();
+  for (let user of users) {
     if (myId !== user.id) {
       if (
         user["latitude"] >= min_lat &&
@@ -34,7 +35,6 @@ const togetherService = (socket, msg) => {
 
   try {
     const { id, latitude, longitude } = JSON.parse(msg);
-
     const aroundUsers = findAroundUsers(id, latitude, longitude);
 
     const ret = JSON.stringify({ aroundUsers });
