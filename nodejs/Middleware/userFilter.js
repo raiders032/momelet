@@ -1,4 +1,5 @@
 const SingleObject = require("../SingleObjects");
+const { logger } = require("../logger");
 
 module.exports = (req, res, next, socket, io) => {
   socket.handshake.query.id = Number(socket.handshake.query.id);
@@ -11,6 +12,8 @@ module.exports = (req, res, next, socket, io) => {
     user.disconnect(true);
   }
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
-  console.log("a user connected. id: " + id);
+
+  const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
+  logger.info("a user connected. id: " + id + "userList: " + userList);
   next();
 };
