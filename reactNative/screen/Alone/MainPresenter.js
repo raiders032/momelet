@@ -5,8 +5,10 @@ import socket from "../../socket";
 import RestaurantsSwipe from "../../component/RestaurantsSwipe";
 
 export default ({ restaurants, navigation, user }) => {
+  const msg = { id: 2, latitude: 37.5, longitude: 127.49999 };
+
   const sendTogetherMessage = () => {
-    socket.emit("together", "together msg from client", (msg) => {
+    socket.emit("together", JSON.stringify(msg), (msg) => {
       navigation.navigate("Together", { msg, user: user.data.userInfo });
       // navigation.navigate("Together", { msg, user: "abc" });
       // navigation.dispatch(StackActions.replace("Together", { msg: msg }));

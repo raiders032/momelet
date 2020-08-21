@@ -140,7 +140,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
   const timeGo = () => {
     Animated.timing(remainTime, {
       toValue: 15,
-      duration: 5000,
+      duration: 15000,
       useNativeDriver: false,
       //carGoDown
     }).start();

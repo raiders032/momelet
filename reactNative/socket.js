@@ -3,7 +3,8 @@ import io from "socket.io-client";
 // 여기 서는 요청에 대한 콜백 처리는 하지 않고 브로드 캐스트 메세지 수신하는 거에 대해서만 다룸.
 const socket = io(
   // "http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:3000",
-  "http://localhost:8001",
+  "http://localhost:3000",
+  // "http://localhost:8001",
   {
     query: {
       id: Platform.OS === "ios" ? 1 : 2,
