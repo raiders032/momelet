@@ -6,12 +6,12 @@ import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import { View } from "react-native";
-
+import socket from "../../socket";
 // 홈 식당 카드의 api 호출 데이터 전달
 
 export default ({ navigation, route }) => {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState(() => {});
+  const [user, setUser] = useState(null);
   const [restaurants, setRestaurants] = useState({
     loading: true,
     restaurants: [],
@@ -90,6 +90,7 @@ export default ({ navigation, route }) => {
       ],
     },
   ];
+
   const _loadAssetsAsync = async () => {
     await Promise.all(
       restaurants.restaurants.map((restaurant) =>
@@ -108,9 +109,6 @@ export default ({ navigation, route }) => {
       console.log("error in get user", error);
     }
   };
-  useEffect(() => {
-    getUser();
-  }, []);
 
   const getUserRestaurant = async () => {
     try {
@@ -134,9 +132,52 @@ export default ({ navigation, route }) => {
       console.log("error In HomeContainer", e);
     }
   };
+
   useEffect(() => {
+    getUser();
     getUserRestaurant();
   }, []);
+  useEffect(() => {
+    if (user !== null) {
+      const tmpUser = user.data.userInfo;
+      socket.query.JWT = route.params.userToken;
+      socket.query.email = tmpUser.email;
+      socket.query.imageUrl = tmpUser.imageUrl;
+      socket.query.name = tmpUser.name;
+      socket.query.id = tmpUser.id;
+      // socket.query.latitude = location.coords.latitude;
+      // socket.query.longitude = location.coords.longitude;
+      socket.open();
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user]);
+
+  //같이 하기 버튼 클릭시
+  const sendTogetherMessage = async () => {
+    const tmpUser = user;
+
+    // latitude , longitude 있음 , 나중에 사용 바람.!!!!
+    const location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+    const sendMsg = {
+      id: socket.query.id,
+      latitude: 37.5,
+      longitude: Platform.OS === "ios" ? 127.5 : 127.49999,
+    };
+    socket.emit("together", JSON.stringify(sendMsg), (msg) => {
+      navigation.navigate("Together", { msg, user: user.data.userInfo });
+    });
+    // const sendMsg = { id: tmpUser.id, latitude: number, longitude: number }
+    // socket.emit("together", JSON.stringify(msg), (msg) => {
+    //   navigation.navigate("Together", { msg, user: user.data.userInfo });
+    //   // navigation.navigate("Together", { msg, user: "abc" });
+    //   // navigation.dispatch(StackActions.replace("Together", { msg: msg }));
+    // });
+  };
+
   if (restaurants.loading) {
     return <View></View>;
   } else {
@@ -146,6 +187,7 @@ export default ({ navigation, route }) => {
         route={route}
         restaurants={restaurants.restaurants}
         user={user}
+        sendTogetherMessage={sendTogetherMessage}
       />
     );
   }

@@ -40,15 +40,17 @@ export default ({ navigation, route }) => {
   );
   useEffect(() => {
     rotate();
+
     socket.on("gameAllFinish", (msg) => {
       console.log(msg);
+
       navigation.navigate("GameResult", {
         msg: msg,
         restaurant: route.params.restaurant,
       });
     });
     return () => {
-      socket.off("gameAllFinish");
+      // socket.off("gameAllFinish");
     };
   }, []);
   return (

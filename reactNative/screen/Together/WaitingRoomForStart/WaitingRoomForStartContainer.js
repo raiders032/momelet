@@ -15,6 +15,7 @@ export default ({ navigation, route }) => {
     });
   }, []);
   const onClick = () => {
+    console.log(msg.gameRoomUserList[0], msg.roomName);
     socket.emit(
       "gameStart",
       JSON.stringify({
@@ -22,6 +23,7 @@ export default ({ navigation, route }) => {
         roomName: msg.roomName,
       }),
       (msg) => {
+        console.log(msg);
         navigation.navigate("GameRoom", {
           msg: msg,
           roomName: roomName,

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import {
   Animated,
   StyleSheet,
@@ -6,9 +6,8 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
-  TextInput,
 } from "react-native";
-import Svg, { Image, Circle, ClipPath } from "react-native-svg";
+import Svg, { Image } from "react-native-svg";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import Constants from "expo-constants";

@@ -3,17 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Alone from "../Alone";
 import Together from "../Together";
-import socket from "../../socket";
 
 const Stack = createStackNavigator();
 
 function App({ userToken }) {
-  useEffect(() => {
-    socket.open();
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator>
