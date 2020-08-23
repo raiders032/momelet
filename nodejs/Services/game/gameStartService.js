@@ -101,7 +101,7 @@ const gameStartService = async (socket, msg) => {
       });
       room.updateHeadCount(headCount);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       console.log("카드 가져오기 실패 / 게임시작 실패");
 
       retMsg.status = "fail";
