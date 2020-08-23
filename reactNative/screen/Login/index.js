@@ -15,7 +15,7 @@ import Constants from "expo-constants";
 import getEnvVars from "../../enviroment";
 
 const { width, height } = Dimensions.get("window");
-const onPress = async (setUserToken, where) => {
+const onPress = async (afterLogin, where) => {
   const { apiUrl } = getEnvVars();
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
     ""
@@ -32,7 +32,8 @@ const onPress = async (setUserToken, where) => {
     }
 
     let data = Linking.parse(event.url);
-    setUserToken(data.queryParams.token);
+    console.log(data.queryParams.token);
+    await afterLogin(data.queryParams.token);
   };
   const addLinkingListener = () => {
     Linking.addEventListener("url", _handleRedirect);
@@ -51,7 +52,7 @@ const onPress = async (setUserToken, where) => {
     }
   }
 };
-export default function App({ setUserToken }) {
+export default function App({ afterLogin }) {
   const animatedObj = useRef(new Animated.Value(0)).current;
 
   const changeStart = () => {
@@ -151,17 +152,17 @@ export default function App({ setUserToken }) {
               justifyContent: "space-around",
             }}
           >
-            <TouchableOpacity onPress={() => onPress(setUserToken, "google")}>
+            <TouchableOpacity onPress={() => onPress(afterLogin, "google")}>
               <View style={{ ...styles.loginButton, borderColor: "red" }}>
                 <Text>G</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPress(setUserToken, "kakao")}>
+            <TouchableOpacity onPress={() => onPress(afterLogin, "kakao")}>
               <View style={{ ...styles.loginButton, borderColor: "orange" }}>
                 <Text>K</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPress(setUserToken, "naver")}>
+            <TouchableOpacity onPress={() => onPress(afterLogin, "naver")}>
               {/* <TouchableOpacity onPress={() => setUserToken("google")}> */}
               <View style={{ ...styles.loginButton, borderColor: "green" }}>
                 <Text>N</Text>

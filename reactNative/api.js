@@ -5,7 +5,7 @@ const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = "") => {
   try {
     return await axios({
-      url: `${apiUrl}/api/v1${path}`,
+      url: `${apiUrl}/api/${path}`,
       method: method,
       ...config,
       data: data,
@@ -15,12 +15,15 @@ const makeRequest = async (method, path, config, data = "") => {
   }
 };
 export const apis = {
-  getRestaurant: (latitude, longitude) =>
-    makeRequest("get", `/restaurants`, {
+  getRestaurant: (latitude, longitude, id, token) =>
+    makeRequest("get", `v2/restaurants/users/${id}/categories`, {
       params: { latitude, longitude, radius: 0.1 },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }),
   getUserMe: (token) =>
-    makeRequest("get", "/users/me", {
+    makeRequest("get", "v1/users/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +31,7 @@ export const apis = {
   editUser: (id, categories, imageUrl, name, token) => {
     return makeRequest(
       "put",
-      `/users/${id}`,
+      `v1/users/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

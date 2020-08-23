@@ -2,7 +2,8 @@ import React from "react";
 import Basic from "../../component/Basic";
 import { View, Text, TouchableOpacity } from "react-native";
 
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
+  console.log("route", route.params.user);
   const footer = (
     <View
       style={{ height: "100%", justifyContent: "center", alignItems: "center" }}

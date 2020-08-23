@@ -5,7 +5,6 @@ import WaitingRoomForStart from "./WaitingRoomForStart";
 import GameRoom from "./GameRoom";
 import WaitingRoomForResult from "./WaitingRoomForResult";
 import GameResult from "./GameResult";
-import { Text } from "react-native";
 
 const Stack = createStackNavigator();
 export default ({ navigation, route }) => {

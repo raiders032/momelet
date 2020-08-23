@@ -5,91 +5,38 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import socket from "../../socket";
+
 // 홈 식당 카드의 api 호출 데이터 전달
 
 export default ({ navigation, route }) => {
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState(null);
+  const [isChanged, setIsChanged] = useState(1);
+  const [coverMessageConfig, setCoverMessageConfig] = useState({
+    zIndex: -1,
+    bodyMessage: (
+      <>
+        <Text>abc</Text>
+        <Text>abc</Text>
+      </>
+    ),
+    footerMessage: ["예", "아니요"],
+    coverMessageRightEvent: () => {},
+    coverMessageLeftEvent: () => {},
+  });
   const [restaurants, setRestaurants] = useState({
     loading: true,
     restaurants: [],
   });
-  const dummy = [
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개창고",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개 컨테이너",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개 박스",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개 피플",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개 피플",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-    {
-      imageUrl:
-        "https://img.wemep.co.kr/deal/7/083/4170837/5a04faa056e035874116fa70c75be8ef9b744408.jpg",
-      title: "조개 피플",
-      distance: "500",
-      point: 4.5,
-      menu: [
-        { name: "조개찜", price: "25000" },
-        { name: "삼겹살 200g", price: "25000" },
-        { name: "로스까스 정식", price: "11000" },
-      ],
-    },
-  ];
+  if (route.params.isChanged) {
+    setIsChanged((before) => {
+      return before ? 0 : 1;
+    });
+
+    route.params.isChanged = false;
+  }
 
   const _loadAssetsAsync = async () => {
     await Promise.all(
@@ -103,6 +50,7 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe(userToken);
       console.log("get User Success ");
+      console.log(result.data);
       setUser(result.data);
       return { ...result.data };
     } catch (error) {
@@ -111,35 +59,47 @@ export default ({ navigation, route }) => {
   };
 
   const getUserRestaurant = async () => {
-    try {
-      const { status, permissions } = await Permissions.askAsync(
-        Permissions.LOCATION
-      );
-      if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync({});
-        const response = await apis.getRestaurant(
-          // location.coords.latitude,
-          // location.coords.longitude
-          37.553292,
-          126.9125836
+    if (user) {
+      try {
+        const { status, permissions } = await Permissions.askAsync(
+          Permissions.LOCATION
         );
-        console.log("get Restaurant");
-        setRestaurants({ loading: false, restaurants: response.data });
-      } else {
-        throw new Error("Location permission not granted");
+        if (status === "granted") {
+          const location = await Location.getCurrentPositionAsync({});
+          // console.log(location);
+
+          const response = await apis.getRestaurant(
+            // location.coords.latitude,
+            // location.coords.longitude
+            // 37.47721,
+            // 126.7627478,
+            37.553292,
+            126.9125836,
+            user.data.userInfo.id,
+            userToken
+          );
+          console.log("get Restaurant Sucess");
+
+          setRestaurants({ loading: false, restaurants: response.data.data });
+        } else {
+          throw new Error("Location permission not granted");
+        }
+      } catch (e) {
+        console.log("error In HomeContainer", e);
       }
-    } catch (e) {
-      console.log("error In HomeContainer", e);
     }
   };
 
   useEffect(() => {
     getUser();
+  }, [isChanged]);
+  useEffect(() => {
     getUserRestaurant();
-  }, []);
+  }, [user]);
   useEffect(() => {
     if (user !== null) {
       const tmpUser = user.data.userInfo;
+
       socket.query.JWT = route.params.userToken;
       socket.query.email = tmpUser.email;
       socket.query.imageUrl = tmpUser.imageUrl;
@@ -149,6 +109,46 @@ export default ({ navigation, route }) => {
       // socket.query.longitude = location.coords.longitude;
       socket.open();
 
+      socket.on("togetherInvitation", (msg) => {
+        const tmpMsg = JSON.parse(msg);
+        setCoverMessageConfig((before) => {
+          return {
+            ...before,
+            zIndex: 1,
+            bodyMessage: (
+              <>
+                <Text>{tmpMsg.hostName}님이</Text>
+                <Text>초대하였습니다.</Text>
+              </>
+            ),
+
+            coverMessageRightEvent: () => {
+              setCoverMessageConfig((before) => {
+                return { ...before, zIndex: -1 };
+              });
+            },
+            coverMessageLeftEvent: () => {
+              const sendMsg = { id: tmpUser.id, roomName: tmpMsg.roomName };
+              socket.emit("gameRoomJoin", JSON.stringify(sendMsg), (msg) => {
+                const tmpMsg = JSON.parse(msg);
+                const { status, roomName, gameRoomUserList, hostId } = tmpMsg;
+                const sendMsg = JSON.stringify({
+                  roomName,
+                  gameRoomUserList,
+                  hostId,
+                });
+
+                setCoverMessageConfig((before) => {
+                  return { ...before, zIndex: -1 };
+                });
+                if (tmpMsg.status === "success") {
+                  navigation.navigate("WaitingRoomForStart", { msg: sendMsg });
+                }
+              });
+            },
+          };
+        });
+      });
       return () => {
         socket.disconnect();
       };
@@ -161,7 +161,7 @@ export default ({ navigation, route }) => {
 
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
     const location = await Location.getCurrentPositionAsync({});
-    console.log(location);
+
     const sendMsg = {
       id: socket.query.id,
       latitude: 37.5,
@@ -185,9 +185,10 @@ export default ({ navigation, route }) => {
       <MainPresenter
         navigation={navigation}
         route={route}
-        restaurants={restaurants.restaurants}
+        restaurants={restaurants.restaurants.restaurants}
         user={user}
         sendTogetherMessage={sendTogetherMessage}
+        coverMessageConfig={coverMessageConfig}
       />
     );
   }

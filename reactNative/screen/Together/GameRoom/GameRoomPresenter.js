@@ -14,7 +14,7 @@ import RestaurantHeader from "../../../component/RestaurantHeader";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 export default ({ restaurants, zIndex, infoText, gameFinish }) => {
   console.log("GameRoomPresenter render");
-
+  const timeFinish = useRef(false);
   const [restaurant, setRestaurant] = useState(restaurants);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
   const gameResult = useRef([]);
@@ -50,6 +50,19 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     inputRange: [-200, -0],
     outputRange: [1, 0],
   });
+  const cardGoDown = () => {
+    console.log("cardGoDownAnimation");
+    Animated.timing(position, {
+      toValue: {
+        x: 0,
+        y: HEIGHT + 50,
+      },
+      duration: 500,
+      useNativeDriver: false,
+    }).start(() => {
+      afterCardMove("soso");
+    });
+  };
   const afterCardMove = (response) => {
     console.log("response: ", response);
 
@@ -101,19 +114,10 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       }
     },
   });
-  const cardGoDown = () => {
-    Animated.timing(position, {
-      toValue: {
-        x: 0,
-        y: HEIGHT + 50,
-      },
-      duration: 500,
-      useNativeDriver: false,
-    }).start(() => {
-      afterCardMove("soso");
-    });
-  };
+
   const cardGoRight = () => {
+    timeFinish.current = false;
+    console.log("Here", timeFinish.current);
     Animated.timing(position, {
       toValue: {
         x: WIDTH + 50,
@@ -140,13 +144,17 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
   const timeGo = () => {
     Animated.timing(remainTime, {
       toValue: 15,
-      duration: 15000,
+      duration: 2000,
       useNativeDriver: false,
       //carGoDown
-    }).start();
+    }).start(() => {
+      // cardGoDown();
+      afterCardMove("soso");
+    });
   };
 
   useEffect(() => {
+    timeFinish.current = true;
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
     const timeout = setTimeout(timeGo, 1000);

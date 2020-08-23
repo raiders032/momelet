@@ -10,9 +10,10 @@ export default ({ navigation, route }) => {
   );
   const onClick = () => {
     const result = [];
+
     users.forEach((user) => {
       if (user.selected) {
-        result.push(user.socketId);
+        result.push(user.socketID);
       }
     });
 

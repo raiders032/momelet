@@ -31,13 +31,20 @@ export default function App() {
   // userToken 가져오는 함수
   const _retrieveData = async () => {
     try {
-      const value = await AsyncStorage.getItem("@userToken");
+      // const value = await AsyncStorage.getItem("@userToken");
+      const value = await AsyncStorage.getItem("@fortestthisisnotareal");
+
       if (value !== null) {
         setUserToken(value);
       }
     } catch (error) {
       console.error("error in get token from device", error);
     }
+  };
+  const afterLogin = async (userToken) => {
+    await AsyncStorage.setItem("@userToken", userToken);
+    // await AsyncStorage.setItem("@userToken", null);
+    setUserToken(userToken);
   };
   const _loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
@@ -53,6 +60,32 @@ export default function App() {
       require("./assets/dislikeOut.png"),
       require("./assets/momulet.png"),
       require("./assets/home.png"),
+      require("./assets/imageEdit.png"),
+      require("./assets/nameEdit.png"),
+      require("./assets/categories/korean.png"),
+      require("./assets/categories/koreanS.png"),
+      require("./assets/categories/beer.png"),
+      require("./assets/categories/beerS.png"),
+      require("./assets/categories/burger.png"),
+      require("./assets/categories/burgerS.png"),
+      require("./assets/categories/chicken.png"),
+      require("./assets/categories/chickenS.png"),
+      require("./assets/categories/chinese.png"),
+      require("./assets/categories/chineseS.png"),
+      require("./assets/categories/chitterlings.png"),
+      require("./assets/categories/chitterlingsS.png"),
+      require("./assets/categories/hotpot.png"),
+      require("./assets/categories/hotpotS.png"),
+      require("./assets/categories/japanese.png"),
+      require("./assets/categories/japaneseS.png"),
+      require("./assets/categories/meat.png"),
+      require("./assets/categories/meatS.png"),
+      require("./assets/categories/snackBar.png"),
+      require("./assets/categories/snackBarS.png"),
+      require("./assets/categories/western.png"),
+      require("./assets/categories/westernS.png"),
+      require("./assets/categories/world.png"),
+      require("./assets/categories/worldS.png"),
     ]);
 
     const fontAssets = cacheFonts([FontAwesome.font]);
@@ -60,13 +93,14 @@ export default function App() {
   };
 
   useEffect(() => {
+    // tmpReset();
     _retrieveData();
   }, []);
   if (assetIsReady && fontsLoaded) {
     if (userToken) {
       return <Home userToken={userToken} />;
     } else {
-      return <Login setUserToken={setUserToken} />;
+      return <Login afterLogin={afterLogin} />;
     }
   } else {
     return (
