@@ -15,5 +15,5 @@ public interface UserCategoryRepositoryCustom {
 
     List<CategoryNumber> findCategoryAndCountByUserId(List<Long> ids);
 
-    List<String> findAllCategoryNameByUserIds(List<Long> ids);
+    List<Category> findByUserIds(List<Long> ids);
 }

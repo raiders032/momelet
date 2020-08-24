@@ -1,5 +1,6 @@
 package com.swm.sprint1.payload.response;
 
+import com.swm.sprint1.domain.Menu;
 import com.swm.sprint1.domain.Restaurant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ public class RetrieveRestaurantResponse {
     private BigInteger id;
     private String name;
     private String thumUrl;
-    private List<String> menuList = new ArrayList<>();
+    private List<MenuDto> menu = new ArrayList<>();
     private String categories;
     private BigDecimal googleRating;
     private Integer googleReviewCount;
@@ -32,7 +34,7 @@ public class RetrieveRestaurantResponse {
     private BigInteger googleId;
     private String phoneNumber;
 
-    public RetrieveRestaurantResponse(BigInteger id, String name, String thumUrl, String categories, BigDecimal googleRating, Integer googleReviewCount, String openingHours, Integer priceLevel, String address, String roadAddress, BigDecimal longitude, BigDecimal latitude, BigInteger naverId, BigInteger googleId, String phoneNumber) {
+    public RetrieveRestaurantResponse(BigInteger id, String name, String thumUrl, String menu, String categories, BigDecimal googleRating, Integer googleReviewCount, String openingHours, Integer priceLevel, String address, String roadAddress, BigDecimal longitude, BigDecimal latitude, BigInteger naverId, BigInteger googleId, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.thumUrl = thumUrl;
@@ -48,6 +50,8 @@ public class RetrieveRestaurantResponse {
         this.naverId = naverId;
         this.googleId = googleId;
         this.phoneNumber = phoneNumber;
+        if(!menu.isEmpty())
+            this.menu = Arrays.stream(menu.split(",")).map(MenuDto::new).collect(Collectors.toList());
     }
 
     public RetrieveRestaurantResponse(Restaurant restaurant){
@@ -67,7 +71,10 @@ public class RetrieveRestaurantResponse {
         this.phoneNumber = restaurant.getPhoneNumber();
         this.categories = restaurant
                 .getRestaurantCategories().stream()
-                .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
+                .map(restaurantCategory -> restaurantCategory.getCategory().getName())
                 .collect(Collectors.joining(","));
+        this.menu = restaurant.getMenuList()
+                .stream().map(MenuDto::new)
+                .collect(Collectors.toList());
     }
 }

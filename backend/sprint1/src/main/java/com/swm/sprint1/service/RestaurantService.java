@@ -1,8 +1,6 @@
 package com.swm.sprint1.service;
 
 import com.swm.sprint1.domain.Category;
-import com.swm.sprint1.domain.CategoryNumber;
-import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.exception.RestaurantLessThan7Exception;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ import java.util.stream.Collectors;
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final UserCategoryRepository userCategoryRepository;
-    private final CategoryRepository categoryRepository;
 
     public List<RetrieveRestaurantResponseV1> findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         if(id == null)
@@ -37,25 +33,9 @@ public class RestaurantService {
     }
 
     public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
-        List<CategoryNumber> categoryNumbers = userCategoryRepository.findCategoryAndCountByUserId(ids);
-        Set<Restaurant> restaurantSet = new HashSet<>();
-        /*  List<Category> categories = categoryNumbers.stream().map(CategoryNumber::getCategory).collect(Collectors.toList());
-        List<Restaurant> restaurantList = restaurantRepository.findByLatitudeAndLongitudeAndCategories(latitude, longitude, radius, categories);
-        */
-        categoryNumbers.forEach(categoryNumber -> restaurantSet.addAll(
-                restaurantRepository.findByLatitudeAndLongitudeAndCategory(
-                        latitude,
-                        longitude,
-                        radius,
-                        categoryNumber.getCategory().getId(),
-                        categoryNumber.getNumber() * 7L)));
-        if(restaurantSet.size() < 7)
+        List<RetrieveRestaurantResponse> restaurants = restaurantRepository.findRestaurant7(latitude, longitude, radius, ids);
+        if(restaurants.size() < 7)
             throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
-        List<Restaurant> restaurants = new ArrayList<>(restaurantSet);
-        Collections.shuffle(restaurants);
-        restaurants = restaurants.subList(0,7);
-        return restaurants.stream()
-                .map(RetrieveRestaurantResponse::new)
-                .collect(Collectors.toList());
+        return restaurants;
     }
 }
