@@ -17,7 +17,7 @@ const makeRequest = async (method, path, config, data = "") => {
 export const apis = {
   getRestaurant: (latitude, longitude, id, token) =>
     makeRequest("get", `v2/restaurants/users/${id}/categories`, {
-      params: { latitude, longitude, radius: 0.1 },
+      params: { latitude, longitude, radius: 1 },
       headers: {
         Authorization: `Bearer ${token}`,
       },

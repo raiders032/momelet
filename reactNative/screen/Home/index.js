@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { View } from "react-native";
 import Alone from "../Alone";
 import Together from "../Together";
 import Invite from "../Together/Invite";
@@ -8,6 +9,7 @@ import WaitingRoomForStart from "../Together/WaitingRoomForStart";
 import GameRoom from "../Together/GameRoom";
 import WaitingRoomForResult from "../Together/WaitingRoomForResult";
 import GameResult from "../Together/GameResult";
+
 const Stack = createStackNavigator();
 
 function App({ userToken }) {
@@ -44,6 +46,8 @@ function App({ userToken }) {
           options={{
             headerShown: true,
             title: "대기실",
+            headerTitleAlign: "center",
+            headerLeft: () => <View />,
           }}
         />
         <Stack.Screen

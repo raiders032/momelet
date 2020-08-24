@@ -7,7 +7,7 @@ export default ({ navigation, route }) => {
   console.log("GameContainer Render");
 
   const restaurant = JSON.parse(route.params.msg);
-  console.log("restaurant: ", restaurant);
+  // console.log("restaurant: ", restaurant);
 
   const [gameReadyAndMessage, setGameReadyAndMessage] = useState({
     isReady: 1,
@@ -30,7 +30,6 @@ export default ({ navigation, route }) => {
     };
 
     socket.emit("gameUserFinish", JSON.stringify(sendMsg), (msg) => {
-      console.log("msg: ", msg);
       navigation.navigate("WaitingRoomForResult", {
         msg: msg,
         restaurant: restaurant,

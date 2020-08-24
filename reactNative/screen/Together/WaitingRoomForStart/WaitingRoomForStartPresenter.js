@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Platform, PlatformColor } from "react-native";
 import Basic from "../../../component/Basic";
 import socket from "../../../socket";
 import Footer from "../../../component/Footer";
@@ -29,11 +29,19 @@ export default ({ users, onClick }) => {
               source={{ uri: users[i].imageUrl }}
             />
             <Text
-              style={{
-                fontFamily: "NotoSansCJKkr",
-                fontSize: 15,
-                marginTop: 10,
-              }}
+              style={
+                Platform.OS === "ios"
+                  ? {
+                      fontFamily: "NotoSansCJKkr",
+                      fontSize: 15,
+                      marginTop: 10,
+                    }
+                  : {
+                      fontFamily: "Godo",
+                      fontSize: 15,
+                      marginTop: 10,
+                    }
+              }
             >
               {users[i].name}
             </Text>

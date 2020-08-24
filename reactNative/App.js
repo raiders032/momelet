@@ -86,6 +86,9 @@ export default function App() {
       require("./assets/categories/westernS.png"),
       require("./assets/categories/world.png"),
       require("./assets/categories/worldS.png"),
+      require("./assets/call.png"),
+      require("./assets/copy.png"),
+      require("./assets/geo.png"),
     ]);
 
     const fontAssets = cacheFonts([FontAwesome.font]);

@@ -49,6 +49,7 @@ export default ({ index, setUsers, user }) => {
         onPress={() => {
           setUsers((before) => {
             const tmp = [...before];
+
             tmp[index] = { ...user, selected: !user.selected };
             return tmp;
           });

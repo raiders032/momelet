@@ -18,13 +18,21 @@ export default ({
     <View
       style={{
         justifyContent: "space-between",
-        alignItems: "center",
+        // alignItems: "center",
         height: "100%",
         flexDirection: "row",
-        padding: 20,
+        // padding: 20,
       }}
     >
-      <TouchableOpacity onPress={sendTogetherMessage}>
+      <TouchableOpacity
+        onPress={sendTogetherMessage}
+        style={{
+          height: "100%",
+          justifyContent: "center",
+          paddingLeft: 20,
+          paddingRight: 20,
+        }}
+      >
         <Text style={{ fontFamily: "Godo" }}>같이하기</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -35,6 +43,11 @@ export default ({
           });
         }}
         // onPress={sendTmpMsg3}
+        style={{
+          justifyContent: "center",
+          paddingLeft: 20,
+          paddingRight: 20,
+        }}
       >
         <Text style={{ fontFamily: "Godo" }}>내 설정</Text>
       </TouchableOpacity>

@@ -3,6 +3,7 @@ import { View, Animated, PanResponder, Dimensions } from "react-native";
 import Basic from "./Basic";
 import RestaurantCard from "./RestaurantCard";
 import RestaurantHeader from "./RestaurantHeader";
+import Card from "./Card";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ restaurants }) => {
@@ -26,7 +27,7 @@ export default ({ restaurants }) => {
   });
   const scaleXPositionConfig = position.x.interpolate({
     inputRange: [-200, 0, 200],
-    outputRange: [1, 0.95, 1],
+    outputRange: [1, 0.1, 1],
     extrapolate: "clamp",
   });
   const panResponder = PanResponder.create({
@@ -91,15 +92,27 @@ export default ({ restaurants }) => {
             <RestaurantCard key={idx} restaurant={restaurant} />
           ))}
         </View> */}
+      <View
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          top: 10,
+          transform: [{ scaleX: 0.95 }],
+        }}
+      >
+        <Card />
+      </View>
       <Animated.View
         style={{
-          top: topPositionConfig,
+          // top: topPositionConfig,
           width: "100%",
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
           position: "absolute",
-          transform: [{ scaleX: scaleXPositionConfig }],
+          // transform: [{ scaleX: scaleXPositionConfig }],
         }}
         {...panResponder.panHandlers}
       >

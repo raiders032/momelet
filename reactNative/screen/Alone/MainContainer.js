@@ -50,7 +50,7 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe(userToken);
       console.log("get User Success ");
-      console.log(result.data);
+
       setUser(result.data);
       return { ...result.data };
     } catch (error) {
@@ -58,26 +58,25 @@ export default ({ navigation, route }) => {
     }
   };
 
-  const getUserRestaurant = async () => {
+  const getUserRestaurant = async (latitude, longitude) => {
+    console.log(latitude, longitude);
     if (user) {
       try {
         const { status, permissions } = await Permissions.askAsync(
           Permissions.LOCATION
         );
         if (status === "granted") {
-          const location = await Location.getCurrentPositionAsync({});
-          // console.log(location);
-
           const response = await apis.getRestaurant(
             // location.coords.latitude,
             // location.coords.longitude
             // 37.47721,
             // 126.7627478,
-            37.553292,
-            126.9125836,
+            latitude,
+            longitude,
             user.data.userInfo.id,
             userToken
           );
+
           console.log("get Restaurant Sucess");
 
           setRestaurants({ loading: false, restaurants: response.data.data });
@@ -89,14 +88,7 @@ export default ({ navigation, route }) => {
       }
     }
   };
-
-  useEffect(() => {
-    getUser();
-  }, [isChanged]);
-  useEffect(() => {
-    getUserRestaurant();
-  }, [user]);
-  useEffect(() => {
+  const socketConnect = async (latitude, longitude) => {
     if (user !== null) {
       const tmpUser = user.data.userInfo;
 
@@ -105,12 +97,13 @@ export default ({ navigation, route }) => {
       socket.query.imageUrl = tmpUser.imageUrl;
       socket.query.name = tmpUser.name;
       socket.query.id = tmpUser.id;
-      // socket.query.latitude = location.coords.latitude;
-      // socket.query.longitude = location.coords.longitude;
+      socket.query.latitude = latitude;
+      socket.query.longitude = longitude;
       socket.open();
 
       socket.on("togetherInvitation", (msg) => {
         const tmpMsg = JSON.parse(msg);
+
         setCoverMessageConfig((before) => {
           return {
             ...before,
@@ -142,18 +135,40 @@ export default ({ navigation, route }) => {
                   return { ...before, zIndex: -1 };
                 });
                 if (tmpMsg.status === "success") {
-                  navigation.navigate("WaitingRoomForStart", { msg: sendMsg });
+                  navigation.navigate("WaitingRoomForStart", {
+                    msg: sendMsg,
+                    myId: user.data.userInfo.id,
+                  });
                 }
               });
             },
           };
         });
       });
-      return () => {
-        socket.disconnect();
-      };
     }
+  };
+  const getRestaurantAndSocketConnect = async () => {
+    const location = await Location.getCurrentPositionAsync({});
+
+    await getUserRestaurant(
+      37.553292,
+      126.9125836
+      // location.coords.latitude,
+      // location.coords.longitude
+    );
+    await socketConnect(location.coords.latitude, location.coords.longitude);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [isChanged]);
+  useEffect(() => {
+    getRestaurantAndSocketConnect();
+    return () => {
+      socket.disconnect();
+    };
   }, [user]);
+  // useEffect(() => {}, [user]);
 
   //같이 하기 버튼 클릭시
   const sendTogetherMessage = async () => {
@@ -162,10 +177,11 @@ export default ({ navigation, route }) => {
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
     const location = await Location.getCurrentPositionAsync({});
 
+    console.log("location: ", location);
     const sendMsg = {
       id: socket.query.id,
-      latitude: 37.5,
-      longitude: Platform.OS === "ios" ? 127.5 : 127.49999,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     };
     socket.emit("together", JSON.stringify(sendMsg), (msg) => {
       navigation.navigate("Together", { msg, user: user.data.userInfo });
