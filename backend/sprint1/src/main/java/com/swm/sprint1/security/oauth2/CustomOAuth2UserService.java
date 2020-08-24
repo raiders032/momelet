@@ -49,11 +49,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
-            user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
-
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
@@ -63,14 +61,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String name = oAuth2UserInfo.getName();
         String email = oAuth2UserInfo.getEmail();
         String imageUrl = oAuth2UserInfo.getImageUrl();
+        if(imageUrl == null)
+            imageUrl="http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com//default.png";
         List<Category> categories = categoryRepository.findAll();
         User user = new User(name, email, imageUrl, provider, providerId, categories);
         return userRepository.save(user);
-    }
-
-    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.update(oAuth2UserInfo.getName(),oAuth2UserInfo.getImageUrl());
-        return userRepository.save(existingUser);
     }
 
 }
