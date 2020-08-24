@@ -62,7 +62,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2UserInfo.getEmail();
         String imageUrl = oAuth2UserInfo.getImageUrl();
         if(imageUrl == null)
-            imageUrl="http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com//default.png";
+            imageUrl="http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/default.png";
         List<Category> categories = categoryRepository.findAll();
         User user = new User(name, email, imageUrl, provider, providerId, categories);
         return userRepository.save(user);
