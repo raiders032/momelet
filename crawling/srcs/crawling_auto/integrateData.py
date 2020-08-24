@@ -25,8 +25,8 @@ def writeJsonFile(filepath, arrayJson):
 
 def saveFilePath(data):
     try:
-        f = open("./integratedRestaurants/화양동path.txt", "w")
-        f.write(data)
+        f = open("../../restaurants/filename.txt", "a")
+        f.write(data + " ")
         f.close()
     except:
         print("filename 저장에 문제가 생겼습니다")
@@ -35,7 +35,7 @@ def saveFilePath(data):
 
 def readFilePath():
     try:
-        f = open("./integratedRestaurants/화양동Path.txt", "w")
+        f = open("../../restaurants/filename.txt", "r")
         data = f.read()
         f.close()
         return data
@@ -70,8 +70,9 @@ def makeIntegrateData(dirPath):
 
     # 파일 저장 경로. dirPath + /xx동_2323개.json
     writeFilePath = dirPath + "/" + \
-        dirPath[6:dirPath.find('.', 6)] + f"_{restaurantId - 1}.json"
+        dirPath[dirPath.find('/', 6) + 1:] + f"_{restaurantId - 1}.json"
     print(writeFilePath, "작성 중...")
     writeJsonFile(writeFilePath, validRestaurants)
+    saveFilePath(writeFilePath[writeFilePath.find('/', 6) + 1:])
     print(writeFilePath, "작성 완료")
     print("총", restaurantId, "개의 식당이 합쳐졌습니다")

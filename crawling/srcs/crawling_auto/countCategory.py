@@ -102,7 +102,7 @@ def countCategory():
 
 
 def makeMetaCategory():
-    f = open('./category_0720.csv', 'r', encoding='utf-8')
+    f = open('./category_0824.csv', 'r', encoding='utf-8')
     rdr = csv.reader(f)
     metaCategory = {}
     for line in rdr:

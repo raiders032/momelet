@@ -1,6 +1,8 @@
 import os
 import naverCrawl_auto
 import integrateData
+import metaCategory
+from db import mysqlQuery
 
 
 def createDir(dirPath):
@@ -29,13 +31,19 @@ def printWelcome():
     a = 0
     while True:
         print("1. 원하는 동을 크롤링 하기")
-        print("2. CLI종료")
+        print("2. 식당 정보에 메타카테고리 반영하기")
+        print("3. db에 데이터 삽입하기")
+        print("4. CLI종료")
         a = input()
-        if a == "2":
+        if a == "4":
             print("프로그램을 종료합니다.")
             break
         elif a == "1":
             startCrawling()
+        elif a == "2":
+            setMetaCategory()
+        elif a == "3":
+            insertDb()
 
 
 def startCrawling():
@@ -63,7 +71,7 @@ def startCrawling():
         elif userInput == "n":
             continue
 
-    dirPath = "../../" + dongName + "_restaurants_json"
+    dirPath = "../../restaurants/" + dongName + "_restaurants_json"
     if createDir(dirPath) == False:
         print("이미 크롤링을 한 동인지 점검이 필요합니다.")
         print("크롤링기능을 중단합니다.")
@@ -75,6 +83,14 @@ def startCrawling():
     integrateData.makeIntegrateData(dirPath)
 
     print("요청한 " + dongName + "에 대한 크롤링 완료")
+
+
+def setMetaCategory():
+    metaCategory.main_metaCategory()
+
+
+def insertDb():
+    mysqlQuery.updateDB()
 
 
 if __name__ == "__main__":

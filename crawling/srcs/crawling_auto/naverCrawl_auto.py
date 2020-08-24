@@ -87,7 +87,7 @@ def set_crawling_query(dongName, dirPath):
     restaurantId = 1
 
     qrys = [f"{dongName} 맛집", f"{dongName} 한식", f"{dongName} 일식", f"{dongName} 중식",
-            f"{dongName} 양식", f"{dongName} 카페", f"{dongName} 치킨", f"{dongName} 족발", f"{dongName} 피자",
+            f"{dongName} 양식", f"{dongName} 찜,탕", f"{dongName} 치킨", f"{dongName} 족발", f"{dongName} 피자",
             f"{dongName} 분식", f"{dongName} 고기", f"{dongName} 파스타", f"{dongName} 술집"]
 
     utils.logging("크롤링 시작!")
