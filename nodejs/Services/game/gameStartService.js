@@ -96,7 +96,7 @@ const gameStartService = async (socket, msg) => {
         if (user.getId() !== room.getHostId()) {
           socket.to(user.socketId).emit("gameStart", retMsg);
         }
-        user.updateCanReceive(false);
+        // user.updateCanReceive(false);
         headCount++;
       });
       room.updateHeadCount(headCount);

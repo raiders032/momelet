@@ -9,16 +9,21 @@ const gameUserFinishService = (socket, msg) => {
   };
 
   const { id, userGameResult, roomName } = JSON.parse(msg);
+  const user = SingleObject.UserRepository.findById(id);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  if (userGameResult.length === 7) {
-    for (let result of userGameResult) {
-      room.addScore(result.id, result.sign);
+
+  if (user.canReceive === true) {
+    user.updateCanReceive(false);
+    if (userGameResult.length === 7) {
+      for (let result of userGameResult) {
+        room.addScore(result.id, result.sign);
+      }
+    } else {
+      console.log("유저 게임이 제대로 종료되지 않아 결과가 반영되지 않았음");
     }
-  } else {
-    console.log("유저 게임이 제대로 종료되지 않아 결과가 반영되지 않았음");
+    room.addFinishCount();
   }
   retMsg.status = "wait";
-  room.addFinishCount();
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;

@@ -1,4 +1,6 @@
 // 37.5444086,127.0654405,17.9z
+const latitude = 37.5447048;
+const longitude = 127.0663154;
 const ioOptions = [
   {
     myId: 1,
@@ -8,9 +10,11 @@ const ioOptions = [
       name: "Seonghoon",
       imageUrl: "naver.com",
       JWT:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk3MzA1NzgzLCJleHAiOjE1OTgxNjk3ODN9.7beQjaodFkouUfTNoCDj9KKJ1qKnwmcBabvT1nDDFrtO3oLfxFbMct475bcgw9Ewzka1vaeT3m8S8zvtE4yNpg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTk4Mjc2NDQ5LCJleHAiOjE1OTkxNDA0NDl9._9QoKUlnenD6g-isiuB0UE6IP9B83lyinlUsPMomUymW5942Ik2J9Gof2c6SrkF-6-DdfGRJZnCjRUFLyiUnLg",
       latitude: "37.5444086",
+      latitude: latitude,
       longitude: "127.0654405",
+      longitude: longitude,
     },
   },
   {
@@ -21,8 +25,8 @@ const ioOptions = [
       name: "Noh",
       imageUrl: "naver.com",
       JWT: "sdgsdf@#$",
-      latitude: "37.5419086",
-      longitude: "127.0655405",
+      latitude: latitude - 0.0025,
+      longitude: longitude,
     },
   },
   {
@@ -33,8 +37,8 @@ const ioOptions = [
       name: "Ha",
       imageUrl: "naver.com",
       JWT: "kkkkmkdf",
-      latitude: "37.5443086",
-      longitude: "127.0653405",
+      latitude: latitude - 0.001,
+      longitude: longitude + 0.001,
     },
   },
   {

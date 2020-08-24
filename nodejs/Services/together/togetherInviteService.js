@@ -7,12 +7,12 @@ const togetherInviteService = (socket, msg) => {
   try {
     const { id, inviteTheseUsers } = JSON.parse(msg);
 
-    const msgSender = SingleObject.UserRepository.findById(id);
+    const user = SingleObject.UserRepository.findById(id);
     const newRoom = SingleObject.RoomRepository.add(id);
     const roomName = newRoom.getRoomName();
     const inviteMsg = JSON.stringify({
       roomName,
-      hostName: msgSender.name,
+      hostName: user.name,
     });
 
     // 기존 접속 방에서 나가기
@@ -24,8 +24,8 @@ const togetherInviteService = (socket, msg) => {
       }
       user.updateJoinedRoomName(null);
     }
-    newRoom.addUser(msgSender);
-    msgSender.updateJoinedRoomName(roomName);
+    newRoom.addUser(user);
+    user.updateJoinedRoomName(roomName);
 
     for (let user of inviteTheseUsers) {
       socket.to(user).emit("togetherInvitation", inviteMsg);
@@ -34,7 +34,7 @@ const togetherInviteService = (socket, msg) => {
     const retMsg = JSON.stringify({
       roomName,
       gameRoomUserList: newRoom.getUserList(),
-      hostId: msgSender.id,
+      hostId: user.id,
     });
     return retMsg;
   } catch (e) {

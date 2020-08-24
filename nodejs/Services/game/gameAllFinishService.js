@@ -48,7 +48,7 @@ const gameAllFinishService = (socket, msg) => {
     socket.emit("gameAllFinish", retMsg);
 
     return retMsg;
-  }, 2000);
+  }, 1500);
 };
 
 module.exports = {
