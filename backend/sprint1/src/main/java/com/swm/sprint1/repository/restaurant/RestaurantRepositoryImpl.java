@@ -114,7 +114,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
         String sql =
                 "   SELECT " +
                 "       f.restaurant_id, f.name, f.thum_url, " +
-                "       group_concat(DISTINCT concat(m.name,':', m.price)  order by m.menu_id) as menu, " +
+                "       group_concat(DISTINCT concat(m.name,'∬', m.price)  order by m.menu_id SEPARATOR '`') as menu, " +
                 "       f.categories,    " +
                 "       f.google_rating, f.google_review_count, f.opening_hours, f.price_level, f.address, f.road_address, " +
                 "       f.longitude, f.latitude, f.naver_id, f.google_id, f.phone_number " +
@@ -134,7 +134,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "               from (  " +
                 "                   select restaurant.*   " +
                 "                   from restaurant    " +
-                "                   where (restaurant.latitude between 37.5396665 and 37.5596665) and (restaurant.longitude between 126.9004545 and 126.9204545)  " +
+                "                   where (restaurant.latitude between :lat1 and :lat2) and (restaurant.longitude between :lon1 and :lon2)  " +
                 "                   ) r  " +
                 "               JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id  " +
                 "               JOIN category on rc.category_id =category.category_id  " +
@@ -159,6 +159,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "   group by f.restaurant_id ";
 
         Query query = em.createNativeQuery(sql)
+                .setParameter("lat1", latitude.subtract(radius))
+                .setParameter("lat2", latitude.add(radius))
+                .setParameter("lon1", longitude.subtract(radius))
+                .setParameter("lon2", longitude.add(radius))
                 .setParameter("ids", ids);
 
         return jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
