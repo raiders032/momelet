@@ -1,18 +1,20 @@
 import React from "react";
 import { View, Text } from "react-native";
-
+import truncate from "../utils/truncate";
 export default ({ title, distance, point }) => {
   return (
     <View>
-      <View style={{ flexDirection: "row", marginBottom: 15 }}>
+      <View style={{ flexDirection: "row", marginTop: 5 }}>
         <View style={{ marginRight: 4 }}>
-          <Text style={{ fontFamily: "Godo", fontSize: 20 }}>{title}</Text>
+          <Text style={{ fontFamily: "Godo", fontSize: 17 }}>
+            {truncate(title, 10)}
+          </Text>
         </View>
         <View
           style={{
             backgroundColor: "#e4e4e4",
             borderRadius: 4,
-            width: "30%",
+            width: 55,
             alignItems: "center",
             justifyContent: "center",
           }}

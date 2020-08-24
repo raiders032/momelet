@@ -5,7 +5,7 @@ import WaitingRoomForStart from "./WaitingRoomForStart";
 import GameRoom from "./GameRoom";
 import WaitingRoomForResult from "./WaitingRoomForResult";
 import GameResult from "./GameResult";
-import { Text } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 
 const Stack = createStackNavigator();
 export default ({ navigation, route }) => {
@@ -26,6 +26,8 @@ export default ({ navigation, route }) => {
         options={{
           headerShown: true,
           title: "대기실",
+          headerLeft: () => <View></View>,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen

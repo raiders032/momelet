@@ -11,6 +11,7 @@ export default ({ children }) => {
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 2,
         shadowColor: "grey",
+        elevation: 15,
       }}
     >
       {children}

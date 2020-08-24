@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   Image,
@@ -6,6 +6,7 @@ import {
   Dimensions,
   Animated,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import Card from "./Card";
 import SeeMenuButton from "./SeeMenuButton";
@@ -13,13 +14,12 @@ import RestaurantBasicInfo from "./RestaurantBasicInfo";
 import PresentMenu from "./PresentMenu";
 import CardBack from "./CardBack";
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ restaurant, children }) => {
-  console.log("RestaurantCard rendered");
-
+export default ({ restaurant, header, cover }) => {
   let changeValue = 0;
   const lotation = useRef(new Animated.Value(0)).current;
-
+  useEffect(() => {
+    lotation.setValue(0);
+  }, [restaurant]);
   lotation.addListener(({ value }) => {
     changeValue = value;
   });
@@ -75,84 +75,88 @@ export default ({ restaurant, children }) => {
   }, [restaurant.thumUrl]);
 
   return (
-    <View
-      style={{
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-      }}
-    >
-      <Card>
-        <View style={{ width: "100%", height: "100%" }}>
-          <View style={{ height: "65%" }}>
-            <Animated.View
+    <Card>
+      <View style={{ width: "100%", height: "100%" }}>
+        <View style={{ height: "65%" }}>
+          <Animated.View
+            style={{
+              width: "100%",
+              height: "100%",
+
+              transform: [{ rotateY: backInterpolate }],
+              backfaceVisibility: "hidden",
+              position: "absolute",
+            }}
+          >
+            <CardBack menus={restaurant.menu} name={restaurant.name} />
+          </Animated.View>
+          <Animated.View
+            style={{
+              transform: [{ rotateY: frontInterpolate }],
+              backfaceVisibility: "hidden",
+            }}
+          >
+            {header}
+
+            <CardImage />
+            {cover}
+          </Animated.View>
+        </View>
+        <View style={{ height: "35%", paddingHorizontal: 15 }}>
+          <View
+            style={{
+              height: "45%",
+            }}
+          >
+            <View
               style={{
-                transform: [{ rotateY: frontInterpolate }],
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <CardImage />
-            </Animated.View>
-            <Animated.View
-              style={{
-                width: "100%",
                 height: "100%",
-                position: "absolute",
-                transform: [{ rotateY: backInterpolate }],
-                backfaceVisibility: "hidden",
+                borderColor: "#e4e4e4",
+                borderBottomWidth: 0.7,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <CardBack />
-            </Animated.View>
+              <RestaurantBasicInfo
+                title={restaurant.name}
+                distance={"500M"}
+                point={"4.4점"}
+              />
+              <TouchableOpacity
+                style={{ width: "20%", height: "40%" }}
+                onPress={flipCard}
+              >
+                <SeeMenuButton />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{ height: "35%", paddingHorizontal: 15 }}>
-            <View
-              style={{
-                height: "45%",
-              }}
+          <View
+            style={{
+              height: "55%",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{ fontFamily: "Godo", fontSize: 18, marginBottom: 10 }}
             >
-              <View
-                style={{
-                  height: "100%",
-                  borderColor: "#e4e4e4",
-                  borderBottomWidth: 0.7,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <RestaurantBasicInfo
-                  title={restaurant.name}
-                  distance={"500M"}
-                  point={"4.4점"}
-                />
-                <TouchableOpacity
-                  style={{ width: "20%", height: "40%" }}
-                  onPress={flipCard}
-                >
-                  <SeeMenuButton />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View
-              style={{
-                height: "55%",
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Godo", fontSize: 18, marginBottom: 10 }}
-              >
-                대표메뉴
-              </Text>
-              <PresentMenu menu={"조개찜 or 조개구이"} price={"25,000원"} />
-              <PresentMenu menu={"삼겹살 200g"} price={"23,000원"} />
-            </View>
+              대표메뉴
+            </Text>
+            {restaurant.menu[0] && (
+              <PresentMenu
+                menu={restaurant.menu[0].name}
+                price={restaurant.menu[0].price}
+              />
+            )}
+            {restaurant.menu[1] && (
+              <PresentMenu
+                menu={restaurant.menu[1].name}
+                price={restaurant.menu[1].price}
+              />
+            )}
           </View>
         </View>
-      </Card>
-    </View>
+      </View>
+    </Card>
   );
 };

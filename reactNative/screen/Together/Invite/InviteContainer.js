@@ -3,6 +3,8 @@ import InvitePresenter from "./InvitePresenter";
 import socket from "../../../socket";
 export default ({ navigation, route }) => {
   const tmpUsers = JSON.parse(route.params.msg).aroundUsers;
+
+  console.log("tmpUsers: ", tmpUsers);
   const [users, setUsers] = useState(
     tmpUsers.map((user) => {
       return { ...user, selected: false };
@@ -15,7 +17,7 @@ export default ({ navigation, route }) => {
         result.push(user.socketId);
       }
     });
-
+    console.log(result);
     socket.emit(
       "togetherInvite",
       JSON.stringify({
@@ -23,7 +25,10 @@ export default ({ navigation, route }) => {
         inviteTheseUsers: result,
       }),
       (msg) => {
-        navigation.navigate("WaitingRoomForStart", { msg });
+        navigation.navigate("WaitingRoomForStart", {
+          msg,
+          myId: route.params.user.id,
+        });
       }
     );
   };
