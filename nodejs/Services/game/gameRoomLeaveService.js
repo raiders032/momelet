@@ -10,16 +10,18 @@ const gameRoomLeaveService = (socket, msg) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  try {
-    if (room.deleteUser(user) === 0) {
-      SingleObject.RoomRepository.delete(room.getRoomName());
-    } else {
-      gameRoomUpdateService(socket, roomName, id);
+  if (user.joinedRoomName !== null) {
+    try {
+      if (room.deleteUser(user) === 0) {
+        SingleObject.RoomRepository.delete(room.getRoomName());
+      } else {
+        gameRoomUpdateService(socket, roomName, id);
+      }
+      user.updateJoinedRoomName(null);
+      retMsg.status = "ok";
+    } catch (err) {
+      console.log(err);
     }
-    user.updateJoinedRoomName(null);
-    retMsg.status = "ok";
-  } catch (err) {
-    console.log(err);
   }
 
   retMsg = JSON.stringify(retMsg);

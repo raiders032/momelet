@@ -27,11 +27,10 @@ class Room {
       if (user === value) {
         this.userList.splice(index, 1);
         this.headCount--;
-      }
-
-      //만약 방장이라면 유저 리스트의 첫번째 유저를 방장으로 설정
-      if (this.headCount > 0 && user.id === this.hostId) {
-        this.hostId = this.userList[0].id;
+        //만약 방장이라면 유저 리스트의 첫번째 유저를 방장으로 설정
+        if (this.headCount > 0 && user.id === this.hostId) {
+          this.hostId = this.userList[0].id;
+        }
       }
     });
 
