@@ -50,7 +50,8 @@ public class RetrieveRestaurantResponse {
         this.naverId = naverId;
         this.googleId = googleId;
         this.phoneNumber = phoneNumber;
-        this.menu = Arrays.stream(menu.split(",")).map(MenuDto::new).collect(Collectors.toList());
+        if(!menu.isEmpty())
+            this.menu = Arrays.stream(menu.split(",")).map(MenuDto::new).collect(Collectors.toList());
     }
 
     public RetrieveRestaurantResponse(Restaurant restaurant){
@@ -70,7 +71,7 @@ public class RetrieveRestaurantResponse {
         this.phoneNumber = restaurant.getPhoneNumber();
         this.categories = restaurant
                 .getRestaurantCategories().stream()
-                .map(restaurantCategory -> { return restaurantCategory.getCategory().getName();})
+                .map(restaurantCategory -> restaurantCategory.getCategory().getName())
                 .collect(Collectors.joining(","));
         this.menu = restaurant.getMenuList()
                 .stream().map(MenuDto::new)
