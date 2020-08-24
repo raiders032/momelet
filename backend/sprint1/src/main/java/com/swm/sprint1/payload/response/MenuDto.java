@@ -17,10 +17,10 @@ public class MenuDto {
     public MenuDto(String nameAndPrice){
         String [] split = nameAndPrice.split(":");
         this.name = split[0];
-        //if(split.length>1)
+        if(split.length>1)
             this.price = Integer.parseInt(split[1]);
-        //else
-            //this.price = 0;
+        else
+            this.price = 0;
     }
 
     public MenuDto(Menu menu){
