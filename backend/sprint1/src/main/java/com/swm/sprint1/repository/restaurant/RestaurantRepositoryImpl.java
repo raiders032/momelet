@@ -68,7 +68,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "           WHERE user_category.user_id = ? ) " +
                 "       GROUP by rc.restaurant_id) " +
                 "   GROUP by r.restaurant_id " +
-                "   ORDER by r.google_rating ";
+                "   ORDER by rand() ";
 
         Query query = em.createNativeQuery(sql)
                 .setParameter(1, latitude.subtract(radius))
