@@ -19,6 +19,7 @@ const findAroundUsers = (myId, lat, long) => {
       ) {
         aroundUsers.push({
           id: user["id"],
+          socketId: user["socketId"],
           name: user["name"],
           imageUrl: user["imageUrl"],
         });
@@ -37,8 +38,8 @@ const togetherService = (socket, msg) => {
     const { id, latitude, longitude } = JSON.parse(msg);
     const aroundUsers = findAroundUsers(id, latitude, longitude);
 
-    const ret = JSON.stringify({ aroundUsers });
-    return ret;
+    const retMsg = JSON.stringify({ aroundUsers });
+    return retMsg;
   } catch (e) {
     return echo;
   }

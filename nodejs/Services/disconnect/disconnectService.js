@@ -13,9 +13,7 @@ const disconnectService = (socket) => {
 
   // 출력용 문구. 후에 삭제 필요함.
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
-  logger.info(
-    "a user disconnected. id: " + id + ", userList: (" + userList + ")"
-  );
+  logger.info("a user disconnected. userList: (" + userList + ")");
 };
 
 module.exports = {
