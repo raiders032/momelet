@@ -15,6 +15,15 @@ const togetherInviteService = (socket, msg) => {
       hostName: msgSender.name,
     });
 
+    // 기존 접속 방에서 나가기
+    if (user.joinedRoomName !== null) {
+      if (room.deleteUser(user) === 0) {
+        SingleObject.RoomRepository.delete(room.getRoomName());
+      } else {
+        gameRoomUpdateService(socket, roomName, id);
+      }
+      user.updateJoinedRoomName(null);
+    }
     newRoom.addUser(msgSender);
     msgSender.updateJoinedRoomName(roomName);
 
