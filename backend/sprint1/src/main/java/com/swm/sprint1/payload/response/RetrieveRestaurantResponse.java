@@ -51,7 +51,7 @@ public class RetrieveRestaurantResponse {
         this.googleId = googleId;
         this.phoneNumber = phoneNumber;
         if(!menu.isEmpty())
-            this.menu = Arrays.stream(menu.split(",")).map(MenuDto::new).collect(Collectors.toList());
+            this.menu = Arrays.stream(menu.split("`")).map(MenuDto::new).collect(Collectors.toList());
     }
 
     public RetrieveRestaurantResponse(Restaurant restaurant){
