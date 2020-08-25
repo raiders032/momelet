@@ -1,5 +1,5 @@
 const app = require("express")();
-// const logger = require("morgan");
+const { logger } = require("./logger");
 const webSocket = require("./socket");
 require("dotenv").config();
 
@@ -11,7 +11,7 @@ require("dotenv").config();
 // });
 
 const server = app.listen(process.env.PORT, () => {
-  console.log("listening on *:3000");
+  logger.info("Server started. listening on *:3000.");
 });
 
 webSocket(server, app);

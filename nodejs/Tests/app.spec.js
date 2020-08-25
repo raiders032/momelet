@@ -334,6 +334,9 @@ describe("Connecting Server", () => {
                   JSON.stringify({
                     id: ioOptions[1].myId,
                     roomName,
+                    radius: 0.01,
+                    latitude: ioOptions[1].query.latitude,
+                    longitude: ioOptions[1].query.longitude,
                   }),
                   (msg) => {
                     // then
@@ -386,6 +389,9 @@ describe("Connecting Server", () => {
       JSON.stringify({
         id: ioOptions[0].myId,
         roomName,
+        radius: 0.01,
+        latitude: ioOptions[0].query.latitude,
+        longitude: ioOptions[1].query.longitude,
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -601,7 +607,13 @@ describe("Connecting Server", () => {
 
             senders[0].emit(
               "gameStart",
-              JSON.stringify({ id: ioOptions[0].myId, roomName }),
+              JSON.stringify({
+                id: ioOptions[0].myId,
+                roomName,
+                radius: 0.01,
+                latitude: ioOptions[0].query.latitude,
+                longitude: ioOptions[0].query.longitude,
+              }),
               (msg) => {
                 msg.should.be.type("string");
                 const msgObject = JSON.parse(msg);

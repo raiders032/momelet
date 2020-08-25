@@ -1,9 +1,8 @@
 const axios = require("axios");
 const SingleObject = require("../../SingleObjects");
-const radius = 0.01;
 const { logger } = require("../../logger");
 
-const getCard = async (users, myId) => {
+const getCard = async (users, myId, radius, latitude, longitude) => {
   let id = "";
   for (let i = 0; i < users.length; i++) {
     if (i === users.length - 1) {
@@ -12,9 +11,7 @@ const getCard = async (users, myId) => {
       id += users[i].id + ",";
     }
   }
-  const { longitude, latitude, JWT } = SingleObject.UserRepository.findById(
-    myId
-  );
+  const { JWT } = SingleObject.UserRepository.findById(myId);
 
   const cards = [];
   try {
@@ -54,7 +51,7 @@ const gameStartService = async (socket, msg) => {
     restaurants: null,
   };
 
-  const { id, roomName } = JSON.parse(msg);
+  const { id, roomName, radius, latitude, longitude } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
 
   // 에러 취약함. 처리해줘야 함.
@@ -66,7 +63,10 @@ const gameStartService = async (socket, msg) => {
     try {
       const cards = await getCard(
         users.filter((user) => user.getCanReceive()),
-        id
+        id,
+        radius,
+        latitude,
+        longitude
       );
       if (cards.length === 7) {
         retMsg.status = "ok";
