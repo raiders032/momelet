@@ -10,6 +10,7 @@ export default ({ restaurants }) => {
   // console.log("RestaurantSwipeRender");
   const [restaurant, setRestaurant] = useState(restaurants);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
+  // console.log("firstRestaurant: ", firstRestaurant.name);
 
   const position = new Animated.ValueXY({ x: 0, y: 0 });
   useEffect(() => {
@@ -99,6 +100,7 @@ export default ({ restaurants }) => {
           justifyContent: "center",
           alignItems: "center",
           top: 10,
+          zIndex: -2,
           transform: [{ scaleX: 0.95 }],
         }}
       >
@@ -112,6 +114,7 @@ export default ({ restaurants }) => {
           justifyContent: "center",
           alignItems: "center",
           position: "absolute",
+          zIndex: -1,
           // transform: [{ scaleX: scaleXPositionConfig }],
         }}
         {...panResponder.panHandlers}

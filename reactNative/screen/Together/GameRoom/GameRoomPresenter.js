@@ -64,6 +64,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     });
   };
   const afterCardMove = (response) => {
+    console.log("response: ", response);
     console.log("gameResult.current.length", gameResult.current.length);
     if (gameResult.current.length >= 6) {
       gameResult.current.push({ id: firstRestaurant.id, sign: response });
@@ -147,7 +148,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       //carGoDown
     }).start(() => {
       // cardGoDown();
-      afterCardMove("soso");
+      // afterCardMove("soso");
     });
   };
 

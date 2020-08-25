@@ -49,8 +49,11 @@ export default ({ navigation, route }) => {
   const getUser = async () => {
     try {
       const result = await apis.getUserMe(userToken);
-      console.log("get User Success ");
-
+      console.log("get User Success \n");
+      console.log("로그인한 유저의 정보 ");
+      console.log("    토큰 : ", userToken);
+      console.log("    id : ", result.data.data.userInfo.id);
+      console.log("    이름 : ", result.data.data.userInfo.name);
       setUser(result.data);
       return { ...result.data };
     } catch (error) {
@@ -59,7 +62,7 @@ export default ({ navigation, route }) => {
   };
 
   const getUserRestaurant = async (latitude, longitude) => {
-    console.log(latitude, longitude);
+    // console.log(latitude, longitude);
     if (user) {
       try {
         const { status, permissions } = await Permissions.askAsync(
@@ -67,10 +70,6 @@ export default ({ navigation, route }) => {
         );
         if (status === "granted") {
           const response = await apis.getRestaurant(
-            // location.coords.latitude,
-            // location.coords.longitude
-            // 37.47721,
-            // 126.7627478,
             latitude,
             longitude,
             user.data.userInfo.id,
@@ -78,7 +77,7 @@ export default ({ navigation, route }) => {
           );
 
           console.log("get Restaurant Sucess");
-
+          // console.log(response);
           setRestaurants({ loading: false, restaurants: response.data.data });
         } else {
           throw new Error("Location permission not granted");
@@ -149,14 +148,18 @@ export default ({ navigation, route }) => {
   };
   const getRestaurantAndSocketConnect = async () => {
     const location = await Location.getCurrentPositionAsync({});
-
+    // const { latitude, longitude } = location.coords;
+    const latitude = 37.5447048;
+    const longitude = 127.0663154;
     await getUserRestaurant(
-      37.553292,
-      126.9125836
+      latitude,
+      longitude
+
       // location.coords.latitude,
       // location.coords.longitude
     );
-    await socketConnect(location.coords.latitude, location.coords.longitude);
+    // await socketConnect(location.coords.latitude, location.coords.longitude);
+    await socketConnect(latitude, longitude);
   };
 
   useEffect(() => {
@@ -177,11 +180,13 @@ export default ({ navigation, route }) => {
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
     const location = await Location.getCurrentPositionAsync({});
 
-    console.log("location: ", location);
     const sendMsg = {
       id: socket.query.id,
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+      latitude: 37.5447048,
+      longitude: 127.0663154,
+
+      // latitude: location.coords.latitude,
+      // longitude: location.coords.longitude,
     };
     socket.emit("together", JSON.stringify(sendMsg), (msg) => {
       navigation.navigate("Together", { msg, user: user.data.userInfo });
