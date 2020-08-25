@@ -156,7 +156,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "       ORDER by rand()  " +
                 "       limit 7  " +
                 "   ) f  " +
-                "   join menu m on m.restaurant_id = f.restaurant_id  " +
+                "   left join menu m on m.restaurant_id = f.restaurant_id  " +
                 "   group by f.restaurant_id ";
 
         Query query = em.createNativeQuery(sql)
