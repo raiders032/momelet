@@ -1,8 +1,9 @@
 const SingleObject = require("../../SingleObjects");
+const { logger } = require("../../logger");
 
 const togetherInviteService = (socket, msg) => {
-  const echo = "togetherInviteService 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  const echo = "togetherInviteService. msg: " + msg;
+  logger.info(echo);
 
   try {
     const { id, inviteTheseUsers } = JSON.parse(msg);

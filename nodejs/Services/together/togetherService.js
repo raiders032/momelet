@@ -1,5 +1,5 @@
 const SingleObject = require("../../SingleObjects");
-
+const { logger } = require("../../logger");
 const findAroundUsers = (myId, lat, long) => {
   const aroundUsers = [];
   const max_lat = Number(lat) + 0.0025;
@@ -31,8 +31,8 @@ const findAroundUsers = (myId, lat, long) => {
 
 // 같이하기
 const togetherService = (socket, msg) => {
-  var echo = "together 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "together. msg: " + msg;
+  logger.info(echo);
 
   try {
     const { id, latitude, longitude } = JSON.parse(msg);

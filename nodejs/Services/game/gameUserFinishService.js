@@ -1,8 +1,9 @@
 const SingleObject = require("../../SingleObjects");
-const { gameAllFinishService } = require("./gameAllFinishService");
+const { logger } = require("../../logger");
+
 const gameUserFinishService = (socket, msg) => {
-  var echo = "gameRoomUserFinish 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "gameRoomUserFinish. msg: " + msg;
+  logger.info(echo);
 
   let retMsg = {
     status: "fail",

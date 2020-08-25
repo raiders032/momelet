@@ -1,8 +1,9 @@
 const SingleObject = require("../../SingleObjects");
+const { logger } = require("../../logger");
 
 const gameRoomJoinAgainService = (socket, msg) => {
-  var echo = "gameRoomJoinAgain 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "gameRoomJoinAgain. msg: " + msg;
+  logger.info(echo);
 
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);

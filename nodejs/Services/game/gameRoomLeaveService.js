@@ -1,9 +1,9 @@
 const SingleObject = require("../../SingleObjects");
 const { gameRoomUpdateService } = require("./gameRoomUpdateService");
-
+const { logger } = require("../../logger");
 const gameRoomLeaveService = (socket, msg) => {
-  var echo = "gameRoomLeave 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "gameRoomLeave. msg: " + msg;
+  logger.info(echo);
 
   let retMsg = { status: "fail" };
   const { id, roomName } = JSON.parse(msg);

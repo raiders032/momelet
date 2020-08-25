@@ -1,5 +1,9 @@
 const SingleObject = require("../../SingleObjects");
+const { logger } = require("../../logger");
+
 const gameAllFinishService = (socket, msg) => {
+  var echo = "gameAllFinishService. msg: " + msg;
+  logger.info(echo);
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   if (room.getHeadCount() > room.getFinishCount()) {

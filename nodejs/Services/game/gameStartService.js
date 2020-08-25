@@ -1,6 +1,7 @@
 const axios = require("axios");
 const SingleObject = require("../../SingleObjects");
-const radius = 1;
+const radius = 0.01;
+const { logger } = require("../../logger");
 
 const getCard = async (users, myId) => {
   let id = "";
@@ -37,7 +38,7 @@ const getCard = async (users, myId) => {
       cards.push(restaurants[i]);
     }
   } catch (err) {
-    console.log("데이타 fetch 오류");
+    logger.error("데이타 fetch 오류");
     throw err;
   }
 
@@ -45,8 +46,8 @@ const getCard = async (users, myId) => {
 };
 
 const gameStartService = async (socket, msg) => {
-  var echo = "gameStart 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "gameStart. msg: " + msg;
+  logger.info(echo);
 
   let retMsg = {
     status: "fail",
@@ -102,7 +103,7 @@ const gameStartService = async (socket, msg) => {
       room.updateHeadCount(headCount);
     } catch (err) {
       // console.log(err);
-      console.log("카드 가져오기 실패 / 게임시작 실패");
+      logger.error("카드 가져오기 실패 / 게임시작 실패");
 
       retMsg.status = "fail";
       retMsg = JSON.stringify(retMsg);
