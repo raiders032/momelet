@@ -1,3 +1,0 @@
-import mysqlQuery
-
-mysqlQuery.updateDB()
