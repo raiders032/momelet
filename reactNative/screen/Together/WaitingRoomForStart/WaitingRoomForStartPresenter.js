@@ -8,7 +8,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default ({ users, onClick }) => {
   const abc = [];
-  const footer = <Footer onClick={onClick} text={"시작하기"} />;
+  const footer = (
+    <Footer
+      onClick={() => {
+        onClick();
+      }}
+      text={"시작하기"}
+    />
+  );
   //임시로 테스트 하기 위해서 11 개만 만들고 밑에 추가로 하나 만듬.
   for (let i = 0; i < 11; i++) {
     if (i < users.length) {

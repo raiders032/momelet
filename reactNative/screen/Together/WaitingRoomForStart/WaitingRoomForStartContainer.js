@@ -43,13 +43,15 @@ export default ({ navigation, route }) => {
     //   setUsers(null);
     // };
   }, []);
-  const onClick = () => {
-    console.log(msg.gameRoomUserList[0], msg.roomName);
+  const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
     socket.emit(
       "gameStart",
       JSON.stringify({
         id: msg.gameRoomUserList[0].id,
         roomName: msg.roomName,
+        radius: 0.01,
+        latitude: latitude,
+        longitude: longitude,
       }),
       (msg) => {
         console.log("gameStart Message 보내기", msg);
