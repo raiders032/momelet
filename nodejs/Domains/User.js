@@ -15,12 +15,12 @@ class User {
     this.canReceive = false;
   }
 
-  updateJoinedRoomName(roomName) {
-    this.joinedRoomName = roomName;
-  }
-
   getJoinedRoomName() {
     return this.joinedRoomName;
+  }
+
+  updateJoinedRoomName(roomName) {
+    this.joinedRoomName = roomName;
   }
 
   getCanReceive() {
@@ -29,6 +29,10 @@ class User {
 
   updateCanReceive(canReceive) {
     this.canReceive = canReceive;
+  }
+
+  getId() {
+    return this.id;
   }
 }
 

@@ -1,38 +1,42 @@
 const SingleObject = require("../../SingleObjects");
 const { gameRoomUpdateService } = require("./gameRoomUpdateService");
+const { logger } = require("../../logger");
 
 const gameRoomJoinService = (socket, msg) => {
-  var echo = "gameRoomJoin 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "gameRoomJoin. msg: " + msg;
+  logger.info(echo);
 
   const { id, roomName } = JSON.parse(msg);
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const user = SingleObject.UserRepository.findById(id);
 
-  if (room.getIsStarted()) {
-    const ret = JSON.stringify({
-      status: "fail",
-      roomName: null,
-      gameRoomUserList: null,
-      hostId: null,
-    });
-    return ret;
+  let retMsg = {
+    status: "fail",
+    roomName: null,
+    gameRoomUserList: null,
+    hostId: null,
+  };
+
+  // 기존 접속 방에서 나가기
+  if (user.joinedRoomName !== null) {
+    if (room.deleteUser(user) === 0) {
+      SingleObject.RoomRepository.delete(room.getRoomName());
+    } else {
+      gameRoomUpdateService(socket, roomName, id);
+    }
+    user.updateJoinedRoomName(null);
+  }
+  if (room.addUser(user)) {
+    gameRoomUpdateService(socket, roomName, id);
+    user.updateJoinedRoomName(roomName);
+    retMsg.status = "success";
+    retMsg.roomName = roomName;
+    retMsg.gameRoomUserList = room.getUserList();
+    retMsg.hostId = room.getHostId();
   }
 
-  room.addUser(user);
-
-  socket.join(roomName, () => {
-    gameRoomUpdateService(socket, roomName, id);
-  });
-
-  const ret = JSON.stringify({
-    status: "success",
-    roomName: roomName,
-    gameRoomUserList: room.getUserList(),
-    hostId: room.getHostId(),
-  });
-
-  return ret;
+  retMsg = JSON.stringify(retMsg);
+  return retMsg;
 };
 
 module.exports = {
