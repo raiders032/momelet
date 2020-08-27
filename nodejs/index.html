@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font: 13px Helvetica, Arial;
+      }
+      form {
+        background: #000;
+        padding: 3px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+      form input {
+        border: 0;
+        padding: 10px;
+        width: 90%;
+        margin-right: 0.5%;
+      }
+      form button {
+        width: 9%;
+        background: rgb(130, 224, 255);
+        border: none;
+        padding: 10px;
+      }
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages li {
+        padding: 5px 10px;
+      }
+      #messages li:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+      $(function () {
+        var socket = io({
+          //path: "/momulet",
+          extraHeaders: {
+            "x-id": "jsjphone123123",
+          },
+          query: {
+            id: "jsjphone",
+            email: "jsjphone@naver.com",
+            name: "Seonghoon",
+            imageUrl: "naver.com",
+            JWT: "@#$@FDSF",
+            latitude: "33.2",
+            longitude: "123.3",
+          },
+        });
+        var socketId;
+        socket.on("connect", () => {
+          socketId = socket.id;
+          $("#messages").append($('<li id="sId">').text(socketId));
+        });
+        $("form").submit(function (e) {
+          e.preventDefault(); // prevents page reloading
+          var value = $("#m").val();
+          var texts = value.split(" ");
+          var channel = texts[0];
+          var msg = texts.slice(1);
+
+          socket.emit(channel, msg);
+          $("#m").val("");
+          return false;
+        });
+
+        socket.on("together", function (msg) {
+          $("#messages").append(
+            $("<li>").text("together 이벤트. 받은 msg: " + msg)
+          );
+          //var obj = JSON.stringify(msg);
+        });
+        socket.on("togetherInvite", (msg) => {
+          $("#messages").append(
+            $("<li>").text("togetherInvite 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("togetherInvitation", (msg) => {
+          $("#messages").append(
+            $("<li>").text("togetherInvitation 이벤트. 받은 msg: " + msg)
+          );
+        });
+
+        socket.on("gameRoomJoin", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomJoin 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRoomUpdate", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomUpdate 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRoomLeave", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRoomLeave 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameStart", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameStart 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameUserFinish", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameUserFinish 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameAllFinish", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameAllFinish 이벤트. 받은 msg: " + msg)
+          );
+        });
+        socket.on("gameRestart", (msg) => {
+          $("#messages").append(
+            $("<li>").text("gameRestart 이벤트. 받은 msg: " + msg)
+          );
+        });
+      });
+    </script>
+  </body>
+</html>
