@@ -47,6 +47,9 @@ def naver_crawling(query, fileName, restaurantId, dirPath):
             page -= 1
             continue
 
+        if len(response) < 100:
+            page = 3
+
         for restaurant in response:
             tmp = {}
             tmp["restaurantId"] = restaurantId
@@ -69,7 +72,7 @@ def naver_crawling(query, fileName, restaurantId, dirPath):
         with open(dirPath + f"/{fileName}.json", "w") as json_file:
             json.dump(array, json_file, ensure_ascii=False)
 
-        utils.logging(f"({page} / 3)page 긁기 성공!")
+        utils.logging(f"({page})page 긁기 성공!")
         if page < 3:
             sleepTime = 5
             utils.logging("다음 페이지 긁기 전", str(sleepTime), "초 기다리는 중...")
@@ -87,8 +90,10 @@ def set_crawling_query(dongName, dirPath):
     restaurantId = 1
 
     qrys = [f"{dongName} 맛집", f"{dongName} 한식", f"{dongName} 일식", f"{dongName} 중식",
-            f"{dongName} 양식", f"{dongName} 찜,탕", f"{dongName} 치킨", f"{dongName} 족발", f"{dongName} 피자",
-            f"{dongName} 분식", f"{dongName} 고기", f"{dongName} 파스타", f"{dongName} 술집"]
+            f"{dongName} 양식", f"{dongName} 찜", f"{dongName} 치킨", f"{dongName} 곱창",
+            f"{dongName} 분식", f"{dongName} 고기", f"{dongName} 파스타", f"{dongName} 술집",
+            f"{dongName} 밥집", f"{dongName} 족발", f"{dongName} 햄버거", f"{dongName} 피자",
+            f"{dongName} 국수", ]
 
     utils.logging("크롤링 시작!")
     for qry in qrys:

@@ -29,9 +29,11 @@ def getDongNamefromFile(filepath):
 def setMetaCategory(metaCategory):
     # PK 생성용
     # rId = 1
-
+    print("메타카테고리")
+    print(metaCategory)
     filename = getDongNamefromFile("../../restaurants/filename.txt")
     for name in filename:
+        print(name, "합치는 중")
         if name == "":
             break
         path = "../../restaurants/" + \
@@ -46,15 +48,11 @@ def setMetaCategory(metaCategory):
             # 카테고리 없는 소수의 식당 거르기
             if data[i]["category"] == None:
                 continue
-
             catFlag = 0
             tempCat = []
             for cat in data[i]["category"]:
                 # 부적절한 카테고리의 식당은 None으로 표기해서 거르기
                 try:
-                    if cat == "한식":
-                        catFlag += 1
-                        continue
                     if metaCategory[cat] == None:
                         continue
                     tempCat.append(metaCategory[cat])
@@ -63,7 +61,7 @@ def setMetaCategory(metaCategory):
                     print(e)
                     print("메타 카테고리 삽입 중 문제 발생")
                     continue
-            if catFlag == 2:
+            if catFlag >= 1:
                 data[i]["metaCategory"] = tempCat
                 arr.append(data[i])
 

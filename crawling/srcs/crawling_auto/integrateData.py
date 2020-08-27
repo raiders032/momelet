@@ -73,6 +73,6 @@ def makeIntegrateData(dirPath):
         dirPath[dirPath.find('/', 6) + 1:] + f"_{restaurantId - 1}.json"
     print(writeFilePath, "작성 중...")
     writeJsonFile(writeFilePath, validRestaurants)
-    saveFilePath(writeFilePath[writeFilePath.find('/', 6) + 1:])
+    saveFilePath(writeFilePath[writeFilePath.find('/', 18) + 1:])
     print(writeFilePath, "작성 완료")
     print("총", restaurantId, "개의 식당이 합쳐졌습니다")
