@@ -89,6 +89,8 @@ export default function App() {
       require("./assets/call.png"),
       require("./assets/copy.png"),
       require("./assets/geo.png"),
+      require("./assets/google.png"),
+      require("./assets/kakao.png")
     ]);
 
     const fontAssets = cacheFonts([FontAwesome.font]);

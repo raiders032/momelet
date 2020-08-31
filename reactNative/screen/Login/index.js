@@ -6,6 +6,7 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
+  Image as reactImage
 } from "react-native";
 import Svg, { Image } from "react-native-svg";
 import * as WebBrowser from "expo-web-browser";
@@ -115,22 +116,24 @@ export default function App({ afterLogin }) {
       </Animated.View>
 
       <View style={{ height: height / 4, justifyContent: "center" }}>
+      <TouchableOpacity onPress={changeStart}>
         <Animated.View
           style={{
             ...styles.button,
             opacity: buttonOpacity,
+            elevation: 7,
             transform: [{ translateY: buttonY }],
           }}
         >
-          <TouchableOpacity onPress={changeStart}>
+          
             <Text
               style={{ fontFamily: "Godo", fontSize: 30, fontWeight: "bold" }}
             >
               로그인
             </Text>
-          </TouchableOpacity>
+          
         </Animated.View>
-
+        </TouchableOpacity>
         <Animated.View
           style={{
             height: height / 4,
@@ -140,7 +143,7 @@ export default function App({ afterLogin }) {
           }}
         >
           <Animated.View
-            style={{ ...styles.closeButton, opacity: animatedObj }}
+            style={{ ...styles.closeButton, opacity: animatedObj,elevation: 5 }}
           >
             <TouchableOpacity onPress={cancelPress}>
               <Text style={{ fontSize: 15 }}>X</Text>
@@ -153,20 +156,39 @@ export default function App({ afterLogin }) {
             }}
           >
             <TouchableOpacity onPress={() => onPress(afterLogin, "google")}>
-              <View style={{ ...styles.loginButton, borderColor: "red" }}>
-                <Text>G</Text>
-              </View>
+              <Svg width={50} height={50}>
+          <Image
+            href={require("../../assets/google.png")}
+            width={50}
+            height={50}
+            preserveAspectRatio="xMidYMid"
+          />
+        </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onPress(afterLogin, "kakao")}>
-              <View style={{ ...styles.loginButton, borderColor: "orange" }}>
-                <Text>K</Text>
-              </View>
+            <Svg width={50} height={50}>
+          <Image
+            href={require("../../assets/kakao.png")}
+            width={50}
+            height={50}
+            preserveAspectRatio="xMidYMid"
+          />
+        </Svg>
+        
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onPress(afterLogin, "naver")}>
               {/* <TouchableOpacity onPress={() => setUserToken("google")}> */}
-              <View style={{ ...styles.loginButton, borderColor: "green" }}>
+              <Svg width={50} height={50}>
+          <Image
+            href={{uri:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5097%2F2014%2F11%2F17%2F224765_9935_410_99_20141117105908.png&type=sc960_832"}}
+            width={50}
+            height={50}
+            preserveAspectRatio="xMidYMid"
+          />
+        </Svg>
+              {/* <View style={{ ...styles.loginButton, borderColor: "green" }}>
                 <Text>N</Text>
-              </View>
+              </View> */}
             </TouchableOpacity>
           </View>
         </Animated.View>
