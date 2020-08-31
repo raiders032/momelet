@@ -6,7 +6,6 @@ import { AsyncStorage } from "react-native";
 import { StackActions } from "@react-navigation/native";
 
 export default ({ navigation, route }) => {
-  console.log(route.params.userChangeCount);
   const [user, setUser] = useState(route.params.user);
   const onClickFooter = async () => {
     const token = await AsyncStorage.getItem("@userToken");
