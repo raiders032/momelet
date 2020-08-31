@@ -7,10 +7,11 @@ import Card from "./Card";
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default ({ restaurants }) => {
-  // console.log("RestaurantSwipeRender");
   const [restaurant, setRestaurant] = useState(restaurants);
+  useEffect(() => {
+    setRestaurant(restaurants);
+  }, [restaurants]);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
-  // console.log("firstRestaurant: ", firstRestaurant.name);
 
   const position = new Animated.ValueXY({ x: 0, y: 0 });
   useEffect(() => {
