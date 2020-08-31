@@ -1,18 +1,17 @@
 const app = require("express")();
-const logger = require("morgan");
+const { logger } = require("./logger");
 const webSocket = require("./socket");
-
 require("dotenv").config();
 
-app.use(logger("dev"));
+// app.use(logger("dev"));
 
 // 디버깅 용
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html");
+// });
 
-const server = app.listen(3000, () => {
-  console.log("listening on *:3000");
+const server = app.listen(process.env.PORT, () => {
+  logger.info("Server started. listening on *:3000.");
 });
 
 webSocket(server, app);

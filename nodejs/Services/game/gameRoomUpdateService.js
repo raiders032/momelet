@@ -1,6 +1,10 @@
 const SingleObject = require("../../SingleObjects");
+const { logger } = require("../../logger");
 
 const gameRoomUpdateService = (socket, roomName, id) => {
+  const echo = "gameRoomUpdateService. roomName: " + roomName + ", id: " + id;
+  logger.info(echo);
+
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   const users = room.getUserList();
 

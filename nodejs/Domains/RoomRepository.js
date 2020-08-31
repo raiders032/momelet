@@ -6,7 +6,7 @@ class RoomRepository {
   }
 
   add(id) {
-    const roomName = id + Date.now();
+    const roomName = String(id + Date.now());
     const newRoom = new Room(roomName, id);
 
     if (this.roomRepository.has(roomName)) return null;

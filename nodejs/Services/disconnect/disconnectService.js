@@ -1,15 +1,19 @@
 const SingleObject = require("../../SingleObjects");
+const { logger } = require("../../logger");
 
 const disconnectService = (socket) => {
-  console.log("user disconnected");
-
   // 클래스의 프로퍼티에 직접 접근하고 있음
-  SingleObject.UserRepository.delete(socket.id);
+  const user = SingleObject.UserRepository.findBySocketId(socket.id);
+  if (user.joinedRoomName !== null) {
+    SingleObject.RoomRepository.findByRoomName(user.joinedRoomName).deleteUser(
+      user
+    );
+  }
+  SingleObject.UserRepository.delete(user.socketId);
 
-  const temp = Array.from(SingleObject.UserRepository.userRepository.values());
-  const userId = [];
-  temp.forEach((e) => userId.push(e["id"]));
-  console.log("나간 후 유저리스트: " + userId);
+  // 출력용 문구. 후에 삭제 필요함.
+  const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
+  logger.info("a user disconnected. userList: (" + userList + ")");
 };
 
 module.exports = {

@@ -1,6 +1,7 @@
+const { logger } = require("../../logger");
 const togetherInvitationService = (socket, msg) => {
-  var echo = "togetherInvitation 이벤트. 받은 msg: " + msg;
-  console.log(echo);
+  var echo = "togetherInvitation. msg: " + msg;
+  logger.info(echo);
 
   return echo;
 };
