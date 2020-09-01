@@ -13,7 +13,7 @@ import MypageBody from "../../../component/MypageBody";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
-export default ({ user, setUser, onClickFooter }) => {
+export default ({ user, setUser, onClickFooter, imageEditButtonEvent }) => {
   const [isNameEdit, setIsNameEdit] = useState(false);
   const tmp = useRef(false);
   const footer = <Footer text="저장" onClick={onClickFooter} />;
@@ -37,17 +37,23 @@ export default ({ user, setUser, onClickFooter }) => {
                 borderRadius: 20,
               }}
             />
-            <Image
-              source={require("../../../assets/imageEdit.png")}
+            <TouchableOpacity
               style={{
-                width: 26,
-                height: 26,
-                borderRadius: 13,
                 alignSelf: "flex-end",
                 position: "absolute",
                 right: -8,
               }}
-            />
+              onPress={imageEditButtonEvent}
+            >
+              <Image
+                source={require("../../../assets/imageEdit.png")}
+                style={{
+                  width: 26,
+                  height: 26,
+                  borderRadius: 13,
+                }}
+              />
+            </TouchableOpacity>
           </View>
           <View style={{ paddingTop: 15, paddingLeft: 30 }}>
             <View

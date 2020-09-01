@@ -80,18 +80,6 @@ export default ({ restaurant, header, cover }) => {
         <View style={{ height: "65%" }}>
           <Animated.View
             style={{
-              width: "100%",
-              height: "100%",
-
-              transform: [{ rotateY: backInterpolate }],
-              backfaceVisibility: "hidden",
-              position: "absolute",
-            }}
-          >
-            <CardBack menus={restaurant.menu} name={restaurant.name} />
-          </Animated.View>
-          <Animated.View
-            style={{
               transform: [{ rotateY: frontInterpolate }],
               backfaceVisibility: "hidden",
             }}
@@ -100,6 +88,23 @@ export default ({ restaurant, header, cover }) => {
 
             <CardImage />
             {cover}
+          </Animated.View>
+          <Animated.View
+            style={{
+              width: "100%",
+              height: "100%",
+
+              transform: [{ rotateY: backInterpolate }],
+              backfaceVisibility: "hidden",
+              position: "absolute",
+            }}
+          >
+            <CardBack
+              menus={restaurant.menu}
+              name={restaurant.name}
+              phoneNumber={restaurant.phoneNumber}
+              address={restaurant.roadAddress}
+            />
           </Animated.View>
         </View>
         <View style={{ height: "35%", paddingHorizontal: 15 }}>

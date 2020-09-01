@@ -29,15 +29,27 @@ export const apis = {
       },
     }),
   editUser: (id, categories, imageUrl, name, token) => {
+    const body = new FormData();
+
+    const photo = {
+      uri: imageUrl,
+      type: "image/jpeg",
+      name: `${id}.jpg`,
+    };
+    body.append("categories", categories);
+    body.append("name", name);
+    body.append("imageFile", photo);
+    console.log(body);
     return makeRequest(
       "put",
       `v1/users/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          // "Content-Type": "multipart/form-data",
         },
       },
-      { categories, imageUrl, name }
+      body
     );
   },
 };
