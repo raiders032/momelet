@@ -40,7 +40,7 @@ public class S3Uploader {
         String imageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return imageUrl.replace("profile-image/", "profile-image-resize/")
-                .replace(fileNameOnly + "_" + uuid,fileNameOnly + "_" + uuid + "_resize" )
+                .replace(uuid, uuid + "_resize")
                 .replace(extension, ".jpeg");
     }
 
