@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -69,8 +70,8 @@ public class UserController {
     @PutMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
-                                            @Valid @RequestBody UpdateUserRequest request,
-                                            @PathVariable Long id){
+                                            @Valid @ModelAttribute UpdateUserRequest request,
+                                            @PathVariable Long id) throws IOException {
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, request);
@@ -92,4 +93,5 @@ public class UserController {
         return ResponseEntity.created(null)
                 .body(new ApiResponse(LocalDateTime.now(),true,"유저 의사 표현 저장 완료"));
     }
+
 }
