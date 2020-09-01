@@ -185,22 +185,23 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
           bottom: 10,
         }}
       >
-        <TouchableOpacity onPress={cardGoRight}>
+        <TouchableOpacity onPress={cardGoLeft}>
           <Image
             style={{ height: 70, width: 70, resizeMode: "contain" }}
-            source={require("../../../assets/dislike.png")}
+            source={require("../../../assets/like.png")}
           />
         </TouchableOpacity>
+
         <TouchableOpacity onPress={cardGoDown}>
           <Image
             style={{ height: 70, width: 70, resizeMode: "contain" }}
             source={require("../../../assets/soso.png")}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={cardGoLeft}>
+        <TouchableOpacity onPress={cardGoRight}>
           <Image
             style={{ height: 70, width: 70, resizeMode: "contain" }}
-            source={require("../../../assets/like.png")}
+            source={require("../../../assets/dislike.png")}
           />
         </TouchableOpacity>
       </View>
