@@ -30,29 +30,7 @@ public class UserServiceTest {
 
     @Test
     public void updateUser() {
-        //given
-        String name = "김민수";
-        String imageUrl ="123";
-        Long userId = userRepository.save(new User(name, AuthProvider.local, "localTest")).getId();
 
-        String newName = "김민수2";
-        String newImageUrl = "456";
-        List<String> arrayList = new ArrayList<>(Arrays.asList("한식", "양식"));
-        UpdateUserRequest request = UpdateUserRequest.builder()
-                .name(newName)
-                .imageUrl(newImageUrl)
-                .categories(arrayList)
-                .build();
-
-        //when
-        userService.updateUser(userId, request);
-
-        //then
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        assertThat(findUser.getImageUrl()).isEqualTo(newImageUrl);
-        assertThat(findUser.getName()).isEqualTo(newName);
-        assertThat(findUser.getUserCategories().stream()
-                .map(userCategory -> userCategory.getCategory().getName()).collect(Collectors.toList())).containsAll(arrayList);
     }
 
     @Test

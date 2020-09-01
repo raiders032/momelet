@@ -22,6 +22,8 @@
             <div class="form-group">
                 <label for="img">파일 업로드</label>
                 <input type="file" id="img">
+                <label for="name">Enter name:</label>
+                <input type="text" id="name" name="name">
             </div>
             <button type="button" class="btn btn-primary" id="btn-save">저장</button>
         </form>
@@ -39,8 +41,10 @@
     function uploadImage() {
         var file = $('#img')[0].files[0];
         var formData = new FormData();
+        var name = $('#name').valueOf().toString();
         formData.append('data', file);
-
+        formData.append('name','nys');
+        formData.append('categories',JSON.stringify(["한식", "중식"]));
         $.ajax({
             type: 'POST',
             url: '/upload',

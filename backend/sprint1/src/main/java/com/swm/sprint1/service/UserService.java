@@ -7,11 +7,13 @@ import com.swm.sprint1.payload.request.UpdateUserRequest;
 import com.swm.sprint1.repository.category.CategoryRepository;
 import com.swm.sprint1.repository.user.UserCategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
+import com.swm.sprint1.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class UserService {
     private final CategoryRepository categoryRepository;
     private final UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public User createUser(SignUpRequest signUpRequest) {
@@ -33,10 +36,11 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(Long id, UpdateUserRequest request) {
+    public void updateUser(Long id, UpdateUserRequest request) throws IOException {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
-        user.updateUserInfo(request.getName(), request.getImageUrl(), categories);
+        String imageUrl = s3Uploader.upload(request.getImageFile(), "profile-image");
+        user.updateUserInfo(request.getName(), imageUrl, categories);
     }
 
     public List<String> findCategoryNameByUserId(Long id) {
