@@ -93,7 +93,6 @@ export default ({ restaurant, header, cover }) => {
             style={{
               width: "100%",
               height: "100%",
-
               transform: [{ rotateY: backInterpolate }],
               backfaceVisibility: "hidden",
               position: "absolute",

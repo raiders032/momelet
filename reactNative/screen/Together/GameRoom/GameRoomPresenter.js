@@ -157,8 +157,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
     const timeout = setTimeout(timeGo, 1000);
+    const timeoutCardDown = setTimeout(cardGoDown, 16000);
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeoutCardDown);
     };
   }, [restaurant]);
   const header = (
