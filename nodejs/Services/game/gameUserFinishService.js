@@ -7,6 +7,7 @@ const gameUserFinishService = (socket, msg) => {
 
   let retMsg = {
     status: "fail",
+    roomName: null,
   };
 
   const { id, userGameResult, roomName } = JSON.parse(msg);
@@ -25,6 +26,7 @@ const gameUserFinishService = (socket, msg) => {
     room.addFinishCount();
   }
   retMsg.status = "wait";
+  retMsg.roomName = roomName;
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;
