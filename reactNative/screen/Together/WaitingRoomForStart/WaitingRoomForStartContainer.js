@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
+import { StackActions } from "@react-navigation/native";
+
 import WaitingRoomForStartPresenter from "./WaitingRoomForStartPresenter";
 import socket from "../../../socket";
 
@@ -31,12 +33,13 @@ export default ({ navigation, route }) => {
       setUsers(JSON.parse(msg).gameRoomUserList);
     });
     socket.on("gameStart", (msg) => {
-      console.log("onGameStartMessage", msg);
-      navigation.navigate("GameRoom", {
-        msg: msg,
-        roomName: roomName,
-        userId: id,
-      });
+      navigation.dispatch(
+        StackActions.replace("GameRoom", {
+          msg: msg,
+          roomName: roomName,
+          userId: id,
+        })
+      );
     });
     // can't perform 에러 해결을 위한 코드
     // return () => {
@@ -54,12 +57,14 @@ export default ({ navigation, route }) => {
         longitude: longitude,
       }),
       (msg) => {
-        console.log("gameStart Message 보내기", msg);
-        navigation.navigate("GameRoom", {
-          msg: msg,
-          roomName: roomName,
-          userId: id,
-        });
+        // console.log("gameStart Message 보내기", msg);
+        navigation.dispatch(
+          StackActions.replace("GameRoom", {
+            msg: msg,
+            roomName: roomName,
+            userId: id,
+          })
+        );
       }
     );
   };

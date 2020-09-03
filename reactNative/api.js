@@ -32,7 +32,7 @@ export const apis = {
     const body = new FormData();
 
     const photo = {
-      uri: imageUrl,
+      path: imageUrl,
       type: "image/jpeg",
       name: `${id}.jpg`,
     };
@@ -46,7 +46,7 @@ export const apis = {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          // "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       },
       body

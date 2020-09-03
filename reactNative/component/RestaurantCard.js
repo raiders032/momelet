@@ -65,6 +65,10 @@ export default ({ restaurant, header, cover }) => {
     return (
       <Image
         source={{ uri: restaurant.thumUrl }}
+        // source={{
+        //   uri:
+        //     "https://d22j25xnhsuyth.cloudfront.net/profile-image/600x600/webp/test6.jpg",
+        // }}
         style={{
           height: "100%",
           borderTopRightRadius: 20,

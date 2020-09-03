@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GameResultPresenter from "./GameResultPresenter";
+import socket from "../../../socket";
 export default ({ navigation, route }) => {
+  console.log("abc", route.params.userId);
+
+  useEffect(() => {
+    return () => {
+      const sendMsg = {
+        id: route.params.userId,
+        roomName: route.params.roomName,
+      };
+      // console.log(sendMsg);
+      socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {
+        console.log("leavemsg", msg);
+      });
+    };
+  }, []);
   const msg = JSON.parse(route.params.msg);
   // console.log(route.params);
   const resultId = msg.roomGameResult.id;
