@@ -10,9 +10,19 @@ const gameUserFinishService = (socket, msg) => {
     roomName: null,
   };
 
-  const { id, userGameResult, roomName } = JSON.parse(msg);
-  const user = SingleObject.UserRepository.findById(id);
-  const room = SingleObject.RoomRepository.findByRoomName(roomName);
+  let id, userGameResult, roomName, user, room;
+  try {
+    const parsedMsg = JSON.parse(msg);
+    id = parsedMsg.id;
+    userGameResult = parsedMsg.userGameResult;
+    roomName = parsedMsg.roomName;
+  } catch (err) {
+    logger.error("gameUserFinish Msg parse error: " + err);
+    return JSON.stringify(retMsg);
+  }
+
+  user = SingleObject.UserRepository.findById(id);
+  room = SingleObject.RoomRepository.findByRoomName(roomName);
 
   if (user.canReceive === true) {
     user.updateCanReceive(false);
@@ -21,15 +31,15 @@ const gameUserFinishService = (socket, msg) => {
         room.addScore(result.id, result.sign);
       }
     } else {
-      console.log("유저 게임이 제대로 종료되지 않아 결과가 반영되지 않았음");
+      logger.error("유저 게임이 제대로 종료되지 않아 결과가 반영되지 않았음");
     }
     room.addFinishCount();
   }
+
   retMsg.status = "wait";
   retMsg.roomName = roomName;
 
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(retMsg);
 };
 
 module.exports = {
