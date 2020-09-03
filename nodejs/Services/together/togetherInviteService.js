@@ -1,6 +1,19 @@
 const SingleObject = require("../../SingleObjects");
 const { logger } = require("../../logger");
 
+// 기존 접속 방에서 나가기
+const exitRoom = (user) => {
+  const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
+  if (room !== false) {
+    if (room.deleteUser(user) === 0) {
+      SingleObject.RoomRepository.delete(room.getRoomName());
+    } else {
+      gameRoomUpdateService(socket, room.getRoomName(), id);
+    }
+  }
+  user.updateJoinedRoomName(null);
+};
+
 const togetherInviteService = (socket, msg) => {
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
@@ -18,18 +31,9 @@ const togetherInviteService = (socket, msg) => {
 
     // 기존 접속 방에서 나가기
     if (user.joinedRoomName !== null) {
-      const room = SingleObject.RoomRepository.findByRoomName(
-        user.joinedRoomName
-      );
-      if (room !== false) {
-        if (room.deleteUser(user) === 0) {
-          SingleObject.RoomRepository.delete(room.getRoomName());
-        } else {
-          gameRoomUpdateService(socket, roomName, id);
-        }
-      }
-      user.updateJoinedRoomName(null);
+      exitRoom(user);
     }
+
     newRoom.addUser(user);
     user.updateJoinedRoomName(roomName);
 

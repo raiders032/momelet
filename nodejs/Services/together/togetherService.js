@@ -34,15 +34,17 @@ const togetherService = (socket, msg) => {
   var echo = "together. msg: " + msg;
   logger.info(echo);
 
+  let retMsg = { aroundUsers: null };
+
   try {
     const { id, latitude, longitude } = JSON.parse(msg);
-    const aroundUsers = findAroundUsers(id, latitude, longitude);
-
-    const retMsg = JSON.stringify({ aroundUsers });
-    return retMsg;
+    retMsg.aroundUsers = findAroundUsers(id, latitude, longitude);
   } catch (e) {
-    return echo;
+    logger.error(e);
+    retMsg.aroundUsers = null;
   }
+  retMsg = JSON.stringify(retMsg);
+  return retMsg;
 };
 
 module.exports = {
