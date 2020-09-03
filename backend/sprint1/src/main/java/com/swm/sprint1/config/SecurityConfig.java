@@ -8,6 +8,8 @@ import com.swm.sprint1.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepos
 import com.swm.sprint1.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.swm.sprint1.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.context.ShutdownEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +17,6 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -110,6 +111,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                     .and()
                 .authorizeRequests()
+                    .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class))
+                        .hasRole("ACTUATOR_ADMIN")
+                    .requestMatchers(EndpointRequest.toAnyEndpoint())
+                        .permitAll()
                     .antMatchers("/",
                         "/error",
                         "/favicon.ico",
@@ -121,7 +126,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/auth/**","/api/v1/auth","/api/v1/restaurants","/ws/**", "/upload/*")
+                    .antMatchers("/auth/**",
+                            "/api/v1/auth",
+                            "/api/v1/restaurants",
+                            "/ws/**",
+                            "/upload/*")
                         .permitAll()
                     .antMatchers(AUTH_WHITELIST)
                         .permitAll()
