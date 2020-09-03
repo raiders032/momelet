@@ -40,7 +40,7 @@ const togetherService = (socket, msg) => {
     const { id, latitude, longitude } = JSON.parse(msg);
     retMsg.aroundUsers = findAroundUsers(id, latitude, longitude);
   } catch (err) {
-    logger.error("togetherService error " + err);
+    logger.error("togetherService error: " + err);
     retMsg.aroundUsers = null;
   }
   retMsg = JSON.stringify(retMsg);

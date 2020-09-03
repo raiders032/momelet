@@ -44,8 +44,7 @@ const gameRoomJoinService = (socket, msg) => {
     retMsg.gameRoomUserList = room.getUserList();
     retMsg.hostId = room.getHostId();
   } catch (err) {
-    logger.error("gameRoomJoinService error");
-    logger.error(err);
+    logger.error("gameRoomJoinService error: " + err);
     retMsg.status = "fail";
     retMsg.roomName = null;
     retMsg.gameRoomUserList = null;

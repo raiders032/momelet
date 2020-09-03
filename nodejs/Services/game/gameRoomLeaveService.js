@@ -2,6 +2,13 @@ const SingleObject = require("../../SingleObjects");
 const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 const { logger } = require("../../logger");
 
+const exitRoom = (socket, user, room) => {
+  if (room.deleteUser(user) > 0) {
+    gameRoomUpdateService(socket, room, user.getId());
+    return;
+  }
+  SingleObject.RoomRepository.delete(room.getRoomName());
+};
 const gameRoomLeaveService = (socket, msg) => {
   var echo = "gameRoomLeave. msg: " + msg;
   logger.info(echo);
@@ -14,18 +21,12 @@ const gameRoomLeaveService = (socket, msg) => {
     user = SingleObject.UserRepository.findById(id);
     room = SingleObject.RoomRepository.findByRoomName(roomName);
     if (user.joinedRoomName !== null) {
-      if (room.deleteUser(user) <= 0) {
-        SingleObject.RoomRepository.delete(roomName);
-      } else {
-        console.log("게임룸리브에서 업데이트 호출!");
-        gameRoomUpdateService(socket, room, id);
-      }
+      exitRoom(socket, user, room);
       user.updateJoinedRoomName(null);
       retMsg.status = "ok";
     }
   } catch (err) {
-    logger.error("gameRoomLeaveService error");
-    logger.error(err);
+    logger.error("gameRoomLeaveService error: " + err);
     retMsg.status = "fail";
   }
 

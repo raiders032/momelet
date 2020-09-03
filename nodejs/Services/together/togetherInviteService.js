@@ -50,8 +50,7 @@ const togetherInviteService = (socket, msg) => {
     retMsg.gameRoomUserList = newRoom.getUserList();
     retMsg.hostId = user.id;
   } catch (err) {
-    logger.error("togetherInviteService Error");
-    logger.error(err);
+    logger.error("togetherInviteService Error: " + err);
     retMsg.roomName = null;
     retMsg.gameRoomUserList = null;
     retMsg.hostId = null;
