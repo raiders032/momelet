@@ -39,8 +39,9 @@ const togetherService = (socket, msg) => {
   try {
     const { id, latitude, longitude } = JSON.parse(msg);
     retMsg.aroundUsers = findAroundUsers(id, latitude, longitude);
-  } catch (e) {
-    logger.error(e);
+  } catch (err) {
+    logger.error("togetherService error");
+    logger.error(err);
     retMsg.aroundUsers = null;
   }
   retMsg = JSON.stringify(retMsg);

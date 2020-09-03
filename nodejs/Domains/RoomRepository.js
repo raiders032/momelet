@@ -17,13 +17,14 @@ class RoomRepository {
 
   delete(roomName) {
     if (!this.roomRepository.has(roomName))
-      throw new ResourceNotFoundError(404, "해당 방을 찾을 수 없습니다.");
+      throw "존재하지 않는 방을 삭제하려 하였습니다.";
     this.roomRepository.delete(roomName);
     return true;
   }
 
   findByRoomName(roomName) {
-    if (!this.roomRepository.has(roomName)) return false;
+    if (!this.roomRepository.has(roomName))
+      throw "해당 방이름이 없습니다. 방이름: " + roomName;
     return this.roomRepository.get(roomName);
   }
 }

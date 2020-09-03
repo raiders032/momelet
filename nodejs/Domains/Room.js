@@ -11,12 +11,12 @@ class Room {
   }
 
   addUser(user) {
-    if (this.isStarted || this.headCount >= this.maxHeadCount) return false;
+    if (this.isStarted || this.headCount >= this.maxHeadCount) {
+      throw "Can't join the room";
+    }
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
-
-    return true;
   }
 
   deleteUser(user) {
