@@ -2,7 +2,7 @@ const SingleObject = require("../../SingleObjects");
 const { logger } = require("../../logger");
 const { gameRoomUpdateService } = require("../index");
 
-const exitRoom = (socket, user, id) => {
+const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
   if (room === false) {
     user.updateJoinedRoomName(null);
@@ -29,25 +29,25 @@ const togetherInviteService = (socket, msg) => {
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
   let retMsg = { roomName: null, gameRoomUserList: null };
-  let user, newRoom, roomName;
+  let user, room, roomName;
 
   try {
     const { id, inviteTheseUsers } = JSON.parse(msg);
     user = SingleObject.UserRepository.findById(id);
-    newRoom = SingleObject.RoomRepository.add(id);
-    roomName = newRoom.getRoomName();
+    room = SingleObject.RoomRepository.add(id);
+    roomName = room.getRoomName();
 
     // 기존 접속 방에서 나가기
     if (user.joinedRoomName !== null) {
-      exitRoom(socket, user, id);
+      exitExistRoom(socket, user, id);
     }
-    newRoom.addUser(user);
+    room.addUser(user);
     user.updateJoinedRoomName(roomName);
 
     inviteUsers(socket, inviteTheseUsers, roomName, user);
 
     retMsg.roomName = roomName;
-    retMsg.gameRoomUserList = newRoom.getUserList();
+    retMsg.gameRoomUserList = room.getUserList();
     retMsg.hostId = user.id;
   } catch (err) {
     logger.error("togetherInviteService Error: " + err);

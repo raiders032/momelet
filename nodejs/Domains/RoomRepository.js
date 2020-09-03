@@ -22,8 +22,7 @@ class RoomRepository {
   }
 
   findByRoomName(roomName) {
-    if (!this.roomRepository.has(roomName))
-      throw "해당 방이름이 없습니다. 방이름: " + roomName;
+    if (!this.roomRepository.has(roomName)) return false;
     return this.roomRepository.get(roomName);
   }
 }

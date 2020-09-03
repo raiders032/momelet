@@ -3,6 +3,7 @@ const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 const { logger } = require("../../logger");
 
 const exitRoom = (socket, user, room) => {
+  if (room === false) return;
   if (room.deleteUser(user) > 0) {
     gameRoomUpdateService(socket, room, user.getId());
     return;

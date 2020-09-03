@@ -2,7 +2,7 @@ const SingleObject = require("../../SingleObjects");
 const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 const { logger } = require("../../logger");
 
-const exitRoom = (socket, user, id) => {
+const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
   if (room === false) {
     user.updateJoinedRoomName(null);
@@ -33,7 +33,7 @@ const gameRoomJoinService = (socket, msg) => {
 
     // 기존 접속 방에서 나가기
     if (user.joinedRoomName !== null) {
-      exitRoom(socket, user, id);
+      exitExistRoom(socket, user, id);
     }
 
     room.addUser(user);

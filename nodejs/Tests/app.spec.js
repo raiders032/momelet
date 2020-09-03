@@ -223,9 +223,9 @@ describe("Connecting Server", () => {
           let msgObject = JSON.parse(msg);
 
           msgObject.should.have.property("status").with.equal("ok");
-          // SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
-          //   false
-          // );
+          SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
+            false
+          );
         }
       );
     });
@@ -257,9 +257,9 @@ describe("Connecting Server", () => {
 
             msgObject.should.have.property("status").with.equal("ok");
 
-            // SingleObject.RoomRepository.findByRoomName(roomName).should.equal(
-            //   false
-            // );
+            SingleObject.RoomRepository.findByRoomName(roomName).should.equal(
+              false
+            );
             offEventAll("gameRoomUpdate", senders);
             done();
           }
@@ -278,9 +278,9 @@ describe("Connecting Server", () => {
         let msgObject = JSON.parse(msg);
 
         msgObject.should.have.property("status").with.equal("ok");
-        // SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
-        //   false
-        // );
+        SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
+          false
+        );
       }
     );
   });
