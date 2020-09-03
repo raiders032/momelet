@@ -94,4 +94,13 @@ public class UserController {
                 .body(new ApiResponse(LocalDateTime.now(),true,"유저 의사 표현 저장 완료"));
     }
 
+    @ApiOperation(value = "유저 정보 수정")
+    @PutMapping("/upload/{id}")
+    public ResponseEntity<?> updateUser( @Valid @ModelAttribute UpdateUserRequest request,
+                                         @PathVariable Long id) throws IOException {
+        userService.updateUser(id, request);
+        return ResponseEntity
+                .ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
+    }
+
 }
