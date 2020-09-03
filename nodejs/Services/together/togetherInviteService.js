@@ -12,7 +12,7 @@ const exitRoom = (socket, user, id) => {
     SingleObject.RoomRepository.delete(room.getRoomName());
     return;
   }
-  gameRoomUpdateService(socket, room.getRoomName(), id);
+  gameRoomUpdateService(socket, room, id);
 };
 
 const inviteUsers = (socket, inviteUsers, roomName, host) => {

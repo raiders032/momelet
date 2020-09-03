@@ -1,28 +1,35 @@
 const SingleObject = require("../../SingleObjects");
 const { logger } = require("../../logger");
 
-const gameRoomUpdateService = (socket, roomName, id) => {
-  const echo = "gameRoomUpdateService. roomName: " + roomName + ", id: " + id;
+const gameRoomUpdateService = (socket, room, id) => {
+  const echo =
+    "gameRoomUpdateService. roomName: " + room.getRoomName() + ", id: " + id;
   logger.info(echo);
 
-  const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  const users = room.getUserList();
+  if (room === undefined) return;
 
-  users
-    .filter((user) => user.getCanReceive() && id !== user.id)
-    .forEach((user) => {
-      socket.to(user.socketId).emit(
-        "gameRoomUpdate",
-        JSON.stringify({
-          gameRoomUserList: room.getUserList().map((user) => {
-            const { id, name, imageUrl } = user;
-            const userDto = { id, name, imageUrl };
-            return userDto;
-          }),
-          hostId: room.getHostId(),
-        })
-      );
+  const users = room.getUserList();
+  let msg = {
+    gameRoomUserList: null,
+    hostId: null,
+  };
+
+  try {
+    msg.gameRoomUserList = room.getUserList().map((user) => {
+      const { id, name, imageUrl } = user;
+      return { id, name, imageUrl };
     });
+    msg.hostId = room.getHostId();
+    msg = JSON.stringify(msg);
+
+    users
+      .filter((user) => user.getCanReceive() && id !== user.id)
+      .forEach((user) => {
+        socket.to(user.socketId).emit("gameRoomUpdate", msg);
+      });
+  } catch (err) {
+    logger.error("gameRoomUpdateService " + err);
+  }
 };
 
 module.exports = {

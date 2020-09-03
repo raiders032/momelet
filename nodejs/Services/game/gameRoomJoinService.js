@@ -12,7 +12,7 @@ const exitRoom = (socket, user, id) => {
     SingleObject.RoomRepository.delete(room.getRoomName());
     return;
   }
-  gameRoomUpdateService(socket, room.getRoomName(), id);
+  gameRoomUpdateService(socket, room, id);
 };
 
 const gameRoomJoinService = (socket, msg) => {
@@ -37,7 +37,7 @@ const gameRoomJoinService = (socket, msg) => {
     }
 
     room.addUser(user);
-    gameRoomUpdateService(socket, roomName, id);
+    gameRoomUpdateService(socket, room, id);
     user.updateJoinedRoomName(roomName);
     retMsg.status = "success";
     retMsg.roomName = roomName;
