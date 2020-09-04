@@ -51,5 +51,10 @@ public class CustomizedResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NotSupportedExtension.class)
+    public final ResponseEntity<ApiResponse> handleNotSupportedExtensions(Exception ex, WebRequest request) {
+        ApiResponse response = new ApiResponse(LocalDateTime.now(),false,ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }

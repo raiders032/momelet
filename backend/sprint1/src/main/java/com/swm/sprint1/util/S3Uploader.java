@@ -33,15 +33,13 @@ public class S3Uploader {
 
     private String upload(File uploadFile, String dirName) {
         String fileName = uploadFile.getName();
-        String extension = fileName.substring(fileName.lastIndexOf("."));
         String uuid = UUID.randomUUID().toString();
         String fileNameOnly = fileName.substring(0,fileName.lastIndexOf("."));
-        fileName = dirName + "/" + fileNameOnly + "_" + uuid + extension;
+        fileName = dirName + "/" + fileNameOnly + "_" + uuid + ".jpg";
         String imageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return imageUrl.replace("profile-image/", "profile-image-resize/")
-                .replace(uuid, uuid + "_resize")
-                .replace(extension, ".jpeg");
+                .replace(uuid, uuid + "_resize");
     }
 
     private String putS3(File uploadFile, String fileName) {
