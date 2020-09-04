@@ -1,6 +1,7 @@
 package com.swm.sprint1.service;
 
 import com.swm.sprint1.domain.*;
+import com.swm.sprint1.exception.NotSupportedExtension;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.SignUpRequest;
 import com.swm.sprint1.payload.request.UpdateUserRequest;
@@ -37,6 +38,12 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long id, UpdateUserRequest request) throws IOException {
+        String filename = request.getImageFile().getOriginalFilename();
+        String extension = filename.substring(filename.lastIndexOf("."));
+        List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
+        if(!supportedExtension.contains(extension))
+            throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
+
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
         String imageUrl = s3Uploader.upload(request.getImageFile(), "profile-image");
