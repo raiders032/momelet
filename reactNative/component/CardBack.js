@@ -13,7 +13,8 @@ import ExtraIcon from "./ExtraIcon";
 import truncate from "../utils/truncate";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ menus, name, phoneNumber, address }) => {
+export default ({ menus, name, phoneNumber, address, canTouch }) => {
+  console.log("canTouch: ", canTouch);
   return (
     <View>
       <View
@@ -58,6 +59,7 @@ export default ({ menus, name, phoneNumber, address }) => {
         <ExtraIcon
           icon={require("../assets/call.png")}
           text="전화하기"
+          canTouch={canTouch}
           onPress={async () => {
             let number;
 
@@ -76,11 +78,16 @@ export default ({ menus, name, phoneNumber, address }) => {
           }}
         />
 
-        <ExtraIcon icon={require("../assets/geo.png")} text="길찾기" />
+        <ExtraIcon
+          canTouch={canTouch}
+          icon={require("../assets/geo.png")}
+          text="길찾기"
+        />
 
         <ExtraIcon
           icon={require("../assets/copy.png")}
           text="주소복사"
+          canTouch={canTouch}
           onPress={() => {
             console.log(address);
             Clipboard.setString(address);

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -15,10 +15,12 @@ import PresentMenu from "./PresentMenu";
 import CardBack from "./CardBack";
 
 export default ({ restaurant, header, cover }) => {
+  const [canTouch, setCanTouch] = useState(true);
   let changeValue = 0;
   const lotation = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     lotation.setValue(0);
+    // setCanTouch("false");
   }, [restaurant]);
   lotation.addListener(({ value }) => {
     changeValue = value;
@@ -34,27 +36,29 @@ export default ({ restaurant, header, cover }) => {
 
   // const isFlipping = useRef(false);
   let isFlipping = false;
-  const [test, setTest] = React.useState({});
 
   const flipCard = () => {
-    setTest({});
-    if (isFlipping) {
-      return;
-    }
+    // if (isFlipping) {
+    //   return;
+    // }
 
-    isFlipping = true;
+    // isFlipping = true;
 
     if (changeValue >= 90) {
       Animated.timing(lotation, {
         toValue: 0,
         useNativeDriver: true,
       }).start();
+      setCanTouch(true);
+      console.log("flip1");
     } else {
       Animated.timing(lotation, {
         toValue: 180,
 
         useNativeDriver: true,
       }).start();
+      setCanTouch(false);
+      console.log("flip2");
     }
     setTimeout(() => {
       isFlipping = false;
@@ -106,6 +110,7 @@ export default ({ restaurant, header, cover }) => {
               name={restaurant.name}
               phoneNumber={restaurant.phoneNumber}
               address={restaurant.roadAddress}
+              canTouch={canTouch}
             />
           </Animated.View>
         </View>

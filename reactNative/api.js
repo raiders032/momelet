@@ -32,9 +32,9 @@ export const apis = {
     const body = new FormData();
 
     const photo = {
-      path: imageUrl,
+      name: `abc`,
       type: "image/jpeg",
-      name: `${id}.jpg`,
+      uri: imageUrl,
     };
     body.append("categories", categories);
     body.append("name", name);
