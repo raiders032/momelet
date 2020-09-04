@@ -15,12 +15,12 @@ import PresentMenu from "./PresentMenu";
 import CardBack from "./CardBack";
 
 export default ({ restaurant, header, cover }) => {
-  const [canTouch, setCanTouch] = useState(true);
+  const [isFront, setIsFront] = useState(true);
   let changeValue = 0;
   const lotation = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     lotation.setValue(0);
-    // setCanTouch("false");
+    // setIsFront("false");
   }, [restaurant]);
   lotation.addListener(({ value }) => {
     changeValue = value;
@@ -49,16 +49,14 @@ export default ({ restaurant, header, cover }) => {
         toValue: 0,
         useNativeDriver: true,
       }).start();
-      setCanTouch(true);
-      console.log("flip1");
+      setIsFront(true);
     } else {
       Animated.timing(lotation, {
         toValue: 180,
 
         useNativeDriver: true,
       }).start();
-      setCanTouch(false);
-      console.log("flip2");
+      setIsFront(false);
     }
     setTimeout(() => {
       isFlipping = false;
@@ -84,36 +82,68 @@ export default ({ restaurant, header, cover }) => {
   return (
     <Card>
       <View style={{ width: "100%", height: "100%" }}>
-        <View style={{ height: "65%" }}>
-          <Animated.View
-            style={{
-              transform: [{ rotateY: frontInterpolate }],
-              backfaceVisibility: "hidden",
-            }}
-          >
-            {header}
+        {isFront ? (
+          <View style={{ height: "65%" }}>
+            <Animated.View
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [{ rotateY: backInterpolate }],
+                backfaceVisibility: "hidden",
+                position: "absolute",
+              }}
+            >
+              <CardBack
+                menus={restaurant.menu}
+                name={restaurant.name}
+                phoneNumber={restaurant.phoneNumber}
+                address={restaurant.roadAddress}
+              />
+            </Animated.View>
+            <Animated.View
+              style={{
+                transform: [{ rotateY: frontInterpolate }],
+                backfaceVisibility: "hidden",
+              }}
+            >
+              {/* {header} */}
 
-            <CardImage />
-            {cover}
-          </Animated.View>
-          <Animated.View
-            style={{
-              width: "100%",
-              height: "100%",
-              transform: [{ rotateY: backInterpolate }],
-              backfaceVisibility: "hidden",
-              position: "absolute",
-            }}
-          >
-            <CardBack
-              menus={restaurant.menu}
-              name={restaurant.name}
-              phoneNumber={restaurant.phoneNumber}
-              address={restaurant.roadAddress}
-              canTouch={canTouch}
-            />
-          </Animated.View>
-        </View>
+              <CardImage />
+              {cover}
+            </Animated.View>
+          </View>
+        ) : (
+          <View style={{ height: "65%" }}>
+            <Animated.View
+              style={{
+                transform: [{ rotateY: frontInterpolate }],
+                backfaceVisibility: "hidden",
+              }}
+            >
+              {/* {header} */}
+
+              <CardImage />
+              {cover}
+            </Animated.View>
+            <Animated.View
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [{ rotateY: backInterpolate }],
+                backfaceVisibility: "hidden",
+                position: "absolute",
+              }}
+            >
+              <CardBack
+                menus={restaurant.menu}
+                name={restaurant.name}
+                phoneNumber={restaurant.phoneNumber}
+                address={restaurant.roadAddress}
+              />
+            </Animated.View>
+          </View>
+        )}
+
         <View style={{ height: "35%", paddingHorizontal: 15 }}>
           <View
             style={{

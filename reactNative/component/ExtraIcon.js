@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Image, View, Text, Dimensions, TouchableOpacity } from "react-native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ icon, text, onPress, canTouch }) => {
+export default ({ icon, text, onPress }) => {
   return (
     <TouchableOpacity
-      disabled={canTouch}
       style={{
         height: "80%",
         width: "30%",
