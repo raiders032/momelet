@@ -9,6 +9,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
     status: "fail",
     gameUserList: null,
   };
+  let id, roomName;
   try {
     const parsedMsg = JSON.parse(msg);
     id = parsedMsg.id;
@@ -22,7 +23,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
   if (
     room !== false &&
     room.getIsStarted() === false &&
-    room.findUserById(user.getId())
+    room.findUserById(id)
   ) {
     const user = SingleObject.UserRepository.findById(id);
     user.updateCanReceive(true);
