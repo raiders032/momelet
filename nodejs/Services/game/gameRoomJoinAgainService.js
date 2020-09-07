@@ -7,7 +7,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
 
   let retMsg = {
     status: "fail",
-    gameUserList: null,
+    gameRoomUserList: null,
   };
   let id, roomName;
   try {
@@ -28,7 +28,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
     const user = SingleObject.UserRepository.findById(id);
     user.updateCanReceive(true);
     retMsg.status = "ok";
-    retMsg.gameUserList = room
+    retMsg.gameRoomUserList = room
       .getUserList()
       .filter((user) => user.getCanReceive())
       .map((user) => {
