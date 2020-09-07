@@ -8,6 +8,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
   let retMsg = {
     status: "fail",
     gameRoomUserList: null,
+    hostId: null,
   };
   let id, roomName;
   try {
@@ -35,6 +36,16 @@ const gameRoomJoinAgainService = (socket, msg) => {
         const { id, name, imageUrl } = user;
         return { id, name, imageUrl };
       });
+
+    // change host
+    if (
+      SingleObject.UserRepository.findById(room.getHostId()).getCanReceive() ===
+      false
+    ) {
+      room.updateHostId(user.getId());
+    }
+
+    retMsg.hostId = room.getHostId();
   }
 
   retMsg = JSON.stringify(retMsg);

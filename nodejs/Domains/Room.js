@@ -101,6 +101,10 @@ class Room {
     return (this.headCount = newHeadCount);
   }
 
+  updateHostId(hostId) {
+    return (this.hostId = hostId);
+  }
+
   findUserById(userId) {
     for (let user of this.userList) {
       if (user.getId() === userId) return true;
