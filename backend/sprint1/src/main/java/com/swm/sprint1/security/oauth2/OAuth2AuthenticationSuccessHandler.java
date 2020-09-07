@@ -16,7 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static com.swm.sprint1.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -61,10 +61,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
-
+        List<String> tokens = tokenProvider.createToken(authentication);
+        
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
+                .queryParam("accessToken", tokens.get(0))
+                .queryParam("refreshToken", tokens.get(1))
                 .build().toUriString();
     }
 

@@ -1,8 +1,14 @@
 package com.swm.sprint1.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swm.sprint1.payload.response.ApiResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -24,6 +31,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
     @Override
@@ -31,7 +41,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt)) {
+                try {
+                    tokenProvider.validateToken(jwt);
+                } catch(Exception exception){
+                    logger.error(exception.getMessage());
+                    ApiResponse apiResponse = new ApiResponse(false, exception.getMessage());
+                    if(exception.getClass().equals(ExpiredJwtException.class))
+                        apiResponse.setErrorCode("jwt.expired");
+                    response.setStatus(HttpStatus.BAD_REQUEST.value());
+                    response.getWriter().write(convertObjectToJson(apiResponse));
+                    return;
+                }
+
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
 
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
@@ -49,8 +71,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public String convertObjectToJson(Object object) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        return objectMapper.writeValueAsString(object);
     }
 }
