@@ -27,7 +27,6 @@ public class S3Uploader {
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-
         return upload(uploadFile, dirName);
     }
 
@@ -35,8 +34,8 @@ public class S3Uploader {
         String fileName = uploadFile.getName();
         String uuid = UUID.randomUUID().toString();
         String fileNameOnly = fileName.substring(0,fileName.lastIndexOf("."));
-        fileName = dirName + "/" + fileNameOnly + "_" + uuid + ".jpg";
-        String imageUrl = putS3(uploadFile, fileName);
+        String newFileName = dirName + "/" + fileNameOnly + "_" + uuid + ".jpeg";
+        String imageUrl = putS3(uploadFile, newFileName);
         removeNewFile(uploadFile);
         return imageUrl.replace("profile-image/", "profile-image-resize/")
                 .replace(uuid, uuid + "_resize");

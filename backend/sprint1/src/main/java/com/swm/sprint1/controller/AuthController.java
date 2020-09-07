@@ -1,76 +1,48 @@
 package com.swm.sprint1.controller;
 
-import com.swm.sprint1.domain.User;
-import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.exception.JwtTokenNotValidException;
 import com.swm.sprint1.payload.request.JwtDto;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
-import com.swm.sprint1.payload.request.LoginRequest;
-import com.swm.sprint1.payload.request.SignUpRequest;
-import com.swm.sprint1.repository.user.UserRepository;
+import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.TokenProvider;
-import com.swm.sprint1.service.UserService;
+import com.swm.sprint1.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-
-    private final UserRepository userRepository;
-
     private final TokenProvider tokenProvider;
 
-    private final UserService userService;
-
-    @PostMapping("/auth/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
-    }
-
-    @PostMapping("/auth/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
-        }
-
-        User result= userService.createUser(signUpRequest);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
-    }
-
-    @PostMapping("/api/v1/auth")
+    @PostMapping("/api/v1/auth/validation")
     public ResponseEntity<?> validateJwtToken(@RequestBody JwtDto jwt){
-        if(!tokenProvider.validateToken(jwt.getJwt()))
-            return ResponseEntity.ok(new ApiResponse(false, "유효하지 않은 토큰입니다."));
+        tokenProvider.validateToken(jwt.getJwt());
         return ResponseEntity.ok(new ApiResponse(true, "유효한 토큰 입니다."));
     }
+
+    @PostMapping("/api/v1/auth/refresh")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> refreshJwtToken(@CurrentUser UserPrincipal userPrincipal,
+                                             @RequestBody JwtDto jwt){
+        if(!tokenProvider.validateRefreshToken(userPrincipal.getId(), jwt.getJwt()))
+            throw new JwtTokenNotValidException("유효하지 않은 리프레시 토큰 입니다.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> tokens = tokenProvider.createToken(authentication);
+
+        ApiResponse response = new ApiResponse(true, "토큰 리프레시 완료");
+        response.putData("tokens", new AuthResponse(tokens.get(0), tokens.get(1)));
+        return ResponseEntity.ok(response);
+    }
+
+
 }

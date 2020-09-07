@@ -52,7 +52,7 @@ public class UserController {
         Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
 
         UserInfoDto userInfoDto = new UserInfoDto(user.getId(), user.getName(), user.getEmail(), user.getImageUrl(), categories);
-        ApiResponse response = new ApiResponse(LocalDateTime.now(), true);
+        ApiResponse response = new ApiResponse(true);
         response.putData("userInfo", userInfoDto);
 
         return ResponseEntity.ok(response);
@@ -76,7 +76,7 @@ public class UserController {
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, request);
         return ResponseEntity
-                .ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
+                .ok(new ApiResponse(true, "회원 정보 수정 완료"));
     }
 
     @ApiOperation(value ="유저 의사표현 저장")
@@ -91,16 +91,6 @@ public class UserController {
 
         userLikingService.saveUserLiking(userLikingDto);
         return ResponseEntity.created(null)
-                .body(new ApiResponse(LocalDateTime.now(),true,"유저 의사 표현 저장 완료"));
+                .body(new ApiResponse(true, "유저 의사 표현 저장 완료"));
     }
-
-    @ApiOperation(value = "유저 정보 수정")
-    @PutMapping("/upload/{id}")
-    public ResponseEntity<?> updateUser( @Valid @ModelAttribute UpdateUserRequest request,
-                                         @PathVariable Long id) throws IOException {
-        userService.updateUser(id, request);
-        return ResponseEntity
-                .ok(new ApiResponse(LocalDateTime.now(),true,"회원 정보 수정 완료"));
-    }
-
 }
