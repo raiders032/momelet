@@ -8,6 +8,11 @@ import socket from "../../../socket";
 export default ({ navigation, route }) => {
   const msg = JSON.parse(route.params.msg);
 
+  console.log(
+    "내가 호스트가 될 상인가?",
+    msg.hostId,
+    msg.hostId === route.params.myId
+  );
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -47,6 +52,16 @@ export default ({ navigation, route }) => {
     // };
   }, []);
   const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
+    const sendMsg = {
+      id: msg.gameRoomUserList[0].id,
+      roomName: msg.roomName,
+      radius: 0.01,
+      latitude: latitude,
+      longitude: longitude,
+    };
+    console.log(sendMsg);
+    const stringifiedMsg = JSON.stringify(sendMsg);
+    console.log(stringifiedMsg);
     socket.emit(
       "gameStart",
       JSON.stringify({
@@ -57,7 +72,6 @@ export default ({ navigation, route }) => {
         longitude: longitude,
       }),
       (msg) => {
-        // console.log("gameStart Message 보내기", msg);
         navigation.dispatch(
           StackActions.replace("GameRoom", {
             msg: msg,
@@ -68,5 +82,11 @@ export default ({ navigation, route }) => {
       }
     );
   };
-  return <WaitingRoomForStartPresenter users={users} onClick={onClick} />;
+  return (
+    <WaitingRoomForStartPresenter
+      users={users}
+      onClick={onClick}
+      activation={msg.hostId === route.params.myId}
+    />
+  );
 };

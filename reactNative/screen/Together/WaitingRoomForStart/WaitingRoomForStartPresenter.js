@@ -6,7 +6,7 @@ import Footer from "../../../component/Footer";
 import WaitBox from "../../../component/WaitBox";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default ({ users, onClick }) => {
+export default ({ users, onClick, activation }) => {
   const abc = [];
   const footer = (
     <Footer
@@ -14,6 +14,7 @@ export default ({ users, onClick }) => {
         onClick();
       }}
       text={"시작하기"}
+      activation={activation}
     />
   );
   //임시로 테스트 하기 위해서 11 개만 만들고 밑에 추가로 하나 만듬.

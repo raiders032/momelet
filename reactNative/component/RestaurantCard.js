@@ -78,7 +78,29 @@ export default ({ restaurant, header, cover }) => {
       />
     );
   }, [restaurant.thumUrl]);
-
+  // const CardBackCallBack = React.useCallback(() => {
+  //   return (
+  //     <Animated.View
+  //       style={{
+  //         width: "100%",
+  //         height: "100%",
+  //         transform: [{ rotateY: backInterpolate }],
+  //         backfaceVisibility: "hidden",
+  //         position: "absolute",
+  //       }}
+  //     >
+  //       <CardBack
+  //         menus={restaurant.menu}
+  //         name={restaurant.name}
+  //         phoneNumber={restaurant.phoneNumber}
+  //         address={restaurant.roadAddress}
+  //       />
+  //     </Animated.View>
+  //   );
+  // }, [restaurant]);
+  // const CardFront = React.useCallback(() => {
+  //   return ()
+  // })
   return (
     <Card>
       <View style={{ width: "100%", height: "100%" }}>

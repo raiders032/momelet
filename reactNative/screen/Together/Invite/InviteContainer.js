@@ -27,6 +27,7 @@ export default ({ navigation, route }) => {
         inviteTheseUsers: result,
       }),
       (msg) => {
+        console.log("msg: ", msg);
         navigation.dispatch(
           StackActions.replace("WaitingRoomForStart", {
             msg,
