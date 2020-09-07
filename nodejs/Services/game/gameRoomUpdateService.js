@@ -15,10 +15,13 @@ const gameRoomUpdateService = (socket, room, id) => {
   };
 
   try {
-    msg.gameRoomUserList = room.getUserList().map((user) => {
-      const { id, name, imageUrl } = user;
-      return { id, name, imageUrl };
-    });
+    msg.gameRoomUserList = room
+      .getUserList()
+      .filter((user) => user.getCanReceive())
+      .map((user) => {
+        const { id, name, imageUrl } = user;
+        return { id, name, imageUrl };
+      });
     msg.hostId = room.getHostId();
     msg = JSON.stringify(msg);
 

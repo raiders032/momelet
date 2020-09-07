@@ -1,5 +1,6 @@
 const SingleObject = require("../../SingleObjects");
 const { logger } = require("../../logger");
+const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 
 const gameRoomJoinAgainService = (socket, msg) => {
   var echo = "gameRoomJoinAgain. msg: " + msg;
@@ -46,6 +47,7 @@ const gameRoomJoinAgainService = (socket, msg) => {
     }
 
     retMsg.hostId = room.getHostId();
+    gameRoomUpdateService(socket, room, id);
   }
 
   retMsg = JSON.stringify(retMsg);
