@@ -10,12 +10,15 @@ import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.UserInfoDto;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.CurrentUser;
+import com.swm.sprint1.security.TokenAuthenticationFilter;
 import com.swm.sprint1.security.UserPrincipal;
 import com.swm.sprint1.service.UserLikingService;
 import com.swm.sprint1.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserLikingService userLikingService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @ApiOperation(value = "유저의 정보를 반환")
     @GetMapping("/users/me")
@@ -47,7 +51,6 @@ public class UserController {
     @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal) {
-
         User user = userPrincipal.getUser();
         Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
 
@@ -72,8 +75,12 @@ public class UserController {
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
                                             @Valid @ModelAttribute UpdateUserRequest request,
                                             @PathVariable Long id) throws IOException {
-        if(!id.equals(userPrincipal.getId()))
+        logger.info("/api/v1/users/me 호출");
+        if(!id.equals(userPrincipal.getId())){
+            logger.error("유효하지 않은 id입니다.");
             throw new BadRequestException("유효하지 않은 id : " + id);
+        }
+
         userService.updateUser(id, request);
         return ResponseEntity
                 .ok(new ApiResponse(true, "회원 정보 수정 완료"));

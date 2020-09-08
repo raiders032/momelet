@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final AmazonS3 s3Client;
+    private static final Logger logger = LoggerFactory.getLogger(S3Uploader.class);
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket; //S3 버킷경로
@@ -36,6 +39,7 @@ public class S3Uploader {
         String fileNameOnly = fileName.substring(0,fileName.lastIndexOf("."));
         String newFileName = dirName + "/" + fileNameOnly + "_" + uuid + ".jpeg";
         String imageUrl = putS3(uploadFile, newFileName);
+        logger.info("s3 업로드 완료");
         removeNewFile(uploadFile);
         return imageUrl.replace("profile-image/", "profile-image-resize/")
                 .replace(uuid, uuid + "_resize");

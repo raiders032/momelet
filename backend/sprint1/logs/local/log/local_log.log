@@ -1,0 +1,103 @@
+2020-09-08 | 17:02:23.553 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | Starting Sprint1Application on yeongsamnoui-MacBookPro.local with PID 19507 (/Users/yeongsamno/Desktop/com/soma/recorder/backend/sprint1/build/classes/java/main started by yeongsamno in /Users/yeongsamno/Desktop/com/soma/recorder/backend/sprint1)
+2020-09-08 | 17:02:23.557 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | The following profiles are active: real-db,oauth,jwt,aws,local
+2020-09-08 | 17:02:23.638 | restartedMain        |  INFO | ertyDefaultsPostProcessor | ID:          | Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-09-08 | 17:02:23.638 | restartedMain        |  INFO | ertyDefaultsPostProcessor | ID:          | For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-09-08 | 17:02:24.793 | restartedMain        |  INFO | toryConfigurationDelegate | ID:          | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2020-09-08 | 17:02:24.885 | restartedMain        |  INFO | toryConfigurationDelegate | ID:          | Finished Spring Data repository scanning in 80ms. Found 6 JPA repository interfaces.
+2020-09-08 | 17:02:25.299 | restartedMain        |  INFO | $BeanPostProcessorChecker | ID:          | Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4a5209b6' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-08 | 17:02:25.308 | restartedMain        |  INFO | $BeanPostProcessorChecker | ID:          | Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-08 | 17:02:25.628 | restartedMain        |  INFO | s.b.w.e.t.TomcatWebServer | ID:          | Tomcat initialized with port(s): 8080 (http)
+2020-09-08 | 17:02:25.642 | restartedMain        |  INFO | o.a.c.h.Http11NioProtocol | ID:          | Initializing ProtocolHandler ["http-nio-8080"]
+2020-09-08 | 17:02:25.651 | restartedMain        |  INFO | o.a.c.c.StandardService   | ID:          | Starting service [Tomcat]
+2020-09-08 | 17:02:25.651 | restartedMain        |  INFO | o.a.c.core.StandardEngine | ID:          | Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-08 | 17:02:25.789 | restartedMain        |  INFO | o.a.c.c.C.[.[.[/]         | ID:          | Initializing Spring embedded WebApplicationContext
+2020-09-08 | 17:02:25.789 | restartedMain        |  INFO | o.s.w.c.ContextLoader     | ID:          | Root WebApplicationContext: initialization completed in 2151 ms
+2020-09-08 | 17:02:26.383 | restartedMain        |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Starting...
+2020-09-08 | 17:02:26.844 | restartedMain        |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Start completed.
+2020-09-08 | 17:02:26.894 | restartedMain        |  INFO | o.h.j.i.util.LogHelper    | ID:          | HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2020-09-08 | 17:02:26.970 | restartedMain        |  INFO | org.hibernate.Version     | ID:          | HHH000412: Hibernate Core {5.3.17.Final}
+2020-09-08 | 17:02:26.972 | restartedMain        |  INFO | o.h.cfg.Environment       | ID:          | HHH000206: hibernate.properties not found
+2020-09-08 | 17:02:27.140 | restartedMain        |  INFO | o.h.a.common.Version      | ID:          | HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-09-08 | 17:02:27.308 | restartedMain        |  INFO | o.h.dialect.Dialect       | ID:          | HHH000400: Using dialect: com.swm.sprint1.config.MysqlCustomDialect
+2020-09-08 | 17:02:28.095 | restartedMain        |  INFO | rEntityManagerFactoryBean | ID:          | Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-09-08 | 17:02:29.287 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'clientInboundChannelExecutor'
+2020-09-08 | 17:02:29.295 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'clientOutboundChannelExecutor'
+2020-09-08 | 17:02:29.462 | restartedMain        |  WARN | on$JpaWebMvcConfiguration | ID:          | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-09-08 | 17:02:29.583 | restartedMain        |  INFO | e.w.EndpointLinksResolver | ID:          | Exposing 16 endpoint(s) beneath base path '/actuator'
+2020-09-08 | 17:02:29.840 | restartedMain        |  INFO | c.ThreadPoolTaskScheduler | ID:          | Initializing ExecutorService 'messageBrokerTaskScheduler'
+2020-09-08 | 17:02:29.893 | restartedMain        |  INFO | WelcomePageHandlerMapping | ID:          | Adding welcome page: class path resource [static/index.html]
+2020-09-08 | 17:02:29.927 | restartedMain        |  INFO | efaultSecurityFilterChain | ID:          | Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4bf1948c, org.springframework.security.web.context.SecurityContextPersistenceFilter@17ccf132, org.springframework.security.web.header.HeaderWriterFilter@18a8c3b9, org.springframework.web.filter.CorsFilter@5c85b4fc, org.springframework.security.web.authentication.logout.LogoutFilter@659dae56, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@724f0c9e, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@2f917e4d, com.swm.sprint1.security.TokenAuthenticationFilter@3ef38cd2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4ef0d412, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7f0239c8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@294fbcd9, org.springframework.security.web.session.SessionManagementFilter@7f831f8c, org.springframework.security.web.access.ExceptionTranslationFilter@19004060, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1c2fd52f]
+2020-09-08 | 17:02:29.945 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'brokerChannelExecutor'
+2020-09-08 | 17:02:30.125 | restartedMain        |  INFO | .OptionalLiveReloadServer | ID:          | LiveReload server is running on port 35729
+2020-09-08 | 17:02:30.460 | restartedMain        |  INFO | tationPluginsBootstrapper | ID:          | Context refreshed
+2020-09-08 | 17:02:30.478 | restartedMain        |  INFO | tationPluginsBootstrapper | ID:          | Found 1 custom documentation plugin(s)
+2020-09-08 | 17:02:30.490 | restartedMain        |  INFO | piListingReferenceScanner | ID:          | Scanning for api listing references
+2020-09-08 | 17:02:30.666 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | Starting...
+2020-09-08 | 17:02:30.666 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2020-09-08 | 17:02:30.667 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | Started.
+2020-09-08 | 17:02:30.678 | restartedMain        |  INFO | o.a.c.h.Http11NioProtocol | ID:          | Starting ProtocolHandler ["http-nio-8080"]
+2020-09-08 | 17:02:30.704 | restartedMain        |  INFO | s.b.w.e.t.TomcatWebServer | ID:          | Tomcat started on port(s): 8080 (http) with context path ''
+2020-09-08 | 17:02:30.706 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | Started Sprint1Application in 7.699 seconds (JVM running for 8.335)
+2020-09-08 | 17:02:31.129 | nection(1)-127.0.0.1 |  INFO | o.a.c.c.C.[.[.[/]         | ID:          | Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-08 | 17:02:31.129 | nection(1)-127.0.0.1 |  INFO | o.s.w.s.DispatcherServlet | ID:          | Initializing Servlet 'dispatcherServlet'
+2020-09-08 | 17:02:31.140 | nection(1)-127.0.0.1 |  INFO | o.s.w.s.DispatcherServlet | ID:          | Completed initialization in 11 ms
+2020-09-08 | 17:02:37.403 | http-nio-8080-exec-2 |  INFO | ranslatorFactoryInitiator | ID:          | HHH000397: Using ASTQueryTranslatorFactory
+2020-09-08 | 17:02:37.502 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        user0_.user_id as user_id1_9_,
+        user0_.created_date_time as created_2_9_,
+        user0_.updated_date_time as updated_3_9_,
+        user0_.email as email4_9_,
+        user0_.email_verified as email_ve5_9_,
+        user0_.image_url as image_ur6_9_,
+        user0_.name as name7_9_,
+        user0_.password as password8_9_,
+        user0_.provider as provider9_9_,
+        user0_.provider_id as provide10_9_ 
+    from
+        users user0_ 
+    where
+        user0_.provider=? 
+        and user0_.provider_id=?
+2020-09-08 | 17:02:37.555 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [VARCHAR] - [100252817413004287211]
+2020-09-08 | 17:02:37.713 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        userrefres0_.user_refresh_token_id as user_ref1_8_,
+        userrefres0_.refresh_token as refresh_2_8_,
+        userrefres0_.user_id as user_id3_8_ 
+    from
+        user_refresh_token userrefres0_ 
+    where
+        userrefres0_.user_id=?
+2020-09-08 | 17:02:37.714 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-08 | 17:02:37.768 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    update
+        user_refresh_token 
+    set
+        refresh_token=?,
+        user_id=? 
+    where
+        user_refresh_token_id=?
+2020-09-08 | 17:02:37.768 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [VARCHAR] - [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTUyMTU3LCJleHAiOjE2MDA0MTYxNTd9.TnzDOl6P5RcAYLnUckojJfiKxZeTSTQu3_eBTxjuW8eGxXJhBQvombgVH2pcQo-Twx9O7VNI8jlIWpK1gqbTpA]
+2020-09-08 | 17:02:37.768 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [BIGINT] - [7]
+2020-09-08 | 17:02:37.768 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [10]
+2020-09-08 | 17:02:38.331 | http-nio-8080-exec-4 | ERROR | TokenAuthenticationFilter | ID:          | JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2020-09-08 | 17:03:29.946 | MessageBroker-1      |  INFO | bSocketMessageBrokerStats | ID:          | WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2020-09-08 | 17:16:54.202 | riPool-1 housekeeper |  WARN | c.z.h.pool.HikariPool     | ID:          | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=57s141ms).
+2020-09-08 | 17:18:16.402 | riPool-1 housekeeper |  WARN | c.z.h.pool.HikariPool     | ID:          | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m22s202ms).
+2020-09-08 | 17:34:49.319 | MessageBroker-1      |  INFO | bSocketMessageBrokerStats | ID:          | WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2020-09-08 | 17:41:39.761 | http-nio-8080-exec-6 |  WARN | nHandlerExceptionResolver | ID:          | Resolved [java.lang.ArrayIndexOutOfBoundsException: 8212]
+2020-09-08 | 17:41:59.754 | http-nio-8080-exec-9 |  WARN | nHandlerExceptionResolver | ID:          | Resolved [java.lang.ArrayIndexOutOfBoundsException: 8212]
+2020-09-08 | 18:04:49.333 | MessageBroker-2      |  INFO | bSocketMessageBrokerStats | ID:          | WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2020-09-08 | 18:05:22.603 | Thread-23            |  INFO | impleBrokerMessageHandler | ID:          | Stopping...
+2020-09-08 | 18:05:22.603 | Thread-23            |  INFO | impleBrokerMessageHandler | ID:          | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2020-09-08 | 18:05:22.604 | Thread-23            |  INFO | impleBrokerMessageHandler | ID:          | Stopped.
+2020-09-08 | 18:05:22.607 | Thread-23            |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'brokerChannelExecutor'
+2020-09-08 | 18:05:22.607 | Thread-23            |  INFO | c.ThreadPoolTaskScheduler | ID:          | Shutting down ExecutorService 'messageBrokerTaskScheduler'
+2020-09-08 | 18:05:22.610 | Thread-23            |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'clientOutboundChannelExecutor'
+2020-09-08 | 18:05:22.610 | Thread-23            |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'clientInboundChannelExecutor'
+2020-09-08 | 18:05:22.613 | Thread-23            |  INFO | rEntityManagerFactoryBean | ID:          | Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-09-08 | 18:05:22.617 | Thread-23            |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Shutdown initiated...
+2020-09-08 | 18:05:22.620 | Thread-23            |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Shutdown completed.

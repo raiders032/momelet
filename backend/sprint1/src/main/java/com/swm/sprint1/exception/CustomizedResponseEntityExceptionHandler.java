@@ -1,8 +1,11 @@
 package com.swm.sprint1.exception;
 
 import com.swm.sprint1.payload.response.ApiResponse;
+import com.swm.sprint1.security.TokenAuthenticationFilter;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 @RestController
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {
+
+    private static  final Logger logger = LoggerFactory.getLogger(CustomizedResponseEntityExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ApiResponse> handleAllExceptions(Exception ex, WebRequest request) {

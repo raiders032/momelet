@@ -44,6 +44,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt)) {
                 try {
                     tokenProvider.validateToken(jwt);
+                    logger.info("token validation 완료");
                 } catch(Exception exception){
                     logger.error(exception.getMessage());
                     ApiResponse apiResponse = new ApiResponse(false, exception.getMessage());

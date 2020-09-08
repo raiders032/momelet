@@ -1,0 +1,357 @@
+2020-09-03 | 12:26:26.031 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | Starting Sprint1Application on yeongsamnoui-MacBookPro.local with PID 3930 (/Users/yeongsamno/Desktop/com/soma/recorder/backend/sprint1/build/classes/java/main started by yeongsamno in /Users/yeongsamno/Desktop/com/soma/recorder/backend/sprint1)
+2020-09-03 | 12:26:26.033 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | The following profiles are active: real-db,oauth,jwt,aws,local
+2020-09-03 | 12:26:26.090 | restartedMain        |  INFO | ertyDefaultsPostProcessor | ID:          | Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-09-03 | 12:26:26.090 | restartedMain        |  INFO | ertyDefaultsPostProcessor | ID:          | For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-09-03 | 12:26:26.828 | restartedMain        |  INFO | toryConfigurationDelegate | ID:          | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2020-09-03 | 12:26:26.915 | restartedMain        |  INFO | toryConfigurationDelegate | ID:          | Finished Spring Data repository scanning in 82ms. Found 5 JPA repository interfaces.
+2020-09-03 | 12:26:27.237 | restartedMain        |  INFO | $BeanPostProcessorChecker | ID:          | Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@7e06fb4c' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-03 | 12:26:27.248 | restartedMain        |  INFO | $BeanPostProcessorChecker | ID:          | Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-09-03 | 12:26:27.471 | restartedMain        |  INFO | s.b.w.e.t.TomcatWebServer | ID:          | Tomcat initialized with port(s): 8080 (http)
+2020-09-03 | 12:26:27.481 | restartedMain        |  INFO | o.a.c.h.Http11NioProtocol | ID:          | Initializing ProtocolHandler ["http-nio-8080"]
+2020-09-03 | 12:26:27.491 | restartedMain        |  INFO | o.a.c.c.StandardService   | ID:          | Starting service [Tomcat]
+2020-09-03 | 12:26:27.491 | restartedMain        |  INFO | o.a.c.core.StandardEngine | ID:          | Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-03 | 12:26:27.595 | restartedMain        |  INFO | o.a.c.c.C.[.[.[/]         | ID:          | Initializing Spring embedded WebApplicationContext
+2020-09-03 | 12:26:27.596 | restartedMain        |  INFO | o.s.w.c.ContextLoader     | ID:          | Root WebApplicationContext: initialization completed in 1506 ms
+2020-09-03 | 12:26:27.865 | restartedMain        |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Starting...
+2020-09-03 | 12:26:28.274 | restartedMain        |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Start completed.
+2020-09-03 | 12:26:28.316 | restartedMain        |  INFO | o.h.j.i.util.LogHelper    | ID:          | HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2020-09-03 | 12:26:28.363 | restartedMain        |  INFO | org.hibernate.Version     | ID:          | HHH000412: Hibernate Core {5.3.17.Final}
+2020-09-03 | 12:26:28.364 | restartedMain        |  INFO | o.h.cfg.Environment       | ID:          | HHH000206: hibernate.properties not found
+2020-09-03 | 12:26:28.450 | restartedMain        |  INFO | o.h.a.common.Version      | ID:          | HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-09-03 | 12:26:28.548 | restartedMain        |  INFO | o.h.dialect.Dialect       | ID:          | HHH000400: Using dialect: com.swm.sprint1.config.MysqlCustomDialect
+2020-09-03 | 12:26:29.173 | restartedMain        |  INFO | rEntityManagerFactoryBean | ID:          | Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-09-03 | 12:26:30.016 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'clientInboundChannelExecutor'
+2020-09-03 | 12:26:30.025 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'clientOutboundChannelExecutor'
+2020-09-03 | 12:26:30.152 | restartedMain        |  WARN | on$JpaWebMvcConfiguration | ID:          | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-09-03 | 12:26:30.337 | restartedMain        |  INFO | c.ThreadPoolTaskScheduler | ID:          | Initializing ExecutorService 'messageBrokerTaskScheduler'
+2020-09-03 | 12:26:30.373 | restartedMain        |  INFO | WelcomePageHandlerMapping | ID:          | Adding welcome page: class path resource [static/index.html]
+2020-09-03 | 12:26:30.401 | restartedMain        |  INFO | efaultSecurityFilterChain | ID:          | Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5816aa31, org.springframework.security.web.context.SecurityContextPersistenceFilter@5d9d2eb7, org.springframework.security.web.header.HeaderWriterFilter@30151c8d, org.springframework.web.filter.CorsFilter@4ac57039, org.springframework.security.web.authentication.logout.LogoutFilter@418f078b, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@19adf922, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@2169905b, com.swm.sprint1.security.TokenAuthenticationFilter@39be1b20, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@9affdfb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@609c9e1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f4f7676, org.springframework.security.web.session.SessionManagementFilter@5bea6858, org.springframework.security.web.access.ExceptionTranslationFilter@7104e85c, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1186ed4f]
+2020-09-03 | 12:26:30.414 | restartedMain        |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Initializing ExecutorService 'brokerChannelExecutor'
+2020-09-03 | 12:26:30.542 | restartedMain        |  INFO | .OptionalLiveReloadServer | ID:          | LiveReload server is running on port 35729
+2020-09-03 | 12:26:30.710 | restartedMain        |  INFO | tationPluginsBootstrapper | ID:          | Context refreshed
+2020-09-03 | 12:26:30.718 | restartedMain        |  INFO | tationPluginsBootstrapper | ID:          | Found 1 custom documentation plugin(s)
+2020-09-03 | 12:26:30.725 | restartedMain        |  INFO | piListingReferenceScanner | ID:          | Scanning for api listing references
+2020-09-03 | 12:26:30.861 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | Starting...
+2020-09-03 | 12:26:30.862 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2020-09-03 | 12:26:30.862 | restartedMain        |  INFO | impleBrokerMessageHandler | ID:          | Started.
+2020-09-03 | 12:26:30.868 | restartedMain        |  INFO | o.a.c.h.Http11NioProtocol | ID:          | Starting ProtocolHandler ["http-nio-8080"]
+2020-09-03 | 12:26:30.885 | restartedMain        |  INFO | s.b.w.e.t.TomcatWebServer | ID:          | Tomcat started on port(s): 8080 (http) with context path ''
+2020-09-03 | 12:26:30.888 | restartedMain        |  INFO | c.s.s.Sprint1Application  | ID:          | Started Sprint1Application in 5.279 seconds (JVM running for 5.791)
+2020-09-03 | 12:26:35.614 | http-nio-8080-exec-1 |  INFO | o.a.c.c.C.[.[.[/]         | ID:          | Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-03 | 12:26:35.614 | http-nio-8080-exec-1 |  INFO | o.s.w.s.DispatcherServlet | ID:          | Initializing Servlet 'dispatcherServlet'
+2020-09-03 | 12:26:35.622 | http-nio-8080-exec-1 |  INFO | o.s.w.s.DispatcherServlet | ID:          | Completed initialization in 8 ms
+2020-09-03 | 12:27:02.352 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        user0_.user_id as user_id1_8_0_,
+        user0_.created_date_time as created_2_8_0_,
+        user0_.updated_date_time as updated_3_8_0_,
+        user0_.email as email4_8_0_,
+        user0_.email_verified as email_ve5_8_0_,
+        user0_.image_url as image_ur6_8_0_,
+        user0_.name as name7_8_0_,
+        user0_.password as password8_8_0_,
+        user0_.provider as provider9_8_0_,
+        user0_.provider_id as provide10_8_0_ 
+    from
+        users user0_ 
+    where
+        user0_.user_id=?
+2020-09-03 | 12:27:02.363 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.438 | http-nio-8080-exec-2 |  INFO | ranslatorFactoryInitiator | ID:          | HHH000397: Using ASTQueryTranslatorFactory
+2020-09-03 | 12:27:02.513 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        category0_.category_id as category1_1_,
+        category0_.name as name2_1_ 
+    from
+        category category0_ 
+    where
+        category0_.name in (
+            ? , ? , ?
+        )
+2020-09-03 | 12:27:02.514 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [VARCHAR] - [고기]
+2020-09-03 | 12:27:02.514 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [VARCHAR] - [주점]
+2020-09-03 | 12:27:02.514 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [VARCHAR] - [분식]
+2020-09-03 | 12:27:02.857 | http-nio-8080-exec-2 |  INFO | c.s.s.util.S3Uploader     | ID:          | 파일이 삭제되었습니다.
+2020-09-03 | 12:27:02.858 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        usercatego0_.user_id as user_id5_6_1_,
+        usercatego0_.user_category_id as user_cat1_6_1_,
+        usercatego0_.user_category_id as user_cat1_6_0_,
+        usercatego0_.created_date_time as created_2_6_0_,
+        usercatego0_.updated_date_time as updated_3_6_0_,
+        usercatego0_.category_id as category4_6_0_,
+        usercatego0_.user_id as user_id5_6_0_ 
+    from
+        user_category usercatego0_ 
+    where
+        usercatego0_.user_id=?
+2020-09-03 | 12:27:02.859 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.921 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:27:02.922 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:27:02.913]
+2020-09-03 | 12:27:02.922 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:27:02.913]
+2020-09-03 | 12:27:02.922 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [5]
+2020-09-03 | 12:27:02.922 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.937 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:27:02.938 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:27:02.937]
+2020-09-03 | 12:27:02.938 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:27:02.937]
+2020-09-03 | 12:27:02.938 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [6]
+2020-09-03 | 12:27:02.938 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.950 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:27:02.951 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:27:02.949]
+2020-09-03 | 12:27:02.951 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:27:02.949]
+2020-09-03 | 12:27:02.952 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [8]
+2020-09-03 | 12:27:02.952 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.976 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    update
+        users 
+    set
+        updated_date_time=?,
+        email=?,
+        email_verified=?,
+        image_url=?,
+        name=?,
+        password=?,
+        provider=?,
+        provider_id=? 
+    where
+        user_id=?
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:27:02.970]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [VARCHAR] - [nameks17@gmail.com]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BOOLEAN] - [false]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [VARCHAR] - [https://momelet.s3.ap-northeast-2.amazonaws.com/profile-image-resize/KakaoTalk_Photo_2020-07-18-17-45-07_419a247e-b102-46b2-849c-da5fdba1f058_resize.jpeg]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [5] as [VARCHAR] - [raiders032]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [6] as [VARCHAR] - [null]
+2020-09-03 | 12:27:02.977 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [8] as [VARCHAR] - [100252817413004287211]
+2020-09-03 | 12:27:02.978 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [9] as [BIGINT] - [7]
+2020-09-03 | 12:27:02.994 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    delete 
+    from
+        user_category 
+    where
+        user_category_id=?
+2020-09-03 | 12:27:02.994 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [434]
+2020-09-03 | 12:27:03.012 | http-nio-8080-exec-2 | DEBUG | org.hibernate.SQL         | ID:          | 
+    delete 
+    from
+        user_category 
+    where
+        user_category_id=?
+2020-09-03 | 12:27:03.012 | http-nio-8080-exec-2 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [433]
+2020-09-03 | 12:27:09.847 | http-nio-8080-exec-5 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        user0_.user_id as user_id1_8_0_,
+        user0_.created_date_time as created_2_8_0_,
+        user0_.updated_date_time as updated_3_8_0_,
+        user0_.email as email4_8_0_,
+        user0_.email_verified as email_ve5_8_0_,
+        user0_.image_url as image_ur6_8_0_,
+        user0_.name as name7_8_0_,
+        user0_.password as password8_8_0_,
+        user0_.provider as provider9_8_0_,
+        user0_.provider_id as provide10_8_0_ 
+    from
+        users user0_ 
+    where
+        user0_.user_id=?
+2020-09-03 | 12:27:09.847 | http-nio-8080-exec-5 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:27:09.939 | http-nio-8080-exec-5 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        category0_.name as col_0_0_,
+        case 
+            when category0_.category_id in (select
+                usercatego1_.category_id 
+            from
+                user_category usercatego1_ 
+            where
+                usercatego1_.user_id=?) then ? 
+            else 0 
+        end as col_1_0_ 
+    from
+        category category0_
+2020-09-03 | 12:27:09.939 | http-nio-8080-exec-5 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:27:09.940 | http-nio-8080-exec-5 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [INTEGER] - [1]
+2020-09-03 | 12:27:30.415 | MessageBroker-1      |  INFO | bSocketMessageBrokerStats | ID:          | WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2020-09-03 | 12:37:32.998 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        user0_.user_id as user_id1_8_0_,
+        user0_.created_date_time as created_2_8_0_,
+        user0_.updated_date_time as updated_3_8_0_,
+        user0_.email as email4_8_0_,
+        user0_.email_verified as email_ve5_8_0_,
+        user0_.image_url as image_ur6_8_0_,
+        user0_.name as name7_8_0_,
+        user0_.password as password8_8_0_,
+        user0_.provider as provider9_8_0_,
+        user0_.provider_id as provide10_8_0_ 
+    from
+        users user0_ 
+    where
+        user0_.user_id=?
+2020-09-03 | 12:37:32.999 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.008 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        category0_.category_id as category1_1_,
+        category0_.name as name2_1_ 
+    from
+        category category0_ 
+    where
+        category0_.name in (
+            ? , ? , ?
+        )
+2020-09-03 | 12:37:33.008 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [VARCHAR] - [고기]
+2020-09-03 | 12:37:33.008 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [VARCHAR] - [주점]
+2020-09-03 | 12:37:33.008 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [VARCHAR] - [분식]
+2020-09-03 | 12:37:33.215 | http-nio-8080-exec-7 |  INFO | c.s.s.util.S3Uploader     | ID:          | 파일이 삭제되었습니다.
+2020-09-03 | 12:37:33.216 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        usercatego0_.user_id as user_id5_6_1_,
+        usercatego0_.user_category_id as user_cat1_6_1_,
+        usercatego0_.user_category_id as user_cat1_6_0_,
+        usercatego0_.created_date_time as created_2_6_0_,
+        usercatego0_.updated_date_time as updated_3_6_0_,
+        usercatego0_.category_id as category4_6_0_,
+        usercatego0_.user_id as user_id5_6_0_ 
+    from
+        user_category usercatego0_ 
+    where
+        usercatego0_.user_id=?
+2020-09-03 | 12:37:33.216 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.228 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:37:33.229 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:37:33.228]
+2020-09-03 | 12:37:33.229 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:37:33.228]
+2020-09-03 | 12:37:33.229 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [8]
+2020-09-03 | 12:37:33.229 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.240 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:37:33.240 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:37:33.240]
+2020-09-03 | 12:37:33.241 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:37:33.240]
+2020-09-03 | 12:37:33.241 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [5]
+2020-09-03 | 12:37:33.241 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.251 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    insert 
+    into
+        user_category
+        (created_date_time, updated_date_time, category_id, user_id) 
+    values
+        (?, ?, ?, ?)
+2020-09-03 | 12:37:33.251 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:37:33.251]
+2020-09-03 | 12:37:33.251 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [TIMESTAMP] - [2020-09-03T12:37:33.251]
+2020-09-03 | 12:37:33.252 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BIGINT] - [6]
+2020-09-03 | 12:37:33.252 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    update
+        users 
+    set
+        updated_date_time=?,
+        email=?,
+        email_verified=?,
+        image_url=?,
+        name=?,
+        password=?,
+        provider=?,
+        provider_id=? 
+    where
+        user_id=?
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [TIMESTAMP] - [2020-09-03T12:37:33.262]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [VARCHAR] - [nameks17@gmail.com]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [3] as [BOOLEAN] - [false]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [4] as [VARCHAR] - [https://momelet.s3.ap-northeast-2.amazonaws.com/profile-image-resize/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202020-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%206.36.39_6621a20a-351c-4dd9-854e-e778d242a5c4_resize.jpeg]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [5] as [VARCHAR] - [raiders032]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [6] as [VARCHAR] - [null]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [8] as [VARCHAR] - [100252817413004287211]
+2020-09-03 | 12:37:33.263 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [9] as [BIGINT] - [7]
+2020-09-03 | 12:37:33.273 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    delete 
+    from
+        user_category 
+    where
+        user_category_id=?
+2020-09-03 | 12:37:33.273 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [435]
+2020-09-03 | 12:37:33.283 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    delete 
+    from
+        user_category 
+    where
+        user_category_id=?
+2020-09-03 | 12:37:33.283 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [436]
+2020-09-03 | 12:37:33.292 | http-nio-8080-exec-7 | DEBUG | org.hibernate.SQL         | ID:          | 
+    delete 
+    from
+        user_category 
+    where
+        user_category_id=?
+2020-09-03 | 12:37:33.293 | http-nio-8080-exec-7 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [437]
+2020-09-03 | 12:37:38.741 | ttp-nio-8080-exec-10 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        user0_.user_id as user_id1_8_0_,
+        user0_.created_date_time as created_2_8_0_,
+        user0_.updated_date_time as updated_3_8_0_,
+        user0_.email as email4_8_0_,
+        user0_.email_verified as email_ve5_8_0_,
+        user0_.image_url as image_ur6_8_0_,
+        user0_.name as name7_8_0_,
+        user0_.password as password8_8_0_,
+        user0_.provider as provider9_8_0_,
+        user0_.provider_id as provide10_8_0_ 
+    from
+        users user0_ 
+    where
+        user0_.user_id=?
+2020-09-03 | 12:37:38.741 | ttp-nio-8080-exec-10 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:37:38.798 | ttp-nio-8080-exec-10 | DEBUG | org.hibernate.SQL         | ID:          | 
+    select
+        category0_.name as col_0_0_,
+        case 
+            when category0_.category_id in (select
+                usercatego1_.category_id 
+            from
+                user_category usercatego1_ 
+            where
+                usercatego1_.user_id=?) then ? 
+            else 0 
+        end as col_1_0_ 
+    from
+        category category0_
+2020-09-03 | 12:37:38.798 | ttp-nio-8080-exec-10 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [1] as [BIGINT] - [7]
+2020-09-03 | 12:37:38.798 | ttp-nio-8080-exec-10 | TRACE | o.h.t.d.sql.BasicBinder   | ID:          | binding parameter [2] as [INTEGER] - [1]
+2020-09-03 | 12:41:05.465 | Thread-9             |  INFO | impleBrokerMessageHandler | ID:          | Stopping...
+2020-09-03 | 12:41:05.466 | Thread-9             |  INFO | impleBrokerMessageHandler | ID:          | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2020-09-03 | 12:41:05.466 | Thread-9             |  INFO | impleBrokerMessageHandler | ID:          | Stopped.
+2020-09-03 | 12:41:05.468 | Thread-9             |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'brokerChannelExecutor'
+2020-09-03 | 12:41:05.468 | Thread-9             |  INFO | c.ThreadPoolTaskScheduler | ID:          | Shutting down ExecutorService 'messageBrokerTaskScheduler'
+2020-09-03 | 12:41:05.470 | Thread-9             |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'clientOutboundChannelExecutor'
+2020-09-03 | 12:41:05.470 | Thread-9             |  INFO | .c.ThreadPoolTaskExecutor | ID:          | Shutting down ExecutorService 'clientInboundChannelExecutor'
+2020-09-03 | 12:41:05.472 | Thread-9             |  INFO | rEntityManagerFactoryBean | ID:          | Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-09-03 | 12:41:05.474 | Thread-9             |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Shutdown initiated...
+2020-09-03 | 12:41:05.476 | Thread-9             |  INFO | c.z.h.HikariDataSource    | ID:          | HikariPool-1 - Shutdown completed.

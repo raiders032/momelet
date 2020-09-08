@@ -1,5 +1,6 @@
 package com.swm.sprint1.service;
 
+import com.swm.sprint1.controller.UserController;
 import com.swm.sprint1.domain.*;
 import com.swm.sprint1.exception.NotSupportedExtension;
 import com.swm.sprint1.exception.ResourceNotFoundException;
@@ -10,6 +11,8 @@ import com.swm.sprint1.repository.user.UserCategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,7 @@ public class UserService {
     private final UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Uploader s3Uploader;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Transactional
     public User createUser(SignUpRequest signUpRequest) {
@@ -38,16 +42,19 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long id, UpdateUserRequest request) throws IOException {
+        logger.info("user service user update 호출됨");
         String filename = request.getImageFile().getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf("."));
         List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
-        if(!supportedExtension.contains(extension))
+        if(!supportedExtension.contains(extension)){
+            logger.error("지원하지 않는 확장자입니다.");
             throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
-
+        }
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
         String imageUrl = s3Uploader.upload(request.getImageFile(), "profile-image");
         user.updateUserInfo(request.getName(), imageUrl, categories);
+        logger.info("userupdate 완료");
     }
 
     public List<String> findCategoryNameByUserId(Long id) {
