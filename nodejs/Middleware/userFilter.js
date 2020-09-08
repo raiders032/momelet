@@ -1,7 +1,7 @@
 import * as SingleObject from "../SingleObjects.js";
 import logger from "../logger.js";
 
-export default (req, res, next, socket, io) => {
+export default (io, socket, next) => {
   socket.handshake.query.id = Number(socket.handshake.query.id);
   const { id } = socket.handshake.query;
   if (SingleObject.UserRepository.existsById(id)) {
