@@ -26,14 +26,13 @@ const getCard = async (users, myId, radius, latitude, longitude) => {
     }
   }
   const { JWT } = SingleObject.UserRepository.findById(myId);
-
   const cards = [];
   try {
     const {
       data: {
         data: { restaurants },
       },
-    } = await axios.get(process.env.DATA_STORAGE_URL + "api/v1/restaurants7", {
+    } = await axios.get(process.env.SERVER_URL + "/api/v1/restaurants7", {
       headers: {
         Authorization: "Bearer " + JWT,
       },
@@ -52,6 +51,11 @@ const getCard = async (users, myId, radius, latitude, longitude) => {
     throw err;
   }
   return cards;
+};
+
+const rollBackRoom = (room) => {
+  room.endGame();
+  room.clearCardList();
 };
 
 export default async (socket, msg) => {
@@ -83,6 +87,8 @@ export default async (socket, msg) => {
     return JSON.stringify(retMsg);
   }
 
+  // 방정보가 업데이트 되기 시작
+  // 오류가 생기면 롤백해야함.
   room.startGame();
   const users = room.getUserList();
   try {
@@ -94,6 +100,7 @@ export default async (socket, msg) => {
       longitude
     );
   } catch (err) {
+    rollBackRoom(room);
     logger.error("getCard error: " + err);
     return JSON.stringify(retMsg);
   }
@@ -101,10 +108,13 @@ export default async (socket, msg) => {
   if (cards.length === 7) {
     retMsg.status = "ok";
     retMsg.restaurants = cards;
+    const cardList = new Map();
     for (let i = 0; i < 7; i++) {
-      room.addCard(cards[i].id, { score: 0, like: 0 });
+      cardList.set(cards[i].id, { score: 0, like: 0 });
     }
+    room.updateCardList(cardList);
   } else {
+    rollBackRoom(room);
     return JSON.stringify(retMsg);
   }
 

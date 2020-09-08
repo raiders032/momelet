@@ -37,8 +37,13 @@ export default class Room {
     return this.headCount;
   }
 
-  addCard(id, scores) {
-    this.cardList.set(id, scores);
+  updateCardList(cardList) {
+    this.clearCardList();
+    this.cardList = cardList;
+  }
+
+  clearCardList() {
+    this.cardList.clear();
   }
 
   addScore(id, like) {
@@ -51,10 +56,6 @@ export default class Room {
     } else if (like === "s") {
       card.score += 1;
     }
-  }
-
-  startGame() {
-    this.isStarted = true;
   }
 
   getUserList() {
@@ -103,6 +104,10 @@ export default class Room {
 
   updateHostId(hostId) {
     return (this.hostId = hostId);
+  }
+
+  resetFinishCount(finishCount) {
+    return (this.findCount = 0);
   }
 
   findUserById(userId) {
