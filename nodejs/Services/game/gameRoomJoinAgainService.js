@@ -1,8 +1,8 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
-const { gameRoomUpdateService } = require("./gameRoomUpdateService");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
+import gameRoomUpdateService from "./gameRoomUpdateService.js";
 
-const gameRoomJoinAgainService = (socket, msg) => {
+export default (socket, msg) => {
   var echo = "gameRoomJoinAgain. msg: " + msg;
   logger.info(echo);
 
@@ -52,8 +52,4 @@ const gameRoomJoinAgainService = (socket, msg) => {
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;
-};
-
-module.exports = {
-  gameRoomJoinAgainService,
 };

@@ -1,5 +1,5 @@
-const winston = require("winston");
-const winstonDaily = require("winston-daily-rotate-file");
+import winston from "winston";
+import winstonDaily from "winston-daily-rotate-file";
 
 const logDir = "logs";
 const { combine, timestamp, printf } = winston.format;
@@ -46,4 +46,5 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
-module.exports.logger = logger;
+
+export default logger;

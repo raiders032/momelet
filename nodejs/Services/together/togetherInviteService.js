@@ -1,6 +1,6 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
-const { gameRoomUpdateService } = require("../index");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
+import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -25,7 +25,7 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
   }
 };
 
-const togetherInviteService = (socket, msg) => {
+export default (socket, msg) => {
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
   let retMsg = { roomName: null, gameRoomUserList: null };
@@ -58,8 +58,4 @@ const togetherInviteService = (socket, msg) => {
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;
-};
-
-module.exports = {
-  togetherInviteService,
 };

@@ -1,5 +1,6 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
+
 const findAroundUsers = (myId, lat, long) => {
   const aroundUsers = [];
   const max_lat = Number(lat) + 0.0025;
@@ -30,7 +31,7 @@ const findAroundUsers = (myId, lat, long) => {
 };
 
 // 같이하기
-const togetherService = (socket, msg) => {
+export default (socket, msg) => {
   var echo = "together. msg: " + msg;
   logger.info(echo);
 
@@ -45,8 +46,4 @@ const togetherService = (socket, msg) => {
   }
   retMsg = JSON.stringify(retMsg);
   return retMsg;
-};
-
-module.exports = {
-  togetherService,
 };

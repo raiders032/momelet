@@ -1,6 +1,6 @@
-const SingleObject = require("../../SingleObjects");
-const { gameRoomUpdateService } = require("./gameRoomUpdateService");
-const { logger } = require("../../logger");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
+import gameRoomUpdateService from "./gameRoomUpdateService.js";
 
 const exitRoom = (socket, user, room) => {
   if (room === false) return;
@@ -10,7 +10,7 @@ const exitRoom = (socket, user, room) => {
   }
   SingleObject.RoomRepository.delete(room.getRoomName());
 };
-const gameRoomLeaveService = (socket, msg) => {
+export default (socket, msg) => {
   var echo = "gameRoomLeave. msg: " + msg;
   logger.info(echo);
 
@@ -33,8 +33,4 @@ const gameRoomLeaveService = (socket, msg) => {
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;
-};
-
-module.exports = {
-  gameRoomLeaveService,
 };

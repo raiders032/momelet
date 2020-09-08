@@ -1,7 +1,7 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
 
-const gameAllFinishService = (socket, msg) => {
+export default (socket, msg) => {
   var echo = "gameAllFinishService. msg: " + msg;
   logger.info(echo);
   let id, roomName;
@@ -62,8 +62,4 @@ const gameAllFinishService = (socket, msg) => {
 
     return retMsg;
   }, 1500);
-};
-
-module.exports = {
-  gameAllFinishService,
 };

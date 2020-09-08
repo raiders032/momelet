@@ -1,7 +1,7 @@
 // 37.5444086,127.0654405,17.9z
 const latitude = 37.5447048;
 const longitude = 127.0663154;
-const ioOptions = [
+export default [
   {
     myId: 1,
     query: {
@@ -151,5 +151,3 @@ const ioOptions = [
     },
   },
 ];
-
-module.exports = ioOptions;
