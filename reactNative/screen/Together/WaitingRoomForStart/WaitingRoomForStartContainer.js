@@ -65,7 +65,7 @@ export default ({ navigation, route }) => {
     socket.emit(
       "gameStart",
       JSON.stringify({
-        id: msg.gameRoomUserList[0].id,
+        id: route.params.myId,
         roomName: msg.roomName,
         radius: 0.01,
         latitude: latitude,

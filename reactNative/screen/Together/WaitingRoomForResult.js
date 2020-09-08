@@ -42,7 +42,12 @@ export default ({ navigation, route }) => {
     rotate();
 
     socket.on("gameAllFinish", (msg) => {
-      // console.log(msg);
+      console.log("gameAllFinishmsg: ", msg);
+      console.log("hefefefe");
+
+      route.params.restaurant.restaurants.forEach((element) =>
+        console.log(element.id, element.name)
+      );
       navigation.dispatch(
         StackActions.replace("GameResult", {
           msg: msg,

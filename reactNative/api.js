@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import getEnvVars from "./enviroment";
+import { Platform } from "react-native";
+
 const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = "") => {
   try {
@@ -32,11 +34,14 @@ export const apis = {
     const body = new FormData();
 
     const photo = {
-      name: `abc`,
+      name: `abc.jpg`,
       type: "image/jpeg",
-      uri: imageUrl,
+
+      uri: imageUrl.replace("file://", ""),
     };
-    body.append("categories", categories);
+
+    console.log("categories, name, photo: ", categories, name, photo);
+    body.append("categories", "한식, 중식");
     body.append("name", name);
     body.append("imageFile", photo);
     console.log(body);
@@ -46,7 +51,6 @@ export const apis = {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       },
       body
