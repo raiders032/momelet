@@ -59,4 +59,6 @@ export default (socket, msg) => {
 
     return retMsg;
   }, 1500);
+
+  room.resetFinishCount();
 };

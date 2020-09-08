@@ -15,7 +15,7 @@ export default (server, app) => {
   app.set("io", io);
 
   io.use((socket, next) => {
-    userFilter(socket.request, socket.request.res, next, socket, io);
+    userFilter(io, socket, next);
   });
 
   io.on("connection", (socket) => {
