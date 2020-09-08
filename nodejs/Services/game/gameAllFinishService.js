@@ -4,8 +4,17 @@ const { logger } = require("../../logger");
 const gameAllFinishService = (socket, msg) => {
   var echo = "gameAllFinishService. msg: " + msg;
   logger.info(echo);
-  const { id, roomName } = JSON.parse(msg);
+  let id, roomName;
+  try {
+    const parsedMsg = JSON.parse(msg);
+    id = parsedMsg.id;
+    roomName = parsedMsg.roomName;
+  } catch (err) {
+    logger.error("gameAllFinish Msg parse error: " + err);
+    return;
+  }
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
+  if (room === false) return;
   if (room.getHeadCount() > room.getFinishCount()) {
     return;
   }

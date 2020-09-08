@@ -19,7 +19,7 @@ class UserRepository {
 
   findById(id) {
     if (!this.userRepository.has(id))
-      throw new ResourceNotFoundError(404, "해당 유저를 찾을 수 없습니다.");
+      throw "해당 유저를 찾을 수 없습니다. 유저 아이디: " + id;
     return this.userRepository.get(id);
   }
 

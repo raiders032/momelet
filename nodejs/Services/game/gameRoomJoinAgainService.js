@@ -1,30 +1,53 @@
 const SingleObject = require("../../SingleObjects");
 const { logger } = require("../../logger");
+const { gameRoomUpdateService } = require("./gameRoomUpdateService");
 
 const gameRoomJoinAgainService = (socket, msg) => {
   var echo = "gameRoomJoinAgain. msg: " + msg;
   logger.info(echo);
 
-  const { id, roomName } = JSON.parse(msg);
-  const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  const user = SingleObject.UserRepository.findById(id);
-
   let retMsg = {
     status: "fail",
-    gameUserList: null,
+    gameRoomUserList: null,
+    hostId: null,
   };
+  let id, roomName;
+  try {
+    const parsedMsg = JSON.parse(msg);
+    id = parsedMsg.id;
+    roomName = parsedMsg.roomName;
+  } catch (err) {
+    logger.error("gameRoomJoinAgain Msg parse error: " + err);
+    return JSON.stringify(retMsg);
+  }
 
-  if (room.getIsStarted() === false && room.findUserById(user.getId())) {
+  const room = SingleObject.RoomRepository.findByRoomName(roomName);
+  if (
+    room !== false &&
+    room.getIsStarted() === false &&
+    room.findUserById(id)
+  ) {
+    const user = SingleObject.UserRepository.findById(id);
     user.updateCanReceive(true);
     retMsg.status = "ok";
-    retMsg.gameUserList = room
+    retMsg.gameRoomUserList = room
       .getUserList()
       .filter((user) => user.getCanReceive())
       .map((user) => {
         const { id, name, imageUrl } = user;
-        const userDto = { id, name, imageUrl };
-        return userDto;
+        return { id, name, imageUrl };
       });
+
+    // change host
+    if (
+      SingleObject.UserRepository.findById(room.getHostId()).getCanReceive() ===
+      false
+    ) {
+      room.updateHostId(user.getId());
+    }
+
+    retMsg.hostId = room.getHostId();
+    gameRoomUpdateService(socket, room, id);
   }
 
   retMsg = JSON.stringify(retMsg);

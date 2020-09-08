@@ -122,6 +122,11 @@ describe("Connecting Server", () => {
 
         // hostId가 내 id가 맞는지 확인
         msgObject["hostId"].should.equal(ioOptions[0].myId);
+
+        // 내가 알맞은 방에 접속했는지 확인
+        let roomName = msgObject["roomName"];
+        let room = SingleObject.RoomRepository.findByRoomName(roomName);
+        room.findUserById(ioOptions[0].myId).should.equal(true);
       }
     );
   });
@@ -572,47 +577,53 @@ describe("Connecting Server", () => {
     );
   });
   it("gameRoomJoinAgain 테스트", (done) => {
-    // 0, 1 이 게임방에 재접속
-    // 0은 gameRoomUpdate 확인
-    // 0 이 게임시작
+    // 1, 0 순으로 게임방에 재접속
+    // 1은 gameRoomUpdate 확인
+    // 1 이 게임시작
     // 2 가 재접속 시도 후 실패
     SingleObject.RoomRepository.findByRoomName(roomName).endGame();
 
-    senders[0].on("gameRoomUpdate", (msg) => {
+    senders[1].on("gameRoomUpdate", (msg) => {
       msg.should.be.type("string");
       const msgObject = JSON.parse(msg);
       msgObject.should.have.property("gameRoomUserList").with.lengthOf(2);
     });
-    senders[0].emit(
+    senders[1].emit(
       "gameRoomJoinAgain",
-      JSON.stringify({ id: ioOptions[0].myId, roomName }),
+      JSON.stringify({ id: ioOptions[1].myId, roomName }),
       (msg) => {
         msg.should.be.type("string");
 
         const msgObject = JSON.parse(msg);
         msgObject.should.have.property("status").with.equal("ok");
-        msgObject.should.have.property("gameUserList").with.have.lengthOf(1);
+        msgObject.should.have
+          .property("gameRoomUserList")
+          .with.have.lengthOf(1);
+        msgObject.should.have.property("hostId").with.equal(ioOptions[1].myId);
 
-        senders[1].emit(
+        senders[0].emit(
           "gameRoomJoinAgain",
-          JSON.stringify({ id: ioOptions[1].myId, roomName }),
+          JSON.stringify({ id: ioOptions[0].myId, roomName }),
           (msg) => {
             msg.should.be.type("string");
 
             const msgObject = JSON.parse(msg);
             msgObject.should.have.property("status").with.equal("ok");
             msgObject.should.have
-              .property("gameUserList")
+              .property("gameRoomUserList")
               .with.have.lengthOf(2);
+            msgObject.should.have
+              .property("hostId")
+              .with.equal(ioOptions[1].myId);
 
-            senders[0].emit(
+            senders[1].emit(
               "gameStart",
               JSON.stringify({
-                id: ioOptions[0].myId,
+                id: ioOptions[1].myId,
                 roomName,
                 radius: 0.01,
-                latitude: ioOptions[0].query.latitude,
-                longitude: ioOptions[0].query.longitude,
+                latitude: ioOptions[1].query.latitude,
+                longitude: ioOptions[1].query.longitude,
               }),
               (msg) => {
                 msg.should.be.type("string");
@@ -628,7 +639,7 @@ describe("Connecting Server", () => {
                     const msgObject = JSON.parse(msg);
                     msgObject.should.have.property("status").with.equal("fail");
                     msgObject.should.have
-                      .property("gameUserList")
+                      .property("gameRoomUserList")
                       .with.equal(null);
 
                     offEventAll("gameRoomUpdate", senders);
