@@ -107,7 +107,7 @@ export default class Room {
   }
 
   resetFinishCount(finishCount) {
-    return (this.findCount = 0);
+    return (this.finishCount = 0);
   }
 
   findUserById(userId) {

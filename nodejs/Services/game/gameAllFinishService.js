@@ -30,6 +30,7 @@ export default (socket, msg) => {
   let isLike = false;
 
   room.endGame();
+  room.resetFinishCount();
 
   cardList.forEach((card, key) => {
     if (card.score > bestCard.score) {
@@ -59,6 +60,4 @@ export default (socket, msg) => {
 
     return retMsg;
   }, 1500);
-
-  room.resetFinishCount();
 };
