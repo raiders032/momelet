@@ -14,18 +14,3 @@ export { default as gameRoomJoinAgainService } from "./game/gameRoomJoinAgainSer
 // disconnect
 export { default as disconnectingService } from "./disconnect/disconnectingService.js";
 export { default as disconnectService } from "./disconnect/disconnectService.js";
-
-// export default togetherService;
-// export default togetherInviteService;
-// export default togetherInvitationService;
-// // module.exports.togetherService = togetherService;
-// // module.exports.togetherInviteService = togetherInviteService;
-// // module.exports.togetherInvitationService = togetherInvitationService;
-// module.exports.gameRoomJoinService = gameRoomJoinService;
-// module.exports.gameRoomLeaveService = gameRoomLeaveService;
-// module.exports.gameStartService = gameStartService;
-// module.exports.gameUserFinishService = gameUserFinishService;
-// module.exports.gameAllFinishService = gameAllFinishService;
-// module.exports.gameRoomJoinAgainService = gameRoomJoinAgainService;
-// module.exports.disconnectingService = disconnectingService;
-// module.exports.disconnectService = disconnectService;

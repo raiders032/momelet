@@ -15,6 +15,6 @@ const app = express();
 const server = app.listen(process.env.PORT, () => {
   logger.info("Server started. listening on *:3000.");
 });
-
+app.set("server", server);
 webSocket(server, app);
-export { app, server };
+export default app;
