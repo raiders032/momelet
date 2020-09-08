@@ -32,9 +32,6 @@ export default (socket, msg) => {
     },
   };
 
-  room.endGame();
-  room.resetFinishCount();
-
   cardList.forEach((card, key) => {
     if (card.score > bestCard.score) {
       bestCard.score = card.score;
@@ -52,6 +49,9 @@ export default (socket, msg) => {
     retMsg.roomGameResult.headCount = room.getHeadCount();
     retMsg.roomGameResult.likeCount = bestCard.like;
   }
+
+  room.endGame();
+  room.resetFinishCount();
 
   setTimeout(() => {
     retMsg = JSON.stringify(retMsg);
