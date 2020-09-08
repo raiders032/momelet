@@ -1,7 +1,7 @@
-const SingleObject = require("../SingleObjects");
-const { logger } = require("../logger");
+import * as SingleObject from "../SingleObjects.js";
+import logger from "../logger.js";
 
-module.exports = (req, res, next, socket, io) => {
+export default (req, res, next, socket, io) => {
   socket.handshake.query.id = Number(socket.handshake.query.id);
   const { id } = socket.handshake.query;
   if (SingleObject.UserRepository.existsById(id)) {

@@ -1,6 +1,6 @@
-const SingleObject = require("../../SingleObjects");
-const { gameRoomUpdateService } = require("./gameRoomUpdateService");
-const { logger } = require("../../logger");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
+import gameRoomUpdateService from "./gameRoomUpdateService.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -15,7 +15,7 @@ const exitExistRoom = (socket, user, id) => {
   gameRoomUpdateService(socket, room, id);
 };
 
-const gameRoomJoinService = (socket, msg) => {
+export default (socket, msg) => {
   var echo = "gameRoomJoin. msg: " + msg;
   logger.info(echo);
 
@@ -53,8 +53,4 @@ const gameRoomJoinService = (socket, msg) => {
 
   retMsg = JSON.stringify(retMsg);
   return retMsg;
-};
-
-module.exports = {
-  gameRoomJoinService,
 };

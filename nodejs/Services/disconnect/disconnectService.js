@@ -1,7 +1,7 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
 
-const disconnectService = (socket) => {
+export default (socket) => {
   // 클래스의 프로퍼티에 직접 접근하고 있음
   const user = SingleObject.UserRepository.findBySocketId(socket.id);
   if (user.joinedRoomName !== null) {
@@ -14,8 +14,4 @@ const disconnectService = (socket) => {
   // 출력용 문구. 후에 삭제 필요함.
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
   logger.info("a user disconnected. userList: (" + userList + ")");
-};
-
-module.exports = {
-  disconnectService,
 };

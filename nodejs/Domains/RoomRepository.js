@@ -1,5 +1,5 @@
-const Room = require("./Room");
-class RoomRepository {
+import Room from "./Room.js";
+export default class RoomRepository {
   constructor() {
     this.roomRepository = new Map();
   }
@@ -26,5 +26,3 @@ class RoomRepository {
     return this.roomRepository.get(roomName);
   }
 }
-
-module.exports.RoomRepository = RoomRepository;

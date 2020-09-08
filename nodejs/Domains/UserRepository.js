@@ -1,6 +1,5 @@
-const { User } = require("./User");
-const ResourceNotFoundError = require("../Errors/ResourceNotFoundError");
-class UserRepository {
+import User from "./User.js";
+export default class UserRepository {
   constructor() {
     this.userRepository = new Map(); // key: id, value: User
     this.socketIdMapper = new Map(); // key: socketId, value: id
@@ -35,5 +34,3 @@ class UserRepository {
     return Array.from(this.userRepository.values());
   }
 }
-
-module.exports.UserRepository = UserRepository;

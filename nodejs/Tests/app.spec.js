@@ -1,10 +1,10 @@
-const should = require("should");
-const request = require("supertest");
-const app = require("../app");
-const ioClient = require("socket.io-client");
-const ioOptions = require("./ioOptions");
-const SingleObject = require("../SingleObjects");
-const socket = require("../socket");
+import should from "should";
+import request from "supertest";
+import app from "../app.js";
+import ioClient from "socket.io-client";
+import ioOptions from "./ioOptions.js";
+import * as SingleObject from "../SingleObjects.js";
+import socket from "../socket.js";
 
 const disconnectAll = (senders) => {
   for (let i = 0; i < senders.length; i++) {
@@ -28,7 +28,7 @@ describe("Connecting Server", () => {
     }
   });
   after(() => {
-    app.server.close();
+    app.get("server").close();
     disconnectAll(senders);
   });
 

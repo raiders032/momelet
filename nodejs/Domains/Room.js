@@ -1,4 +1,4 @@
-class Room {
+export default class Room {
   constructor(roomName, userId) {
     this.roomName = roomName;
     this.hostId = userId;
@@ -112,5 +112,3 @@ class Room {
     return false;
   }
 }
-
-module.exports = Room;

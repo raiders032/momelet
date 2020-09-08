@@ -1,10 +1,11 @@
-const SocketIO = require("socket.io");
-const { togetherController } = require("./Controllers/togetherController");
-const { gameController } = require("./Controllers/gameController");
-const { disconnectController } = require("./Controllers/disconnectController");
-const userFilter = require("./Middleware/userFilter");
+import SocketIO from "socket.io";
+import * as controller from "./Controllers/index.js";
+// const { togetherController } = require("./Controllers/togetherController");
+// const { gameController } = require("./Controllers/gameController");
+// const { disconnectController } = require("./Controllers/disconnectController");
+import userFilter from "./Middleware/userFilter.js";
 
-module.exports = (server, app) => {
+export default (server, app) => {
   const io = SocketIO(server, {
     //path: "/momulet",
     serverClient: false, // 클라이언트 파일 제공 여부
@@ -18,8 +19,8 @@ module.exports = (server, app) => {
   });
 
   io.on("connection", (socket) => {
-    togetherController(socket);
-    gameController(socket);
-    disconnectController(socket);
+    controller.togetherController(socket);
+    controller.gameController(socket);
+    controller.disconnectController(socket);
   });
 };

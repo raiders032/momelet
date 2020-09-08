@@ -1,4 +1,4 @@
-class User {
+export default class User {
   constructor(
     socketId,
     { id, email, name, imageUrl, JWT, latitude, longitude }
@@ -35,5 +35,3 @@ class User {
     return this.id;
   }
 }
-
-module.exports.User = User;

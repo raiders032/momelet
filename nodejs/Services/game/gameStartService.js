@@ -1,6 +1,6 @@
-const axios = require("axios");
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
+import axios from "axios";
+import * as SingleObject from "../../SingleObjects.js";
+import logger from "../../logger.js";
 
 const canStart = (room, id) => {
   if (room === false) {
@@ -54,7 +54,7 @@ const getCard = async (users, myId, radius, latitude, longitude) => {
   return cards;
 };
 
-const gameStartService = async (socket, msg) => {
+export default async (socket, msg) => {
   var echo = "gameStart. msg: " + msg;
   logger.info(echo);
 
@@ -133,8 +133,4 @@ const gameStartService = async (socket, msg) => {
   room.updateHeadCount(headCount);
 
   return retMsg;
-};
-
-module.exports = {
-  gameStartService,
 };

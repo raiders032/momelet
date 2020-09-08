@@ -1,7 +1,6 @@
-const SingleObject = require("../../SingleObjects");
-const { logger } = require("../../logger");
+import logger from "../../logger.js";
 
-const gameRoomUpdateService = (socket, room, id) => {
+export default (socket, room, id) => {
   const echo =
     "gameRoomUpdateService. roomName: " + room.getRoomName() + ", id: " + id;
   logger.info(echo);
@@ -33,8 +32,4 @@ const gameRoomUpdateService = (socket, room, id) => {
   } catch (err) {
     logger.error("gameRoomUpdateService " + err);
   }
-};
-
-module.exports = {
-  gameRoomUpdateService,
 };

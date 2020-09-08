@@ -1,6 +1,6 @@
-const service = require("../Services/index");
+import * as service from "../Services/index.js";
 
-const gameController = (socket) => {
+export default (socket) => {
   // 게임방 입장
   socket.on("gameRoomJoin", (msg, ack) => {
     const ret = service.gameRoomJoinService(socket, msg);
@@ -44,5 +44,3 @@ const gameController = (socket) => {
     ack(ret);
   });
 };
-
-module.exports.gameController = gameController;

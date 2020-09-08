@@ -1,8 +1,9 @@
-const userRepositoryDomain = require("./Domains/UserRepository");
-const UserRepository = new userRepositoryDomain.UserRepository();
+import userRepositoryDomain from "./Domains/UserRepository.js";
+const UserRepository = new userRepositoryDomain();
 
-const roomRepositoryDomain = require("./Domains/RoomRepository");
-const RoomRepository = new roomRepositoryDomain.RoomRepository();
+import roomRepositoryDomain from "./Domains/RoomRepository.js";
+const RoomRepository = new roomRepositoryDomain();
 
-module.exports.UserRepository = UserRepository;
-module.exports.RoomRepository = RoomRepository;
+// module.exports.UserRepository = UserRepository;
+// module.exports.RoomRepository = RoomRepository;
+export { UserRepository, RoomRepository };
