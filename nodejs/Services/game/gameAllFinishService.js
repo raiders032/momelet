@@ -33,6 +33,7 @@ export default (socket, msg) => {
   };
 
   room.endGame();
+  room.resetFinishCount();
 
   cardList.forEach((card, key) => {
     if (card.score > bestCard.score) {
@@ -62,6 +63,4 @@ export default (socket, msg) => {
 
     return retMsg;
   }, 1500);
-
-  room.resetFinishCount();
 };
