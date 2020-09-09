@@ -28,6 +28,7 @@ const io = SocketIO(server, {
 //     auth_header_required: true,
 //   })
 // );
+
 io.use((socket, next) => {
   userFilter(io, socket, next);
 });
