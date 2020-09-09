@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Image, Animated, TouchableOpacity } from "react-native";
+import { StackActions } from "@react-navigation/native";
 
 import Basic from "../../component/Basic";
 import Card from "../../component/Card";
@@ -7,7 +8,7 @@ import socket from "../../socket";
 import Footer from "../../component/Footer";
 
 export default ({ navigation, route }) => {
-  // console.log(route.params.restaurant);
+  console.log("abc", route.params.restaurant.restaurants[0].name);
   const [dot, setDot] = useState(".");
   const rotateValue = useRef(new Animated.Value(0)).current;
   const init = () => {
@@ -33,24 +34,32 @@ export default ({ navigation, route }) => {
     <Footer
       text={`기다리는중 ...`}
       style={{ backgroundColor: "white" }}
-      onClick={() => {
-        socket.emit("tmpMsg2", "tmptmp");
-      }}
+      // onClick={() => {
+      //   socket.emit("tmpMsg2", "tmptmp");
+      // }}
     />
   );
   useEffect(() => {
     rotate();
 
     socket.on("gameAllFinish", (msg) => {
-      console.log(msg);
+      console.log("gameAllFinishmsg: ", msg);
+      console.log("hefefefe");
 
-      navigation.navigate("GameResult", {
-        msg: msg,
-        restaurant: route.params.restaurant,
-      });
+      route.params.restaurant.restaurants.forEach((element) =>
+        console.log(element.id, element.name)
+      );
+      navigation.dispatch(
+        StackActions.replace("GameResult", {
+          msg: msg,
+          restaurant: route.params.restaurant,
+          roomName: JSON.parse(route.params.msg).roomName,
+          userId: route.params.userId,
+        })
+      );
     });
     return () => {
-      // socket.off("gameAllFinish");
+      socket.off("gameAllFinish");
     };
   }, []);
   return (

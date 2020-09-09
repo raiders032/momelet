@@ -1,11 +1,19 @@
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  Linking,
+  Platform,
+  Clipboard,
+  ToastAndroid,
+} from "react-native";
 import Menu from "./Menu";
 import ExtraIcon from "./ExtraIcon";
-import fontNormalize from "../utils/fontNormalize";
 import truncate from "../utils/truncate";
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
-export default ({ menus, name }) => {
+export default ({ menus, name, phoneNumber, address }) => {
   return (
     <View>
       <View
@@ -47,9 +55,43 @@ export default ({ menus, name }) => {
           // backgroundColor: "yellow",
         }}
       >
-        <ExtraIcon icon={require("../assets/call.png")} text="전화하기" />
+        <ExtraIcon
+          icon={require("../assets/call.png")}
+          text="전화하기"
+          onPress={async () => {
+            let number;
+
+            if (Platform.OS !== "android") {
+              number = `telprompt:${phoneNumber}`;
+            } else {
+              number = `tel:${phoneNumber}`;
+            }
+            const canOpen = await Linking.canOpenURL(number);
+            console.log(number);
+            if (canOpen) {
+              Linking.openURL(number);
+            } else {
+              console.log("해당 url을 열수 없습니다!");
+            }
+          }}
+        />
+
         <ExtraIcon icon={require("../assets/geo.png")} text="길찾기" />
-        <ExtraIcon icon={require("../assets/copy.png")} text="주소복사" />
+
+        <ExtraIcon
+          icon={require("../assets/copy.png")}
+          text="주소복사"
+          onPress={() => {
+            console.log(address);
+            Clipboard.setString(address);
+            if (Platform.OS == "android") {
+              ToastAndroid.show(
+                "주소가 클립보드에 복사 되었습니다.",
+                ToastAndroid.SHORT
+              );
+            }
+          }}
+        />
       </View>
     </View>
   );

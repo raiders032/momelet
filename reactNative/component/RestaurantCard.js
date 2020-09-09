@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -15,10 +15,12 @@ import PresentMenu from "./PresentMenu";
 import CardBack from "./CardBack";
 
 export default ({ restaurant, header, cover }) => {
+  const [isFront, setIsFront] = useState(true);
   let changeValue = 0;
   const lotation = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     lotation.setValue(0);
+    // setIsFront("false");
   }, [restaurant]);
   lotation.addListener(({ value }) => {
     changeValue = value;
@@ -34,27 +36,27 @@ export default ({ restaurant, header, cover }) => {
 
   // const isFlipping = useRef(false);
   let isFlipping = false;
-  const [test, setTest] = React.useState({});
 
   const flipCard = () => {
-    setTest({});
-    if (isFlipping) {
-      return;
-    }
+    // if (isFlipping) {
+    //   return;
+    // }
 
-    isFlipping = true;
+    // isFlipping = true;
 
     if (changeValue >= 90) {
       Animated.timing(lotation, {
         toValue: 0,
         useNativeDriver: true,
       }).start();
+      setIsFront(true);
     } else {
       Animated.timing(lotation, {
         toValue: 180,
 
         useNativeDriver: true,
       }).start();
+      setIsFront(false);
     }
     setTimeout(() => {
       isFlipping = false;
@@ -65,6 +67,9 @@ export default ({ restaurant, header, cover }) => {
     return (
       <Image
         source={{ uri: restaurant.thumUrl }}
+        // source={{
+        //   uri: "https://d22j25xnhsuyth.cloudfront.net/profile-image/test7.jpg",
+        // }}
         style={{
           height: "100%",
           borderTopRightRadius: 20,
@@ -73,35 +78,94 @@ export default ({ restaurant, header, cover }) => {
       />
     );
   }, [restaurant.thumUrl]);
-
+  // const CardBackCallBack = React.useCallback(() => {
+  //   return (
+  //     <Animated.View
+  //       style={{
+  //         width: "100%",
+  //         height: "100%",
+  //         transform: [{ rotateY: backInterpolate }],
+  //         backfaceVisibility: "hidden",
+  //         position: "absolute",
+  //       }}
+  //     >
+  //       <CardBack
+  //         menus={restaurant.menu}
+  //         name={restaurant.name}
+  //         phoneNumber={restaurant.phoneNumber}
+  //         address={restaurant.roadAddress}
+  //       />
+  //     </Animated.View>
+  //   );
+  // }, [restaurant]);
+  // const CardFront = React.useCallback(() => {
+  //   return ()
+  // })
   return (
     <Card>
       <View style={{ width: "100%", height: "100%" }}>
-        <View style={{ height: "65%" }}>
-          <Animated.View
-            style={{
-              width: "100%",
-              height: "100%",
+        {isFront ? (
+          <View style={{ height: "65%" }}>
+            <Animated.View
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [{ rotateY: backInterpolate }],
+                backfaceVisibility: "hidden",
+                position: "absolute",
+              }}
+            >
+              <CardBack
+                menus={restaurant.menu}
+                name={restaurant.name}
+                phoneNumber={restaurant.phoneNumber}
+                address={restaurant.roadAddress}
+              />
+            </Animated.View>
+            <Animated.View
+              style={{
+                transform: [{ rotateY: frontInterpolate }],
+                backfaceVisibility: "hidden",
+              }}
+            >
+              {/* {header} */}
 
-              transform: [{ rotateY: backInterpolate }],
-              backfaceVisibility: "hidden",
-              position: "absolute",
-            }}
-          >
-            <CardBack menus={restaurant.menu} name={restaurant.name} />
-          </Animated.View>
-          <Animated.View
-            style={{
-              transform: [{ rotateY: frontInterpolate }],
-              backfaceVisibility: "hidden",
-            }}
-          >
-            {header}
+              <CardImage />
+              {cover}
+            </Animated.View>
+          </View>
+        ) : (
+          <View style={{ height: "65%" }}>
+            <Animated.View
+              style={{
+                transform: [{ rotateY: frontInterpolate }],
+                backfaceVisibility: "hidden",
+              }}
+            >
+              {/* {header} */}
 
-            <CardImage />
-            {cover}
-          </Animated.View>
-        </View>
+              <CardImage />
+              {cover}
+            </Animated.View>
+            <Animated.View
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [{ rotateY: backInterpolate }],
+                backfaceVisibility: "hidden",
+                position: "absolute",
+              }}
+            >
+              <CardBack
+                menus={restaurant.menu}
+                name={restaurant.name}
+                phoneNumber={restaurant.phoneNumber}
+                address={restaurant.roadAddress}
+              />
+            </Animated.View>
+          </View>
+        )}
+
         <View style={{ height: "35%", paddingHorizontal: 15 }}>
           <View
             style={{

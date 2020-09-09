@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
+import { StackActions } from "@react-navigation/native";
+
 import WaitingRoomForStartPresenter from "./WaitingRoomForStartPresenter";
 import socket from "../../../socket";
 
 export default ({ navigation, route }) => {
   const msg = JSON.parse(route.params.msg);
 
+  console.log(
+    "내가 호스트가 될 상인가?",
+    msg.hostId,
+    msg.hostId === route.params.myId
+  );
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -31,12 +38,13 @@ export default ({ navigation, route }) => {
       setUsers(JSON.parse(msg).gameRoomUserList);
     });
     socket.on("gameStart", (msg) => {
-      console.log("onGameStartMessage", msg);
-      navigation.navigate("GameRoom", {
-        msg: msg,
-        roomName: roomName,
-        userId: id,
-      });
+      navigation.dispatch(
+        StackActions.replace("GameRoom", {
+          msg: msg,
+          roomName: roomName,
+          userId: id,
+        })
+      );
     });
     // can't perform 에러 해결을 위한 코드
     // return () => {
@@ -44,24 +52,41 @@ export default ({ navigation, route }) => {
     // };
   }, []);
   const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
+    const sendMsg = {
+      id: msg.gameRoomUserList[0].id,
+      roomName: msg.roomName,
+      radius: 0.01,
+      latitude: latitude,
+      longitude: longitude,
+    };
+    console.log(sendMsg);
+    const stringifiedMsg = JSON.stringify(sendMsg);
+    console.log(stringifiedMsg);
     socket.emit(
       "gameStart",
       JSON.stringify({
-        id: msg.gameRoomUserList[0].id,
+        id: route.params.myId,
         roomName: msg.roomName,
         radius: 0.01,
         latitude: latitude,
         longitude: longitude,
       }),
       (msg) => {
-        console.log("gameStart Message 보내기", msg);
-        navigation.navigate("GameRoom", {
-          msg: msg,
-          roomName: roomName,
-          userId: id,
-        });
+        navigation.dispatch(
+          StackActions.replace("GameRoom", {
+            msg: msg,
+            roomName: roomName,
+            userId: id,
+          })
+        );
       }
     );
   };
-  return <WaitingRoomForStartPresenter users={users} onClick={onClick} />;
+  return (
+    <WaitingRoomForStartPresenter
+      users={users}
+      onClick={onClick}
+      activation={msg.hostId === route.params.myId}
+    />
+  );
 };

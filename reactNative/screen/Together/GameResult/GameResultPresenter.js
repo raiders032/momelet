@@ -6,7 +6,8 @@ import Card from "../../../component/Card";
 import RestaurantCard from "../../../component/RestaurantCard";
 import CardTopCover from "../../../component/CardTopCover";
 import Footer from "../../../component/Footer";
-export default ({ result, total, selected, onClick }) => {
+import socket from "../../../socket";
+export default ({ result, total, selected, onClick, footerClick }) => {
   console.log("total, selected : ", total, selected);
 
   // const footer = (
@@ -21,14 +22,7 @@ export default ({ result, total, selected, onClick }) => {
   const cover = (
     <CardTopCover total={total} selected={selected} onClick={onClick} />
   );
-  const footer = (
-    <Footer
-      text="다시하기"
-      onClick={() => {
-        console.log("다시하기");
-      }}
-    />
-  );
+  const footer = <Footer text="다시하기" onClick={footerClick} />;
   return (
     <Basic footer={footer}>
       <View

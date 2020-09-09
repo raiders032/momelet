@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import getEnvVars from "./enviroment";
+import { Platform } from "react-native";
+
 const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = "") => {
   try {
@@ -29,6 +31,21 @@ export const apis = {
       },
     }),
   editUser: (id, categories, imageUrl, name, token) => {
+    const body = new FormData();
+
+    const photo = {
+      name: `profileImaeg${id}.jpg`,
+      type: "image/jpeg",
+
+      uri: imageUrl.replace("file://", ""),
+    };
+    const categoryToString = categories.join();
+    console.log(categoryToString);
+
+    body.append("categories", categoryToString);
+    body.append("name", name);
+    body.append("imageFile", photo);
+    console.log(body);
     return makeRequest(
       "put",
       `v1/users/${id}`,
@@ -37,7 +54,7 @@ export const apis = {
           Authorization: `Bearer ${token}`,
         },
       },
-      { categories, imageUrl, name }
+      body
     );
   },
 };

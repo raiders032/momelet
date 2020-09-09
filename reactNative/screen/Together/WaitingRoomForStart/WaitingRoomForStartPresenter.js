@@ -6,7 +6,7 @@ import Footer from "../../../component/Footer";
 import WaitBox from "../../../component/WaitBox";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default ({ users, onClick }) => {
+export default ({ users, onClick, activation }) => {
   const abc = [];
   const footer = (
     <Footer
@@ -14,10 +14,11 @@ export default ({ users, onClick }) => {
         onClick();
       }}
       text={"시작하기"}
+      activation={activation}
     />
   );
   //임시로 테스트 하기 위해서 11 개만 만들고 밑에 추가로 하나 만듬.
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 12; i++) {
     if (i < users.length) {
       abc.push(
         <WaitBox key={i}>
@@ -75,15 +76,6 @@ export default ({ users, onClick }) => {
         }}
       >
         {abc}
-        {/* 이 부분은 실제 서버와 연동시 삭제 */}
-        <TouchableOpacity
-          onPress={() => {
-            socket.emit("tmpEvent", "tmptmp");
-          }}
-        >
-          <WaitBox />
-        </TouchableOpacity>
-        {/* 여기까지 */}
       </View>
     </Basic>
   );

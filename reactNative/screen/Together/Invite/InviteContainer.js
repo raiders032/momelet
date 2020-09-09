@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { StackActions } from "@react-navigation/native";
+
 import InvitePresenter from "./InvitePresenter";
 import socket from "../../../socket";
 export default ({ navigation, route }) => {
@@ -25,10 +27,13 @@ export default ({ navigation, route }) => {
         inviteTheseUsers: result,
       }),
       (msg) => {
-        navigation.navigate("WaitingRoomForStart", {
-          msg,
-          myId: route.params.user.id,
-        });
+        console.log("msg: ", msg);
+        navigation.dispatch(
+          StackActions.replace("WaitingRoomForStart", {
+            msg,
+            myId: route.params.user.id,
+          })
+        );
       }
     );
   };

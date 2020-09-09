@@ -30,10 +30,20 @@ export default ({ navigation, route }) => {
     };
 
     socket.emit("gameUserFinish", JSON.stringify(sendMsg), (msg) => {
-      navigation.navigate("WaitingRoomForResult", {
-        msg: msg,
-        restaurant: restaurant,
-      });
+      console.log("gameUserFinishmsg", msg);
+
+      restaurant.restaurants.forEach((element) =>
+        console.log(element.id, element.name)
+      );
+      const newRestaurant = { ...restaurant };
+
+      navigation.dispatch(
+        StackActions.replace("WaitingRoomForResult", {
+          msg: msg,
+          restaurant: newRestaurant,
+          userId: route.params.userId,
+        })
+      );
     });
   };
   return (

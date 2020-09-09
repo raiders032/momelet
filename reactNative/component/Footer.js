@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
-export default ({ text, onClick, style }) => {
+export default ({ text, onClick, style, activation = true }) => {
   return (
-    <TouchableOpacity onPress={onClick}>
+    <TouchableOpacity onPress={onClick} disabled={!activation}>
       <View
         style={{
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
+          // backgroundColor: { footerColor },
           backgroundColor: "#fff271",
+          // backgroundColor: { footerColor },
           ...style,
         }}
       >

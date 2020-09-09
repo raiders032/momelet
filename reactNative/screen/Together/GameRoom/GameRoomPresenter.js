@@ -51,7 +51,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     outputRange: [1, 0],
   });
   const cardGoDown = () => {
-    console.log("cardGoDownAnimation");
+    // console.log("cardGoDownAnimation");
     Animated.timing(position, {
       toValue: {
         x: 0,
@@ -64,8 +64,8 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     });
   };
   const afterCardMove = (response) => {
-    console.log("response: ", response);
-    console.log("gameResult.current.length", gameResult.current.length);
+    // console.log("response: ", response);
+    // console.log("gameResult.current.length", gameResult.current.length);
     if (gameResult.current.length >= 6) {
       gameResult.current.push({ id: firstRestaurant.id, sign: response });
       gameFinish(gameResult);
@@ -157,8 +157,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
     const timeout = setTimeout(timeGo, 1000);
+    const timeoutCardDown = setTimeout(cardGoDown, 16000);
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeoutCardDown);
     };
   }, [restaurant]);
   const header = (
