@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
-import { Socket } from "socket.io-client";
 import SocketResponse from "../../socketResponse.js";
 
 const canStart = (room, id) => {

@@ -18,7 +18,7 @@ const exitExistRoom = (socket, user, id) => {
 
 export default (socket, msg) => {
   let response = new SocketResponse();
-  let data;
+  let data = {};
   let room, user;
   var echo = "gameRoomJoin. msg: " + msg;
 
@@ -33,7 +33,6 @@ export default (socket, msg) => {
     if (user.joinedRoomName !== null) {
       exitExistRoom(socket, user, id);
     }
-
     room.addUser(user);
     gameRoomUpdateService(socket, room, id);
     user.updateJoinedRoomName(roomName);

@@ -30,15 +30,13 @@ export default (socket, msg) => {
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
   let response = new SocketResponse();
-  let data;
-  let user, room, roomName;
+  let user, room, roomName, gameRoomUserList, hostId;
 
   try {
     const { id, inviteTheseUsers } = JSON.parse(msg);
     user = SingleObject.UserRepository.findById(id);
     room = SingleObject.RoomRepository.add(id);
     roomName = room.getRoomName();
-
     // 기존 접속 방에서 나가기
     if (user.joinedRoomName !== null) {
       exitExistRoom(socket, user, id);
@@ -48,10 +46,9 @@ export default (socket, msg) => {
 
     inviteUsers(socket, inviteTheseUsers, roomName, user);
 
-    data.roomName = roomName;
-    data.gameRoomUserList = room.getUserList();
-    data.hostId = user.id;
-    response.isOk(data);
+    gameRoomUserList = room.getUserList();
+    hostId = user.id;
+    response.isOk({ roomName, gameRoomUserList, hostId });
   } catch (err) {
     logger.error("togetherInviteService Error: " + err);
     response.isFail("togetherInviteService.error");
