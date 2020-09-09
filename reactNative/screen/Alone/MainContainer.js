@@ -7,6 +7,7 @@ import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import { View, Text } from "react-native";
 import socket from "../../socket";
+import printSocketEvent from "../../utils/printEvent";
 
 // 홈 식당 카드의 api 호출 데이터 전달
 
@@ -89,19 +90,20 @@ export default ({ navigation, route }) => {
   };
   const socketConnect = async (latitude, longitude) => {
     if (user !== null) {
-      const tmpUser = user.data.userInfo;
+      const nowUser = user.data.userInfo;
 
       socket.query.JWT = route.params.userToken;
-      socket.query.email = tmpUser.email;
-      socket.query.imageUrl = tmpUser.imageUrl;
-      socket.query.name = tmpUser.name;
-      socket.query.id = tmpUser.id;
+      socket.query.email = nowUser.email;
+      socket.query.imageUrl = nowUser.imageUrl;
+      socket.query.name = nowUser.name;
+      socket.query.id = nowUser.id;
       socket.query.latitude = latitude;
       socket.query.longitude = longitude;
       socket.open();
 
       socket.on("togetherInvitation", (msg) => {
-        const tmpMsg = JSON.parse(msg);
+        printSocketEvent("togetherInvitation", msg);
+        const paseMsg = JSON.parse(msg);
 
         setCoverMessageConfig((before) => {
           return {
@@ -109,7 +111,7 @@ export default ({ navigation, route }) => {
             zIndex: 1,
             bodyMessage: (
               <>
-                <Text>{tmpMsg.hostName}님이</Text>
+                <Text>{paseMsg.data.hostName}님이</Text>
                 <Text>초대하였습니다.</Text>
               </>
             ),
@@ -120,23 +122,27 @@ export default ({ navigation, route }) => {
               });
             },
             coverMessageLeftEvent: () => {
-              const sendMsg = { id: tmpUser.id, roomName: tmpMsg.roomName };
+              const sendMsg = {
+                id: nowUser.id,
+                roomName: paseMsg.data.roomName,
+              };
               socket.emit("gameRoomJoin", JSON.stringify(sendMsg), (msg) => {
-                const tmpMsg = JSON.parse(msg);
-                const { status, roomName, gameRoomUserList, hostId } = tmpMsg;
-                const sendMsg = JSON.stringify({
+                printSocketEvent("gameRoomJoin", msg);
+                const paseMsg = JSON.parse(msg);
+                const { roomName, gameRoomUserList, hostId } = paseMsg.data;
+                const sendMsg = {
                   roomName,
                   gameRoomUserList,
                   hostId,
-                });
+                };
 
                 setCoverMessageConfig((before) => {
                   return { ...before, zIndex: -1 };
                 });
-                if (tmpMsg.status === "success") {
+                if (paseMsg.success === true) {
                   navigation.navigate("WaitingRoomForStart", {
                     msg: sendMsg,
-                    myId: user.data.userInfo.id,
+                    myId: nowUser.id,
                   });
                 }
               });
@@ -175,7 +181,7 @@ export default ({ navigation, route }) => {
 
   //같이 하기 버튼 클릭시
   const sendTogetherMessage = async () => {
-    const tmpUser = user;
+    const nowUser = user;
 
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
     const location = await Location.getCurrentPositionAsync({});
@@ -189,9 +195,14 @@ export default ({ navigation, route }) => {
       // longitude: location.coords.longitude,
     };
     socket.emit("together", JSON.stringify(sendMsg), (msg) => {
-      navigation.navigate("Together", { msg, user: user.data.userInfo });
+      printSocketEvent("together", msg);
+      const paseMsg = JSON.parse(msg);
+      navigation.navigate("Together", {
+        msg: paseMsg.data,
+        user: user.data.userInfo,
+      });
     });
-    // const sendMsg = { id: tmpUser.id, latitude: number, longitude: number }
+    // const sendMsg = { id: nowUser.id, latitude: number, longitude: number }
     // socket.emit("together", JSON.stringify(msg), (msg) => {
     //   navigation.navigate("Together", { msg, user: user.data.userInfo });
     //   // navigation.navigate("Together", { msg, user: "abc" });

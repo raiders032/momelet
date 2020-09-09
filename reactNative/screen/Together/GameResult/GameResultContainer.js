@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import GameResultPresenter from "./GameResultPresenter";
 import { StackActions } from "@react-navigation/native";
 import socket from "../../../socket";
+import printSocketEvent from "../../../utils/printEvent";
 
 export default ({ navigation, route }) => {
   // useEffect(() => {
@@ -16,13 +17,11 @@ export default ({ navigation, route }) => {
   //     });
   //   };
   // }, []);
-  const msg = JSON.parse(route.params.msg);
-  // console.log(route.params);
-  const resultId = msg.roomGameResult.id;
-  console.log("resultId: ", resultId);
 
-  const result = route.params.restaurant.restaurants.filter((restaurant) => {
-    console.log(restaurant.id);
+  // console.log(route.params);
+  const resultId = route.params.msg.roomGameResult.id;
+
+  const result = route.params.restaurant.filter((restaurant) => {
     return restaurant.id == resultId;
   });
   // console.log("result: ", result);
@@ -33,7 +32,7 @@ export default ({ navigation, route }) => {
     };
     // console.log(sendMsg);
     socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {
-      console.log("leavemsg", msg);
+      printSocketEvent("gameRoomLeave", msg);
     });
     navigation.navigate("Main");
   };
@@ -43,26 +42,26 @@ export default ({ navigation, route }) => {
       roomName: route.params.roomName,
     };
     socket.emit("gameRoomJoinAgain", JSON.stringify(sendMsg), (msg) => {
-      console.log("msgWhenGameRoomJoinAgain: ", msg);
+      printSocketEvent("gameROmmJoinAgain", msg);
       const newMsg = {
-        ...JSON.parse(msg),
+        ...JSON.parse(msg).data,
         roomName: route.params.roomName,
       };
-
-      console.log("newMsg: ", newMsg);
+      console.log(newMsg);
       navigation.dispatch(
         StackActions.replace("WaitingRoomForStart", {
-          msg: JSON.stringify(newMsg),
+          msg: newMsg,
           myId: route.params.userId,
         })
       );
     });
   };
+
   return (
     <GameResultPresenter
       result={result[0]}
-      total={msg.roomGameResult.headCount}
-      selected={msg.roomGameResult.likeCount}
+      total={route.params.msg.roomGameResult.headCount}
+      selected={route.params.msg.roomGameResult.likeCount}
       onClick={onClick}
       footerClick={footerClick}
     />

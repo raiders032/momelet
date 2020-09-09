@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { StackActions } from "@react-navigation/native";
 import GameRoomPresenter from "./GameRoomPresenter";
 import socket from "../../../socket";
+import printSocketEvent from "../../../utils/printEvent";
 
 export default ({ navigation, route }) => {
-  console.log("GameContainer Render");
+  console.log("게임룸(컨테이너) 렌더");
 
-  const restaurant = JSON.parse(route.params.msg);
-  // console.log("restaurant: ", restaurant);
-
+  const restaurants = route.params.msg.restaurants;
   const [gameReadyAndMessage, setGameReadyAndMessage] = useState({
     isReady: 1,
     message: "준비~",
@@ -30,25 +29,23 @@ export default ({ navigation, route }) => {
     };
 
     socket.emit("gameUserFinish", JSON.stringify(sendMsg), (msg) => {
-      console.log("gameUserFinishmsg", msg);
+      printSocketEvent("gameUserFinish", msg);
 
-      restaurant.restaurants.forEach((element) =>
-        console.log(element.id, element.name)
-      );
-      const newRestaurant = { ...restaurant };
+      restaurants.forEach((element) => console.log(element.id, element.name));
 
       navigation.dispatch(
         StackActions.replace("WaitingRoomForResult", {
           msg: msg,
-          restaurant: newRestaurant,
+          restaurant: restaurants,
           userId: route.params.userId,
+          roomName: route.params.roomName,
         })
       );
     });
   };
   return (
     <GameRoomPresenter
-      restaurants={restaurant.restaurants}
+      restaurants={restaurants}
       infoText={gameReadyAndMessage.message}
       zIndex={gameReadyAndMessage.isReady}
       gameFinish={gameFinish}
