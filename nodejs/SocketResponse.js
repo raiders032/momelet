@@ -1,8 +1,8 @@
 export default class SocketResponse {
-  constructor(success, errorCode, data) {
-    this.success = success;
-    this.errorCode = errorCode;
-    this.data = data;
+  constructor() {
+    this.success = false;
+    this.errorCode = "message is not published";
+    this.data = null;
   }
   setSuccess(success) {
     this.success = success;

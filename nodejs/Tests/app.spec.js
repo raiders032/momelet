@@ -579,19 +579,18 @@ describe("Connecting Server", () => {
       senders[i].on("gameAllFinish", (msg) => {
         doneCount += 1;
         msg.should.be.type("string");
+
         const parsedMsg = JSON.parse(msg);
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
         msgObject.should.have.property("roomGameResult");
         msgObject["roomGameResult"].should.have.properties(
-          "result",
           "id",
           "headCount",
           "likeCount"
         );
 
-        msgObject["roomGameResult"]["result"].should.equal("success");
         msgObject["roomGameResult"]["id"].should.equal(restaurantsId[0]);
         msgObject["roomGameResult"]["headCount"].should.equal(3);
         msgObject["roomGameResult"]["likeCount"].should.equal(3);
@@ -713,7 +712,6 @@ describe("Connecting Server", () => {
                 checkMsgOutline(parsedMsg);
 
                 const msgObject = parsedMsg["data"];
-                msgObject.should.have.property("status").with.equal("ok");
                 msgObject.should.have.property("restaurants").with.lengthOf(7);
 
                 senders[2].emit(
@@ -721,10 +719,10 @@ describe("Connecting Server", () => {
                   JSON.stringify({ id: ioOptions[2].myId, roomName }),
                   (msg) => {
                     msg.should.be.type("string");
-
+                    console.log("받은 메시지:" + msg);
                     const parsedMsg = JSON.parse(msg);
                     parsedMsg["success"].should.equal(false);
-                    should.not.exist(parsedMsg["errorCode"]);
+                    // should.not.exist(parsedMsg["errorCode"]);
 
                     const msgObject = parsedMsg["data"];
                     should.not.exist(msgObject);

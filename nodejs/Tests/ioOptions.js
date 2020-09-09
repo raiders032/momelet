@@ -26,7 +26,7 @@ export default [
       name: "Noh",
       imageUrl: "naver.com",
       JWT:
-        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA",
       latitude: latitude - 0.0025,
       longitude: longitude,
     },

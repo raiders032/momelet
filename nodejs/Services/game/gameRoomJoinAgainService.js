@@ -17,6 +17,7 @@ export default (socket, msg) => {
   } catch (err) {
     response.isFail("json.parse");
     logger.error("gameRoomJoinAgain Msg parse error: " + err);
+
     return JSON.stringify(response);
   }
 
@@ -47,6 +48,8 @@ export default (socket, msg) => {
     data.hostId = room.getHostId();
     response.isOk(data);
     gameRoomUpdateService(socket, room, id);
+  } else {
+    response.isFail("game.join.again");
   }
 
   return JSON.stringify(response);
