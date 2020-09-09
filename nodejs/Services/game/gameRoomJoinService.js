@@ -37,7 +37,7 @@ export default (socket, msg) => {
     gameRoomUpdateService(socket, room, id);
     user.updateJoinedRoomName(roomName);
     data.roomName = roomName;
-    data.gameRoomUserList = room.getUserList();
+    data.gameRoomUserList = room.getUserInfo();
     data.hostId = room.getHostId();
     response.isOk(data);
   } catch (err) {
