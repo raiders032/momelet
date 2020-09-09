@@ -13,6 +13,7 @@ const exitRoom = (socket, user, room) => {
 };
 export default (socket, msg) => {
   let response = new SocketResponse();
+  let data = {};
   let user, room;
   logger.info("gameRoomLeave. msg: " + msg);
 
@@ -23,7 +24,9 @@ export default (socket, msg) => {
     if (user.joinedRoomName !== null) {
       exitRoom(socket, user, room);
       user.updateJoinedRoomName(null);
-      response.isOk({ id, roomName });
+      data.id = id;
+      data.roomName = roomName;
+      response.isOk(data);
     } else {
       throw new Error("참여한 방이 없습니다.");
     }

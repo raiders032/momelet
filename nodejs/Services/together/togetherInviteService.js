@@ -27,9 +27,11 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
 };
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = {};
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
-  let response = new SocketResponse();
+
   let user, room, roomName, gameRoomUserList, hostId;
 
   try {
@@ -48,7 +50,11 @@ export default (socket, msg) => {
 
     gameRoomUserList = room.getUserList();
     hostId = user.id;
-    response.isOk({ roomName, gameRoomUserList, hostId });
+
+    data.roomName = roomName;
+    data.gameRoomUserList = gameRoomUserList;
+    data.hostId = hostId;
+    response.isOk(data);
   } catch (err) {
     logger.error("togetherInviteService Error: " + err);
     response.isFail("togetherInviteService.error");

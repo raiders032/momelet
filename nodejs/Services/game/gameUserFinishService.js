@@ -4,6 +4,7 @@ import SocketResponse from "../../socketResponse.js";
 
 export default (socket, msg) => {
   let response = new SocketResponse();
+  let data = {};
   var echo = "gameRoomUserFinish. msg: " + msg;
   let id, userGameResult, roomName, user, room;
 
@@ -37,6 +38,7 @@ export default (socket, msg) => {
     }
   }
 
-  response.isOk({ roomName });
+  data.roomName = roomName;
+  response.isOk(data);
   return JSON.stringify(response);
 };

@@ -33,12 +33,10 @@ const findAroundUsers = (myId, lat, long) => {
 
 // 같이하기
 export default (socket, msg) => {
-  var echo = "together. msg: " + msg;
-  logger.info(echo);
-
   let response = new SocketResponse();
   let data = { aroundUsers: null };
-
+  var echo = "together. msg: " + msg;
+  logger.info(echo);
   try {
     const { id, latitude, longitude } = JSON.parse(msg);
     data.aroundUsers = findAroundUsers(id, latitude, longitude);
@@ -47,5 +45,6 @@ export default (socket, msg) => {
     logger.error("togetherService error: " + err);
     response.isFail("together.error");
   }
+  console.log("++++++++++" + JSON.stringify(response));
   return JSON.stringify(response);
 };

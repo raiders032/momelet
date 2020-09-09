@@ -1,6 +1,6 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
-import SocketResponse from "../../SocketResponse";
+import SocketResponse from "../../SocketResponse.js";
 
 export default (socket, msg) => {
   let response = new SocketResponse();

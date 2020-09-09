@@ -57,6 +57,7 @@ const getCard = async (users, myId, radius, latitude, longitude) => {
 
 export default async (socket, msg) => {
   let response = new SocketResponse();
+  let data = {};
   let id, roomName, radius, latitude, longitude, room, cards;
   var echo = "gameStart. msg: " + msg;
   logger.info(echo);
@@ -119,7 +120,8 @@ export default async (socket, msg) => {
   // 게임이 시작된 후에 gameRoomUpdate, gameStart에 대해서 메시지를 보낼 일이 없기에
   // 유저들의 canReceive를 false로 업데이트 해준다. 0903 gameUserFinish에서 변경할 예정
   // canReceive가 false인 유저는 방에서 삭제되었기 때문에 filter를 쓰지 않음.
-  response.isOk({ restaurants: cards });
+  data.restaurants = cards;
+  response.isOk(data);
   let headCount = 0;
   users.forEach((user) => {
     if (user.getId() !== room.getHostId()) {
