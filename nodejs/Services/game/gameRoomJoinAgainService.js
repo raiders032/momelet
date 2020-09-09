@@ -1,24 +1,23 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
+import SocketResponse from "../../socketResponse.js";
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = {};
+  let id, roomName;
   var echo = "gameRoomJoinAgain. msg: " + msg;
   logger.info(echo);
 
-  let retMsg = {
-    status: "fail",
-    gameRoomUserList: null,
-    hostId: null,
-  };
-  let id, roomName;
   try {
     const parsedMsg = JSON.parse(msg);
     id = parsedMsg.id;
     roomName = parsedMsg.roomName;
   } catch (err) {
+    response.isFail("json.parse");
     logger.error("gameRoomJoinAgain Msg parse error: " + err);
-    return JSON.stringify(retMsg);
+    return JSON.stringify(response);
   }
 
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
@@ -29,8 +28,7 @@ export default (socket, msg) => {
   ) {
     const user = SingleObject.UserRepository.findById(id);
     user.updateCanReceive(true);
-    retMsg.status = "ok";
-    retMsg.gameRoomUserList = room
+    data.gameRoomUserList = room
       .getUserList()
       .filter((user) => user.getCanReceive())
       .map((user) => {
@@ -46,10 +44,10 @@ export default (socket, msg) => {
       room.updateHostId(user.getId());
     }
 
-    retMsg.hostId = room.getHostId();
+    data.hostId = room.getHostId();
+    response.isOk(data);
     gameRoomUpdateService(socket, room, id);
   }
 
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(response);
 };
