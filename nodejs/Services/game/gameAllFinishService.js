@@ -29,8 +29,6 @@ export default (socket, msg) => {
   let bestCard = { id: null, like: 0, score: 0 };
   let isLike = false;
 
-  room.endGame();
-
   cardList.forEach((card, key) => {
     if (card.score > bestCard.score) {
       bestCard.score = card.score;
@@ -48,6 +46,9 @@ export default (socket, msg) => {
     data.roomGameResult.likeCount = bestCard.like;
     response.isOk(data);
   }
+
+  room.endGame();
+  room.resetFinishCount();
 
   setTimeout(() => {
     let retMsg = JSON.stringify(response);
