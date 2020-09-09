@@ -20,7 +20,7 @@ const offEventAll = (event, senders) => {
 const checkMsgOutline = (msgObject) => {
   msgObject.should.have.properties("success", "errorCode", "data");
   msgObject["success"].should.equal(true);
-  msgObject["errorCode"].should.equal(null);
+  should.not.exist(msgObject["errorCode"]);
 };
 
 describe("Connecting Server", () => {
@@ -95,9 +95,9 @@ describe("Connecting Server", () => {
 
       const msgObject = parsedMsg["data"];
 
-      msgObject.should.have.properties("roomName", "hostName");
+      msgObject.should.have.properties("roomName", "hostId");
       msgObject["roomName"].should.startWith(ioOptions[0].myId);
-      msgObject["hostName"].should.equal(ioOptions[0].query.name);
+      msgObject["hostId"].should.equal(ioOptions[0].myId);
 
       roomName = msgObject["roomName"];
 
@@ -176,7 +176,6 @@ describe("Connecting Server", () => {
 
         const msgObject = parsedMsg["data"];
         msgObject.should.have.properties(
-          "status",
           "roomName",
           "gameRoomUserList",
           "hostId"
@@ -249,7 +248,7 @@ describe("Connecting Server", () => {
           checkMsgOutline(parsedMsg);
 
           const msgObject = parsedMsg["data"];
-          msgObject.should.have.property("status").with.equal("ok");
+          should.not.exist(msgObject);
           SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
             false
           );
@@ -283,9 +282,12 @@ describe("Connecting Server", () => {
           JSON.stringify({ id: ioOptions[2].myId, roomName }),
           (msg) => {
             msg.should.be.type("string");
-            let msgObject = JSON.parse(msg);
 
-            msgObject.should.have.property("status").with.equal("ok");
+            const parsedMsg = JSON.parse(msg);
+            checkMsgOutline(parsedMsg);
+
+            const msgObject = parsedMsg["data"];
+            should.not.exist(msgObject);
 
             SingleObject.RoomRepository.findByRoomName(roomName).should.equal(
               false
@@ -310,7 +312,7 @@ describe("Connecting Server", () => {
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.property("status").with.equal("ok");
+        should.not.exist(msgObject);
         SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
           false
         );
@@ -674,7 +676,6 @@ describe("Connecting Server", () => {
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.property("status").with.equal("ok");
         msgObject.should.have
           .property("gameRoomUserList")
           .with.have.lengthOf(1);
@@ -690,7 +691,6 @@ describe("Connecting Server", () => {
             checkMsgOutline(parsedMsg);
 
             const msgObject = parsedMsg["data"];
-            msgObject.should.have.property("status").with.equal("ok");
             msgObject.should.have
               .property("gameRoomUserList")
               .with.have.lengthOf(2);
@@ -725,13 +725,10 @@ describe("Connecting Server", () => {
 
                     const parsedMsg = JSON.parse(msg);
                     parsedMsg["success"].should.equal(false);
-                    parsedMsg["data"].should.equal(null);
+                    should.not.exist(parsedMsg["errorCode"]);
 
                     const msgObject = parsedMsg["data"];
-                    msgObject.should.have.property("status").with.equal("fail");
-                    msgObject.should.have
-                      .property("gameRoomUserList")
-                      .with.equal(null);
+                    should.not.exist(msgObject);
 
                     offEventAll("gameRoomUpdate", senders);
                     done();
