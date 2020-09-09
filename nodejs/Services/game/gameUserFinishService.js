@@ -1,16 +1,15 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
+import SocketResponse from "../../socketResponse.js";
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = {};
   var echo = "gameRoomUserFinish. msg: " + msg;
+  let id, userGameResult, roomName, user, room;
+
   logger.info(echo);
 
-  let retMsg = {
-    status: "fail",
-    roomName: null,
-  };
-
-  let id, userGameResult, roomName, user, room;
   try {
     const parsedMsg = JSON.parse(msg);
     id = parsedMsg.id;
@@ -18,13 +17,15 @@ export default (socket, msg) => {
     roomName = parsedMsg.roomName;
   } catch (err) {
     logger.error("gameUserFinish Msg parse error: " + err);
-    return JSON.stringify(retMsg);
+    response.isFail("json.parse");
+    return JSON.stringify(response);
   }
 
   user = SingleObject.UserRepository.findById(id);
   room = SingleObject.RoomRepository.findByRoomName(roomName);
 
   if (user.canReceive === true) {
+    room.addFinishCount();
     user.updateCanReceive(false);
     if (userGameResult.length === 7) {
       for (let result of userGameResult) {
@@ -32,12 +33,12 @@ export default (socket, msg) => {
       }
     } else {
       logger.error("유저 게임이 제대로 종료되지 않아 결과가 반영되지 않았음");
+      response.isFail("game.card.error");
+      return JSON.stringify(response);
     }
-    room.addFinishCount();
   }
 
-  retMsg.status = "wait";
-  retMsg.roomName = roomName;
-
-  return JSON.stringify(retMsg);
+  data.roomName = roomName;
+  response.isOk(data);
+  return JSON.stringify(response);
 };

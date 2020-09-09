@@ -1,10 +1,15 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
+import SocketResponse from "../../SocketResponse.js";
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = { roomGameResult: {} };
   var echo = "gameAllFinishService. msg: " + msg;
-  logger.info(echo);
   let id, roomName;
+
+  logger.info(echo);
+
   try {
     const parsedMsg = JSON.parse(msg);
     id = parsedMsg.id;
@@ -23,14 +28,6 @@ export default (socket, msg) => {
   const cardList = room.getCardList();
   let bestCard = { id: null, like: 0, score: 0 };
   let isLike = false;
-  let retMsg = {
-    roomGameResult: {
-      result: "fail",
-      id: null,
-      headCount: null,
-      likeCount: null,
-    },
-  };
 
   room.endGame();
 
@@ -44,16 +41,16 @@ export default (socket, msg) => {
   });
 
   if (!isLike) {
-    retMsg.roomGameResult.result = "fail";
+    response.isFail(game.noLike);
   } else {
-    retMsg.roomGameResult.result = "success";
-    retMsg.roomGameResult.id = bestCard.id;
-    retMsg.roomGameResult.headCount = room.getHeadCount();
-    retMsg.roomGameResult.likeCount = bestCard.like;
+    data.roomGameResult.id = bestCard.id;
+    data.roomGameResult.headCount = room.getHeadCount();
+    data.roomGameResult.likeCount = bestCard.like;
+    response.isOk(data);
   }
 
   setTimeout(() => {
-    retMsg = JSON.stringify(retMsg);
+    let retMsg = JSON.stringify(response);
 
     users.forEach((user) => {
       socket.to(user.socketId).emit("gameAllFinish", retMsg);

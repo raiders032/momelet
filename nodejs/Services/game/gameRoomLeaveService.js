@@ -1,6 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
+import SocketResponse from "../../socketResponse.js";
 
 const exitRoom = (socket, user, room) => {
   if (room === false) return;
@@ -11,11 +12,10 @@ const exitRoom = (socket, user, room) => {
   SingleObject.RoomRepository.delete(room.getRoomName());
 };
 export default (socket, msg) => {
-  var echo = "gameRoomLeave. msg: " + msg;
-  logger.info(echo);
-
-  let retMsg = { status: "fail" };
+  let response = new SocketResponse();
+  let data = {};
   let user, room;
+  logger.info("gameRoomLeave. msg: " + msg);
 
   try {
     const { id, roomName } = JSON.parse(msg);
@@ -24,13 +24,14 @@ export default (socket, msg) => {
     if (user.joinedRoomName !== null) {
       exitRoom(socket, user, room);
       user.updateJoinedRoomName(null);
-      retMsg.status = "ok";
+      response.isOk(null);
+    } else {
+      throw new Error("참여한 방이 없습니다.");
     }
   } catch (err) {
     logger.error("gameRoomLeaveService error: " + err);
-    retMsg.status = "fail";
+    response.isFail("gameRoomLeaveService.error");
   }
 
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(response);
 };

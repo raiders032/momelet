@@ -1,6 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
 import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
+import SocketResponse from "../../socketResponse.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -16,27 +17,33 @@ const exitExistRoom = (socket, user, id) => {
 };
 
 const inviteUsers = (socket, inviteUsers, roomName, host) => {
-  const inviteMsg = JSON.stringify({
+  // const inviteMsg = new SocketResponse(true, null, {
+  //   roomName,
+  //   hostId: host.id,
+  // });
+  const inviteMsg = new SocketResponse();
+  inviteMsg.isOk({
     roomName,
-    hostName: host.name,
+    hostId: host.id,
   });
   for (let user of inviteUsers) {
-    socket.to(user).emit("togetherInvitation", inviteMsg);
+    socket.to(user).emit("togetherInvitation", JSON.stringify(inviteMsg));
   }
 };
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = {};
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
-  let retMsg = { roomName: null, gameRoomUserList: null };
-  let user, room, roomName;
+
+  let user, room, roomName, gameRoomUserList, hostId;
 
   try {
     const { id, inviteTheseUsers } = JSON.parse(msg);
     user = SingleObject.UserRepository.findById(id);
     room = SingleObject.RoomRepository.add(id);
     roomName = room.getRoomName();
-
     // 기존 접속 방에서 나가기
     if (user.joinedRoomName !== null) {
       exitExistRoom(socket, user, id);
@@ -46,16 +53,16 @@ export default (socket, msg) => {
 
     inviteUsers(socket, inviteTheseUsers, roomName, user);
 
-    retMsg.roomName = roomName;
-    retMsg.gameRoomUserList = room.getUserList();
-    retMsg.hostId = user.id;
+    gameRoomUserList = room.getUserList();
+    hostId = user.id;
+
+    data.roomName = roomName;
+    data.gameRoomUserList = gameRoomUserList;
+    data.hostId = hostId;
+    response.isOk(data);
   } catch (err) {
     logger.error("togetherInviteService Error: " + err);
-    retMsg.roomName = null;
-    retMsg.gameRoomUserList = null;
-    retMsg.hostId = null;
+    response.isFail("togetherInviteService.error");
   }
-
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(response);
 };

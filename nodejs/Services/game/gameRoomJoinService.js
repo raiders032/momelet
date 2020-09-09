@@ -1,6 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
+import SocketResponse from "../../socketResponse.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -16,16 +17,13 @@ const exitExistRoom = (socket, user, id) => {
 };
 
 export default (socket, msg) => {
+  let response = new SocketResponse();
+  let data = {};
+  let room, user;
   var echo = "gameRoomJoin. msg: " + msg;
+
   logger.info(echo);
 
-  let retMsg = {
-    status: "fail",
-    roomName: null,
-    gameRoomUserList: null,
-    hostId: null,
-  };
-  let room, user;
   try {
     const { id, roomName } = JSON.parse(msg);
     room = SingleObject.RoomRepository.findByRoomName(roomName);
@@ -35,22 +33,17 @@ export default (socket, msg) => {
     if (user.joinedRoomName !== null) {
       exitExistRoom(socket, user, id);
     }
-
     room.addUser(user);
     gameRoomUpdateService(socket, room, id);
     user.updateJoinedRoomName(roomName);
-    retMsg.status = "success";
-    retMsg.roomName = roomName;
-    retMsg.gameRoomUserList = room.getUserList();
-    retMsg.hostId = room.getHostId();
+    data.roomName = roomName;
+    data.gameRoomUserList = room.getUserList();
+    data.hostId = room.getHostId();
+    response.isOk(data);
   } catch (err) {
     logger.error("gameRoomJoinService error: " + err);
-    retMsg.status = "fail";
-    retMsg.roomName = null;
-    retMsg.gameRoomUserList = null;
-    retMsg.hostId = null;
+    response.isFail("gameRoomJoinService.error");
   }
 
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(response);
 };
