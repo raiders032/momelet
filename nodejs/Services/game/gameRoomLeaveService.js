@@ -24,9 +24,7 @@ export default (socket, msg) => {
     if (user.joinedRoomName !== null) {
       exitRoom(socket, user, room);
       user.updateJoinedRoomName(null);
-      data.id = id;
-      data.roomName = roomName;
-      response.isOk(data);
+      response.isOk(null);
     } else {
       throw new Error("참여한 방이 없습니다.");
     }
