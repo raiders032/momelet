@@ -13,7 +13,7 @@ export default class SocketResponse {
   }
 
   setData(key, value) {
-    data[key] = value;
+    this.data[key] = value;
   }
 
   isOk(data) {

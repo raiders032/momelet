@@ -47,6 +47,5 @@ export default (socket, msg) => {
     logger.error("togetherService error: " + err);
     response.isFail("together.error");
   }
-  console.log(JSON.stringify(response));
   return JSON.stringify(response);
 };

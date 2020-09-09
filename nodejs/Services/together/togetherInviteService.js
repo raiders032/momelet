@@ -1,6 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
 import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
+import SocketResponse from "../../socketResponse.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -28,7 +29,8 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
 export default (socket, msg) => {
   const echo = "togetherInviteService. msg: " + msg;
   logger.info(echo);
-  let retMsg = { roomName: null, gameRoomUserList: null };
+  let response = new SocketResponse();
+  let data;
   let user, room, roomName;
 
   try {
@@ -46,16 +48,13 @@ export default (socket, msg) => {
 
     inviteUsers(socket, inviteTheseUsers, roomName, user);
 
-    retMsg.roomName = roomName;
-    retMsg.gameRoomUserList = room.getUserList();
-    retMsg.hostId = user.id;
+    data.roomName = roomName;
+    data.gameRoomUserList = room.getUserList();
+    data.hostId = user.id;
+    response.isOk(data);
   } catch (err) {
     logger.error("togetherInviteService Error: " + err);
-    retMsg.roomName = null;
-    retMsg.gameRoomUserList = null;
-    retMsg.hostId = null;
+    response.isFail("togetherInviteService.error");
   }
-
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  return JSON.stringify(response);
 };
