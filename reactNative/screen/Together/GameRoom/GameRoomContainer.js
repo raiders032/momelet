@@ -35,10 +35,12 @@ export default ({ navigation, route }) => {
       restaurant.restaurants.forEach((element) =>
         console.log(element.id, element.name)
       );
+      const newRestaurant = { ...restaurant };
+
       navigation.dispatch(
         StackActions.replace("WaitingRoomForResult", {
           msg: msg,
-          restaurant: restaurant,
+          restaurant: newRestaurant,
           userId: route.params.userId,
         })
       );

@@ -8,6 +8,7 @@ import socket from "../../socket";
 import Footer from "../../component/Footer";
 
 export default ({ navigation, route }) => {
+  console.log("abc", route.params.restaurant.restaurants[0].name);
   const [dot, setDot] = useState(".");
   const rotateValue = useRef(new Animated.Value(0)).current;
   const init = () => {
@@ -58,7 +59,7 @@ export default ({ navigation, route }) => {
       );
     });
     return () => {
-      // socket.off("gameAllFinish");
+      socket.off("gameAllFinish");
     };
   }, []);
   return (

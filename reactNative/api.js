@@ -34,14 +34,15 @@ export const apis = {
     const body = new FormData();
 
     const photo = {
-      name: `abc.jpg`,
+      name: `profileImaeg${id}.jpg`,
       type: "image/jpeg",
 
       uri: imageUrl.replace("file://", ""),
     };
+    const categoryToString = categories.join();
+    console.log(categoryToString);
 
-    console.log("categories, name, photo: ", categories, name, photo);
-    body.append("categories", "한식, 중식");
+    body.append("categories", categoryToString);
     body.append("name", name);
     body.append("imageFile", photo);
     console.log(body);

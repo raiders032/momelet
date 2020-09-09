@@ -9,6 +9,7 @@ import * as ImagePicker from "expo-image-picker";
 
 export default ({ navigation, route }) => {
   const [user, setUser] = useState(route.params.user);
+  console.log("유저 정보:", user);
   const onClickFooter = async () => {
     const token = await AsyncStorage.getItem("@userToken");
     const preprocessCategories = [];
