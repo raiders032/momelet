@@ -4,7 +4,7 @@ import SocketResponse from "../../SocketResponse.js";
 
 export default (socket, msg) => {
   let response = new SocketResponse();
-  let data = { roomGameResult: null };
+  let data = { roomGameResult: {} };
   var echo = "gameAllFinishService. msg: " + msg;
   let id, roomName;
 
@@ -50,7 +50,7 @@ export default (socket, msg) => {
   }
 
   setTimeout(() => {
-    retMsg = JSON.stringify(response);
+    let retMsg = JSON.stringify(response);
 
     users.forEach((user) => {
       socket.to(user.socketId).emit("gameAllFinish", retMsg);

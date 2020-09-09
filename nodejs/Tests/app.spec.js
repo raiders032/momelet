@@ -4,7 +4,6 @@ import app from "../app.js";
 import ioClient from "socket.io-client";
 import ioOptions from "./ioOptions.js";
 import * as SingleObject from "../SingleObjects.js";
-import socket from "../socket.js";
 
 const disconnectAll = (senders) => {
   for (let i = 0; i < senders.length; i++) {
@@ -185,8 +184,10 @@ describe("Connecting Server", () => {
         senders[1].on("gameRoomUpdate", (msg) => {
           msg.should.be.type("string");
 
-          const msgObject = JSON.parse(msg);
-          checkMsgOutline(msgObject);
+          const parsedMsg = JSON.parse(msg);
+          checkMsgOutline(parsedMsg);
+
+          const msgObject = parsedMsg["data"];
           msgObject.should.have
             .property("gameRoomUserList")
             .with.have.lengthOf(3);
@@ -357,7 +358,6 @@ describe("Connecting Server", () => {
 
             const msgObject = parsedMsg["data"];
             msgObject.should.have.properties(
-              "status",
               "roomName",
               "gameRoomUserList",
               "hostId"
@@ -394,9 +394,11 @@ describe("Connecting Server", () => {
                     msg.should.be.type("string");
                     const parsedMsg = JSON.parse(msg);
 
-                    parsedMsg.should.have
-                      .property("status")
-                      .with.equal("false");
+                    parsedMsg.should.have.property("success").with.equal(false);
+                    parsedMsg.should.have.property(
+                      "errorCode",
+                      "room.game.start"
+                    );
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
@@ -423,8 +425,7 @@ describe("Connecting Server", () => {
       checkMsgOutline(parsedMsg);
 
       const msgObject = parsedMsg["data"];
-      msgObject.should.have.properties("status", "restaurants");
-      msgObject.status.should.equal("ok");
+      msgObject.should.have.property("restaurants");
       msgObject.restaurants.should.have.lengthOf(7);
       senders[1].off("gameStart");
     });
@@ -435,8 +436,7 @@ describe("Connecting Server", () => {
       checkMsgOutline(parsedMsg);
 
       const msgObject = parsedMsg["data"];
-      msgObject.should.have.properties("status", "restaurants");
-      msgObject.status.should.equal("ok");
+      msgObject.should.have.property("restaurants");
       msgObject.restaurants.should.have.lengthOf(7);
 
       // gameUserFinish 테스트를 위한 것.
@@ -462,8 +462,7 @@ describe("Connecting Server", () => {
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.properties("status", "restaurants");
-        msgObject.status.should.equal("ok");
+        msgObject.should.have.property("restaurants");
         msgObject.restaurants.should.have.lengthOf(7);
 
         SingleObject.RoomRepository.findByRoomName(roomName)
@@ -513,11 +512,12 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
+
         const parsedMsg = JSON.parse(msg);
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.property("status").with.equal("wait");
+        msgObject.should.have.property("roomName", roomName);
       }
     );
 
@@ -564,8 +564,7 @@ describe("Connecting Server", () => {
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.property("status").with.equal("wait");
-
+        msgObject.should.have.property("roomName", roomName);
         done();
       }
     );
@@ -646,7 +645,7 @@ describe("Connecting Server", () => {
         checkMsgOutline(parsedMsg);
 
         const msgObject = parsedMsg["data"];
-        msgObject.should.have.property("status").with.equal("wait");
+        msgObject.should.have.property("roomName", roomName);
       }
     );
   });

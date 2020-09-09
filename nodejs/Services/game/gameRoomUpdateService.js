@@ -3,7 +3,7 @@ import SocketResponse from "../../socketResponse.js";
 
 export default (socket, room, id) => {
   let response = new SocketResponse();
-  let data;
+  let data = {};
   const echo =
     "gameRoomUpdateService. roomName: " + room.getRoomName() + ", id: " + id;
   logger.info(echo);
@@ -25,7 +25,9 @@ export default (socket, room, id) => {
     users
       .filter((user) => user.getCanReceive() && id !== user.id)
       .forEach((user) => {
-        socket.to(user.socketId).emit("gameRoomUpdate", response);
+        socket
+          .to(user.socketId)
+          .emit("gameRoomUpdate", JSON.stringify(response));
       });
   } catch (err) {
     logger.error("gameRoomUpdateService " + err);

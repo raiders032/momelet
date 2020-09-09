@@ -11,7 +11,7 @@ export default [
       imageUrl: "naver.com",
       JWT:
         //"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTk4Mjc2NDQ5LCJleHAiOjE1OTkxNDA0NDl9._9QoKUlnenD6g-isiuB0UE6IP9B83lyinlUsPMomUymW5942Ik2J9Gof2c6SrkF-6-DdfGRJZnCjRUFLyiUnLg",
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNTk5MDI4OTg1LCJleHAiOjE1OTk4OTI5ODV9.HVDJOJNJdcH5R_D0ZgnWaLgqkSkWLgUfFufdLKVWbUAcuXALVjoPQxPtGVTzLNYYwh8QGt6PWFQ0Nz9-OsgtDg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA",
       latitude: "37.5444086",
       latitude: latitude,
       longitude: "127.0654405",
@@ -25,7 +25,8 @@ export default [
       email: "4@naver.com",
       name: "Noh",
       imageUrl: "naver.com",
-      JWT: "sdgsdf@#$",
+      JWT:
+        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA",
       latitude: latitude - 0.0025,
       longitude: longitude,
     },
