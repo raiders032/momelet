@@ -75,8 +75,8 @@ public class UserController {
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
                                             @Valid @ModelAttribute UpdateUserRequest request,
                                             @PathVariable Long id) throws IOException {
-        logger.info("image File name" + request.getImageFile().getOriginalFilename());
-        logger.info("image content type" + request.getImageFile().getContentType());
+        logger.debug("image File name" + request.getImageFile().getOriginalFilename());
+        logger.debug("image content type" + request.getImageFile().getContentType());
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, request);
@@ -103,6 +103,8 @@ public class UserController {
     @PostMapping("/upload/{id}")
     public ResponseEntity<?> upload(@Valid @ModelAttribute UpdateUserRequest request,
                                             @PathVariable Long id) throws IOException {
+        logger.debug("image File name" + request.getImageFile().getOriginalFilename());
+        logger.debug("image content type" + request.getImageFile().getContentType());
         userService.updateUser(id, request);
         return ResponseEntity
                 .ok(new ApiResponse(true, "회원 정보 수정 완료"));
