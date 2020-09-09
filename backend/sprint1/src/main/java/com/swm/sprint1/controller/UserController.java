@@ -67,7 +67,7 @@ public class UserController {
 
 
     @ApiOperation(value = "유저 정보 수정")
-    @PutMapping("/api/v1/users/{id}")
+    @PostMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
                                             @Valid @ModelAttribute UpdateUserRequest request,
@@ -92,5 +92,14 @@ public class UserController {
         userLikingService.saveUserLiking(userLikingDto);
         return ResponseEntity.created(null)
                 .body(new ApiResponse(true, "유저 의사 표현 저장 완료"));
+    }
+
+    @ApiOperation(value = "유저 정보 수정")
+    @PostMapping("/upload/{id}")
+    public ResponseEntity<?> upload(@Valid @ModelAttribute UpdateUserRequest request,
+                                            @PathVariable Long id) throws IOException {
+        userService.updateUser(id, request);
+        return ResponseEntity
+                .ok(new ApiResponse(true, "회원 정보 수정 완료"));
     }
 }

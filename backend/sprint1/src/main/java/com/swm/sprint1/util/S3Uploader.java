@@ -24,6 +24,9 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket; //S3 버킷경로
 
+    @Value("${app.s3.profile.dir}")
+    private String profileDir;
+
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
@@ -37,8 +40,10 @@ public class S3Uploader {
         String newFileName = dirName + "/" + fileNameOnly + "_" + uuid + ".jpeg";
         String imageUrl = putS3(uploadFile, newFileName);
         removeNewFile(uploadFile);
-        return imageUrl.replace("profile-image/", "profile-image-resize/")
-                .replace(uuid, uuid + "_resize");
+        return imageUrl
+                .replace("momelet.s3.ap-northeast-2.amazonaws.com", "dz1rd925xfsaa.cloudfront.net")
+                .replace(profileDir, "profile/resized-images")
+                .replace(uuid, uuid + "_640x640");
     }
 
     private String putS3(File uploadFile, String fileName) {

@@ -14,7 +14,7 @@
 </head>
 <body>
 <h1>
-    S3 이미지 업로더
+    S3 이미지 업로더 ㅜ우ㅡ으으
 </h1>
 <div class="col-md-12">
     <div class="col-md-2">
@@ -42,12 +42,12 @@
         var file = $('#img')[0].files[0];
         var formData = new FormData();
         var name = $('#name').valueOf().toString();
-        formData.append('data', file);
+        formData.append('imageFile', file);
         formData.append('name','nys');
         formData.append('categories',JSON.stringify(["한식", "중식"]));
         $.ajax({
             type: 'POST',
-            url: '/upload',
+            url: '/upload/7',
             data: formData,
             processData: false,
             contentType: false

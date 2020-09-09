@@ -10,6 +10,7 @@ import com.swm.sprint1.repository.user.UserCategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ public class UserService {
     private final UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Uploader s3Uploader;
+
+    @Value("${app.s3.profile.dir}")
+    private String dir;
 
     @Transactional
     public User createUser(SignUpRequest signUpRequest) {
@@ -46,7 +50,7 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
-        String imageUrl = s3Uploader.upload(request.getImageFile(), "profile-image");
+        String imageUrl = s3Uploader.upload(request.getImageFile(), dir);
         user.updateUserInfo(request.getName(), imageUrl, categories);
     }
 
