@@ -68,9 +68,12 @@ describe("Connecting Server", () => {
         msg.should.be.type("string");
 
         const msgObject = JSON.parse(msg);
-        msgObject.should.have.property("aroundUsers");
+        msgObject.should.have.property("success").which.equal(true);
+        msgObject.should.have.property("errorCode").which.equal(null);
+        msgObject.should.have.property("data");
 
-        msgObject["aroundUsers"].length.should.equal(2);
+        const aroundUsers = msgObject.data.aroundUsers;
+        aroundUsers.should.have.length(2);
 
         offEventAll("together", senders);
         done();

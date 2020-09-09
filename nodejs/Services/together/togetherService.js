@@ -1,5 +1,6 @@
 import * as SingleObject from "../../SingleObjects.js";
 import logger from "../../logger.js";
+import SocketResponse from "../../socketResponse.js";
 
 const findAroundUsers = (myId, lat, long) => {
   const aroundUsers = [];
@@ -35,15 +36,17 @@ export default (socket, msg) => {
   var echo = "together. msg: " + msg;
   logger.info(echo);
 
-  let retMsg = { aroundUsers: null };
+  let response = new SocketResponse();
+  let data = { aroundUsers: null };
 
   try {
     const { id, latitude, longitude } = JSON.parse(msg);
-    retMsg.aroundUsers = findAroundUsers(id, latitude, longitude);
+    data.aroundUsers = findAroundUsers(id, latitude, longitude);
+    response.isOk(data);
   } catch (err) {
     logger.error("togetherService error: " + err);
-    retMsg.aroundUsers = null;
+    response.isFail("together.error");
   }
-  retMsg = JSON.stringify(retMsg);
-  return retMsg;
+  console.log(JSON.stringify(response));
+  return JSON.stringify(response);
 };

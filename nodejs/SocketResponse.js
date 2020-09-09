@@ -15,4 +15,16 @@ export default class SocketResponse {
   setData(key, value) {
     data[key] = value;
   }
+
+  isOk(data) {
+    this.success = true;
+    this.errorCode = null;
+    this.data = data;
+  }
+
+  isFail(errorCode) {
+    this.success = false;
+    this.errorCode = errorCode;
+    this.data = null;
+  }
 }
