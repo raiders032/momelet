@@ -17,12 +17,12 @@ const exitExistRoom = (socket, user, id) => {
 };
 
 const inviteUsers = (socket, inviteUsers, roomName, host) => {
-  const inviteMsg = JSON.stringify({
+  const inviteMsg = new SocketResponse(true, null, {
     roomName,
-    hostName: host.name,
+    hostId: host.id,
   });
   for (let user of inviteUsers) {
-    socket.to(user).emit("togetherInvitation", inviteMsg);
+    socket.to(user).emit("togetherInvitation", JSON.stringify(inviteMsg));
   }
 };
 
