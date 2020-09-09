@@ -58,6 +58,18 @@ export default class Room {
     }
   }
 
+  getUserInfo() {
+    let userInfo = [];
+    this.userList.forEach((user) => {
+      const { id, name, imageUrl } = user;
+      userInfo.push({
+        id,
+        name,
+        imageUrl,
+      });
+    });
+    return userInfo;
+  }
   getUserList() {
     return this.userList;
   }

@@ -49,7 +49,7 @@ export default (socket, msg) => {
 
     inviteUsers(socket, inviteTheseUsers, roomName, user);
 
-    gameRoomUserList = room.getUserList();
+    gameRoomUserList = room.getUserInfo();
     hostId = user.id;
 
     data.roomName = roomName;
