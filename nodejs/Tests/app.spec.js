@@ -17,6 +17,11 @@ const offEventAll = (event, senders) => {
     senders[i].off(event);
   }
 };
+const checkMsgOutline = (msgObject) => {
+  msgObject.should.have.properties("success", "errorCode", "data");
+  msgObject["success"].should.equal(true);
+  msgObject["errorCode"].should.equal(null);
+};
 
 describe("Connecting Server", () => {
   let roomName;
@@ -67,12 +72,10 @@ describe("Connecting Server", () => {
       (msg) => {
         msg.should.be.type("string");
 
-        const msgObject = JSON.parse(msg);
-        msgObject.should.have.property("success").which.equal(true);
-        msgObject.should.have.property("errorCode").which.equal(null);
-        msgObject.should.have.property("data");
-
-        const aroundUsers = msgObject.data.aroundUsers;
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+        const msgObject = parsedMsg["data"];
+        const aroundUsers = msgObject.aroundUsers;
         aroundUsers.should.have.length(2);
 
         offEventAll("together", senders);
@@ -87,15 +90,13 @@ describe("Connecting Server", () => {
     senders[1].on("togetherInvitation", (msg) => {
       msg.should.be.type("string");
 
-      const msgObject = JSON.parse(msg);
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
 
-      // roomName, hostName 프로퍼티가 있는지 확인
+      const msgObject = parsedMsg["data"];
+
       msgObject.should.have.properties("roomName", "hostName");
-
-      // roomName이 "id"로 시작하는지 확인
       msgObject["roomName"].should.startWith(ioOptions[0].myId);
-
-      // hostName이 제대로 들어왔는지 확인
       msgObject["hostName"].should.equal(ioOptions[0].query.name);
 
       roomName = msgObject["roomName"];
@@ -114,10 +115,15 @@ describe("Connecting Server", () => {
       (msg) => {
         msg.should.be.type("string");
 
-        const msgObject = JSON.parse(msg);
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
 
-        // roomName 프로퍼티가 있는지, roomName이 "id"로 시작하는지 확인
-        msgObject.should.have.property("roomName");
+        const msgObject = parsedMsg["data"];
+        msgObject.should.have.properties(
+          "roomName",
+          "gameRoomUserList",
+          "hostId"
+        );
         msgObject["roomName"].should.startWith(ioOptions[0].myId);
 
         // gameRoomUserList가 길이가 1인지 확인
@@ -141,7 +147,11 @@ describe("Connecting Server", () => {
     senders[0].on("gameRoomUpdate", (msg) => {
       updateCount += 1;
       msg.should.be.type("string");
-      const msgObject = JSON.parse(msg);
+
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       if (updateCount == 1) {
         msgObject.should.have
           .property("gameRoomUserList")
@@ -161,7 +171,10 @@ describe("Connecting Server", () => {
       (msg) => {
         msg.should.be.type("string");
 
-        const msgObject = JSON.parse(msg);
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.properties(
           "status",
           "roomName",
@@ -172,7 +185,9 @@ describe("Connecting Server", () => {
 
         senders[1].on("gameRoomUpdate", (msg) => {
           msg.should.be.type("string");
+
           const msgObject = JSON.parse(msg);
+          checkMsgOutline(msgObject);
           msgObject.should.have
             .property("gameRoomUserList")
             .with.have.lengthOf(3);
@@ -187,7 +202,10 @@ describe("Connecting Server", () => {
           (msg) => {
             msg.should.be.type("string");
 
-            const msgObject = JSON.parse(msg);
+            const parsedMsg = JSON.parse(msg);
+            checkMsgOutline(parsedMsg);
+
+            const msgObject = parsedMsg["data"];
             msgObject.should.have.properties("gameRoomUserList", "hostId");
             msgObject["gameRoomUserList"].should.have.lengthOf(3);
 
@@ -208,7 +226,10 @@ describe("Connecting Server", () => {
     senders[1].on("gameRoomUpdate", (msg) => {
       msg.should.be.type("string");
 
-      const msgObject = JSON.parse(msg);
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       msgObject.should.have.properties("gameRoomUserList", "hostId");
       msgObject.gameRoomUserList.should.have.lengthOf(2);
       msgObject.hostId.should.not
@@ -223,8 +244,11 @@ describe("Connecting Server", () => {
         }),
         (msg) => {
           msg.should.be.type("string");
-          let msgObject = JSON.parse(msg);
 
+          const parsedMsg = JSON.parse(msg);
+          checkMsgOutline(parsedMsg);
+
+          const msgObject = parsedMsg["data"];
           msgObject.should.have.property("status").with.equal("ok");
           SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
             false
@@ -238,7 +262,10 @@ describe("Connecting Server", () => {
       updateCount += 1;
       msg.should.be.type("string");
 
-      const msgObject = JSON.parse(msg);
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       msgObject.should.have.properties("gameRoomUserList", "hostId");
       if (updateCount === 1) {
         msgObject.gameRoomUserList.should.have.lengthOf(2);
@@ -278,8 +305,11 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        let msgObject = JSON.parse(msg);
 
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("status").with.equal("ok");
         SingleObject.RoomRepository.findByRoomName(roomName).should.not.equal(
           false
@@ -300,7 +330,11 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("roomName");
         msgObject["roomName"].should.startWith(ioOptions[0].myId);
         msgObject.should.have.property("gameRoomUserList").with.lengthOf(1);
@@ -315,7 +349,11 @@ describe("Connecting Server", () => {
           }),
           (msg) => {
             msg.should.be.type("string");
-            const msgObject = JSON.parse(msg);
+
+            const parsedMsg = JSON.parse(msg);
+            checkMsgOutline(parsedMsg);
+
+            const msgObject = parsedMsg["data"];
             msgObject.should.have.properties(
               "status",
               "roomName",
@@ -332,7 +370,10 @@ describe("Connecting Server", () => {
               (msg) => {
                 msg.should.be.type("string");
 
-                const msgObject = JSON.parse(msg);
+                const parsedMsg = JSON.parse(msg);
+                checkMsgOutline(parsedMsg);
+
+                const msgObject = parsedMsg["data"];
                 msgObject.should.have.properties("gameRoomUserList", "hostId");
                 msgObject["gameRoomUserList"].should.have.lengthOf(3);
 
@@ -349,8 +390,11 @@ describe("Connecting Server", () => {
                   (msg) => {
                     // then
                     msg.should.be.type("string");
-                    const msgObject = JSON.parse(msg);
-                    msgObject.should.have.property("status").with.equal("no");
+                    const parsedMsg = JSON.parse(msg);
+
+                    parsedMsg.should.have
+                      .property("status")
+                      .with.equal("false");
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
@@ -372,7 +416,11 @@ describe("Connecting Server", () => {
     // 1, 2가 시작 메시지를 받기
     senders[1].on("gameStart", (msg) => {
       msg.should.be.type("string");
-      const msgObject = JSON.parse(msg);
+
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
@@ -380,7 +428,11 @@ describe("Connecting Server", () => {
     });
     senders[2].on("gameStart", (msg) => {
       msg.should.be.type("string");
-      const msgObject = JSON.parse(msg);
+
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       msgObject.should.have.properties("status", "restaurants");
       msgObject.status.should.equal("ok");
       msgObject.restaurants.should.have.lengthOf(7);
@@ -403,7 +455,11 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.properties("status", "restaurants");
         msgObject.status.should.equal("ok");
         msgObject.restaurants.should.have.lengthOf(7);
@@ -455,7 +511,10 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("status").with.equal("wait");
       }
     );
@@ -498,7 +557,11 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("status").with.equal("wait");
 
         done();
@@ -515,8 +578,10 @@ describe("Connecting Server", () => {
       senders[i].on("gameAllFinish", (msg) => {
         doneCount += 1;
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
 
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("roomGameResult");
         msgObject["roomGameResult"].should.have.properties(
           "result",
@@ -574,7 +639,11 @@ describe("Connecting Server", () => {
       }),
       (msg) => {
         msg.should.be.type("string");
-        const msgObject = JSON.parse(msg);
+
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("status").with.equal("wait");
       }
     );
@@ -588,7 +657,11 @@ describe("Connecting Server", () => {
 
     senders[1].on("gameRoomUpdate", (msg) => {
       msg.should.be.type("string");
-      const msgObject = JSON.parse(msg);
+
+      const parsedMsg = JSON.parse(msg);
+      checkMsgOutline(parsedMsg);
+
+      const msgObject = parsedMsg["data"];
       msgObject.should.have.property("gameRoomUserList").with.lengthOf(2);
     });
     senders[1].emit(
@@ -597,7 +670,10 @@ describe("Connecting Server", () => {
       (msg) => {
         msg.should.be.type("string");
 
-        const msgObject = JSON.parse(msg);
+        const parsedMsg = JSON.parse(msg);
+        checkMsgOutline(parsedMsg);
+
+        const msgObject = parsedMsg["data"];
         msgObject.should.have.property("status").with.equal("ok");
         msgObject.should.have
           .property("gameRoomUserList")
@@ -610,7 +686,10 @@ describe("Connecting Server", () => {
           (msg) => {
             msg.should.be.type("string");
 
-            const msgObject = JSON.parse(msg);
+            const parsedMsg = JSON.parse(msg);
+            checkMsgOutline(parsedMsg);
+
+            const msgObject = parsedMsg["data"];
             msgObject.should.have.property("status").with.equal("ok");
             msgObject.should.have
               .property("gameRoomUserList")
@@ -630,7 +709,11 @@ describe("Connecting Server", () => {
               }),
               (msg) => {
                 msg.should.be.type("string");
-                const msgObject = JSON.parse(msg);
+
+                const parsedMsg = JSON.parse(msg);
+                checkMsgOutline(parsedMsg);
+
+                const msgObject = parsedMsg["data"];
                 msgObject.should.have.property("status").with.equal("ok");
                 msgObject.should.have.property("restaurants").with.lengthOf(7);
 
@@ -639,7 +722,12 @@ describe("Connecting Server", () => {
                   JSON.stringify({ id: ioOptions[2].myId, roomName }),
                   (msg) => {
                     msg.should.be.type("string");
-                    const msgObject = JSON.parse(msg);
+
+                    const parsedMsg = JSON.parse(msg);
+                    parsedMsg["success"].should.equal(false);
+                    parsedMsg["data"].should.equal(null);
+
+                    const msgObject = parsedMsg["data"];
                     msgObject.should.have.property("status").with.equal("fail");
                     msgObject.should.have
                       .property("gameRoomUserList")
