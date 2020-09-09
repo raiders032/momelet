@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon ./app.js",
+    "start": "nodemon --experimental-modules ./app.js",
     "test": "mocha ./Tests/app.spec.js"
   },
   "author": "",
