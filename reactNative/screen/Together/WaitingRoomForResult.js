@@ -6,10 +6,9 @@ import Basic from "../../component/Basic";
 import Card from "../../component/Card";
 import socket from "../../socket";
 import Footer from "../../component/Footer";
+import printSocketEvent from "../../utils/printEvent";
 
 export default ({ navigation, route }) => {
-  console.log("abc", route.params.restaurant.restaurants[0].name);
-  const [dot, setDot] = useState(".");
   const rotateValue = useRef(new Animated.Value(0)).current;
   const init = () => {
     rotateValue.setValue(0);
@@ -26,10 +25,7 @@ export default ({ navigation, route }) => {
     inputRange: [0, 360],
     outputRange: ["0deg", "360deg"],
   });
-  const dotConfig = rotateValue.interpolate({
-    inputRange: [0, 360],
-    outputRange: [1, 3],
-  });
+
   const footer = (
     <Footer
       text={`기다리는중 ...`}
@@ -43,17 +39,13 @@ export default ({ navigation, route }) => {
     rotate();
 
     socket.on("gameAllFinish", (msg) => {
-      console.log("gameAllFinishmsg: ", msg);
-      console.log("hefefefe");
-
-      route.params.restaurant.restaurants.forEach((element) =>
-        console.log(element.id, element.name)
-      );
+      printSocketEvent("gameAllFinish", msg);
+      const paseMsg = JSON.parse(msg);
       navigation.dispatch(
         StackActions.replace("GameResult", {
-          msg: msg,
+          msg: paseMsg.data,
           restaurant: route.params.restaurant,
-          roomName: JSON.parse(route.params.msg).roomName,
+          roomName: route.params.roomName,
           userId: route.params.userId,
         })
       );

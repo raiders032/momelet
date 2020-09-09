@@ -41,13 +41,12 @@ export const apis = {
     };
     const categoryToString = categories.join();
     console.log(categoryToString);
-
     body.append("categories", categoryToString);
     body.append("name", name);
     body.append("imageFile", photo);
     console.log(body);
     return makeRequest(
-      "put",
+      "post",
       `v1/users/${id}`,
       {
         headers: {

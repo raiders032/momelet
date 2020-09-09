@@ -3,10 +3,10 @@ import { StackActions } from "@react-navigation/native";
 
 import InvitePresenter from "./InvitePresenter";
 import socket from "../../../socket";
+import printSocketEvent from "../../../utils/printEvent";
 export default ({ navigation, route }) => {
-  const tmpUsers = JSON.parse(route.params.msg).aroundUsers;
+  const tmpUsers = route.params.msg.aroundUsers;
 
-  console.log("tmpUsers: ", tmpUsers);
   const [users, setUsers] = useState(
     tmpUsers.map((user) => {
       return { ...user, selected: false };
@@ -19,7 +19,7 @@ export default ({ navigation, route }) => {
         result.push(user.socketId);
       }
     });
-    console.log(result);
+    console.log("초대할려는 유저 목록 : ", result);
     socket.emit(
       "togetherInvite",
       JSON.stringify({
@@ -27,10 +27,11 @@ export default ({ navigation, route }) => {
         inviteTheseUsers: result,
       }),
       (msg) => {
-        console.log("msg: ", msg);
+        printSocketEvent("togetherInvite", msg);
+        const paseMsg = JSON.parse(msg);
         navigation.dispatch(
           StackActions.replace("WaitingRoomForStart", {
-            msg,
+            msg: paseMsg.data,
             myId: route.params.user.id,
           })
         );

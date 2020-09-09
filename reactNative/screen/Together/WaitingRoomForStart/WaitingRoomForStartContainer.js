@@ -4,23 +4,22 @@ import { StackActions } from "@react-navigation/native";
 
 import WaitingRoomForStartPresenter from "./WaitingRoomForStartPresenter";
 import socket from "../../../socket";
+import printSocketEvent from "../../../utils/printEvent";
 
 export default ({ navigation, route }) => {
-  const msg = JSON.parse(route.params.msg);
-
-  console.log(
-    "내가 호스트가 될 상인가?",
-    msg.hostId,
-    msg.hostId === route.params.myId
-  );
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
           style={{ paddingRight: 10 }}
           onPress={() => {
-            const sendMsg = { id: route.params.myId, roomName: msg.roomName };
-            socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {});
+            const sendMsg = {
+              id: route.params.myId,
+              roomName: route.params.msg.roomName,
+            };
+            socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {
+              printSocketEvent("gameRoomLeave", msg);
+            });
             navigation.navigate("Main");
           }}
         >
@@ -30,19 +29,21 @@ export default ({ navigation, route }) => {
     });
   }, [navigation]);
 
-  const [users, setUsers] = useState(msg.gameRoomUserList);
-  const roomName = msg.roomName;
-  const id = route.params.myId;
+  const [users, setUsers] = useState(route.params.msg.gameRoomUserList);
+
   useEffect(() => {
     socket.on("gameRoomUpdate", (msg) => {
-      setUsers(JSON.parse(msg).gameRoomUserList);
+      printSocketEvent("gameRoomUpdate", msg);
+      setUsers(JSON.parse(msg).data.gameRoomUserList);
     });
     socket.on("gameStart", (msg) => {
+      printSocketEvent("gameStart", "식당 정보 받아옴");
+      const paseMsg = JSON.parse(msg);
       navigation.dispatch(
         StackActions.replace("GameRoom", {
-          msg: msg,
-          roomName: roomName,
-          userId: id,
+          msg: paseMsg.data,
+          roomName: route.params.msg.roomName,
+          userId: route.params.myId,
         })
       );
     });
@@ -52,31 +53,23 @@ export default ({ navigation, route }) => {
     // };
   }, []);
   const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
-    const sendMsg = {
-      id: msg.gameRoomUserList[0].id,
-      roomName: msg.roomName,
-      radius: 0.01,
-      latitude: latitude,
-      longitude: longitude,
-    };
-    console.log(sendMsg);
-    const stringifiedMsg = JSON.stringify(sendMsg);
-    console.log(stringifiedMsg);
     socket.emit(
       "gameStart",
       JSON.stringify({
         id: route.params.myId,
-        roomName: msg.roomName,
+        roomName: route.params.msg.roomName,
         radius: 0.01,
         latitude: latitude,
         longitude: longitude,
       }),
       (msg) => {
+        printSocketEvent("gameStart", "식당정보 받아옴");
+        const paseMsg = JSON.parse(msg);
         navigation.dispatch(
           StackActions.replace("GameRoom", {
-            msg: msg,
-            roomName: roomName,
-            userId: id,
+            msg: paseMsg.data,
+            roomName: route.params.msg.roomName,
+            userId: route.params.myId,
           })
         );
       }
@@ -86,7 +79,7 @@ export default ({ navigation, route }) => {
     <WaitingRoomForStartPresenter
       users={users}
       onClick={onClick}
-      activation={msg.hostId === route.params.myId}
+      activation={route.params.msg.hostId === route.params.myId}
     />
   );
 };
