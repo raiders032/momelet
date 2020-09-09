@@ -21,13 +21,13 @@ const io = SocketIO(server, {
   pingTimeout: 10000, // 10초 동안 퐁 기다리기
 });
 
-io.use(
-  socketioJwt.authorize({
-    secret: "secret key",
-    handshake: true,
-    auth_header_required: true,
-  })
-);
+// io.use(
+//   socketioJwt.authorize({
+//     secret: "secret key",
+//     handshake: true,
+//     auth_header_required: true,
+//   })
+// );
 io.use((socket, next) => {
   userFilter(io, socket, next);
 });
