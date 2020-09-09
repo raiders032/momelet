@@ -29,6 +29,13 @@ const io = SocketIO(server, {
 //   })
 // );
 
+io.use(
+  socketioJwt.authorize({
+    secret:
+      "926D96C90030DD58429D2751AC1BDBBC21384901ASK1K89M3021MX81LZ0358YCXVBNMKIKJTRJ9",
+    handshake: true,
+  })
+);
 io.use((socket, next) => {
   userFilter(io, socket, next);
 });
