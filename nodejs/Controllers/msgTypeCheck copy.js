@@ -1,7 +1,7 @@
 // typeCheckObject 인자 예시
 import { UndefinedTypeError, WrongTypeError } from "../Errors/TypeError.js";
 let typeCheckObject = {
-  number: [1, "helloe", undefined, 4],
+  number: [1, 2, undefined, 4],
   Array: [3, "hi", 1],
   string: ["hi", "bye"],
 };
