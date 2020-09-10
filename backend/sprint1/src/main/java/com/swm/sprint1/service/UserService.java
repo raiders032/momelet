@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,26 +33,37 @@ public class UserService {
     private String dir;
 
     @Transactional
+    public void updateUser(Long id, MultipartFile imageFile, String name, List<String> categoies) throws IOException {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        List<Category> categories = categoryRepository.findCategoryByCategoryName(categoies);
+        String imageUrl;
+
+        if(imageFile != null)
+            imageUrl = uploadImageFile(imageFile);
+        else
+            imageUrl = user.getImageUrl();
+
+        user.updateUserInfo(name, imageUrl, categories);
+    }
+
+    public String uploadImageFile(MultipartFile imageFile) throws IOException {
+        String imageUrl;
+        String filename = imageFile.getOriginalFilename();
+        String extension = filename.substring(filename.lastIndexOf("."));
+        List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
+        if(!supportedExtension.contains(extension))
+            throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
+        imageUrl = s3Uploader.upload(imageFile, dir);
+        return imageUrl;
+    }
+
+    @Transactional
     public User createUser(SignUpRequest signUpRequest) {
         User user = new User(signUpRequest.getName(),
                 signUpRequest.getEmail(),
                 passwordEncoder.encode(signUpRequest.getPassword()),
                 AuthProvider.local);
         return userRepository.save(user);
-    }
-
-    @Transactional
-    public void updateUser(Long id, UpdateUserRequest request) throws IOException {
-        String filename = request.getImageFile().getOriginalFilename();
-        String extension = filename.substring(filename.lastIndexOf("."));
-        List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
-        if(!supportedExtension.contains(extension))
-            throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
-
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        List<Category> categories = categoryRepository.findCategoryByCategoryName(request.getCategories());
-        String imageUrl = s3Uploader.upload(request.getImageFile(), dir);
-        user.updateUserInfo(request.getName(), imageUrl, categories);
     }
 
     public List<String> findCategoryNameByUserId(Long id) {
@@ -61,4 +73,5 @@ public class UserService {
     public Map<String, Integer> findAllCategoryNameByUserId(Long id) {
         return userCategoryRepository.findAllCategoryNameByUserId(id);
     }
+
 }

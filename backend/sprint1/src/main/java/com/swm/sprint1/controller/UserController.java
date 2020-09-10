@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -73,17 +74,13 @@ public class UserController {
     @PostMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
-                                            @Valid @ModelAttribute UpdateUserRequest request,
+                                            @RequestParam(required = false) MultipartFile imageFile,
+                                            @RequestParam String name,
+                                            @RequestParam List<String> categories,
                                             @PathVariable Long id) throws IOException {
-        logger.debug("image File name :: " + request.getImageFile().getOriginalFilename());
-        logger.debug("image content type :: " + request.getImageFile().getContentType());
-        logger.debug("image size :: " + request.getImageFile().getBytes().toString());
-        logger.debug("image class :: " + request.getImageFile().getClass());
-        logger.debug("image resource :: " + request.getImageFile().getResource());
-        logger.debug("image inpustream :: " + request.getImageFile().getInputStream());
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
-        userService.updateUser(id, request);
+        userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity
                 .ok(new ApiResponse(true, "회원 정보 수정 완료"));
     }
@@ -94,7 +91,6 @@ public class UserController {
     public ResponseEntity<?> createUserLiking(@CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable Long id,
                                               @Valid @RequestBody CreateUserLikingDto userLikingDto){
-
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
 
@@ -105,11 +101,11 @@ public class UserController {
 
     @ApiOperation(value = "유저 정보 수정")
     @PostMapping("/upload/{id}")
-    public ResponseEntity<?> upload(@Valid @ModelAttribute UpdateUserRequest request,
-                                            @PathVariable Long id) throws IOException {
-        logger.debug("image File name" + request.getImageFile().getOriginalFilename());
-        logger.debug("image content type" + request.getImageFile().getContentType());
-        userService.updateUser(id, request);
+    public ResponseEntity<?> upload(@RequestParam(required = false) MultipartFile imageFile,
+                                    @RequestParam String name,
+                                    @RequestParam List<String> categories,
+                                    @PathVariable Long id) throws IOException {
+        userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity
                 .ok(new ApiResponse(true, "회원 정보 수정 완료"));
     }
