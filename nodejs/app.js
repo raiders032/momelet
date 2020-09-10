@@ -11,9 +11,6 @@ const app = express();
 const server = app.listen(process.env.PORT, () => {
   logger.info("Server started. listening on *:3000.");
 });
-
-// webSocket(server, app);
-
 const io = SocketIO(server, {
   //path: "/momulet",
   serverClient: false, // 클라이언트 파일 제공 여부
@@ -21,23 +18,23 @@ const io = SocketIO(server, {
   pingTimeout: 10000, // 10초 동안 퐁 기다리기
 });
 
-// io.use(
-//   socketioJwt.authorize({
-//     secret: "secret key",
-//     handshake: true,
-//     auth_header_required: true,
-//   })
-// );
-
 io.use((socket, next) => {
   userFilter(io, socket, next);
 });
 
-io.on("connection", (socket) => {
-  controller.togetherController(socket);
-  controller.gameController(socket);
-  controller.disconnectController(socket);
-});
+io.sockets
+  .on(
+    "connection",
+    socketioJwt.authorize({
+      secret: process.env.SECRET_KEY,
+      timeout: 15000,
+    })
+  )
+  .on("authenticated", (socket) => {
+    controller.togetherController(socket);
+    controller.gameController(socket);
+    controller.disconnectController(socket);
+  });
 
 app.set("server", server);
 app.set("io", io);

@@ -4,7 +4,6 @@ export default (socket) => {
   // 같이하기;
   socket.on("together", (msg, ack) => {
     // const ret = service.togetherService(socket, msg);
-    console.log("together 타입: " + typeof service.togetherService.toString());
     const ret = service.togetherService(socket, msg);
     // socket.emit("together", ret);
     ack(ret);
