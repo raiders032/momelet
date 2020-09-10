@@ -38,25 +38,26 @@ describe("Connecting Server", () => {
 
   it("connect 테스트", (done) => {
     for (let i = 0; i < ioOptions.length; i++) {
+      // senders[i].on("connect", () => {
+      //   senders[i].id.should.be.type("string");
+      //   if (i === ioOptions.length - 1) done();
+      // });
       senders[i].on("connect", () => {
-        senders[i].id.should.be.type("string");
-        if (i === ioOptions.length - 1) done();
+        senders[i]
+          .emit("authenticate", {
+            token:
+              "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.8wTF_TP9Tov2t5Gj6SZmBG4LrvIrIwJNKZwVCfrRADpwTuHZF3oshv-N0bvctndr70g65vTiR1v_uVX8Croz0g",
+          })
+          .on("authenticated", () => {
+            console.log("클라이언트 연결 성공");
+
+            if (i == ioOptions.length - 1) done();
+          })
+          .on("unauthorized", (msg) => {
+            console.log(`연결 실패: ${JSON.stringify(msg.data)}`);
+          });
       });
     }
-    // senders[0].on("connect", () => {
-    //   senders[0].id.should.be.type("string");
-    //   senders[1].on("connect", () => {
-    //     senders[1].id.should.be.type("string");
-    //     senders[2].on("connect", () => {
-    //       senders[2].id.should.be.type("string");
-    //       senders[3].on("connect", () => {
-    //         senders[3].id.should.be.type("string");
-    //         offEventAll("connect", senders);
-    //         done();
-    //       });
-    //     });
-    //   });
-    // });
   });
   it("together 테스트", (done) => {
     // 0이 together를 보내면
