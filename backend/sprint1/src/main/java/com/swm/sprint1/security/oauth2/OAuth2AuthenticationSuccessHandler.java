@@ -17,7 +17,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.swm.sprint1.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -53,6 +55,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
+
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
@@ -69,9 +73,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("accessToken",accessToken.getJwtToken())
-                .queryParam("accessTokenExpiryDate", accessToken.getExpiryDate())
+                .queryParam("accessTokenExpiryDate", formatter.format(accessToken.getExpiryDate()))
                 .queryParam("refreshToken", refreshToken.getJwtToken())
-                .queryParam("refreshTokenExpiryDate", refreshToken.getExpiryDate())
+                .queryParam("refreshTokenExpiryDate", formatter.format(refreshToken.getExpiryDate()))
                 .build().toUriString();
     }
 
