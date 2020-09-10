@@ -75,8 +75,12 @@ public class UserController {
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
                                             @Valid @ModelAttribute UpdateUserRequest request,
                                             @PathVariable Long id) throws IOException {
-        logger.debug("image File name" + request.getImageFile().getOriginalFilename());
-        logger.debug("image content type" + request.getImageFile().getContentType());
+        logger.debug("image File name :: " + request.getImageFile().getOriginalFilename());
+        logger.debug("image content type :: " + request.getImageFile().getContentType());
+        logger.debug("image size :: " + request.getImageFile().getBytes().toString());
+        logger.debug("image class :: " + request.getImageFile().getClass());
+        logger.debug("image resource :: " + request.getImageFile().getResource());
+        logger.debug("image inpustream :: " + request.getImageFile().getInputStream());
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, request);
