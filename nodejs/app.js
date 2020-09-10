@@ -36,10 +36,6 @@ io.sockets
     controller.disconnectController(socket);
   });
 
-io.on("together", (socket) => {
-  console.log("wow");
-});
 app.set("server", server);
 app.set("io", io);
 export default app;
-/^\/\w+$/;
