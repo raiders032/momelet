@@ -33,8 +33,7 @@ const onPress = async (afterLogin, where) => {
 
     let data = Linking.parse(event.url);
 
-    console.log("data.queryParams: ", data.queryParams);
-    await afterLogin(data.queryParams.accessToken);
+    await afterLogin(data.queryParams.accessToken, data.queryParams);
   };
   const addLinkingListener = () => {
     Linking.addEventListener("url", _handleRedirect);

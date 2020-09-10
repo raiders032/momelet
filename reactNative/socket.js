@@ -6,8 +6,8 @@ import * as Location from "expo-location";
 console.log("Socket Call");
 
 const socket = io(
-  // "http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:3000",
-  "http://localhost:3000",
+  "http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:3000",
+  // "http://localhost:3000",
   // "http://localhost:8002",
   {
     query: {
