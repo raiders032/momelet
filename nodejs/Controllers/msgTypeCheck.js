@@ -4,6 +4,7 @@
 //   Array: [3, "hi", 1],
 //   string: ["hi", "bye"],
 // };
+import { UndefinedTypeError, WrongTypeError } from "../Errors/TypeError.js";
 
 export default (typeCheckObject) => {
   let types = Object.keys(typeCheckObject);
@@ -12,9 +13,10 @@ export default (typeCheckObject) => {
     let values = typeCheckObject[type];
 
     values.forEach((value) => {
-      if (value === undefined) throw new ResourceNotFoundError1();
+      if (value === undefined)
+        throw new UndefinedTypeError(100, "UndefinedTypeError");
       if (typeof value !== type && type !== "Array")
-        throw new ResourceNotFoundError2();
+        throw new WrongTypeError(101, "WrongTypeError");
     });
   });
 };

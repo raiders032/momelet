@@ -1,10 +1,7 @@
 // typeCheckObject 인자 예시
-import {
-  ResourceNotFoundError1,
-  ResourceNotFoundError2,
-} from "../Errors/ResourceNotFoundError.js";
+import { UndefinedTypeError, WrongTypeError } from "../Errors/TypeError.js";
 let typeCheckObject = {
-  number: [1, 2, undefined, 4],
+  number: [1, "helloe", undefined, 4],
   Array: [3, "hi", 1],
   string: ["hi", "bye"],
 };
@@ -17,10 +14,10 @@ const temp = (typeCheckObject) => {
 
     values.forEach((value) => {
       console.log("value: " + value);
-      if (value === undefined) throw new ResourceNotFoundError1();
+      if (value === undefined) throw new UndefinedTypeError();
       if (typeof value !== type)
         // if (typeof value !== type && type !== "Array")
-        throw new ResourceNotFoundError2();
+        throw new WrongTypeError();
     });
   });
 };
@@ -29,8 +26,12 @@ function temp2() {
   try {
     temp(typeCheckObject);
   } catch (err) {
-    if (err instanceof ResourceNotFoundError1) console.log("일!");
-    if (err instanceof ResourceNotFoundError2) console.log("이!");
+    if (err instanceof UndefinedTypeError) {
+      console.log("일!");
+      console.log(err.message);
+      console.log(err.errorCode);
+    }
+    if (err instanceof WrongTypeError) console.log("이!");
   }
 }
 
