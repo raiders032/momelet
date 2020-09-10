@@ -20,7 +20,7 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
   const inviteMsg = new SocketResponse();
   inviteMsg.isOk({
     roomName,
-    hostName: host.name,
+    hostId: host.id,
   });
   for (let user of inviteUsers) {
     socket.to(user).emit("togetherInvitation", JSON.stringify(inviteMsg));
