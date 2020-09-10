@@ -3,6 +3,7 @@ package com.swm.sprint1.security.oauth2;
 
 import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.swm.sprint1.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -52,6 +55,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
+
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
@@ -61,11 +66,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        List<String> tokens = tokenProvider.createToken(authentication);
+        List<Token> tokens = tokenProvider.createToken(authentication);
+
+        Token accessToken = tokens.get(0);
+        Token refreshToken = tokens.get(1);
         
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("accessToken", tokens.get(0))
-                .queryParam("refreshToken", tokens.get(1))
+                .queryParam("accessToken",accessToken.getJwtToken())
+                .queryParam("accessTokenExpiryDate", formatter.format(accessToken.getExpiryDate()))
+                .queryParam("refreshToken", refreshToken.getJwtToken())
+                .queryParam("refreshTokenExpiryDate", formatter.format(refreshToken.getExpiryDate()))
                 .build().toUriString();
     }
 

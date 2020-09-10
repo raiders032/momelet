@@ -1,5 +1,6 @@
 package com.swm.sprint1.payload.response;
 
+import com.swm.sprint1.security.Token;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,11 +9,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class AuthResponse {
-    private String accessToken;
-    private String refreshToken;
+    private Token accessToken;
+    private Token refreshToken;
     private String tokenType = "Bearer";
 
-    public AuthResponse(String accessToken, String refreshToken) {
+    public AuthResponse(Token accessToken, Token refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
