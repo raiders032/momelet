@@ -5,6 +5,7 @@ import com.swm.sprint1.payload.request.JwtDto;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.security.CurrentUser;
+import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +38,11 @@ public class AuthController {
         if(!tokenProvider.validateRefreshToken(userPrincipal.getId(), jwt.getJwt()))
             throw new JwtTokenNotValidException("유효하지 않은 리프레시 토큰 입니다.");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<String> tokens = tokenProvider.createToken(authentication);
+        List<Token> tokens = tokenProvider.createToken(authentication);
 
         ApiResponse response = new ApiResponse(true, "토큰 리프레시 완료");
         response.putData("tokens", new AuthResponse(tokens.get(0), tokens.get(1)));
         return ResponseEntity.ok(response);
     }
-
 
 }
