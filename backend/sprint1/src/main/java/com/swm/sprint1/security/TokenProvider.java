@@ -30,21 +30,21 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
 
-    public List<String> createToken(Authentication authentication) {
+    public List<Token> createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
         Date now = new Date();
         Date accessExpiryDate = new Date(now.getTime() + 60*60* 1000);
         Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
-        String accessToken = Jwts.builder()
+        String accessTokenString = Jwts.builder()
                         .setSubject(Long.toString(userPrincipal.getId()))
                         .setIssuedAt(new Date())
                         .setExpiration(accessExpiryDate)
                         .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                         .compact() ;
 
-        String refreshToken = Jwts.builder()
+        String refreshTokenString = Jwts.builder()
                        .setSubject(Long.toString(userPrincipal.getId()))
                        .setIssuedAt(new Date())
                        .setExpiration(refreshExpiryDate)
@@ -54,10 +54,12 @@ public class TokenProvider {
         Optional<UserRefreshToken> byUserId = userRefreshTokenRepository.findByUserId(userId);
 
         if(byUserId.isPresent())
-            byUserId.get().updateRefreshToken(refreshToken);
+            byUserId.get().updateRefreshToken(refreshTokenString);
         else
-            userRefreshTokenRepository.save(new UserRefreshToken(userId, refreshToken));
+            userRefreshTokenRepository.save(new UserRefreshToken(userId, refreshTokenString));
 
+        Token accessToken = new Token(accessTokenString, accessExpiryDate);
+        Token refreshToken = new Token(refreshTokenString, refreshExpiryDate);
         return Arrays.asList(accessToken, refreshToken);
     }
 
