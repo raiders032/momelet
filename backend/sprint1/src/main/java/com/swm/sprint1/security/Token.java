@@ -17,7 +17,7 @@ public class Token {
     String formattedExpiryDate;
 
     public Token(String jwtToken, Date expiryDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
+        SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy/MM/dd HH:mm:ss", Locale.KOREA );
         this.jwtToken = jwtToken;
         this.expiryDate = expiryDate;
         formattedExpiryDate = formatter.format(expiryDate);
