@@ -6,7 +6,7 @@ import { AsyncStorage } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-
+import { Buffer } from "buffer";
 export default ({ navigation, route }) => {
   const [user, setUser] = useState(route.params.user);
   console.log("유저 정보:", user);
@@ -43,13 +43,15 @@ export default ({ navigation, route }) => {
     } else {
       try {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: false,
           aspect: [4, 3],
           quality: 1,
+          base64: true,
+          exif: true,
         });
         if (!result.cancelled) {
-          console.log(result);
+          console.log(Buffer.byteLength(result.base64));
           setUser({ ...user, imageUrl: result.uri });
         }
       } catch (E) {
