@@ -1,46 +1,48 @@
-import * as service from "../Services/index.js";
+import {
+  gameRoomJoinService,
+  gameRoomLeaveService,
+  gameStartService,
+  gameUserFinishService,
+  gameAllFinishService,
+  gameRoomJoinAgainService,
+} from "../Services/index.js";
+import msgTypeCheck from "./msgTypeCheck.js";
 
 export default (socket) => {
   // 게임방 입장
   socket.on("gameRoomJoin", (msg, ack) => {
-    const ret = service.gameRoomJoinService(socket, msg);
-    // socket.emit("gameRoomJoin", ret);
+    const ret = gameRoomJoinService(socket, msg);
     ack(ret);
   });
 
   // 게임방 퇴장
   socket.on("gameRoomLeave", (msg, ack) => {
-    const ret = service.gameRoomLeaveService(socket, msg);
-    // socket.emit("gameRoomLeave", ret);
+    const ret = gameRoomLeaveService(socket, msg);
     ack(ret);
   });
 
   // 게임시작
   socket.on("gameStart", async (msg, ack) => {
-    const ret = await service.gameStartService(socket, msg);
-    // socket.emit("gameStart", ret);
+    const ret = await gameStartService(socket, msg);
     ack(ret);
   });
 
   // 유저 한명 게임 종료
   socket.on("gameUserFinish", (msg, ack) => {
-    const ret = service.gameUserFinishService(socket, msg);
-    // socket.emit("gameUserFinish", ret);
+    const ret = gameUserFinishService(socket, msg);
     ack(ret);
-    service.gameAllFinishService(socket, msg);
+    gameAllFinishService(socket, msg);
   });
 
   // 전체 유저 게임 종료
   socket.on("gameAllFinish", (msg, ack) => {
-    const ret = service.gameAllFinishService(socket, msg);
-    // socket.emit("gameAllFinish", ret);
+    const ret = gameAllFinishService(socket, msg);
     ack(ret);
   });
 
   // 다시하기
   socket.on("gameRoomJoinAgain", (msg, ack) => {
-    const ret = service.gameRoomJoinAgainService(socket, msg);
-    // socket.emit("gameRestart", ret);
+    const ret = gameRoomJoinAgainService(socket, msg);
     ack(ret);
   });
 };
