@@ -41,14 +41,6 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @ApiOperation(value = "유저의 정보를 반환")
-    @GetMapping("/users/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-    }
-
-    @ApiOperation(value = "유저의 정보를 반환")
     @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> retrieveUserInfo(@CurrentUser UserPrincipal userPrincipal) {
@@ -99,6 +91,13 @@ public class UserController {
         return userRepository.findAllCustom();
     }
 
+    @ApiOperation(value = "유저의 정보를 반환")
+    @GetMapping("/users/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+    }
 
     @ApiOperation(value = "유저 정보 수정")
     @PostMapping("/upload/{id}")

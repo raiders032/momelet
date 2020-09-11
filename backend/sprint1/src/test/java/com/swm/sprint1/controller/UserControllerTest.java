@@ -2,8 +2,10 @@ package com.swm.sprint1.controller;
 
 
 import com.swm.sprint1.domain.AuthProvider;
+import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.ResourceNotFoundException;
+import com.swm.sprint1.repository.category.CategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
@@ -28,7 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,6 +47,9 @@ public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
@@ -65,6 +69,10 @@ public class UserControllerTest {
                 .emailVerified(false)
                 .build();
         userRepository.save(user);
+
+        List<Category> all = categoryRepository.findAll();
+        user.updateUserInfo(all);
+
         UserPrincipal userPrincipal = UserPrincipal.create(user);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         List<Token> tokens = tokenProvider.createToken(authentication);
@@ -98,7 +106,6 @@ public class UserControllerTest {
         User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
         assertThat(findUser.getName()).isEqualTo(name);
         assertThat(findUser.getUserCategories().size()).isEqualTo(3);
-        assertThat(findUser.getUserCategories());
         assertThat(findUser.getImageUrl()).startsWith("https://dz1rd925xfsaa.cloudfront.net");
         assertThat(findUser.getImageUrl()).endsWith("_640x640.jpeg");
     }
@@ -111,17 +118,17 @@ public class UserControllerTest {
         String categories = "한식,일식,중식";
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+        ResultActions result = mockMvc.perform(multipart(url)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken))
-                .andExpect(status().isOk());
+                .header("Authorization", jwtToken));
 
         //then
+        result
+                .andExpect(status().isOk());
         User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
         assertThat(findUser.getName()).isEqualTo(name);
         assertThat(findUser.getUserCategories().size()).isEqualTo(3);
-        assertThat(findUser.getUserCategories());
         assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
     }
 
@@ -134,14 +141,14 @@ public class UserControllerTest {
         MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
 
         //when
-        ResultActions perform = mockMvc.perform(multipart(url)
+        ResultActions result = mockMvc.perform(multipart(url)
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
                 .header("Authorization", jwtToken));
 
         //then
-        perform
+        result
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.errorCode").value("100"))
                 .andExpect(jsonPath("$.success").value("false"));
@@ -176,5 +183,33 @@ public class UserControllerTest {
         User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
         assertThat(findUser.getName()).isEqualTo(user.getName());
         assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
+    }
+
+    @Test
+    public void 유저정보조회() throws Exception {
+        //given
+        String url = "/api/v1/users/me";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url).header("authorization", jwtToken));
+
+        //then
+        result
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.data.userInfo.name").value(user.getName()))
+                .andExpect(jsonPath("$.data.userInfo.imageUrl").value(user.getImageUrl()))
+                .andExpect(jsonPath("$.data.userInfo.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.data.userInfo.categories.양식").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.중식").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.고기").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.일식").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.치킨").value("0"))
+                //.andExpect(jsonPath("$.data.userInfo.categories.찜,탕").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.한식").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.세계음식").value("0"))
+                //.andExpect(jsonPath("$.data.userInfo.categories.곱,대창").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.주점").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.분식").value("0"))
+                .andExpect(jsonPath("$.data.userInfo.categories.패스트푸드").value("0"));
     }
 }

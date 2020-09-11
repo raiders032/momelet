@@ -61,4 +61,9 @@ public class User extends DateEntity{
         this.userCategories.clear();
         categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
     }
+
+    public void updateUserInfo(List<Category> categories) {
+        this.userCategories.clear();
+        categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
+    }
 }
