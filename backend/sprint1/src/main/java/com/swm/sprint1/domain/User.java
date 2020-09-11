@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,8 +54,6 @@ public class User extends DateEntity{
         this.providerId= providerId;
         categories.forEach(category->userCategories.add(new UserCategory(this,category)));
     }
-
-
 
     public void updateUserInfo(String name, String imageUrl, List<Category> categories) {
         this.name = name;

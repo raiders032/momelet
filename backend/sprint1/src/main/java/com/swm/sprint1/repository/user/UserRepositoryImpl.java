@@ -29,9 +29,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public Optional<User> findUserWithUserCategory(Long id) {
         return Optional.ofNullable(
                 queryFactory
-                .select(user)
-                .from(user)
-                .join(userCategory).fetchJoin()
+                .selectFrom(user)
+                .join(user.userCategories, userCategory).fetchJoin()
                 .where(user.id.eq(id))
                 .fetchOne());
     }

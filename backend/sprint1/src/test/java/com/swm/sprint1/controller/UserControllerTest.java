@@ -2,14 +2,12 @@ package com.swm.sprint1.controller;
 
 
 import com.swm.sprint1.domain.AuthProvider;
-import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
-import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,16 +21,17 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -44,6 +43,7 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -61,8 +61,8 @@ public class UserControllerTest {
                 .imageUrl("imageurl")
                 .provider(AuthProvider.local)
                 .providerId("test")
+                .userCategories(new HashSet<>())
                 .emailVerified(false)
-                .userCategories(null)
                 .build();
         userRepository.save(user);
         UserPrincipal userPrincipal = UserPrincipal.create(user);
@@ -74,14 +74,15 @@ public class UserControllerTest {
     @After
     public void clear(){
         logger.info("유저 리포지토 비우기");
-    userRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     public void 유저정보수정() throws Exception {
         //given
+        logger.info("유저정보수정 테스트 시작");
         String url = "/api/v1/users/"+ user.getId();
-        String name = "바꾼이름";
+        String name = "변경된이름";
         String categories = "한식,일식,중식";
         MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
 
@@ -90,14 +91,90 @@ public class UserControllerTest {
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken)).andExpect(status().isOk()).andDo(print());
+                .header("Authorization", jwtToken))
+                .andExpect(status().isOk());
 
         //then
-        User user = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
-        assertThat(user.getName()).isEqualTo(name);
-        assertThat(user.getUserCategories().size()).isEqualTo(3);
-        assertThat(user.getImageUrl()).startsWith("https://dz1rd925xfsaa.cloudfront.net");
-        assertThat(user.getImageUrl()).endsWith("_640x640.jpeg");
+        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        assertThat(findUser.getName()).isEqualTo(name);
+        assertThat(findUser.getUserCategories().size()).isEqualTo(3);
+        assertThat(findUser.getUserCategories());
+        assertThat(findUser.getImageUrl()).startsWith("https://dz1rd925xfsaa.cloudfront.net");
+        assertThat(findUser.getImageUrl()).endsWith("_640x640.jpeg");
+    }
 
+    @Test
+    public void 유저정보수정_파일을보내지않았을때() throws Exception {
+        //given
+        String url = "/api/v1/users/"+ user.getId();
+        String name = "변경된이름";
+        String categories = "한식,일식,중식";
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization", jwtToken))
+                .andExpect(status().isOk());
+
+        //then
+        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        assertThat(findUser.getName()).isEqualTo(name);
+        assertThat(findUser.getUserCategories().size()).isEqualTo(3);
+        assertThat(findUser.getUserCategories());
+        assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
+    }
+
+    @Test
+    public void 유저정보수정_이름을보내지않은경우() throws Exception {
+        //given
+        String url = "/api/v1/users/"+ user.getId();
+        String name = "";
+        String categories = "한식,일식,중식";
+        MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
+
+        //when
+        ResultActions perform = mockMvc.perform(multipart(url)
+                .file(file)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization", jwtToken));
+
+        //then
+        perform
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.errorCode").value("100"))
+                .andExpect(jsonPath("$.success").value("false"));
+
+        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        assertThat(findUser.getName()).isEqualTo(user.getName());
+        assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
+    }
+
+    @Test
+    public void 유저정보수정_카테고리를보내지않은경우() throws Exception {
+        //given
+        String url = "/api/v1/users/"+ user.getId();
+        String name = "변경된이름";
+        String categories = "";
+        MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
+
+        //when
+        ResultActions perform = mockMvc.perform(multipart(url)
+                .file(file)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization", jwtToken));
+
+        //then
+        perform
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.errorCode").value("100"))
+                .andExpect(jsonPath("$.success").value("false"));
+
+        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        assertThat(findUser.getName()).isEqualTo(user.getName());
+        assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
     }
 }
