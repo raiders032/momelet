@@ -7,7 +7,6 @@ export default (socket, errorCheck) => {
   // 같이하기;
   socket.on("together", (msg, ack) => {
     logger.info("together. msg: " + msg);
-
     let response = errorCheck(() => {
       const { id, latitude, longitude } = JSON.parse(msg);
       msgTypeCheck({ number: [id, latitude, longitude] });
@@ -19,7 +18,6 @@ export default (socket, errorCheck) => {
   // 같이하기-초대하기
   socket.on("togetherInvite", (msg, ack) => {
     logger.info("together. msg: " + msg);
-
     let response = errorCheck(() => {
       const { id, inviteTheseUsers } = JSON.parse(msg);
       msgTypeCheck({ number: [id], Array: [inviteTheseUsers] });

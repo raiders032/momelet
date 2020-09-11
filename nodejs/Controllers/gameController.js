@@ -7,18 +7,29 @@ import {
   gameRoomJoinAgainService,
 } from "../Services/index.js";
 import msgTypeCheck from "./msgTypeCheck.js";
+import logger from "../logger.js";
 
-export default (socket) => {
+export default (socket, errorCheck) => {
   // 게임방 입장
   socket.on("gameRoomJoin", (msg, ack) => {
-    const ret = gameRoomJoinService(socket, msg);
-    ack(ret);
+    logger.info("gameRoomJoin. msg: " + msg);
+    let response = errorCheck(() => {
+      const { id, roomName } = JSON.parse(msg);
+      msgTypeCheck({ number: [id], string: [roomName] });
+      return gameRoomJoinService(socket, { id, roomName });
+    });
+    ack(JSON.stringify(response));
   });
 
   // 게임방 퇴장
   socket.on("gameRoomLeave", (msg, ack) => {
-    const ret = gameRoomLeaveService(socket, msg);
-    ack(ret);
+    logger.info("gameRoomLeave. msg: " + msg);
+    let response = errorCheck(() => {
+      const { id, roomName } = JSON.parse(msg);
+      msgTypeCheck({ number: [id], string: [roomName] });
+      return gameRoomLeaveService(socket, { id, roomName });
+    });
+    ack(JSON.stringify(response));
   });
 
   // 게임시작
