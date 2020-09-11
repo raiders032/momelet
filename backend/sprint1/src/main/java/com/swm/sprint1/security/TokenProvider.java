@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,19 +35,20 @@ public class TokenProvider {
         Date now = new Date();
         Date accessExpiryDate = new Date(now.getTime() + 60*60* 1000);
         Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
         String accessTokenString = Jwts.builder()
                         .setSubject(Long.toString(userPrincipal.getId()))
                         .setIssuedAt(new Date())
                         .setExpiration(accessExpiryDate)
-                        .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+                        .signWith(SignatureAlgorithm.HS512, encodedJwt)
                         .compact() ;
 
         String refreshTokenString = Jwts.builder()
                        .setSubject(Long.toString(userPrincipal.getId()))
                        .setIssuedAt(new Date())
                        .setExpiration(refreshExpiryDate)
-                       .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+                       .signWith(SignatureAlgorithm.HS512, encodedJwt)
                        .compact();
 
         Optional<UserRefreshToken> byUserId = userRefreshTokenRepository.findByUserId(userId);
