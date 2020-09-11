@@ -57,15 +57,6 @@ public class UserService {
         return imageUrl;
     }
 
-    @Transactional
-    public User createUser(SignUpRequest signUpRequest) {
-        User user = new User(signUpRequest.getName(),
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                AuthProvider.local);
-        return userRepository.save(user);
-    }
-
     public List<String> findCategoryNameByUserId(Long id) {
         return userCategoryRepository.findCategoryNameByUserId(id);
     }

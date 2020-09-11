@@ -1,9 +1,7 @@
 package com.swm.sprint1.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.swm.sprint1.domain.base.DateEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,9 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User extends DateEntity{
@@ -47,13 +46,6 @@ public class User extends DateEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserCategory> userCategories = new HashSet<>();
 
-    public User(String name, String email, String password, AuthProvider provider) {
-        this.name=name;
-        this.email=email;
-        this.password=password;
-        this.provider=provider;
-    }
-
     public User(String name, String email, String imageUrl, AuthProvider provider, String providerId, List<Category> categories) {
         this.name=name;
         this.email=email;
@@ -63,21 +55,14 @@ public class User extends DateEntity{
         categories.forEach(category->userCategories.add(new UserCategory(this,category)));
     }
 
-    public User(String name, AuthProvider provider, String providerId) {
-        this.name = name;
-        this.provider = provider;
-        this.providerId = providerId;
-    }
-
-
-    public void update(String name, String imageUrl) {
-        this.name=name;
-        this.imageUrl=imageUrl;
-    }
-
     public void updateUserInfo(String name, String imageUrl, List<Category> categories) {
         this.name = name;
         this.imageUrl= imageUrl;
+        this.userCategories.clear();
+        categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
+    }
+
+    public void updateUserInfo(List<Category> categories) {
         this.userCategories.clear();
         categories.forEach(category ->userCategories.add(new UserCategory(this,category)));
     }

@@ -1,11 +1,9 @@
 package com.swm.sprint1.controller;
 
-
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.CreateUserLikingDto;
-import com.swm.sprint1.payload.request.UpdateUserRequest;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.UserInfoDto;
 import com.swm.sprint1.repository.user.UserRepository;
@@ -20,15 +18,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @Api(value = "user")
 @RequiredArgsConstructor
 @RestController
@@ -40,17 +41,9 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @ApiOperation(value = "유저의 정보를 반환")
-    @GetMapping("/users/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-    }
-
-    @ApiOperation(value = "유저의 정보를 반환")
     @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> retrieveUser(@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> retrieveUserInfo(@CurrentUser UserPrincipal userPrincipal) {
 
         User user = userPrincipal.getUser();
         Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
@@ -62,21 +55,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "유저의 목록을 반환")
-    @GetMapping("/api/v1/users")
-    @PreAuthorize("hasRole('USER')")
-    public List<User> getUserList(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findAllCustom();
-    }
-
-
     @ApiOperation(value = "유저 정보 수정")
     @PostMapping("/api/v1/users/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUserInfo(@CurrentUser UserPrincipal userPrincipal,
-                                            @RequestParam(required = false) MultipartFile imageFile,
-                                            @RequestParam String name,
-                                            @RequestParam List<String> categories,
+                                            @RequestParam (required = false) MultipartFile imageFile,
+                                            @RequestParam @NotBlank String name,
+                                            @RequestParam @NotEmpty List<String> categories,
                                             @PathVariable Long id) throws IOException {
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
@@ -99,11 +84,26 @@ public class UserController {
                 .body(new ApiResponse(true, "유저 의사 표현 저장 완료"));
     }
 
+    @ApiOperation(value = "유저의 목록을 반환")
+    @GetMapping("/api/v1/users")
+    @PreAuthorize("hasRole('USER')")
+    public List<User> getUserList(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findAllCustom();
+    }
+
+    @ApiOperation(value = "유저의 정보를 반환")
+    @GetMapping("/users/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+    }
+
     @ApiOperation(value = "유저 정보 수정")
     @PostMapping("/upload/{id}")
     public ResponseEntity<?> upload(@RequestParam(required = false) MultipartFile imageFile,
-                                    @RequestParam String name,
-                                    @RequestParam List<String> categories,
+                                    @RequestParam @NotBlank String name,
+                                    @RequestParam @NotEmpty List<String> categories,
                                     @PathVariable Long id) throws IOException {
         userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.ConstraintViolationException;
+
 @RestController
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {
@@ -52,13 +54,18 @@ public class CustomizedResponseEntityExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
     public final ResponseEntity<ApiResponse> handleJwtExceptions(Exception ex, WebRequest request) {
-        ApiResponse response = new ApiResponse(false,ex.getMessage(), request.getDescription(false));
+        ApiResponse response = new ApiResponse(false, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotSupportedExtension.class)
     public final ResponseEntity<ApiResponse> handleNotSupportedExtensions(Exception ex, WebRequest request) {
-        ApiResponse response = new ApiResponse(false,ex.getMessage(), request.getDescription(false));
+        ApiResponse response = new ApiResponse(false, ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<ApiResponse> handleConstraintViolationExceptions(Exception ex, WebRequest request){
+        ApiResponse response = new ApiResponse(false, "100", ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
