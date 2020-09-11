@@ -29,6 +29,8 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
 
+
+
     public List<Token> createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
@@ -64,8 +66,9 @@ public class TokenProvider {
     }
 
     public Long getUserIdFromToken(String token) {
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
         Claims claims = Jwts.parser()
-                .setSigningKey(appProperties.getAuth().getTokenSecret())
+                .setSigningKey(encodedJwt)
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -73,12 +76,14 @@ public class TokenProvider {
     }
 
     public void validateToken(String authToken) {
-            Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
+        Jwts.parser().setSigningKey(encodedJwt);
     }
 
     public boolean validateRefreshToken(Long userId, String refreshToken) {
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
         try {
-            Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(refreshToken);
+            Jwts.parser().setSigningKey(encodedJwt);
         }
         catch (ExpiredJwtException e){
             throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "refresh "+ e.getMessage());
