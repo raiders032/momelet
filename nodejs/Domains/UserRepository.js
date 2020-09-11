@@ -1,4 +1,9 @@
 import User from "./User.js";
+import {
+  UserNotFoundByIdError,
+  UserNotFoundBySocketIdError,
+} from "../Errors/RepositoryError.js";
+
 export default class UserRepository {
   constructor() {
     this.userRepository = new Map(); // key: id, value: User
@@ -17,16 +22,17 @@ export default class UserRepository {
   }
 
   findById(id) {
-    if (!this.userRepository.has(id))
-      throw "해당 유저를 찾을 수 없습니다. 유저 아이디: " + id;
+    if (!this.userRepository.has(id)) throw new UserNotFoundByIdError();
     return this.userRepository.get(id);
   }
 
   findBySocketId(socketId) {
+    if (!this.socketIdMapper.has(socketId))
+      throw new UserNotFoundBySocketIdError();
     return this.userRepository.get(this.socketIdMapper.get(socketId));
   }
 
-  existsById(id) {
+  existById(id) {
     return this.userRepository.has(id);
   }
 

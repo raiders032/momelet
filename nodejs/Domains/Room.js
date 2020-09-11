@@ -118,7 +118,7 @@ export default class Room {
     return (this.hostId = hostId);
   }
 
-  resetFinishCount(finishCount) {
+  resetFinishCount() {
     return (this.finishCount = 0);
   }
 

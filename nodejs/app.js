@@ -1,20 +1,19 @@
 import express from "express";
 import SocketIO from "socket.io";
 import socketioJwt from "socketio-jwt";
-import dotenv from "dotenv";
+import { errorHandler } from "./Errors/errorHandler.js";
+import checkUserUnique from "./Middleware/checkUserUnique.js";
+import togetherController from "./Controllers/togetherController.js";
+import gameController from "./Controllers/gameController.js";
+import disconnectController from "./Controllers/disconnectController.js";
 import logger from "./logger.js";
-import userFilter from "./Middleware/userFilter.js";
-import {
-  togetherController,
-  gameController,
-  disconnectController,
-} from "./Controllers/index.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 function controller(socket) {
-  togetherController(socket);
-  gameController(socket);
-  disconnectController(socket);
+  togetherController(socket, errorHandler);
+  gameController(socket, errorHandler);
+  disconnectController(socket, errorHandler);
 }
 
 function startServer() {
@@ -30,7 +29,7 @@ function startServer() {
   });
 
   io.use((socket, next) => {
-    userFilter(io, socket, next);
+    checkUserUnique(io, socket, next);
   });
 
   io.sockets

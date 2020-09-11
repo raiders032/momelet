@@ -1,5 +1,4 @@
-import SocketResponse from "../SocketResponse.js";
-import { errorCheckAsync } from "../Controllers/errorCheckController.js";
+import { errorHandlerAsync } from "../Errors/errorHandler.js";
 import {
   gameRoomJoinService,
   gameRoomLeaveService,
@@ -11,11 +10,11 @@ import {
 import msgTypeCheck from "./msgTypeCheck.js";
 import logger from "../logger.js";
 
-export default (socket, errorCheck) => {
+export default (socket, errorHandler) => {
   // 게임방 입장
   socket.on("gameRoomJoin", (msg, ack) => {
     logger.info("gameRoomJoin. msg: " + msg);
-    let response = errorCheck(() => {
+    let response = errorHandler(() => {
       const { id, roomName } = JSON.parse(msg);
       msgTypeCheck({ number: [id], string: [roomName] });
       return gameRoomJoinService(socket, { id, roomName });
@@ -26,7 +25,7 @@ export default (socket, errorCheck) => {
   // 게임방 퇴장
   socket.on("gameRoomLeave", (msg, ack) => {
     logger.info("gameRoomLeave. msg: " + msg);
-    let response = errorCheck(() => {
+    let response = errorHandler(() => {
       const { id, roomName } = JSON.parse(msg);
       msgTypeCheck({ number: [id], string: [roomName] });
       return gameRoomLeaveService(socket, { id, roomName });
@@ -37,7 +36,7 @@ export default (socket, errorCheck) => {
   // 게임시작
   socket.on("gameStart", async (msg, ack) => {
     logger.info("gameStart. msg: " + msg);
-    let response = await errorCheckAsync(async () => {
+    let response = await errorHandlerAsync(async () => {
       const { id, roomName, radius, latitude, longitude } = JSON.parse(msg);
       msgTypeCheck({
         number: [id, radius, latitude, longitude],

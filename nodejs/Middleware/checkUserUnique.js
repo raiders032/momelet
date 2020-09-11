@@ -4,7 +4,7 @@ import logger from "../logger.js";
 export default (io, socket, next) => {
   socket.handshake.query.id = Number(socket.handshake.query.id);
   const { id } = socket.handshake.query;
-  if (SingleObject.UserRepository.existsById(id)) {
+  if (SingleObject.UserRepository.existById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
     logger.info("중복유저찾았다!");
     const user =

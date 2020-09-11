@@ -1,7 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
-import logger from "../../logger.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
 import SocketResponse from "../../socketResponse.js";
+import { RoomNotExistError } from "../../Errors/RepositoryError.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -16,34 +16,29 @@ const exitExistRoom = (socket, user, id) => {
   gameRoomUpdateService(socket, room, id);
 };
 
-export default (socket, msg) => {
+export default (socket, { id, roomName }) => {
   let response = new SocketResponse();
   let data = {};
+
   let room, user;
-  var echo = "gameRoomJoin. msg: " + msg;
+  room = SingleObject.RoomRepository.findByRoomName(roomName);
+  user = SingleObject.UserRepository.findById(id);
 
-  logger.info(echo);
-
-  try {
-    const { id, roomName } = JSON.parse(msg);
-    room = SingleObject.RoomRepository.findByRoomName(roomName);
-    user = SingleObject.UserRepository.findById(id);
-
-    // 기존 접속 방에서 나가기
-    if (user.joinedRoomName !== null) {
-      exitExistRoom(socket, user, id);
-    }
-    room.addUser(user);
-    gameRoomUpdateService(socket, room, id);
-    user.updateJoinedRoomName(roomName);
-    data.roomName = roomName;
-    data.gameRoomUserList = room.getUserInfo();
-    data.hostId = room.getHostId();
-    response.isOk(data);
-  } catch (err) {
-    logger.error("gameRoomJoinService error: " + err);
-    response.isFail("gameRoomJoinService.error");
+  if (room === false) {
+    throw new RoomNotExistError();
+  }
+  // 기존 접속 방에서 나가기
+  if (user.joinedRoomName !== null) {
+    exitExistRoom(socket, user, id);
   }
 
-  return JSON.stringify(response);
+  room.addUser(user);
+  gameRoomUpdateService(socket, room, id);
+  user.updateJoinedRoomName(roomName);
+
+  data.roomName = roomName;
+  data.gameRoomUserList = room.getUserInfo();
+  data.hostId = room.getHostId();
+  response.isOk(data);
+  return response;
 };

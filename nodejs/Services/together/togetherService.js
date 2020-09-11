@@ -1,5 +1,4 @@
 import * as SingleObject from "../../SingleObjects.js";
-import logger from "../../logger.js";
 import SocketResponse from "../../socketResponse.js";
 
 const findAroundUsers = (myId, lat, long) => {
@@ -32,18 +31,11 @@ const findAroundUsers = (myId, lat, long) => {
 };
 
 // 같이하기
-export default (socket, msg) => {
+export default ({ id, latitude, longitude }) => {
   let response = new SocketResponse();
-  let data = { aroundUsers: null };
-  var echo = "together. msg: " + msg;
-  logger.info(echo);
-  try {
-    const { id, latitude, longitude } = JSON.parse(msg);
-    data.aroundUsers = findAroundUsers(id, latitude, longitude);
-    response.isOk(data);
-  } catch (err) {
-    logger.error("togetherService error: " + err);
-    response.isFail("together.error");
-  }
-  return JSON.stringify(response);
+  let data = {};
+
+  data.aroundUsers = findAroundUsers(id, latitude, longitude);
+  response.isOk(data);
+  return response;
 };

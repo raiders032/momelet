@@ -1,57 +1,19 @@
 import axios from "axios";
 import * as SingleObject from "../../SingleObjects.js";
-import logger from "../../logger.js";
 import SocketResponse from "../../socketResponse.js";
+import { RoomNotExistError } from "../../Errors/RepositoryError.js";
+import {
+  GameAlreadyStartedError,
+  GameHostNotCorrectError,
+  NotEnoughRestaurantCardError,
+} from "../../Errors/GameError.js";
+import getRestaurantCard from "../util/getRestaurantCard.js";
 
-const canStart = (room, id) => {
-  if (room === false) {
-    return false;
-  }
-  // lock 역할로 isStarted 활용
-  if (room.getIsStarted() === true) {
-    return false;
-  }
-  if (room.getHostId() !== id) {
-    return false;
-  }
+const checkCanStart = (room, id) => {
+  if (room === false) throw new RoomNotExistError();
+  if (room.getIsStarted() === true) throw new GameAlreadyStartedError();
+  if (room.getHostId() !== id) throw new GameHostNotCorrectError();
   return true;
-};
-
-const getCard = async (users, myId, radius, latitude, longitude) => {
-  let id = "";
-  for (let i = 0; i < users.length; i++) {
-    if (i === users.length - 1) {
-      id += users[i].id;
-    } else {
-      id += users[i].id + ",";
-    }
-  }
-  const { JWT } = SingleObject.UserRepository.findById(myId);
-  const cards = [];
-  try {
-    const {
-      data: {
-        data: { restaurants },
-      },
-    } = await axios.get(process.env.SERVER_URL + "/api/v1/restaurants7", {
-      headers: {
-        Authorization: "Bearer " + JWT,
-      },
-      params: {
-        id,
-        longitude,
-        latitude,
-        radius,
-      },
-    });
-    for (let i in restaurants) {
-      cards.push(restaurants[i]);
-    }
-  } catch (err) {
-    logger.error("카드 7장 가져오는 데이터 fetch하던 중에 오류");
-    throw err;
-  }
-  return cards;
 };
 
 const rollBackRoom = (room) => {
@@ -59,39 +21,24 @@ const rollBackRoom = (room) => {
   room.clearCardList();
 };
 
-export default async (socket, msg) => {
+export default async (
+  socket,
+  { id, roomName, radius, latitude, longitude }
+) => {
   let response = new SocketResponse();
   let data = {};
-  let id, roomName, radius, latitude, longitude, room, cards;
-  var echo = "gameStart. msg: " + msg;
-  logger.info(echo);
 
-  try {
-    const parsedMsg = JSON.parse(msg);
-    id = parsedMsg.id;
-    roomName = parsedMsg.roomName;
-    radius = parsedMsg.radius;
-    latitude = parsedMsg.latitude;
-    longitude = parsedMsg.longitude;
-    room = parsedMsg.room;
-  } catch (err) {
-    logger.error("gameStartService Msg parse error: " + err);
-    response.isFail("json.parse");
-    return JSON.stringify(response);
-  }
-
+  let room;
   room = SingleObject.RoomRepository.findByRoomName(roomName);
-  if (!canStart(room, id)) {
-    response.isFail("room.game.start");
-    return JSON.stringify(response);
-  }
+  checkCanStart(room, id);
 
   // 방정보가 업데이트 되기 시작
   // 오류가 생기면 롤백해야함.
+  let cards;
   room.startGame();
   const users = room.getUserList();
   try {
-    cards = await getCard(
+    cards = await getRestaurantCard(
       users.filter((user) => user.getCanReceive()),
       id,
       radius,
@@ -100,9 +47,7 @@ export default async (socket, msg) => {
     );
   } catch (err) {
     rollBackRoom(room);
-    logger.error("getCard error: " + err);
-    response.isFail("game.card.get");
-    return JSON.stringify(response);
+    throw err;
   }
 
   if (cards.length === 7) {
@@ -112,8 +57,8 @@ export default async (socket, msg) => {
     }
     room.updateCardList(cardList);
   } else {
-    response.isFail("game.card.notEnough");
-    return JSON.stringify(response);
+    rollBackRoom();
+    throw new NotEnoughRestaurantCardError();
   }
 
   // room.userList가 Array이기 때문에 순회하며 delete를 할 수 없음
@@ -136,11 +81,9 @@ export default async (socket, msg) => {
     if (user.getId() !== room.getHostId()) {
       socket.to(user.socketId).emit("gameStart", JSON.stringify(response));
     }
-    // user.updateCanReceive(false);
     headCount++;
   });
   room.updateHeadCount(headCount);
 
-  response.isOk({ restaurants: cards });
-  return JSON.stringify(response);
+  return response;
 };

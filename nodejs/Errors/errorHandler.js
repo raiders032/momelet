@@ -1,17 +1,17 @@
-import { UndefinedTypeError, WrongTypeError } from "../Errors/TypeError.js";
+import { UndefinedTypeError, WrongTypeError } from "./TypeError.js";
 import {
   UserNotFoundByIdError,
   UserNotFoundBySocketIdError,
   RoomNotFoundByRoomNameError,
   RoomNotExistError,
   RoomAlreadyExistError,
-} from "../Errors/RepositoryError.js";
+} from "./RepositoryError.js";
 import {
   GameAlreadyStartedError,
   GameHostNotCorrectError,
   GetRestaurantCardError,
   NotEnoughRestaurantCardError,
-} from "../Errors/GameError.js";
+} from "./GameError.js";
 import logger from "../logger.js";
 
 const errorMsg = {
@@ -19,7 +19,7 @@ const errorMsg = {
   errorCode: null,
   data: null,
 };
-export const errorCheck = (callback) => {
+export const errorHandler = (callback) => {
   try {
     return callback();
   } catch (err) {
@@ -67,7 +67,7 @@ export const errorCheck = (callback) => {
   }
 };
 
-export const errorCheckAsync = async (callback) => {
+export const errorHandlerAsync = async (callback) => {
   try {
     return await callback();
   } catch (err) {

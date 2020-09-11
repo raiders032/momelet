@@ -396,10 +396,7 @@ describe("Connecting Server", () => {
                     const parsedMsg = JSON.parse(msg);
 
                     parsedMsg.should.have.property("success").with.equal(false);
-                    parsedMsg.should.have.property(
-                      "errorCode",
-                      "room.game.start"
-                    );
+                    parsedMsg.should.have.property("errorCode", 301);
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
