@@ -29,8 +29,6 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
 
-
-
     public List<Token> createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
