@@ -1,3 +1,5 @@
+import SocketResponse from "../SocketResponse.js";
+import { errorCheckAsync } from "../Controllers/errorCheckController.js";
 import {
   gameRoomJoinService,
   gameRoomLeaveService,
@@ -34,8 +36,23 @@ export default (socket, errorCheck) => {
 
   // 게임시작
   socket.on("gameStart", async (msg, ack) => {
-    const ret = await gameStartService(socket, msg);
-    ack(ret);
+    logger.info("gameStart. msg: " + msg);
+    let response = await errorCheckAsync(async () => {
+      const { id, roomName, radius, latitude, longitude } = JSON.parse(msg);
+      msgTypeCheck({
+        number: [id, radius, latitude, longitude],
+        string: [roomName],
+      });
+
+      return await gameStartService(socket, {
+        id,
+        roomName,
+        radius,
+        latitude,
+        longitude,
+      });
+    });
+    ack(JSON.stringify(response));
   });
 
   // 유저 한명 게임 종료
