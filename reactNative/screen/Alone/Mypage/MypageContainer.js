@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import MypagePresenter from "./MypagePresenter";
-import { apis } from "../../../api";
+import { StackActions } from '@react-navigation/native';
+import { Buffer } from 'buffer';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import React, { useState } from 'react';
+import { AsyncStorage } from 'react-native';
 
-import { AsyncStorage } from "react-native";
-import { StackActions } from "@react-navigation/native";
-import * as Permissions from "expo-permissions";
-import * as ImagePicker from "expo-image-picker";
-import { Buffer } from "buffer";
+import { apis } from '../../../api';
+import MypagePresenter from './MypagePresenter';
+
 export default ({ navigation, route }) => {
   const [user, setUser] = useState(route.params.user);
-  console.log("유저 정보:", user);
+
+  console.log('유저 정보:', user);
   const onClickFooter = async () => {
-    const token = await AsyncStorage.getItem("@userToken");
+    const token = await AsyncStorage.getItem('@userToken');
     const preprocessCategories = [];
+
     for (const category in user.categories) {
       if (user.categories[category]) preprocessCategories.push(category);
     }
@@ -24,6 +27,7 @@ export default ({ navigation, route }) => {
       user.name,
       token
     );
+
     console.log(result.data);
     // navigation.dispatch(StackActions.pop(1));
     // navigation.dispatch(
@@ -31,18 +35,18 @@ export default ({ navigation, route }) => {
     //     userToken: token,
     //   })
     // );
-    navigation.navigate("Main", {
+    navigation.navigate('Main', {
       isChanged: true,
     });
   };
   const imageEditButtonEvent = async () => {
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    if (permission.status !== "granted") {
-      alert("카메라 앨범 권한이 없어 실행할 수 없습니다.");
+    if (permission.status !== 'granted') {
+      alert('카메라 앨범 권한이 없어 실행할 수 없습니다.');
     } else {
       try {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: false,
           aspect: [4, 3],
@@ -50,6 +54,7 @@ export default ({ navigation, route }) => {
           base64: true,
           exif: true,
         });
+
         if (!result.cancelled) {
           console.log(Buffer.byteLength(result.base64));
           setUser({ ...user, imageUrl: result.uri });
@@ -59,6 +64,7 @@ export default ({ navigation, route }) => {
       }
     }
   };
+
   return (
     <MypagePresenter
       user={user}

@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Image, Text, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 export default ({ size, image, categoryName, onPress }) => {
   return (
     <TouchableOpacity onPress={() => onPress(categoryName)}>
@@ -8,12 +8,11 @@ export default ({ size, image, categoryName, onPress }) => {
           width: size / 1.2,
           height: size / 1.2,
           borderWidth: 0.6,
-          borderColor: "#e4e4e4",
+          borderColor: '#e4e4e4',
           borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Image
           source={image}
           style={{
@@ -24,10 +23,9 @@ export default ({ size, image, categoryName, onPress }) => {
 
         <Text
           style={{
-            color: "#9f9f9f",
+            color: '#9f9f9f',
             fontSize: size / 7,
-          }}
-        >
+          }}>
           {categoryName}
         </Text>
       </View>
