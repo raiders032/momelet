@@ -20,6 +20,7 @@ const cacheImages = (images) => {
     }
   });
 };
+
 // 폰트 캐싱 함수
 const cacheFonts = (fonts) => {
   return fonts.map((font) => Font.loadAsync(font));
@@ -28,10 +29,12 @@ const cacheFonts = (fonts) => {
 export default function App() {
   const [assetIsReady, setAssetIsReady] = useState(false);
   const [userToken, setUserToken] = useState(null);
+
   const [fontsLoaded] = Font.useFonts({
     Godo: require("./assets/GodoM.ttf"),
     NotoSansCJKkr: require("./assets/NotoSansMonoCJKkr-Regular.otf"),
   });
+
   // userToken 가져오는 함수
   const setTokenInSecure = async (tokenInfo) => {
     await SecureStore.setItemAsync(
@@ -49,6 +52,7 @@ export default function App() {
       })
     );
   };
+
   const _retrieveData = async () => {
     console.log("retrieveDate 실행");
     try {
@@ -72,6 +76,7 @@ export default function App() {
       }
     } catch (error) {}
   };
+
   const afterLogin = async (userToken, tokenInfo) => {
     console.log(tokenInfo);
     setTokenInSecure(tokenInfo);
@@ -80,6 +85,7 @@ export default function App() {
     // await AsyncStorage.setItem("@userToken", null);
     setUserToken(userToken);
   };
+  
   const _loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
       require("./assets/bg.jpg"),
