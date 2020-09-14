@@ -33,7 +33,7 @@ public class TokenProvider {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
         Date now = new Date();
-        Date accessExpiryDate = new Date(now.getTime() + 60*60* 1000);
+        Date accessExpiryDate = new Date(now.getTime() + 15 * 1000);
         Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
