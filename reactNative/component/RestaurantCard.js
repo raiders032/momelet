@@ -18,20 +18,23 @@ import SeeMenuButton from './SeeMenuButton';
 export default ({ restaurant, header, cover }) => {
   const [isFront, setIsFront] = useState(true);
   let changeValue = 0;
-  const lotation = useRef(new Animated.Value(0)).current;
+  const rotation = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    lotation.setValue(0);
-    // setIsFront("false");
-  }, [restaurant]);
-  lotation.addListener(({ value }) => {
+  rotation.addListener(({ value }) => {
     changeValue = value;
   });
-  const frontInterpolate = lotation.interpolate({
+
+  useEffect(() => {
+    rotation.setValue(0);
+    // setIsFront("false");
+  }, [restaurant]);
+
+  const frontInterpolate = rotation.interpolate({
     inputRange: [0, 180],
     outputRange: ['0deg', '180deg'],
   });
-  const backInterpolate = lotation.interpolate({
+
+  const backInterpolate = rotation.interpolate({
     inputRange: [0, 180],
     outputRange: ['180deg', '360deg'],
   });
@@ -47,19 +50,21 @@ export default ({ restaurant, header, cover }) => {
     // isFlipping = true;
 
     if (changeValue >= 90) {
-      Animated.timing(lotation, {
+      Animated.timing(rotation, {
         toValue: 0,
         useNativeDriver: true,
       }).start();
+
       setIsFront(true);
     } else {
-      Animated.timing(lotation, {
+      Animated.timing(rotation, {
         toValue: 180,
-
         useNativeDriver: true,
       }).start();
+
       setIsFront(false);
     }
+
     setTimeout(() => {
       isFlipping = false;
     }, 1000);
@@ -68,7 +73,7 @@ export default ({ restaurant, header, cover }) => {
   const CardImage = React.useCallback(() => {
     return (
       <Image
-        source={{ uri: restaurant.thumUrl }}
+        source={{ uri: restaurant.thumUrl }} // @FIXME restaurant.thumbUrl
         // source={{
         //   uri: "https://d22j25xnhsuyth.cloudfront.net/profile-image/test7.jpg",
         // }}
@@ -104,6 +109,7 @@ export default ({ restaurant, header, cover }) => {
   // const CardFront = React.useCallback(() => {
   //   return ()
   // })
+
   return (
     <Card>
       <View style={{ width: '100%', height: '100%' }}>
@@ -136,7 +142,7 @@ export default ({ restaurant, header, cover }) => {
             </Animated.View>
           </View>
         ) : (
-          <View style={{ height: '65%' }}>
+          <View style={{ height: '65%' }} pointerEvents={isFront ? 'auto' : 'none'}>
             <Animated.View
               style={{
                 transform: [{ rotateY: frontInterpolate }],

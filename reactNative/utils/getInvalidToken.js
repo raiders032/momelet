@@ -3,7 +3,25 @@ import * as SecureStore from 'expo-secure-store';
 
 import getEnvVars from '../enviroment';
 import dateCheck from './dateCheck';
+
 const { apiUrl } = getEnvVars();
+
+class Token {
+  static getRefreshToken = async () => {
+    const token = await SecureStore.getItemAsync('refresh_TokenInfo').refreshToken;
+
+    return JSON.parse(token);
+  };
+
+  setRefreshToken = async () => {};
+}
+
+const getAccessToken = async () => {
+  const token = await SecureStore.getItemAsync('access_TokenInfo').refreshToken;
+
+  return JSON.parse(token);
+};
+
 const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
 
@@ -27,6 +45,7 @@ const makeRequest = async (method, path, config, data = '') => {
     console.error(`error in api call : ${path}`, error);
   }
 };
+
 const refreshTokenFunc = async () => {
   const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
 
@@ -43,6 +62,7 @@ const refreshTokenFunc = async () => {
     }
   );
 };
+
 const setTokenInSecure = async (tokenInfo) => {
   await SecureStore.setItemAsync(
     'access_TokenInfo',
@@ -51,6 +71,7 @@ const setTokenInSecure = async (tokenInfo) => {
       accessTokenExpiredDate: tokenInfo.accessTokenExpiryDate,
     })
   );
+
   await SecureStore.setItemAsync(
     'refresh_TokenInfo',
     JSON.stringify({
@@ -59,6 +80,7 @@ const setTokenInSecure = async (tokenInfo) => {
     })
   );
 };
+
 const getInvalidToken = async () => {
   const accessTokenInfo = JSON.parse(await SecureStore.getItemAsync('access_TokenInfo'));
 

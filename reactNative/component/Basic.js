@@ -3,6 +3,7 @@ import React, { Children } from 'react';
 import { View, Text } from 'react-native';
 
 import CoverMessage from './CoverMessage';
+
 export default ({
   coverMessageConfig = {
     zIndex: -1,
