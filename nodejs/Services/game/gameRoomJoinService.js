@@ -1,7 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
 import SocketResponse from "../../socketResponse.js";
-import { RoomNotExistError } from "../../Errors/RepositoryError.js";
+import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
@@ -25,7 +25,7 @@ export default (socket, { id, roomName }) => {
   user = SingleObject.UserRepository.findById(id);
 
   if (room === false) {
-    throw new RoomNotExistError();
+    throw new ERR_ROOM_NOT_EXIST();
   }
   // 기존 접속 방에서 나가기
   if (user.joinedRoomName !== null) {

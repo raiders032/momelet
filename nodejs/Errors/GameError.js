@@ -1,32 +1,38 @@
-import e from "express";
-
-class GameAlreadyStartedError extends Error {
-  constructor(message = "GameAlreadyStartedError", errorCode = 300, ...params) {
-    super(...params);
-    this.message = message;
-    this.errorCode = errorCode;
-  }
-}
-
-class GameHostNotCorrectError extends Error {
-  constructor(message = "GameHostNotCorrectError", errorCode = 301, ...params) {
-    super(...params);
-    this.message = message;
-    this.errorCode = errorCode;
-  }
-}
-
-class GetRestaurantCardError extends Error {
-  constructor(message = "GetRestaurantCardError", errorCode = 302, ...params) {
-    super(...params);
-    this.message = message;
-    this.errorCode = errorCode;
-  }
-}
-
-class NotEnoughRestaurantCardError extends Error {
+class ERR_GAME_ALREADY_STARTED extends Error {
   constructor(
-    message = "NotEnoughRestaurantCardError",
+    message = "ERR_GAME_ALREADY_STARTED",
+    errorCode = 300,
+    ...params
+  ) {
+    super(...params);
+    this.message = message;
+    this.errorCode = errorCode;
+  }
+}
+
+class ERR_HOST_NOT_CORRECT extends Error {
+  constructor(message = "ERR_HOST_NOT_CORRECT", errorCode = 301, ...params) {
+    super(...params);
+    this.message = message;
+    this.errorCode = errorCode;
+  }
+}
+
+class ERR_RESTAURANT_GET_FAILED extends Error {
+  constructor(
+    message = "ERR_RESTAURANT_GET_FAILED",
+    errorCode = 302,
+    ...params
+  ) {
+    super(...params);
+    this.message = message;
+    this.errorCode = errorCode;
+  }
+}
+
+class ERR_NOT_ENOUGH_RESTAURANT_CARD extends Error {
+  constructor(
+    message = "ERR_NOT_ENOUGH_RESTAURANT_CARD",
     errorCode = 303,
     ...params
   ) {
@@ -36,9 +42,9 @@ class NotEnoughRestaurantCardError extends Error {
   }
 }
 
-class NotEnoughGameResultError extends Error {
+class ERR_NOT_ENOUGH_GAME_RESULT extends Error {
   constructor(
-    message = "NotEnoughGameResultError",
+    message = "ERR_NOT_ENOUGH_GAME_RESULT",
     errorCode = 310,
     ...params
   ) {
@@ -48,9 +54,9 @@ class NotEnoughGameResultError extends Error {
   }
 }
 export {
-  GameAlreadyStartedError,
-  GameHostNotCorrectError,
-  GetRestaurantCardError,
-  NotEnoughRestaurantCardError,
-  NotEnoughGameResultError,
+  ERR_GAME_ALREADY_STARTED,
+  ERR_HOST_NOT_CORRECT,
+  ERR_RESTAURANT_GET_FAILED,
+  ERR_NOT_ENOUGH_RESTAURANT_CARD,
+  ERR_NOT_ENOUGH_GAME_RESULT,
 };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetRestaurantCardError } from "../../Errors/GameError.js";
+import { ERR_RESTAURANT_GET_FAILED } from "../../Errors/GameError.js";
 import * as SingleObject from "../../SingleObjects.js";
 export default async (users, myId, radius, latitude, longitude) => {
   let id = "";
@@ -42,7 +42,7 @@ export default async (users, myId, radius, latitude, longitude) => {
         });
         continue;
       }
-      throw new GetRestaurantCardError();
+      throw new ERR_RESTAURANT_GET_FAILED();
     }
   }
   return cards;

@@ -1,18 +1,18 @@
 import axios from "axios";
 import * as SingleObject from "../../SingleObjects.js";
 import SocketResponse from "../../socketResponse.js";
-import { RoomNotExistError } from "../../Errors/RepositoryError.js";
+import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 import {
-  GameAlreadyStartedError,
-  GameHostNotCorrectError,
-  NotEnoughRestaurantCardError,
+  ERR_GAME_ALREADY_STARTED,
+  ERR_HOST_NOT_CORRECT,
+  ERR_NOT_ENOUGH_RESTAURANT_CARD,
 } from "../../Errors/GameError.js";
 import getRestaurantCard from "../util/getRestaurantCard.js";
 
 const checkCanStart = (room, id) => {
-  if (room === false) throw new RoomNotExistError();
-  if (room.getIsStarted() === true) throw new GameAlreadyStartedError();
-  if (room.getHostId() !== id) throw new GameHostNotCorrectError();
+  if (room === false) throw new ERR_ROOM_NOT_EXIST();
+  if (room.getIsStarted() === true) throw new ERR_GAME_ALREADY_STARTED();
+  if (room.getHostId() !== id) throw new ERR_HOST_NOT_CORRECT();
   return true;
 };
 
@@ -58,7 +58,7 @@ export default async (
     room.updateCardList(cardList);
   } else {
     rollBackRoom();
-    throw new NotEnoughRestaurantCardError();
+    throw new ERR_NOT_ENOUGH_RESTAURANT_CARD();
   }
 
   // room.userList가 Array이기 때문에 순회하며 delete를 할 수 없음

@@ -1,14 +1,14 @@
-class UserNotFoundByIdError extends Error {
-  constructor(message = "UserNotFoundByIdError", errorCode = 200, ...params) {
+class ERR_USER_ID_NOT_FOUND extends Error {
+  constructor(message = "ERR_USER_ID_NOT_FOUND", errorCode = 200, ...params) {
     super(...params);
     this.message = message;
     this.errorCode = errorCode;
   }
 }
 
-class UserNotFoundBySocketIdError extends Error {
+class ERR_USER_SOCKET_ID_NOT_FOUND extends Error {
   constructor(
-    message = "UserNotFoundBySocketIdError",
+    message = "ERR_USER_SOCKET_ID_NOT_FOUND",
     errorCode = 201,
     ...params
   ) {
@@ -18,26 +18,22 @@ class UserNotFoundBySocketIdError extends Error {
   }
 }
 
-class RoomNotFoundByRoomNameError extends Error {
-  constructor(
-    message = "RoomNotFoundByRoomNameError",
-    errorCode = 210,
-    ...params
-  ) {
+class ERR_ROOM_NAME_NOT_FOUND extends Error {
+  constructor(message = "ERR_ROOM_NAME_NOT_FOUND", errorCode = 210, ...params) {
     super(...params);
     this.message = message;
     this.errorCode = errorCode;
   }
 }
-class RoomNotExistError extends Error {
-  constructor(message = "RoomNotExistError", errorCode = 211, ...params) {
+class ERR_ROOM_NOT_EXIST extends Error {
+  constructor(message = "ERR_ROOM_NOT_EXIST", errorCode = 211, ...params) {
     super(...params);
     this.message = message;
     this.errorCode = errorCode;
   }
 }
-class RoomAlreadyExistError extends Error {
-  constructor(message = "RoomAlreadyExistError", errorCode = 212, ...params) {
+class ERR_ROOM_EXIST_ALREADY extends Error {
+  constructor(message = "ERR_ROOM_EXIST_ALREADY", errorCode = 212, ...params) {
     super(...params);
     this.message = message;
     this.errorCode = errorCode;
@@ -45,9 +41,9 @@ class RoomAlreadyExistError extends Error {
 }
 
 export {
-  UserNotFoundByIdError,
-  UserNotFoundBySocketIdError,
-  RoomNotFoundByRoomNameError,
-  RoomNotExistError,
-  RoomAlreadyExistError,
+  ERR_USER_ID_NOT_FOUND,
+  ERR_USER_SOCKET_ID_NOT_FOUND,
+  ERR_ROOM_NAME_NOT_FOUND,
+  ERR_ROOM_NOT_EXIST,
+  ERR_ROOM_EXIST_ALREADY,
 };

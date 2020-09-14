@@ -6,7 +6,7 @@ let typeCheckObject = {
   string: ["hi", "bye"],
 };
 */
-import { UndefinedTypeError, WrongTypeError } from "../Errors/TypeError.js";
+import { ERR_UNDEFINED_TYPE, ERR_WRONG_TYPE } from "../Errors/TypeError.js";
 export default (typeCheckingObject) => {
   let types = Object.keys(typeCheckingObject);
 
@@ -14,8 +14,8 @@ export default (typeCheckingObject) => {
     let values = typeCheckingObject[type];
 
     values.forEach((value) => {
-      if (value === undefined) throw new UndefinedTypeError();
-      if (typeof value !== type && type !== "Array") throw new WrongTypeError();
+      if (value === undefined) throw new ERR_UNDEFINED_TYPE();
+      if (typeof value !== type && type !== "Array") throw new ERR_WRONG_TYPE();
     });
   });
 };

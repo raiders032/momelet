@@ -1,12 +1,12 @@
 import logger from "../../logger.js";
 import SocketResponse from "../../socketResponse.js";
-import { RoomNotExistError } from "../../Errors/RepositoryError.js";
+import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 export default (socket, room, id) => {
   logger.info(
     "gameRoomUpdateService. roomName: " + room.getRoomName() + ", id: " + id
   );
 
-  // if (room === false || room === undefined) throw new RoomNotExistError();
+  // if (room === false || room === undefined) throw new ERR_ROOM_NOT_EXIST();
   let response = new SocketResponse();
   let data = {};
 

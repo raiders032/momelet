@@ -1,18 +1,3 @@
-import { UndefinedTypeError, WrongTypeError } from "./TypeError.js";
-import {
-  UserNotFoundByIdError,
-  UserNotFoundBySocketIdError,
-  RoomNotFoundByRoomNameError,
-  RoomNotExistError,
-  RoomAlreadyExistError,
-} from "./RepositoryError.js";
-import {
-  GameAlreadyStartedError,
-  GameHostNotCorrectError,
-  GetRestaurantCardError,
-  NotEnoughRestaurantCardError,
-  NotEnoughGameResultError,
-} from "./GameError.js";
 import logger from "../logger.js";
 
 const errorMsg = {
@@ -26,8 +11,9 @@ export const errorHandler = (callback) => {
   } catch (err) {
     logger.error(err.stack);
     if (err.errorCode !== undefined) {
-      logger.error("Unexpected Error!!!");
       errorMsg.errorCode = err.errorCode;
+    } else {
+      logger.error("Unexpected Error!!!");
     }
     return errorMsg;
   }
@@ -39,8 +25,9 @@ export const errorHandlerAsync = async (callback) => {
   } catch (err) {
     logger.error(err.stack);
     if (err.errorCode !== undefined) {
-      logger.error("Unexpected Error!!!");
       errorMsg.errorCode = err.errorCode;
+    } else {
+      logger.error("Unexpected Error!!!");
     }
     return errorMsg;
   }
