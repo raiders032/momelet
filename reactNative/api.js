@@ -10,10 +10,13 @@ const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
 
+  console.log(path);
   if (path === 'v1/auth/refresh') {
     tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
+    console.log('hh');
   } else {
     tmpToken = await getInvalidToken();
+    console.log('gg');
   }
   console.log('tmpToken', tmpToken);
   console.log(await SecureStore.getItemAsync('refresh_TokenInfo'));
@@ -40,12 +43,7 @@ export const apis = {
       //   Authorization: `Bearer ${token}`,
       // },
     }),
-  getUserMe: (token) =>
-    makeRequest('get', 'v1/users/me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+  getUserMe: (token) => makeRequest('get', 'v1/users/me', {}),
   editUser: (id, categories, imageUrl, name, token) => {
     const body = new FormData();
 

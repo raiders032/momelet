@@ -49,6 +49,8 @@ const makeRequest = async (method, path, config, data = '') => {
 const refreshTokenFunc = async () => {
   const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
 
+  console.log('refreshToken: ', refreshToken);
+
   return makeRequest(
     'post',
     'v1/auth/refresh',
@@ -82,16 +84,22 @@ const setTokenInSecure = async (tokenInfo) => {
 };
 
 const getInvalidToken = async () => {
+  console.log('getInvalidToken: ');
+
   const accessTokenInfo = JSON.parse(await SecureStore.getItemAsync('access_TokenInfo'));
 
-  if (!dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
+  if (dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
+    console.log('엑세스 토큰 살아잇음');
+
     return accessTokenInfo.accessToken;
   } else {
+    console.log('엑세스 토큰 죽음');
     const refreshTokenInfo = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
     if (dateCheck(refreshTokenInfo.refreshTokenExpiredDate)) {
-      console.log('Hello');
+      console.log('리프레시 토큰 살아있음');
       const newRefreshToken = await refreshTokenFunc();
+
       const tokenInfo = {
         accessToken: newRefreshToken.data.data.tokens.accessToken.jwtToken,
         accessTokenExpiryDate: newRefreshToken.data.data.tokens.accessToken.formattedExpiryDate,
@@ -99,6 +107,7 @@ const getInvalidToken = async () => {
         refreshTokenExpiryDate: newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
       };
 
+      console.log('tokenInfo: ', tokenInfo);
       setTokenInSecure(tokenInfo);
 
       return newRefreshToken.data.data.tokens.accessToken.jwtToken;
