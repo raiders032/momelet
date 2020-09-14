@@ -6,7 +6,7 @@ let typeCheckObject = {
   string: ["hi", "bye"],
 };
 */
-import { ERR_UNDEFINED_TYPE, ERR_WRONG_TYPE } from "../Errors/TypeError.js";
+import { ERR_UNDEFINED_TYPE, ERR_WRONG_TYPE } from "../../Errors/TypeError.js";
 export default (typeCheckingObject) => {
   let types = Object.keys(typeCheckingObject);
 

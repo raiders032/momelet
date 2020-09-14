@@ -7,7 +7,7 @@ import {
   gameAllFinishService,
   gameRoomJoinAgainService,
 } from "../Services/index.js";
-import msgTypeCheck from "./msgTypeCheck.js";
+import msgTypeCheck from "./util/msgTypeCheck.js";
 import logger from "../logger.js";
 
 export default (socket, errorHandler) => {
@@ -69,15 +69,14 @@ export default (socket, errorHandler) => {
     ack(JSON.stringify(response));
   });
 
-  // 전체 유저 게임 종료
-  socket.on("gameAllFinish", (msg, ack) => {
-    const ret = gameAllFinishService(socket, msg);
-    ack(ret);
-  });
-
   // 다시하기
   socket.on("gameRoomJoinAgain", (msg, ack) => {
-    const ret = gameRoomJoinAgainService(socket, msg);
-    ack(ret);
+    logger.info("gameRoomJoinAgain. msg: " + msg);
+    let response = errorHandler(() => {
+      const { id, roomName } = JSON.parse(msg);
+      msgTypeCheck({ number: [id], string: [roomName] });
+      return gameRoomJoinAgainService(socket, { id, roomName });
+    });
+    ack(JSON.stringify(response));
   });
 };

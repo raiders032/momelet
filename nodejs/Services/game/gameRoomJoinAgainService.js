@@ -3,30 +3,12 @@ import logger from "../../logger.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
 import SocketResponse from "../../socketResponse.js";
 
-export default (socket, msg) => {
+export default (socket, { id, roomName }) => {
   let response = new SocketResponse();
   let data = {};
-  let id, roomName;
-  var echo = "gameRoomJoinAgain. msg: " + msg;
-  logger.info(echo);
-
-  try {
-    const parsedMsg = JSON.parse(msg);
-    id = parsedMsg.id;
-    roomName = parsedMsg.roomName;
-  } catch (err) {
-    response.isFail("json.parse");
-    logger.error("gameRoomJoinAgain Msg parse error: " + err);
-
-    return JSON.stringify(response);
-  }
 
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  if (
-    room !== false &&
-    room.getIsStarted() === false &&
-    room.findUserById(id)
-  ) {
+  if (room.getIsStarted() === false && room.findUserById(id)) {
     const user = SingleObject.UserRepository.findById(id);
     user.updateCanReceive(true);
     data.gameRoomUserList = room
@@ -49,8 +31,8 @@ export default (socket, msg) => {
     response.isOk(data);
     gameRoomUpdateService(socket, room, id);
   } else {
-    response.isFail("game.join.again");
+    response.isFail(330);
   }
 
-  return JSON.stringify(response);
+  return response;
 };

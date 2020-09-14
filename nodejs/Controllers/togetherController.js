@@ -1,6 +1,6 @@
 // const service = require("../Services/index");s
 import { togetherService, togetherInviteService } from "../Services/index.js";
-import msgTypeCheck from "./msgTypeCheck.js";
+import msgTypeCheck from "./util/msgTypeCheck.js";
 import logger from "../logger.js";
 
 export default (socket, errorHandler) => {
