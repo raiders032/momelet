@@ -13,13 +13,10 @@ const makeRequest = async (method, path, config, data = '') => {
   console.log(path);
   if (path === 'v1/auth/refresh') {
     tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
-    console.log('hh');
   } else {
     tmpToken = await getInvalidToken();
-    console.log('gg');
   }
-  console.log('tmpToken', tmpToken);
-  console.log(await SecureStore.getItemAsync('refresh_TokenInfo'));
+
   try {
     return await axios({
       url: `${apiUrl}/api/${path}`,
