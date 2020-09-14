@@ -1,5 +1,5 @@
 import * as SingleObject from "../../SingleObjects.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 import {
   ERR_GAME_ALREADY_STARTED,

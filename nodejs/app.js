@@ -41,6 +41,7 @@ function startServer() {
       })
     )
     .on("authenticated", (socket) => {
+      console.log("이얏호우");
       controller(socket);
     });
 

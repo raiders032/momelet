@@ -1,5 +1,5 @@
 import logger from "../../logger.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 export default (socket, room, id) => {
   logger.info(

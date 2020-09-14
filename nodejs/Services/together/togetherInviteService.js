@@ -1,6 +1,6 @@
 import * as SingleObject from "../../SingleObjects.js";
 import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 
 const exitExistRoom = (socket, user, id) => {
   const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);

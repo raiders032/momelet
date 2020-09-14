@@ -1,5 +1,5 @@
 import * as SingleObject from "../../SingleObjects.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 
 const findAroundUsers = (myId, lat, long) => {
   const aroundUsers = [];

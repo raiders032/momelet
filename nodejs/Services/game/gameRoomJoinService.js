@@ -1,6 +1,6 @@
 import * as SingleObject from "../../SingleObjects.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 
 const exitExistRoom = (socket, user, id) => {

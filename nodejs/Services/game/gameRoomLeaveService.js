@@ -1,6 +1,6 @@
 import * as SingleObject from "../../SingleObjects.js";
 import gameRoomUpdateService from "./gameRoomUpdateService.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 
 const exitRoom = (socket, user, room) => {
   if (room.deleteUser(user) > 0) {

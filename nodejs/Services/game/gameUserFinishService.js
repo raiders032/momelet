@@ -1,5 +1,5 @@
 import * as SingleObject from "../../SingleObjects.js";
-import SocketResponse from "../../socketResponse.js";
+import SocketResponse from "../../SocketResponse.js";
 import { ERR_NOT_ENOUGH_GAME_RESULT } from "../../Errors/GameError.js";
 import gameAllFinishService from "./gameAllFinishService.js";
 import logger from "../../logger.js";
