@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import MainContainer from './MainContainer';
+import MapView from './MapView';
 import Mypage from './Mypage';
 import NameEdit from './NameEdit';
 const Stack = createStackNavigator();
@@ -28,6 +29,14 @@ export default ({ navigation, route }) => {
         }}
       />
       <Stack.Screen name="NameEdit" component={NameEdit} />
+      <Stack.Screen
+        name="MapView"
+        component={MapView}
+        options={{
+          title: '지도',
+          headerBackTitle: '뒤로',
+        }}
+      />
     </Stack.Navigator>
   );
 };

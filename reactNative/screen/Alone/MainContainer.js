@@ -2,6 +2,7 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
@@ -51,6 +52,7 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe(userToken);
 
+      console.log(result);
       console.log('get User Success \n');
       console.log('로그인한 유저의 정보 ');
       console.log('    토큰 : ', userToken);

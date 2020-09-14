@@ -10,6 +10,7 @@ const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
 
+  console.log(path);
   if (path === 'v1/auth/refresh') {
     tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
   } else {
@@ -27,7 +28,7 @@ const makeRequest = async (method, path, config, data = '') => {
       data,
     });
   } catch (error) {
-    console.error(`error in api call : ${path}`, error);
+    console.error(`error in api call1 : ${path}`, error);
   }
 };
 
@@ -39,12 +40,7 @@ export const apis = {
       //   Authorization: `Bearer ${token}`,
       // },
     }),
-  getUserMe: (token) =>
-    makeRequest('get', 'v1/users/me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
+  getUserMe: (token) => makeRequest('get', 'v1/users/me', {}),
   editUser: (id, categories, imageUrl, name, token) => {
     const body = new FormData();
 
