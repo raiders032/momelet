@@ -128,6 +128,8 @@ export default ({ restaurant, header, cover }) => {
                 name={restaurant.name}
                 phoneNumber={restaurant.phoneNumber}
                 address={restaurant.roadAddress}
+                lat={restaurant.latitude}
+                lng={restaurant.longitude}
               />
             </Animated.View>
             <Animated.View
@@ -142,7 +144,7 @@ export default ({ restaurant, header, cover }) => {
             </Animated.View>
           </View>
         ) : (
-          <View style={{ height: '65%' }} pointerEvents={isFront ? 'auto' : 'none'}>
+          <View style={{ height: '65%' }}>
             <Animated.View
               style={{
                 transform: [{ rotateY: frontInterpolate }],
@@ -166,6 +168,8 @@ export default ({ restaurant, header, cover }) => {
                 name={restaurant.name}
                 phoneNumber={restaurant.phoneNumber}
                 address={restaurant.roadAddress}
+                lat={restaurant.latitude}
+                lng={restaurant.longitude}
               />
             </Animated.View>
           </View>

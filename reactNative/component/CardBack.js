@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, Dimensions, Linking, Platform, Clipboard, ToastAndroid } from 'react-native';
 
@@ -7,7 +8,9 @@ import Menu from './Menu';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ menus, name, phoneNumber, address }) => {
+export default ({ menus, name, phoneNumber, address, lat, lng }) => {
+  const navigation = useNavigation();
+
   return (
     <View>
       <View
@@ -57,7 +60,13 @@ export default ({ menus, name, phoneNumber, address }) => {
           }}
         />
 
-        <ExtraIcon icon={require('../assets/geo.png')} text="길찾기" />
+        <ExtraIcon
+          icon={require('../assets/geo.png')}
+          text="길찾기"
+          onPress={() => {
+            navigation.navigate('MapView', { lat, lng });
+          }}
+        />
 
         <ExtraIcon
           icon={require('../assets/copy.png')}

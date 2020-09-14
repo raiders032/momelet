@@ -59,7 +59,7 @@ export default function App() {
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
-      if (dateCheck(refreshToken.refreshTokenExpiredDate)) {
+      if (dateCheck(!refreshToken.refreshTokenExpiredDate)) {
         const newRefreshToken = await apis.refreshToken();
         const tokenInfo = {
           accessToken: newRefreshToken.data.data.tokens.accessToken.jwtToken,

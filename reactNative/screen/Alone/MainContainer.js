@@ -2,6 +2,7 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
@@ -101,7 +102,10 @@ export default ({ navigation, route }) => {
       socket.query.latitude = latitude;
       socket.query.longitude = longitude;
       socket.open();
-
+      socket.emit('authenticate', { token: route.params.userToken });
+      socket.on('authenticated', () => {
+        console.log('connect!');
+      });
       socket.on('togetherInvitation', (msg) => {
         printSocketEvent('togetherInvitation', msg);
         const paseMsg = JSON.parse(msg);

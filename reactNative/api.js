@@ -15,7 +15,8 @@ const makeRequest = async (method, path, config, data = '') => {
   } else {
     tmpToken = await getInvalidToken();
   }
-
+  console.log('tmpToken', tmpToken);
+  console.log(await SecureStore.getItemAsync('refresh_TokenInfo'));
   try {
     return await axios({
       url: `${apiUrl}/api/${path}`,
@@ -27,7 +28,7 @@ const makeRequest = async (method, path, config, data = '') => {
       data,
     });
   } catch (error) {
-    console.error(`error in api call : ${path}`, error);
+    console.error(`error in api call1 : ${path}`, error);
   }
 };
 

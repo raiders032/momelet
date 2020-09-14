@@ -42,7 +42,7 @@ const makeRequest = async (method, path, config, data = '') => {
       data,
     });
   } catch (error) {
-    console.error(`error in api call : ${path}`, error);
+    console.error(`error in api call2 : ${path}`, error);
   }
 };
 
@@ -84,7 +84,7 @@ const setTokenInSecure = async (tokenInfo) => {
 const getInvalidToken = async () => {
   const accessTokenInfo = JSON.parse(await SecureStore.getItemAsync('access_TokenInfo'));
 
-  if (dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
+  if (!dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
     return accessTokenInfo.accessToken;
   } else {
     const refreshTokenInfo = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
