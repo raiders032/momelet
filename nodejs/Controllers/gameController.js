@@ -56,9 +56,18 @@ export default (socket, errorHandler) => {
 
   // 유저 한명 게임 종료
   socket.on("gameUserFinish", (msg, ack) => {
-    const ret = gameUserFinishService(socket, msg);
-    ack(ret);
-    gameAllFinishService(socket, msg);
+    logger.info("gameRoomUserFinish. msg: " + msg);
+    let response = errorHandler(() => {
+      const { id, userGameResult, roomName } = JSON.parse(msg);
+      msgTypeCheck({
+        number: [id],
+        Array: [userGameResult],
+        string: [roomName],
+      });
+      console.log("무엇?");
+      return gameUserFinishService({ id, userGameResult, roomName });
+    });
+    ack(JSON.stringify(response));
   });
 
   // 전체 유저 게임 종료

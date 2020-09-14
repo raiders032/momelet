@@ -35,9 +35,22 @@ class NotEnoughRestaurantCardError extends Error {
     this.errorCode = errorCode;
   }
 }
+
+class NotEnoughGameResultError extends Error {
+  constructor(
+    message = "NotEnoughGameResultError",
+    errorCode = 310,
+    ...params
+  ) {
+    super(...params);
+    this.message = message;
+    this.errorCode = errorCode;
+  }
+}
 export {
   GameAlreadyStartedError,
   GameHostNotCorrectError,
   GetRestaurantCardError,
   NotEnoughRestaurantCardError,
+  NotEnoughGameResultError,
 };
