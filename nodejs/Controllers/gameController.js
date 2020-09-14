@@ -64,10 +64,10 @@ export default (socket, errorHandler) => {
         Array: [userGameResult],
         string: [roomName],
       });
-      console.log("무엇?");
       return gameUserFinishService({ id, userGameResult, roomName });
     });
     ack(JSON.stringify(response));
+    gameAllFinishService(socket, msg);
   });
 
   // 전체 유저 게임 종료

@@ -11,6 +11,7 @@ import {
   GameHostNotCorrectError,
   GetRestaurantCardError,
   NotEnoughRestaurantCardError,
+  NotEnoughGameResultError,
 } from "./GameError.js";
 import logger from "../logger.js";
 
@@ -24,44 +25,46 @@ export const errorHandler = (callback) => {
     return callback();
   } catch (err) {
     if (err instanceof UndefinedTypeError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof WrongTypeError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof UserNotFoundByIdError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof UserNotFoundBySocketIdError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomNotFoundByRoomNameError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomNotExistError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomAlreadyExistError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameAlreadyStartedError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GetRestaurantCardError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof NotEnoughRestaurantCardError) {
-      logger.error(err);
+      logger.error(err.stack);
+      errorMsg.errorCode = err.errorCode;
+    } else if (err instanceof NotEnoughGameResultError) {
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else {
-      logger.error("Undefined Error");
-      logger.error(err);
+      logger.error(err.stack);
     }
     return errorMsg;
   }
@@ -72,44 +75,46 @@ export const errorHandlerAsync = async (callback) => {
     return await callback();
   } catch (err) {
     if (err instanceof UndefinedTypeError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof WrongTypeError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof UserNotFoundByIdError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof UserNotFoundBySocketIdError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomNotFoundByRoomNameError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomNotExistError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof RoomAlreadyExistError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameAlreadyStartedError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof GetRestaurantCardError) {
-      logger.error(err);
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else if (err instanceof NotEnoughRestaurantCardError) {
-      logger.error(err);
+      logger.error(err.stack);
+      errorMsg.errorCode = err.errorCode;
+    } else if (err instanceof NotEnoughGameResultError) {
+      logger.error(err.stack);
       errorMsg.errorCode = err.errorCode;
     } else {
-      logger.error("Not caught Error");
-      logger.error(err);
+      logger.error(err.stack);
     }
     return errorMsg;
   }
