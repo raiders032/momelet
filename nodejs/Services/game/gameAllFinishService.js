@@ -1,28 +1,8 @@
-import * as SingleObject from "../../SingleObjects.js";
-import logger from "../../logger.js";
 import SocketResponse from "../../SocketResponse.js";
 
-export default (socket, msg) => {
+export default (socket, room) => {
   let response = new SocketResponse();
   let data = { roomGameResult: {} };
-  var echo = "gameAllFinishService. msg: " + msg;
-  let id, roomName;
-
-  logger.info(echo);
-
-  try {
-    const parsedMsg = JSON.parse(msg);
-    id = parsedMsg.id;
-    roomName = parsedMsg.roomName;
-  } catch (err) {
-    logger.error("gameAllFinish Msg parse error: " + err);
-    return;
-  }
-  const room = SingleObject.RoomRepository.findByRoomName(roomName);
-  if (room === false) return;
-  if (room.getHeadCount() > room.getFinishCount()) {
-    return;
-  }
 
   const users = room.getUserList();
   const cardList = room.getCardList();
@@ -39,7 +19,7 @@ export default (socket, msg) => {
   });
 
   if (!isLike) {
-    response.isFail(game.noLike);
+    response.isFail(320);
   } else {
     data.roomGameResult.id = bestCard.id;
     data.roomGameResult.headCount = room.getHeadCount();
@@ -53,11 +33,9 @@ export default (socket, msg) => {
   setTimeout(() => {
     let retMsg = JSON.stringify(response);
 
+    socket.emit("gameAllFinish", retMsg);
     users.forEach((user) => {
       socket.to(user.socketId).emit("gameAllFinish", retMsg);
     });
-    socket.emit("gameAllFinish", retMsg);
-
-    return retMsg;
   }, 1500);
 };

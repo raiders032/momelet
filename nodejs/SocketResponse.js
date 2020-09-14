@@ -26,7 +26,7 @@ export default class SocketResponse {
     return this;
   }
 
-  isFail(errorCode) {
+  isFail(errorCode = 0) {
     this.success = false;
     this.errorCode = errorCode;
     this.data = null;

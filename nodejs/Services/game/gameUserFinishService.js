@@ -1,8 +1,10 @@
 import * as SingleObject from "../../SingleObjects.js";
 import SocketResponse from "../../socketResponse.js";
 import { NotEnoughGameResultError } from "../../Errors/GameError.js";
+import gameAllFinishService from "./gameAllFinishService.js";
+import logger from "../../logger.js";
 
-export default ({ id, userGameResult, roomName }) => {
+export default (socket, { id, userGameResult, roomName }) => {
   let response = new SocketResponse();
   let data = {};
   let user, room;
@@ -24,5 +26,9 @@ export default ({ id, userGameResult, roomName }) => {
 
   data.roomName = roomName;
   response.isOk(data);
+  if (room.getHeadCount() <= room.getFinishCount()) {
+    logger.info("gameAllFinish. roomName: " + roomName);
+    gameAllFinishService(socket, room);
+  }
   return response;
 };

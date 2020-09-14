@@ -24,47 +24,10 @@ export const errorHandler = (callback) => {
   try {
     return callback();
   } catch (err) {
-    if (err instanceof UndefinedTypeError) {
-      logger.error(err.stack);
+    logger.error(err.stack);
+    if (err.errorCode !== undefined) {
+      logger.error("Unexpected Error!!!");
       errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof WrongTypeError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof UserNotFoundByIdError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof UserNotFoundBySocketIdError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomNotFoundByRoomNameError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomNotExistError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomAlreadyExistError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameAlreadyStartedError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GetRestaurantCardError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof NotEnoughRestaurantCardError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof NotEnoughGameResultError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else {
-      logger.error(err.stack);
     }
     return errorMsg;
   }
@@ -74,47 +37,10 @@ export const errorHandlerAsync = async (callback) => {
   try {
     return await callback();
   } catch (err) {
-    if (err instanceof UndefinedTypeError) {
-      logger.error(err.stack);
+    logger.error(err.stack);
+    if (err.errorCode !== undefined) {
+      logger.error("Unexpected Error!!!");
       errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof WrongTypeError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof UserNotFoundByIdError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof UserNotFoundBySocketIdError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomNotFoundByRoomNameError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomNotExistError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof RoomAlreadyExistError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameAlreadyStartedError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GameHostNotCorrectError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof GetRestaurantCardError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof NotEnoughRestaurantCardError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else if (err instanceof NotEnoughGameResultError) {
-      logger.error(err.stack);
-      errorMsg.errorCode = err.errorCode;
-    } else {
-      logger.error(err.stack);
     }
     return errorMsg;
   }
