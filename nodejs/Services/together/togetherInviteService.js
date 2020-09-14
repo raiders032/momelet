@@ -1,5 +1,4 @@
 import * as SingleObject from "../../SingleObjects.js";
-import logger from "../../logger.js";
 import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
 import SocketResponse from "../../socketResponse.js";
 
@@ -27,38 +26,32 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
   }
 };
 
-export default (socket, msg) => {
+export default (socket, { id, inviteTheseUsers }) => {
   let response = new SocketResponse();
   let data = {};
-  const echo = "togetherInviteService. msg: " + msg;
-  logger.info(echo);
 
-  let user, room, roomName, gameRoomUserList, hostId;
+  let user, room, roomName;
+  user = SingleObject.UserRepository.findById(id);
+  room = SingleObject.RoomRepository.add(id);
+  roomName = room.getRoomName();
 
-  try {
-    const { id, inviteTheseUsers } = JSON.parse(msg);
-    user = SingleObject.UserRepository.findById(id);
-    room = SingleObject.RoomRepository.add(id);
-    roomName = room.getRoomName();
-    // 기존 접속 방에서 나가기
-    if (user.joinedRoomName !== null) {
-      exitExistRoom(socket, user, id);
-    }
-    room.addUser(user);
-    user.updateJoinedRoomName(roomName);
-
-    inviteUsers(socket, inviteTheseUsers, roomName, user);
-
-    gameRoomUserList = room.getUserInfo();
-    hostId = user.id;
-
-    data.roomName = roomName;
-    data.gameRoomUserList = gameRoomUserList;
-    data.hostId = hostId;
-    response.isOk(data);
-  } catch (err) {
-    logger.error("togetherInviteService Error: " + err);
-    response.isFail("togetherInviteService.error");
+  // 기존 접속 방에서 나가기
+  if (user.joinedRoomName !== null) {
+    exitExistRoom(socket, user, id);
   }
-  return JSON.stringify(response);
+  room.addUser(user);
+  user.updateJoinedRoomName(roomName);
+
+  let gameRoomUserList, hostId;
+  gameRoomUserList = room.getUserInfo();
+  hostId = user.id;
+
+  data.roomName = roomName;
+  data.gameRoomUserList = gameRoomUserList;
+  data.hostId = hostId;
+
+  response.isOk(data);
+  // 유저 초대
+  inviteUsers(socket, inviteTheseUsers, roomName, user);
+  return response;
 };

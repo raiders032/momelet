@@ -2,11 +2,11 @@ import * as SingleObject from "../SingleObjects.js";
 import logger from "../logger.js";
 
 export default (io, socket, next) => {
-  socket.handshake.query.id = Number(socket.handshake.query.id);
+  socket.handshake.query.id = parseInt(socket.handshake.query.id);
   const { id } = socket.handshake.query;
-  if (SingleObject.UserRepository.existsById(id)) {
+  if (SingleObject.UserRepository.existById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
-    logger.info("중복유저찾았다!");
+    logger.info(id + " is overlapped user. Disconnect exsisting user");
     const user =
       io.sockets.connected[SingleObject.UserRepository.findById(id).socketId];
     user.disconnect(true);

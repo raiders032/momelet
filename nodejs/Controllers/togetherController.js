@@ -1,31 +1,28 @@
 // const service = require("../Services/index");s
-import * as service from "../Services/index.js";
+import { togetherService, togetherInviteService } from "../Services/index.js";
+import msgTypeCheck from "./util/msgTypeCheck.js";
 import logger from "../logger.js";
-export default (socket) => {
+
+export default (socket, errorHandler) => {
   // 같이하기;
   socket.on("together", (msg, ack) => {
     logger.info("together. msg: " + msg);
-    const { id, latitude, longitude } = JSON.parse(msg);
-    if (
-      (id === undefined) |
-      (latitude === undefined) |
-      (longitude === undefined)
-    )
-      throw new Error("type error");
-    if (
-      (typeof id !== "number") |
-      (typeof latitude !== "number") |
-      (typeof longitude !== "number")
-    )
-      throw new Error("type error");
-
-    const ret = service.togetherService({ id, latitude, longitude });
-    ack(ret);
+    let response = errorHandler(() => {
+      const { id, latitude, longitude } = JSON.parse(msg);
+      msgTypeCheck({ number: [id, latitude, longitude] });
+      return togetherService({ id, latitude, longitude });
+    });
+    ack(JSON.stringify(response));
   });
 
   // 같이하기-초대하기
   socket.on("togetherInvite", (msg, ack) => {
-    const ret = service.togetherInviteService(socket, msg);
-    ack(ret);
+    logger.info("together. msg: " + msg);
+    let response = errorHandler(() => {
+      const { id, inviteTheseUsers } = JSON.parse(msg);
+      msgTypeCheck({ number: [id], Array: [inviteTheseUsers] });
+      return togetherInviteService(socket, { id, inviteTheseUsers });
+    });
+    ack(JSON.stringify(response));
   });
 };

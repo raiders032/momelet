@@ -396,10 +396,7 @@ describe("Connecting Server", () => {
                     const parsedMsg = JSON.parse(msg);
 
                     parsedMsg.should.have.property("success").with.equal(false);
-                    parsedMsg.should.have.property(
-                      "errorCode",
-                      "room.game.start"
-                    );
+                    parsedMsg.should.have.property("errorCode", 301);
 
                     SingleObject.RoomRepository.findByRoomName(roomName)
                       .getIsStarted()
@@ -720,10 +717,9 @@ describe("Connecting Server", () => {
                   JSON.stringify({ id: ioOptions[2].myId, roomName }),
                   (msg) => {
                     msg.should.be.type("string");
-                    console.log("받은 메시지:" + msg);
                     const parsedMsg = JSON.parse(msg);
                     parsedMsg["success"].should.equal(false);
-                    // should.not.exist(parsedMsg["errorCode"]);
+                    parsedMsg["errorCode"].should.equal(330);
 
                     const msgObject = parsedMsg["data"];
                     should.not.exist(msgObject);
