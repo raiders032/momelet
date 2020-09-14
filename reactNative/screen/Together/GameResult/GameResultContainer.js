@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import GameResultPresenter from "./GameResultPresenter";
-import { StackActions } from "@react-navigation/native";
-import socket from "../../../socket";
-import printSocketEvent from "../../../utils/printEvent";
+import { StackActions } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+
+import socket from '../../../socket';
+import printSocketEvent from '../../../utils/printEvent';
+import GameResultPresenter from './GameResultPresenter';
 
 export default ({ navigation, route }) => {
   // useEffect(() => {
@@ -30,26 +31,29 @@ export default ({ navigation, route }) => {
       id: route.params.userId,
       roomName: route.params.roomName,
     };
+
     // console.log(sendMsg);
-    socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {
-      printSocketEvent("gameRoomLeave", msg);
+    socket.emit('gameRoomLeave', JSON.stringify(sendMsg), (msg) => {
+      printSocketEvent('gameRoomLeave', msg);
     });
-    navigation.navigate("Main");
+    navigation.navigate('Main');
   };
   const footerClick = () => {
     const sendMsg = {
       id: route.params.userId,
       roomName: route.params.roomName,
     };
-    socket.emit("gameRoomJoinAgain", JSON.stringify(sendMsg), (msg) => {
-      printSocketEvent("gameROmmJoinAgain", msg);
+
+    socket.emit('gameRoomJoinAgain', JSON.stringify(sendMsg), (msg) => {
+      printSocketEvent('gameROmmJoinAgain', msg);
       const newMsg = {
         ...JSON.parse(msg).data,
         roomName: route.params.roomName,
       };
+
       console.log(newMsg);
       navigation.dispatch(
-        StackActions.replace("WaitingRoomForStart", {
+        StackActions.replace('WaitingRoomForStart', {
           msg: newMsg,
           myId: route.params.userId,
         })

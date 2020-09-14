@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Animated,
@@ -7,13 +7,15 @@ import {
   Image,
   Text,
   TouchableOpacity,
-} from "react-native";
-import Basic from "../../../component/Basic";
-import RestaurantCard from "../../../component/RestaurantCard";
-import RestaurantHeader from "../../../component/RestaurantHeader";
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+} from 'react-native';
+
+import Basic from '../../../component/Basic';
+import RestaurantCard from '../../../component/RestaurantCard';
+import RestaurantHeader from '../../../component/RestaurantHeader';
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+
 export default ({ restaurants, zIndex, infoText, gameFinish }) => {
-  console.log("GameRoomPresenter render");
+  console.log('GameRoomPresenter render');
 
   const [restaurant, setRestaurant] = useState(restaurants);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
@@ -24,23 +26,23 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
   const position = new Animated.ValueXY();
   const rotationValues = position.x.interpolate({
     inputRange: [-200, 0, 200],
-    outputRange: ["-13deg", "0deg", "13deg"],
-    extrapolate: "clamp",
+    outputRange: ['-13deg', '0deg', '13deg'],
+    extrapolate: 'clamp',
   });
   const topPositionConfig = position.x.interpolate({
     inputRange: [-200, 0, 200],
     outputRange: [0, 10, 0],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
   const scaleXPositionConfig = position.x.interpolate({
     inputRange: [-200, 0, 200],
     outputRange: [1, 0.95, 1],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
   const TimerWidthConfig = remainTime.interpolate({
     inputRange: [0, 15],
-    outputRange: ["80%", "0%"],
-    extrapolate: "clamp",
+    outputRange: ['80%', '0%'],
+    extrapolate: 'clamp',
   });
   const dislikeOpacityConfig = position.x.interpolate({
     inputRange: [0, 200],
@@ -51,9 +53,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     outputRange: [1, 0],
   });
   const afterCardMove = (response) => {
-    console.log("response: ", response);
+    console.log('response: ', response);
 
-    console.log("gameResult.current.length", gameResult.current.length);
+    console.log('gameResult.current.length', gameResult.current.length);
     if (gameResult.current.length >= 6) {
       gameResult.current.push({ id: firstRestaurant.id, sign: response });
       gameFinish(gameResult);
@@ -77,7 +79,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
           duration: 200,
           useNativeDriver: false,
         }).start(() => {
-          afterCardMove("n");
+          afterCardMove('n');
         });
       } else if (dx <= -150) {
         Animated.timing(position, {
@@ -88,7 +90,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
           duration: 100,
           useNativeDriver: false,
         }).start(() => {
-          afterCardMove("y");
+          afterCardMove('y');
         });
       } else {
         Animated.spring(position, {
@@ -110,7 +112,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove("soso");
+      afterCardMove('soso');
     });
   };
   const cardGoRight = () => {
@@ -122,7 +124,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove("n");
+      afterCardMove('n');
     });
   };
   const cardGoLeft = () => {
@@ -134,7 +136,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove("y");
+      afterCardMove('y');
     });
   };
   const timeGo = () => {
@@ -149,85 +151,80 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
     const timeout = setTimeout(timeGo, 500);
+
     return () => {
       clearTimeout(timeout);
     };
   });
   const header = (
-    <RestaurantHeader
-      dislikeOpacity={dislikeOpacityConfig}
-      likeOpacity={likeOpacityConfig}
-    />
+    <RestaurantHeader dislikeOpacity={dislikeOpacityConfig} likeOpacity={likeOpacityConfig} />
   );
   const footer = (
     <View
       style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#FEEE7D",
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#FEEE7D',
         // backgroundColor: "black",
-      }}
-    >
+      }}>
       <View
         style={{
-          width: "100%",
-          height: "100%",
-          flexDirection: "row",
-          justifyContent: "center",
+          width: '100%',
+          height: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
           bottom: 10,
-        }}
-      >
+        }}>
         <TouchableOpacity onPress={cardGoRight}>
           <Image
-            style={{ height: 70, width: 70, resizeMode: "contain" }}
-            source={require("../../../assets/dislike.png")}
+            style={{ height: 70, width: 70, resizeMode: 'contain' }}
+            source={require('../../../assets/dislike.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={cardGoDown}>
           <Image
-            style={{ height: 70, width: 70, resizeMode: "contain" }}
-            source={require("../../../assets/soso.png")}
+            style={{ height: 70, width: 70, resizeMode: 'contain' }}
+            source={require('../../../assets/soso.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={cardGoLeft}>
           <Image
-            style={{ height: 70, width: 70, resizeMode: "contain" }}
-            source={require("../../../assets/like.png")}
+            style={{ height: 70, width: 70, resizeMode: 'contain' }}
+            source={require('../../../assets/like.png')}
           />
         </TouchableOpacity>
       </View>
     </View>
   );
+
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <View style={{ width: '100%', height: '100%' }}>
       <Basic footer={footer}>
         <Animated.View
           style={{
             height: 10,
-            backgroundColor: "#a0cf22",
+            backgroundColor: '#a0cf22',
             top: HEIGHT / 25,
             width: TimerWidthConfig,
             left: WIDTH / 12,
             borderRadius: 15,
           }}
-        ></Animated.View>
+        />
         <View
           style={{
             flex: 1,
-          }}
-        >
+          }}>
           <Animated.View
             style={{
               top: topPositionConfig,
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
               transform: [{ scaleX: scaleXPositionConfig }],
             }}
-            {...panResponder.panHandlers}
-          >
+            {...panResponder.panHandlers}>
             {secondRestaurant ? (
               <RestaurantCard restaurant={secondRestaurant} header={header} />
             ) : (
@@ -236,45 +233,35 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
           </Animated.View>
           <Animated.View
             style={{
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
-              transform: [
-                { rotate: rotationValues },
-                ...position.getTranslateTransform(),
-              ],
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
+              transform: [{ rotate: rotationValues }, ...position.getTranslateTransform()],
             }}
-            {...panResponder.panHandlers}
-          >
-            {firstRestaurant ? (
-              <RestaurantCard restaurant={firstRestaurant} />
-            ) : (
-              <View />
-            )}
+            {...panResponder.panHandlers}>
+            {firstRestaurant ? <RestaurantCard restaurant={firstRestaurant} /> : <View />}
           </Animated.View>
         </View>
       </Basic>
       <View
         style={{
-          width: "100%",
-          height: "100%",
-          position: "absolute",
-          zIndex: zIndex,
-          backgroundColor: "#000000",
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          zIndex,
+          backgroundColor: '#000000',
           opacity: 0.7,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text
           style={{
-            fontFamily: "Godo",
+            fontFamily: 'Godo',
             fontSize: 24,
-            color: "white",
-          }}
-        >
+            color: 'white',
+          }}>
           {infoText}
         </Text>
       </View>

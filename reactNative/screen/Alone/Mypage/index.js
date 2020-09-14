@@ -1,3 +1,4 @@
-import React from "react";
-import MypageContainer from "./MypageContainer";
+import React from 'react';
+
+import MypageContainer from './MypageContainer';
 export default MypageContainer;
