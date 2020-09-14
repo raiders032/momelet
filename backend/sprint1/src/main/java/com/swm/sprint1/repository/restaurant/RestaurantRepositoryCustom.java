@@ -2,7 +2,7 @@ package com.swm.sprint1.repository.restaurant;
 
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.Restaurant;
-import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
+import com.swm.sprint1.payload.response.RestaurantDtoResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 
 import java.math.BigDecimal;
@@ -12,11 +12,11 @@ public interface RestaurantRepositoryCustom {
 
     List<RetrieveRestaurantResponseV1> findRetrieveRestaurantByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList);
 
-    List<RetrieveRestaurantResponse> findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id);
+    List<RestaurantDtoResponse> findRestaurantDtoResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id);
 
     List<Restaurant> findByLatitudeAndLongitudeAndCategories(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Category> categoryList);
 
     List<Restaurant> findByLatitudeAndLongitudeAndCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long category_id, Long limit);
 
-    List<RetrieveRestaurantResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids);
+    List<RestaurantDtoResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids);
 }

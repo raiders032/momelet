@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.Restaurant;
-import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
+import com.swm.sprint1.payload.response.RestaurantDtoResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import lombok.RequiredArgsConstructor;
 import org.qlrm.mapper.JpaResultMapper;
@@ -44,7 +44,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     }
 
     @Override
-    public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+    public List<RestaurantDtoResponse> findRestaurantDtoResponseByLatitudeAndLongitudeAndUserCategory(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
         String sql =
                 "   SELECT  " +
                 "       r.restaurant_id, r.name, r.thum_url, " +
@@ -58,7 +58,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 "       WHERE (restaurant.latitude between ? and ?) and (restaurant.longitude between ? and ?)) r " +
                 "   JOIN restaurant_category rc on r.restaurant_id = rc.restaurant_id " +
                 "   JOIN category c on rc.category_id = c.category_id " +
-                "   JOIN menu m on r.restaurant_id = m.restaurant_id " +
+                "   LEFT JOIN menu m on r.restaurant_id = m.restaurant_id " +
                 "   WHERE r.restaurant_id in ( " +
                 "       SELECT rc.restaurant_id " +
                 "       FROM restaurant_category rc " +
@@ -78,7 +78,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .setParameter(4, longitude.add(radius))
                 .setParameter(5, id);
 
-        List<RetrieveRestaurantResponse> list = jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
+        List<RestaurantDtoResponse> list = jpaResultMapper.list(query, RestaurantDtoResponse.class);
         return list;
     }
 
@@ -111,7 +111,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
     }
 
     @Override
-    public List<RetrieveRestaurantResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids) {
+    public List<RestaurantDtoResponse> findRestaurant7(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, List<Long> ids) {
         String sql =
                 "   SELECT " +
                 "       f.restaurant_id, f.name, f.thum_url, " +
@@ -166,7 +166,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
                 .setParameter("lon2", longitude.add(radius))
                 .setParameter("ids", ids);
 
-        return jpaResultMapper.list(query, RetrieveRestaurantResponse.class);
+        return jpaResultMapper.list(query, RestaurantDtoResponse.class);
     }
 
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){
