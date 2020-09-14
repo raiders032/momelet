@@ -2,9 +2,8 @@ package com.swm.sprint1.service;
 
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.exception.RestaurantLessThan7Exception;
-import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
+import com.swm.sprint1.payload.response.RestaurantDtoResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
-import com.swm.sprint1.repository.category.CategoryRepository;
 import com.swm.sprint1.repository.restaurant.RestaurantRepository;
 import com.swm.sprint1.repository.user.UserCategoryRepository;
 import lombok.*;
@@ -28,12 +27,12 @@ public class RestaurantService {
         return restaurantRepository.findRetrieveRestaurantByLatitudeAndLongitudeAndUserCategory(latitude, longitude, radius, categoryByUserId);
     }
 
-    public List<RetrieveRestaurantResponse> findRetrieveRestaurantResponse(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
-        return restaurantRepository.findRetrieveRestaurantResponseByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
+    public List<RestaurantDtoResponse> findRestaurantDtoResponse(BigDecimal latitude, BigDecimal longitude, BigDecimal radius, Long id) {
+        return restaurantRepository.findRestaurantDtoResponseByLatitudeAndLongitudeAndUserCategory(latitude,longitude,radius,id);
     }
 
-    public List<RetrieveRestaurantResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
-        List<RetrieveRestaurantResponse> restaurants = restaurantRepository.findRestaurant7(latitude, longitude, radius, ids);
+    public List<RestaurantDtoResponse> findRestaurant7SimpleCategoryBased(List<Long> ids, BigDecimal longitude, BigDecimal latitude, BigDecimal radius) {
+        List<RestaurantDtoResponse> restaurants = restaurantRepository.findRestaurant7(latitude, longitude, radius, ids);
         if(restaurants.size() < 7)
             throw new RestaurantLessThan7Exception("선택된 식당 카드가 7장 미만입니다.");
         return restaurants;

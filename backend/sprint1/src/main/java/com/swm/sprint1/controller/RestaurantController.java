@@ -2,7 +2,7 @@ package com.swm.sprint1.controller;
 
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.payload.response.ApiResponse;
-import com.swm.sprint1.payload.response.RetrieveRestaurantResponse;
+import com.swm.sprint1.payload.response.RestaurantDtoResponse;
 import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.UserPrincipal;
@@ -30,7 +30,7 @@ public class RestaurantController {
     public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude,
                                            @RequestParam BigDecimal latitude,
                                            @RequestParam BigDecimal radius){
-        List<RetrieveRestaurantResponseV1> restaurantList = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude,radius, null);
+        List<RetrieveRestaurantResponseV1> restaurantList = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude, radius, null);
         return ResponseEntity.ok(restaurantList);
     }
 
@@ -54,11 +54,10 @@ public class RestaurantController {
                                                              @RequestParam BigDecimal latitude,
                                                              @RequestParam BigDecimal radius,
                                                              @PathVariable Long id){
-
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
 
-        List<RetrieveRestaurantResponse> restaurants = restaurantService.findRetrieveRestaurantResponse(latitude, longitude, radius, userPrincipal.getId());
+        List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurantDtoResponse(latitude, longitude, radius, userPrincipal.getId());
         ApiResponse response = new ApiResponse(true);
         response.putData("restaurants", restaurants);
 
@@ -71,9 +70,8 @@ public class RestaurantController {
                                                                @RequestParam BigDecimal longitude,
                                                                @RequestParam BigDecimal latitude,
                                                                @RequestParam BigDecimal radius){
-
         List<Long> ids = Arrays.stream(id.split(",")).map(Long::parseLong).collect(Collectors.toList());
-        List<RetrieveRestaurantResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
+        List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
 
         ApiResponse response = new ApiResponse(true);
         response.putData("restaurants", restaurants);

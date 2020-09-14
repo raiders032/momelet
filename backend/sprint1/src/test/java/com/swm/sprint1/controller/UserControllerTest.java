@@ -215,10 +215,10 @@ public class UserControllerTest {
         assertThat(categoires.get("고기")).isEqualTo(0);
         assertThat(categoires.get("일식")).isEqualTo(0);
         assertThat(categoires.get("치킨")).isEqualTo(0);
-        //assertThat(categoires.get("찜,탕")).isEqualTo(0);
+        assertThat(categoires.get("찜|탕")).isEqualTo(0);
         assertThat(categoires.get("한식")).isEqualTo(0);
         assertThat(categoires.get("세계음식")).isEqualTo(0);
-        //assertThat(categoires.get("곱,대창")).isEqualTo(0);
+        assertThat(categoires.get("곱|대창")).isEqualTo(0);
         assertThat(categoires.get("주점")).isEqualTo(0);
         assertThat(categoires.get("분식")).isEqualTo(0);
         assertThat(categoires.get("패스트푸드")).isEqualTo(0);
