@@ -1,13 +1,15 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import Invite from "./Invite";
-import WaitingRoomForStart from "./WaitingRoomForStart";
-import GameRoom from "./GameRoom";
-import WaitingRoomForResult from "./WaitingRoomForResult";
-import GameResult from "./GameResult";
-import { View, TouchableOpacity, Text } from "react-native";
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
+
+import GameResult from './GameResult';
+import GameRoom from './GameRoom';
+import Invite from './Invite';
+import WaitingRoomForResult from './WaitingRoomForResult';
+import WaitingRoomForStart from './WaitingRoomForStart';
 
 const Stack = createStackNavigator();
+
 export default ({ navigation, route }) => {
   return (
     <Stack.Navigator>
@@ -16,7 +18,7 @@ export default ({ navigation, route }) => {
         component={Invite}
         options={{
           headerShown: true,
-          title: "초대하기",
+          title: '초대하기',
         }}
         initialParams={route.params}
       />
@@ -25,9 +27,9 @@ export default ({ navigation, route }) => {
         component={WaitingRoomForStart}
         options={{
           headerShown: true,
-          title: "대기실",
-          headerLeft: () => <View></View>,
-          headerTitleAlign: "center",
+          title: '대기실',
+          headerLeft: () => <View />,
+          headerTitleAlign: 'center',
         }}
       />
       <Stack.Screen

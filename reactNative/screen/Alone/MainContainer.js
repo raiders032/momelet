@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import MainPresenter from "./MainPresenter";
-import { apis } from "../../api";
-import { AppLoading } from "expo";
-import { Asset } from "expo-asset";
-import * as Permissions from "expo-permissions";
-import * as Location from "expo-location";
-import { View, Text } from "react-native";
-import socket from "../../socket";
-import printSocketEvent from "../../utils/printEvent";
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+
+import { apis } from '../../api';
+import socket from '../../socket';
+import printSocketEvent from '../../utils/printEvent';
+import MainPresenter from './MainPresenter';
 
 // 홈 식당 카드의 api 호출 데이터 전달
 
@@ -23,7 +24,7 @@ export default ({ navigation, route }) => {
         <Text>abc</Text>
       </>
     ),
-    footerMessage: ["예", "아니요"],
+    footerMessage: ['예', '아니요'],
     coverMessageRightEvent: () => {},
     coverMessageLeftEvent: () => {},
   });
@@ -31,6 +32,7 @@ export default ({ navigation, route }) => {
     loading: true,
     restaurants: [],
   });
+
   if (route.params.isChanged) {
     setIsChanged((before) => {
       return before ? 0 : 1;
@@ -41,24 +43,24 @@ export default ({ navigation, route }) => {
 
   const _loadAssetsAsync = async () => {
     await Promise.all(
-      restaurants.restaurants.map((restaurant) =>
-        Asset.loadAsync(restaurant.imageUrl)
-      )
+      restaurants.restaurants.map((restaurant) => Asset.loadAsync(restaurant.imageUrl))
     );
   };
   const userToken = route.params.userToken;
   const getUser = async () => {
     try {
       const result = await apis.getUserMe(userToken);
-      console.log("get User Success \n");
-      console.log("로그인한 유저의 정보 ");
-      console.log("    토큰 : ", userToken);
-      console.log("    id : ", result.data.data.userInfo.id);
-      console.log("    이름 : ", result.data.data.userInfo.name);
+
+      console.log('get User Success \n');
+      console.log('로그인한 유저의 정보 ');
+      console.log('    토큰 : ', userToken);
+      console.log('    id : ', result.data.data.userInfo.id);
+      console.log('    이름 : ', result.data.data.userInfo.name);
       setUser(result.data);
+
       return { ...result.data };
     } catch (error) {
-      console.log("error in get user", error);
+      console.log('error in get user', error);
     }
   };
 
@@ -66,10 +68,9 @@ export default ({ navigation, route }) => {
     // console.log(latitude, longitude);
     if (user) {
       try {
-        const { status, permissions } = await Permissions.askAsync(
-          Permissions.LOCATION
-        );
-        if (status === "granted") {
+        const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+
+        if (status === 'granted') {
           const response = await apis.getRestaurant(
             latitude,
             longitude,
@@ -77,14 +78,14 @@ export default ({ navigation, route }) => {
             userToken
           );
 
-          console.log("get Restaurant Sucess");
+          console.log('get Restaurant Sucess');
           // console.log(response);
           setRestaurants({ loading: false, restaurants: response.data.data });
         } else {
-          throw new Error("Location permission not granted");
+          throw new Error('Location permission not granted');
         }
       } catch (e) {
-        console.log("error In HomeContainer", e);
+        console.log('error In HomeContainer', e);
       }
     }
   };
@@ -101,8 +102,8 @@ export default ({ navigation, route }) => {
       socket.query.longitude = longitude;
       socket.open();
 
-      socket.on("togetherInvitation", (msg) => {
-        printSocketEvent("togetherInvitation", msg);
+      socket.on('togetherInvitation', (msg) => {
+        printSocketEvent('togetherInvitation', msg);
         const paseMsg = JSON.parse(msg);
 
         setCoverMessageConfig((before) => {
@@ -126,8 +127,9 @@ export default ({ navigation, route }) => {
                 id: nowUser.id,
                 roomName: paseMsg.data.roomName,
               };
-              socket.emit("gameRoomJoin", JSON.stringify(sendMsg), (msg) => {
-                printSocketEvent("gameRoomJoin", msg);
+
+              socket.emit('gameRoomJoin', JSON.stringify(sendMsg), (msg) => {
+                printSocketEvent('gameRoomJoin', msg);
                 const paseMsg = JSON.parse(msg);
                 const { roomName, gameRoomUserList, hostId } = paseMsg.data;
                 const sendMsg = {
@@ -140,7 +142,7 @@ export default ({ navigation, route }) => {
                   return { ...before, zIndex: -1 };
                 });
                 if (paseMsg.success === true) {
-                  navigation.navigate("WaitingRoomForStart", {
+                  navigation.navigate('WaitingRoomForStart', {
                     msg: sendMsg,
                     myId: nowUser.id,
                   });
@@ -157,6 +159,7 @@ export default ({ navigation, route }) => {
     // const { latitude, longitude } = location.coords;
     const latitude = 37.5447048;
     const longitude = 127.0663154;
+
     await getUserRestaurant(
       latitude,
       longitude
@@ -173,6 +176,7 @@ export default ({ navigation, route }) => {
   }, [isChanged]);
   useEffect(() => {
     getRestaurantAndSocketConnect();
+
     return () => {
       socket.disconnect();
     };
@@ -194,10 +198,12 @@ export default ({ navigation, route }) => {
       // latitude: location.coords.latitude,
       // longitude: location.coords.longitude,
     };
-    socket.emit("together", JSON.stringify(sendMsg), (msg) => {
-      printSocketEvent("together", msg);
+
+    socket.emit('together', JSON.stringify(sendMsg), (msg) => {
+      printSocketEvent('together', msg);
       const paseMsg = JSON.parse(msg);
-      navigation.navigate("Together", {
+
+      navigation.navigate('Together', {
         msg: paseMsg.data,
         user: user.data.userInfo,
       });
@@ -211,7 +217,7 @@ export default ({ navigation, route }) => {
   };
 
   if (restaurants.loading) {
-    return <View></View>;
+    return <View />;
   } else {
     return (
       <MainPresenter

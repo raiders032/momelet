@@ -1,3 +1,4 @@
-import React from "react";
-import WaitingRoomForStartContainer from "./WaitingRoomForStartContainer";
+import React from 'react';
+
+import WaitingRoomForStartContainer from './WaitingRoomForStartContainer';
 export default WaitingRoomForStartContainer;

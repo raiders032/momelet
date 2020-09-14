@@ -1,14 +1,15 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Basic from "../../../component/Basic";
-import Card from "../../../component/Card";
-import RestaurantCard from "../../../component/RestaurantCard";
-import CardTopCover from "../../../component/CardTopCover";
-import Footer from "../../../component/Footer";
-import socket from "../../../socket";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import Basic from '../../../component/Basic';
+import Card from '../../../component/Card';
+import CardTopCover from '../../../component/CardTopCover';
+import Footer from '../../../component/Footer';
+import RestaurantCard from '../../../component/RestaurantCard';
+import socket from '../../../socket';
 export default ({ result, total, selected, onClick, footerClick }) => {
-  console.log("total, selected : ", total, selected);
+  console.log('total, selected : ', total, selected);
 
   // const footer = (
   //   <View
@@ -19,20 +20,18 @@ export default ({ result, total, selected, onClick, footerClick }) => {
   //     </TouchableOpacity>
   //   </View>
   // );
-  const cover = (
-    <CardTopCover total={total} selected={selected} onClick={onClick} />
-  );
+  const cover = <CardTopCover total={total} selected={selected} onClick={onClick} />;
   const footer = <Footer text="다시하기" onClick={footerClick} />;
+
   return (
     <Basic footer={footer}>
       <View
         style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <RestaurantCard restaurant={result} cover={cover} />
       </View>
     </Basic>

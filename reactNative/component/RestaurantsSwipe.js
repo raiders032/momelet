@@ -1,36 +1,39 @@
-import React, { useRef, useState, useEffect } from "react";
-import { View, Animated, PanResponder, Dimensions } from "react-native";
-import Basic from "./Basic";
-import RestaurantCard from "./RestaurantCard";
-import RestaurantHeader from "./RestaurantHeader";
-import Card from "./Card";
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Animated, PanResponder, Dimensions } from 'react-native';
+
+import Basic from './Basic';
+import Card from './Card';
+import RestaurantCard from './RestaurantCard';
+import RestaurantHeader from './RestaurantHeader';
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ restaurants }) => {
   const [restaurant, setRestaurant] = useState(restaurants);
+
   useEffect(() => {
     setRestaurant(restaurants);
   }, [restaurants]);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
 
   const position = new Animated.ValueXY({ x: 0, y: 0 });
+
   useEffect(() => {
     position.setValue({ x: 0, y: 0 });
   });
   const rotationValues = position.x.interpolate({
     inputRange: [-200, 0, 200],
-    outputRange: ["-13deg", "0deg", "13deg"],
-    extrapolate: "clamp",
+    outputRange: ['-13deg', '0deg', '13deg'],
+    extrapolate: 'clamp',
   });
   const topPositionConfig = position.x.interpolate({
     inputRange: [-200, 0, 200],
     outputRange: [0, 10, 0],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
   const scaleXPositionConfig = position.x.interpolate({
     inputRange: [-200, 0, 200],
     outputRange: [1, 0.1, 1],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -76,8 +79,7 @@ export default ({ restaurants }) => {
     <View
       style={{
         flex: 1,
-      }}
-    >
+      }}>
       {/* <View
           style={{
             top: 10,
@@ -96,55 +98,41 @@ export default ({ restaurants }) => {
         </View> */}
       <View
         style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
           top: 10,
           zIndex: -2,
           transform: [{ scaleX: 0.95 }],
-        }}
-      >
+        }}>
         <Card />
       </View>
       <Animated.View
         style={{
           // top: topPositionConfig,
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
           zIndex: -1,
           // transform: [{ scaleX: scaleXPositionConfig }],
         }}
-        {...panResponder.panHandlers}
-      >
-        {secondRestaurant ? (
-          <RestaurantCard restaurant={secondRestaurant} />
-        ) : (
-          <View></View>
-        )}
+        {...panResponder.panHandlers}>
+        {secondRestaurant ? <RestaurantCard restaurant={secondRestaurant} /> : <View />}
       </Animated.View>
       <Animated.View
         style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          transform: [
-            { rotate: rotationValues },
-            ...position.getTranslateTransform(),
-          ],
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          transform: [{ rotate: rotationValues }, ...position.getTranslateTransform()],
         }}
-        {...panResponder.panHandlers}
-      >
-        {firstRestaurant ? (
-          <RestaurantCard restaurant={firstRestaurant} />
-        ) : (
-          <View></View>
-        )}
+        {...panResponder.panHandlers}>
+        {firstRestaurant ? <RestaurantCard restaurant={firstRestaurant} /> : <View />}
       </Animated.View>
       {/* <TouchableOpacity
           style={{ zIndex: zIdx, width: "100%", height: "100%" }}

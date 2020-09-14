@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { StackActions } from "@react-navigation/native";
+import { StackActions } from '@react-navigation/native';
+import React, { useState } from 'react';
 
-import InvitePresenter from "./InvitePresenter";
-import socket from "../../../socket";
-import printSocketEvent from "../../../utils/printEvent";
+import socket from '../../../socket';
+import printSocketEvent from '../../../utils/printEvent';
+import InvitePresenter from './InvitePresenter';
 export default ({ navigation, route }) => {
   const tmpUsers = route.params.msg.aroundUsers;
 
@@ -14,23 +14,25 @@ export default ({ navigation, route }) => {
   );
   const onClick = () => {
     const result = [];
+
     users.forEach((user) => {
       if (user.selected) {
         result.push(user.socketId);
       }
     });
-    console.log("초대할려는 유저 목록 : ", result);
+    console.log('초대할려는 유저 목록 : ', result);
     socket.emit(
-      "togetherInvite",
+      'togetherInvite',
       JSON.stringify({
         id: route.params.user.id,
         inviteTheseUsers: result,
       }),
       (msg) => {
-        printSocketEvent("togetherInvite", msg);
+        printSocketEvent('togetherInvite', msg);
         const paseMsg = JSON.parse(msg);
+
         navigation.dispatch(
-          StackActions.replace("WaitingRoomForStart", {
+          StackActions.replace('WaitingRoomForStart', {
             msg: paseMsg.data,
             myId: route.params.user.id,
           })
@@ -38,7 +40,6 @@ export default ({ navigation, route }) => {
       }
     );
   };
-  return (
-    <InvitePresenter users={users} setUsers={setUsers} onClick={onClick} />
-  );
+
+  return <InvitePresenter users={users} setUsers={setUsers} onClick={onClick} />;
 };

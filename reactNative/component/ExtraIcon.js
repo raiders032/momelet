@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Image, View, Text, Dimensions, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Image, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+
 export default ({ icon, text, onPress }) => {
   return (
     <TouchableOpacity
       style={{
-        height: "80%",
-        width: "30%",
-        alignItems: "center",
-        justifyContent: "center",
+        height: '80%',
+        width: '30%',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
-      onPress={onPress}
-    >
+      onPress={onPress}>
       <Image
         source={icon}
         style={{

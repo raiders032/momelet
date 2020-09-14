@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import { StackActions } from "@react-navigation/native";
+import { StackActions } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
 
-import WaitingRoomForStartPresenter from "./WaitingRoomForStartPresenter";
-import socket from "../../../socket";
-import printSocketEvent from "../../../utils/printEvent";
+import socket from '../../../socket';
+import printSocketEvent from '../../../utils/printEvent';
+import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 
 export default ({ navigation, route }) => {
   React.useLayoutEffect(() => {
@@ -17,12 +17,12 @@ export default ({ navigation, route }) => {
               id: route.params.myId,
               roomName: route.params.msg.roomName,
             };
-            socket.emit("gameRoomLeave", JSON.stringify(sendMsg), (msg) => {
-              printSocketEvent("gameRoomLeave", msg);
+
+            socket.emit('gameRoomLeave', JSON.stringify(sendMsg), (msg) => {
+              printSocketEvent('gameRoomLeave', msg);
             });
-            navigation.navigate("Main");
-          }}
-        >
+            navigation.navigate('Main');
+          }}>
           <Text>나가기</Text>
         </TouchableOpacity>
       ),
@@ -32,15 +32,16 @@ export default ({ navigation, route }) => {
   const [users, setUsers] = useState(route.params.msg.gameRoomUserList);
 
   useEffect(() => {
-    socket.on("gameRoomUpdate", (msg) => {
-      printSocketEvent("gameRoomUpdate", msg);
+    socket.on('gameRoomUpdate', (msg) => {
+      printSocketEvent('gameRoomUpdate', msg);
       setUsers(JSON.parse(msg).data.gameRoomUserList);
     });
-    socket.on("gameStart", (msg) => {
-      printSocketEvent("gameStart", "식당 정보 받아옴");
+    socket.on('gameStart', (msg) => {
+      printSocketEvent('gameStart', '식당 정보 받아옴');
       const paseMsg = JSON.parse(msg);
+
       navigation.dispatch(
-        StackActions.replace("GameRoom", {
+        StackActions.replace('GameRoom', {
           msg: paseMsg.data,
           roomName: route.params.msg.roomName,
           userId: route.params.myId,
@@ -54,19 +55,20 @@ export default ({ navigation, route }) => {
   }, []);
   const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
     socket.emit(
-      "gameStart",
+      'gameStart',
       JSON.stringify({
         id: route.params.myId,
         roomName: route.params.msg.roomName,
         radius: 0.01,
-        latitude: latitude,
-        longitude: longitude,
+        latitude,
+        longitude,
       }),
       (msg) => {
-        printSocketEvent("gameStart", "식당정보 받아옴");
+        printSocketEvent('gameStart', '식당정보 받아옴');
         const paseMsg = JSON.parse(msg);
+
         navigation.dispatch(
-          StackActions.replace("GameRoom", {
+          StackActions.replace('GameRoom', {
             msg: paseMsg.data,
             roomName: route.params.msg.roomName,
             userId: route.params.myId,
@@ -75,6 +77,7 @@ export default ({ navigation, route }) => {
       }
     );
   };
+
   return (
     <WaitingRoomForStartPresenter
       users={users}
