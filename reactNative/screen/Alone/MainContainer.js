@@ -103,7 +103,6 @@ export default ({ navigation, route }) => {
       socket.query.latitude = latitude;
       socket.query.longitude = longitude;
       socket.open();
-      console.log('here');
       socket.emit('authenticate', { token: route.params.userToken });
       socket.on('authenticated', () => {
         console.log('connect!');
