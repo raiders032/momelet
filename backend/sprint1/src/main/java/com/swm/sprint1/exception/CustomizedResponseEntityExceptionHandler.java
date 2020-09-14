@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,20 +43,20 @@ public class CustomizedResponseEntityExceptionHandler {
 
     @ExceptionHandler(RestaurantLessThan7Exception.class)
     public final ResponseEntity<ApiResponse> handleRestaurantLessThan7Exceptions(Exception ex, WebRequest request) {
-        ApiResponse response = new ApiResponse(false,ex.getMessage(), request.getDescription(false));
+        ApiResponse response = new ApiResponse(false,"303", ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public final ResponseEntity<ApiResponse> handleExpiredJwtExceptions(Exception ex, WebRequest request) {
         ApiResponse response = new ApiResponse(false, "jwt.expired", ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(JwtException.class)
     public final ResponseEntity<ApiResponse> handleJwtExceptions(Exception ex, WebRequest request) {
         ApiResponse response = new ApiResponse(false, ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NotSupportedExtension.class)
@@ -63,10 +64,19 @@ public class CustomizedResponseEntityExceptionHandler {
         ApiResponse response = new ApiResponse(false, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(ConstraintViolationException.class)
-    public final ResponseEntity<ApiResponse> handleConstraintViolationExceptions(Exception ex, WebRequest request){
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public final ResponseEntity<ApiResponse> handleMissingServletRequestParameterExceptions(Exception ex, WebRequest request){
         ApiResponse response = new ApiResponse(false, "100", ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<ApiResponse> handleConstraintViolationExceptions(Exception ex, WebRequest request){
+        ApiResponse response = new ApiResponse(false, "101", ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }

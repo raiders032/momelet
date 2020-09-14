@@ -159,7 +159,7 @@ public class UserControllerTest {
         //then
         result
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.errorCode").value("100"))
+                .andExpect(jsonPath("$.errorCode").value("101"))
                 .andExpect(jsonPath("$.success").value("false"));
 
         User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
@@ -186,7 +186,7 @@ public class UserControllerTest {
         perform
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.errorCode").value("100"))
+                .andExpect(jsonPath("$.errorCode").value("101"))
                 .andExpect(jsonPath("$.success").value("false"));
 
         User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
