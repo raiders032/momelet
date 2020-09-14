@@ -4,6 +4,8 @@ import app from "../app.js";
 import ioClient from "socket.io-client";
 import ioOptions from "./ioOptions.js";
 import * as SingleObject from "../SingleObjects.js";
+const refreshToken =
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNjAwMDczNjQ2LCJleHAiOjE2MDA5Mzc2NDZ9.1VekyY_jSjxsawoiDmtQJhGnoLR6-mNx8ZG4k61QAMhVZ07mKKAc8vDknE6j3iSN3cTJmBzDUomxfUN13cLIiQ";
 
 const disconnectAll = (senders) => {
   for (let i = 0; i < senders.length; i++) {
@@ -45,8 +47,7 @@ describe("Connecting Server", () => {
       senders[i].on("connect", () => {
         senders[i]
           .emit("authenticate", {
-            token:
-              "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.8wTF_TP9Tov2t5Gj6SZmBG4LrvIrIwJNKZwVCfrRADpwTuHZF3oshv-N0bvctndr70g65vTiR1v_uVX8Croz0g",
+            token: refreshToken,
           })
           .on("authenticated", () => {
             console.log("클라이언트 연결 성공");

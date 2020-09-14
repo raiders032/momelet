@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as SingleObject from "../../SingleObjects.js";
 import SocketResponse from "../../socketResponse.js";
 import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
@@ -30,6 +29,7 @@ export default async (
 
   let room;
   room = SingleObject.RoomRepository.findByRoomName(roomName);
+  console.log("room host: " + room.getHostId());
   checkCanStart(room, id);
 
   // 방정보가 업데이트 되기 시작

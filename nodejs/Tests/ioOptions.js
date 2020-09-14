@@ -1,9 +1,11 @@
 // 37.5444086,127.0654405,17.9z
 const latitude = 37.5447048;
 const longitude = 127.0663154;
+const refreshToken =
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNjAwMDczNjQ2LCJleHAiOjE2MDA5Mzc2NDZ9.1VekyY_jSjxsawoiDmtQJhGnoLR6-mNx8ZG4k61QAMhVZ07mKKAc8vDknE6j3iSN3cTJmBzDUomxfUN13cLIiQ";
 const jwtToken =
   // "yJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA";
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA";
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNjAwMDczNjQ2LCJleHAiOjE2MDAwNzcyNDZ9.y8ZrGm8sbFu-QZbhzAfGke0nfJsyG_kxQVTaf-5bMUXM0y4tiT9-hK103O3BHSUBD1ewk18veZ_iL5_0BvyPGw";
 
 export default [
   {
