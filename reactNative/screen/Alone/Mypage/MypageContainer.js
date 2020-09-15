@@ -43,8 +43,11 @@ export default ({ navigation, route }) => {
   const imageEditButtonEvent = async () => {
     const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
+    console.log(permission);
     if (permission.status !== 'granted') {
-      alert('카메라 앨범 권한이 없어 실행할 수 없습니다.');
+      alert(
+        '카메라 앨범 권한이 없어 실행할 수 없습니다. 설정에서 카메라 앨범 권한을 허용해주세요.'
+      );
     } else {
       try {
         const result = await ImagePicker.launchImageLibraryAsync({

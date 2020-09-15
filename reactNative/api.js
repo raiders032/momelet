@@ -52,12 +52,12 @@ export const apis = {
     };
     const categoryToString = categories.join();
 
-    console.log(categoryToString);
+    // console.log(categoryToString);
     body.append('categories', categoryToString);
     body.append('name', name);
     body.append('imageFile', photo);
     // body.append("imageFile", null);
-    console.log(body);
+    // console.log(body);
 
     return makeRequest('post', `v1/users/${id}`, {}, body);
   },

@@ -52,7 +52,6 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe(userToken);
 
-      console.log(result);
       console.log('get User Success \n');
       console.log('로그인한 유저의 정보 ');
       console.log('    토큰 : ', userToken);
@@ -70,7 +69,9 @@ export default ({ navigation, route }) => {
     // console.log(latitude, longitude);
     if (user) {
       try {
-        const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+        const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
+          Permissions.LOCATION
+        );
 
         if (status === 'granted') {
           const response = await apis.getRestaurant(
@@ -85,6 +86,7 @@ export default ({ navigation, route }) => {
           setRestaurants({ loading: false, restaurants: response.data.data });
         } else {
           throw new Error('Location permission not granted');
+          alert('위치 권한이 없어서 실행 할 수 없습니다. 설정에서 위치 권한을 허용해주세요.');
         }
       } catch (e) {
         console.log('error In HomeContainer', e);
@@ -160,7 +162,17 @@ export default ({ navigation, route }) => {
     }
   };
   const getRestaurantAndSocketConnect = async () => {
-    const location = await Location.getCurrentPositionAsync({});
+    console.log('here!');
+    const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
+      Permissions.LOCATION
+    );
+
+    console.log(status, permissions, canAskAgain, ios, android);
+    if (status === 'granted') {
+      const location = await Location.getCurrentPositionAsync({});
+    } else {
+      alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
+    }
     // const { latitude, longitude } = location.coords;
     const latitude = 37.5447048;
     const longitude = 127.0663154;
@@ -193,6 +205,7 @@ export default ({ navigation, route }) => {
     const nowUser = user;
 
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
+
     const location = await Location.getCurrentPositionAsync({});
 
     const sendMsg = {
