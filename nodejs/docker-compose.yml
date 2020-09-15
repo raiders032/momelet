@@ -1,0 +1,19 @@
+version: "2"
+services:
+  node:
+    container_name: websocket
+    image: "node:14"
+    user: "1001"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/home/node/app
+      # 호스트 유저도 node
+      - /home/node/node_logs:/home/node/app/logs
+    expose:
+      - "3000"
+    ports:
+      - 3000:3000
+    # restart: always
+    command: "npm start"
