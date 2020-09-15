@@ -10,6 +10,7 @@ import MypagePresenter from './MypagePresenter';
 
 export default ({ navigation, route }) => {
   const [user, setUser] = useState(route.params.user);
+  const [coverMessageZIndex, setCoverMessageZIndex] = useState(-1);
 
   console.log('유저 정보:', user);
   const onClickFooter = async () => {
@@ -57,12 +58,19 @@ export default ({ navigation, route }) => {
 
         if (!result.cancelled) {
           console.log(Buffer.byteLength(result.base64));
-          setUser({ ...user, imageUrl: result.uri });
+          if (Buffer.byteLength(result.base64) >= 18000000) {
+            setCoverMessageZIndex(1);
+          } else {
+            setUser({ ...user, imageUrl: result.uri });
+          }
         }
       } catch (E) {
         console.log(E);
       }
     }
+  };
+  const coverMessageEnterButtonEvent = () => {
+    setCoverMessageZIndex(-1);
   };
 
   return (
@@ -71,6 +79,8 @@ export default ({ navigation, route }) => {
       setUser={setUser}
       onClickFooter={onClickFooter}
       imageEditButtonEvent={imageEditButtonEvent}
+      coverMessageZIndex={coverMessageZIndex}
+      coverMessageEnterButtonEvent={coverMessageEnterButtonEvent}
     />
   );
 };
