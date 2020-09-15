@@ -10,6 +10,8 @@ import com.swm.sprint1.repository.user.UserCategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final UserCategoryRepository userCategoryRepository;
-    private final PasswordEncoder passwordEncoder;
     private final S3Uploader s3Uploader;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Value("${app.s3.profile.dir}")
     private String dir;
@@ -51,8 +53,10 @@ public class UserService {
         String filename = imageFile.getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf("."));
         List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
-        if(!supportedExtension.contains(extension))
+        if(!supportedExtension.contains(extension)) {
+            logger.error(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
             throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
+        }
         imageUrl = s3Uploader.upload(imageFile, dir);
         return imageUrl;
     }

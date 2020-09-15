@@ -8,6 +8,8 @@ import com.swm.sprint1.security.UserPrincipal;
 import com.swm.sprint1.service.RestaurantService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -31,14 +33,17 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
+    private final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
+
     @ApiOperation(value = "유저 카테고리 기반 식당 조회" , notes = "유저의 카테고리를 기반으로 하여 최대 100개의 주변 식당 목록을 반환합니다.")
     @GetMapping("/api/v1/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getRestaurantWithUserCategoryV2(@CurrentUser UserPrincipal userPrincipal,
-                                                             @RequestParam @DecimalMin("122") @DecimalMax("133")BigDecimal longitude,
-                                                             @RequestParam @DecimalMin("32") @DecimalMax("43")BigDecimal latitude,
-                                                             @RequestParam @DecimalMin("0.001") @DecimalMax("0.02") BigDecimal radius,
-                                                             @PathVariable Long id){
+    public ResponseEntity<?> getRestaurantWithUserCategory(@CurrentUser UserPrincipal userPrincipal,
+                                                           @RequestParam @DecimalMin("122") @DecimalMax("133")BigDecimal longitude,
+                                                           @RequestParam @DecimalMin("32") @DecimalMax("43")BigDecimal latitude,
+                                                           @RequestParam @DecimalMin("0.001") @DecimalMax("0.02") BigDecimal radius,
+                                                           @PathVariable Long id){
+        logger.debug("getRestaurantWithUserCategory 호출되었습니다.");
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurantDtoResponse(latitude, longitude, radius, userPrincipal.getId());
@@ -55,6 +60,7 @@ public class RestaurantController {
                                                                @RequestParam @DecimalMin("123") @DecimalMax("133")BigDecimal longitude,
                                                                @RequestParam @DecimalMin("32") @DecimalMax("43")BigDecimal latitude,
                                                                @RequestParam @DecimalMin("0.001") @DecimalMax("0.02") BigDecimal radius){
+        logger.debug("getRestaurant7SimpleCategoryBased 호출되었습니다.");
         List<Long> ids = Arrays.stream(id.split(",")).map(Long::parseLong).collect(Collectors.toList());
         List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurant7SimpleCategoryBased(ids,longitude,latitude,radius);
         ApiResponse response = new ApiResponse(true);

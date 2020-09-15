@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/api/v1/users/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> retrieveUserInfo(@CurrentUser UserPrincipal userPrincipal) {
-
+        logger.debug("retrieveUserInfo 호출되었습니다.");
         User user = userPrincipal.getUser();
         Map<String, Integer> categories = userService.findAllCategoryNameByUserId(user.getId());
 
@@ -63,6 +63,7 @@ public class UserController {
                                             @RequestParam @NotBlank String name,
                                             @RequestParam @NotEmpty List<String> categories,
                                             @PathVariable Long id) throws IOException {
+        logger.debug("updateUserInfo 호출되었습니다.");
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
         userService.updateUser(id, imageFile, name, categories);
@@ -76,6 +77,7 @@ public class UserController {
     public ResponseEntity<?> createUserLiking(@CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable Long id,
                                               @Valid @RequestBody CreateUserLikingDto userLikingDto){
+        logger.debug("createUserLiking 호출되었습니다.");
         if(!id.equals(userPrincipal.getId()))
             throw new BadRequestException("유효하지 않은 id : " + id);
 
@@ -88,6 +90,7 @@ public class UserController {
     @GetMapping("/api/v1/users")
     @PreAuthorize("hasRole('USER')")
     public List<User> getUserList(@CurrentUser UserPrincipal userPrincipal) {
+        logger.debug("getUserList 호출되었습니다.");
         return userRepository.findAllCustom();
     }
 

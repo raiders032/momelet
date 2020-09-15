@@ -16,6 +16,8 @@ import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,9 +48,12 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @ApiOperation(value = "유저 로그인", notes = "로그인 하고 응답으로 액세스 토큰과 리프레시 토큰을 발급합니다.")
     @PostMapping("/api/v1/auth/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        logger.debug("authenticateUser 호출되었습니다.");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -63,7 +68,9 @@ public class AuthController {
     @ApiOperation(value = "유저 생성", notes = "유저를 생성합니다. 응답으로 액세스 토큰과 리프레시 토큰을 발급합니다..")
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        logger.debug("registerUser 호출되었습니다.");
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+            logger.error("Email address already in use.");
             throw new BadRequestException("Email address already in use.");
         }
 
@@ -92,7 +99,9 @@ public class AuthController {
     @ApiOperation(value = "액세스 토큰 유효성 검사", notes = "토큰의 유효성을 검사하고 결과를 반환합니다.")
     @PostMapping("/api/v1/auth/validation")
     public ResponseEntity<?> validateJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+        logger.debug("validateJwtToken 호출되었습니다.");
         if(result.hasErrors()) {
+            logger.error("validateJwtToken binding error : ");
             throw new BindingException(result.getFieldError().getDefaultMessage());
         }
         tokenProvider.validateToken(jwtDto.getJwt());
@@ -104,6 +113,7 @@ public class AuthController {
     @PostMapping("/api/v1/auth/refresh")
     public ResponseEntity<?> refreshJwtToken(@CurrentUser UserPrincipal userPrincipal,
                                              WebRequest request){
+        logger.debug("refreshJwtToken 호출되었습니다.");
         String jwtFromRequest = getJwtFromRequest(request);
         tokenProvider.validateRefreshToken(userPrincipal.getId(), jwtFromRequest);
 
