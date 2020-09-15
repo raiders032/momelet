@@ -10,6 +10,8 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
+import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
@@ -23,6 +25,13 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.swm.sprint1.controller"))
                 .paths(paths())
                 .build();
+    }
+
+    @Bean
+    public SecurityConfiguration security() {
+        final String swaggerToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMCIsImlhdCI6MTYwMDE0Mjg0NywiZXhwIjoxNjAxMDA2ODQ3fQ.mvDo5NuiJOf-w8YR0scAzfq9oyuygFM-jxKI60ZZICD4QGS932Bp_TQiN8hFt-5Xo5HDBuXs6UJMlLEdReAsyw";
+        return new SecurityConfiguration(null, null, null, null,
+                "Bearer " + swaggerToken, ApiKeyVehicle.HEADER, "Authorization", ",");
     }
 
     // Describe your apis

@@ -1,15 +1,13 @@
 package com.swm.sprint1.payload.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,7 +43,6 @@ public class ApiResponse{
         this.errorCode = errorCode;
         this.message = message;
         this.detail = detail;
-
     }
 
     public void putData(String key, Object value){
