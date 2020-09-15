@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 
+import { IMAGES } from '../src/constants/images';
 import Category from './Category';
 export default ({ categories, setUser }) => {
   const [categoryLayout, setCategoryLayout] = useState({
@@ -43,11 +44,7 @@ export default ({ categories, setUser }) => {
         }}>
         <Category
           size={categoryLayout.height}
-          image={
-            categories['한식']
-              ? require('../assets/categories/koreanS.png')
-              : require('../assets/categories/korean.png')
-          }
+          image={categories['한식'] ? IMAGES.icon.isKoreanUnSelected : IMAGES.icon.isKoreanSelected}
           categoryName="한식"
           onPress={categoryClicked}
         />
@@ -143,9 +140,7 @@ export default ({ categories, setUser }) => {
         <Category
           size={categoryLayout.height}
           image={
-            categories['패스트푸드']
-              ? require('../assets/categories/burgerS.png')
-              : require('../assets/categories/burger.png')
+            categories['패스트푸드'] ? IMAGES.icon.icBurgerUnSelected : IMAGES.icon.icBurgerSelected
           }
           categoryName="패스트푸드"
           onPress={categoryClicked}

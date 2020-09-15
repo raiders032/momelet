@@ -7,14 +7,56 @@ import MypageBody from '../../../component/MypageBody';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ user, setUser, onClickFooter, imageEditButtonEvent }) => {
+export default ({
+  user,
+  setUser,
+  onClickFooter,
+  imageEditButtonEvent,
+  coverMessageZIndex,
+  coverMessageEnterButtonEvent,
+}) => {
   const [isNameEdit, setIsNameEdit] = useState(false);
   const tmp = useRef(false);
   const footer = <Footer text="저장" onClick={onClickFooter} />;
 
   return (
     <Basic footer={footer}>
-      <View style={{ width: '100%', height: '100%', backgroundColor: 'white' }}>
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          zIndex: coverMessageZIndex,
+        }}>
+        <View
+          style={{
+            width: '60%',
+            height: '25%',
+            borderWidth: 0.5,
+            backgroundColor: '#FEEE7D',
+            borderRadius: 10,
+          }}>
+          <View style={{ alignItems: 'center', height: '60%', justifyContent: 'center' }}>
+            <Text style={{ fontFamily: 'Godo', fontSize: 15 }}>이미지 용량이 너무 커서</Text>
+            <Text style={{ fontFamily: 'Godo', fontSize: 15 }}>작업을 수행 할 수 없습니다.</Text>
+          </View>
+
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity style={{ padding: 10 }} onPress={coverMessageEnterButtonEvent}>
+              <Text style={{ fontFamily: 'Godo', color: 'blue' }}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+
+          backgroundColor: 'white',
+        }}>
         <View
           style={{
             height: '30%',
@@ -98,6 +140,7 @@ export default ({ user, setUser, onClickFooter, imageEditButtonEvent }) => {
             </View>
           </View>
         </View>
+
         <MypageBody categories={user.categories} setUser={setUser} />
       </View>
     </Basic>
