@@ -148,7 +148,7 @@ public class RestaurantControllerTest {
     @Test
     public void 식당조회_중식만_선택한_유저() throws Exception {
         //given
-        String url = "/api/v2/restaurants/users/" + user1.getId() + "/categories";
+        String url = "/api/v1/restaurants/users/" + user1.getId() + "/categories";
 
         //when
         MvcResult result = mockMvc.perform(get(url)

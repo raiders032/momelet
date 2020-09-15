@@ -99,14 +99,4 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
     }
 
-    @ApiOperation(value = "유저 정보 수정")
-    @PostMapping("/upload/{id}")
-    public ResponseEntity<?> upload(@RequestParam(required = false) MultipartFile imageFile,
-                                    @RequestParam @NotBlank String name,
-                                    @RequestParam @NotEmpty List<String> categories,
-                                    @PathVariable Long id) throws IOException {
-        userService.updateUser(id, imageFile, name, categories);
-        return ResponseEntity
-                .ok(new ApiResponse(true, "회원 정보 수정 완료"));
-    }
 }
