@@ -390,6 +390,7 @@ describe("Connecting Server", () => {
                     radius: 0.01,
                     latitude: ioOptions[1].query.latitude,
                     longitude: ioOptions[1].query.longitude,
+                    jwt: ioOptions[1].query.jwtToken,
                   }),
                   (msg) => {
                     // then
@@ -452,7 +453,8 @@ describe("Connecting Server", () => {
         roomName,
         radius: 0.01,
         latitude: ioOptions[0].query.latitude,
-        longitude: ioOptions[1].query.longitude,
+        longitude: ioOptions[0].query.longitude,
+        jwt: ioOptions[0].query.jwtToken,
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -703,6 +705,7 @@ describe("Connecting Server", () => {
                 radius: 0.01,
                 latitude: ioOptions[1].query.latitude,
                 longitude: ioOptions[1].query.longitude,
+                jwt: ioOptions[1].query.jwtToken,
               }),
               (msg) => {
                 msg.should.be.type("string");

@@ -37,10 +37,12 @@ export default (socket, errorHandler) => {
   socket.on("gameStart", async (msg, ack) => {
     logger.info("gameStart. msg: " + msg);
     let response = await errorHandlerAsync(async () => {
-      const { id, roomName, radius, latitude, longitude } = JSON.parse(msg);
+      const { id, roomName, radius, latitude, longitude, jwt } = JSON.parse(
+        msg
+      );
       msgTypeCheck({
         number: [id, radius, latitude, longitude],
-        string: [roomName],
+        string: [roomName, jwt],
       });
 
       return await gameStartService(socket, {
@@ -49,6 +51,7 @@ export default (socket, errorHandler) => {
         radius,
         latitude,
         longitude,
+        jwt,
       });
     });
     ack(JSON.stringify(response));

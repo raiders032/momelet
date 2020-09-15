@@ -22,14 +22,13 @@ const rollBackRoom = (room) => {
 
 export default async (
   socket,
-  { id, roomName, radius, latitude, longitude }
+  { id, roomName, radius, latitude, longitude, jwt }
 ) => {
   let response = new SocketResponse();
   let data = {};
 
   let room;
   room = SingleObject.RoomRepository.findByRoomName(roomName);
-  console.log("room host: " + room.getHostId());
   checkCanStart(room, id);
 
   // 방정보가 업데이트 되기 시작
@@ -43,7 +42,8 @@ export default async (
       id,
       radius,
       latitude,
-      longitude
+      longitude,
+      jwt
     );
   } catch (err) {
     rollBackRoom(room);

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ERR_RESTAURANT_GET_FAILED } from "../../Errors/GameError.js";
-import * as SingleObject from "../../SingleObjects.js";
-export default async (users, myId, radius, latitude, longitude) => {
+
+export default async (users, myId, radius, latitude, longitude, jwt) => {
   let id = "";
   for (let i = 0; i < users.length; i++) {
     if (i === users.length - 1) {
@@ -10,7 +10,6 @@ export default async (users, myId, radius, latitude, longitude) => {
       id += users[i].id + ",";
     }
   }
-  const { JWT } = SingleObject.UserRepository.findById(myId);
   const cards = [];
   for (let i = 0; i < 3; i++) {
     try {
@@ -20,7 +19,7 @@ export default async (users, myId, radius, latitude, longitude) => {
         },
       } = await axios.get(process.env.SERVER_URL + "/api/v1/restaurants7", {
         headers: {
-          Authorization: "Bearer " + JWT,
+          Authorization: "Bearer " + jwt,
         },
         params: {
           id,
@@ -34,6 +33,7 @@ export default async (users, myId, radius, latitude, longitude) => {
       }
       break;
     } catch (err) {
+      // 0.15초 간격으로 3번까지 재요청
       if (i < 2) {
         await (() => {
           return new Promise((resolve) => {
