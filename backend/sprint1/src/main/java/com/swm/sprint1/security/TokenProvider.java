@@ -4,7 +4,7 @@ import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.domain.UserRefreshToken;
 import com.swm.sprint1.repository.user.UserRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -33,8 +35,8 @@ public class TokenProvider {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
         Date now = new Date();
-        Date accessExpiryDate = new Date(now.getTime() + 60*60* 1000);
-        Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        Date accessExpiryDate = new Date(now.getTime() + appProperties.getAuth().getAccessTokenExpirationMsec());
+        Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpirationMsec());
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
         String accessTokenString = Jwts.builder()
@@ -75,17 +77,13 @@ public class TokenProvider {
 
     public void validateToken(String authToken) {
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
-        Jwts.parser().setSigningKey(encodedJwt);
+        Jwts.parser().setSigningKey(encodedJwt).parseClaimsJws(authToken);
     }
 
-    public boolean validateRefreshToken(Long userId, String refreshToken) {
-        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
-        try {
-            Jwts.parser().setSigningKey(encodedJwt);
-        }
-        catch (ExpiredJwtException e){
-            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "refresh "+ e.getMessage());
-        }
-        return userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken);
+    public void validateRefreshToken(Long userId, String refreshToken) {
+        validateToken(refreshToken);
+        if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken))
+            throw new JwtException("유효하지 않은 리프레시 토큰입니다.");
+
     }
 }

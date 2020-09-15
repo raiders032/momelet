@@ -3,10 +3,10 @@ package com.swm.sprint1.controller;
 import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.RestaurantDtoResponse;
-import com.swm.sprint1.payload.response.RetrieveRestaurantResponseV1;
 import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.UserPrincipal;
 import com.swm.sprint1.service.RestaurantService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,28 +31,8 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
-    @GetMapping("/api/v1/restaurants")
-    public ResponseEntity<?> getRestaurant(@RequestParam BigDecimal longitude,
-                                           @RequestParam BigDecimal latitude,
-                                           @RequestParam BigDecimal radius){
-        List<RetrieveRestaurantResponseV1> restaurantList = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude, radius, null);
-        return ResponseEntity.ok(restaurantList);
-    }
-
+    @ApiOperation(value = "유저 카테고리 기반 식당 조회" , notes = "유저의 카테고리를 기반으로 하여 최대 100개의 주변 식당 목록을 반환합니다.")
     @GetMapping("/api/v1/restaurants/users/{id}/categories")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getRestaurantWithUserCategory(@CurrentUser UserPrincipal userPrincipal,
-                                                           @RequestParam BigDecimal longitude,
-                                                           @RequestParam BigDecimal latitude,
-                                                           @RequestParam BigDecimal radius,
-                                                           @PathVariable Long id){
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
-        List<RetrieveRestaurantResponseV1> restaurants = restaurantService.findRestaurantByLatitudeAndLongitudeAndUserCategoryV1(latitude, longitude, radius, userPrincipal.getId());
-        return ResponseEntity.ok(restaurants);
-    }
-
-    @GetMapping("/api/v2/restaurants/users/{id}/categories")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurantWithUserCategoryV2(@CurrentUser UserPrincipal userPrincipal,
                                                              @RequestParam @DecimalMin("122") @DecimalMax("133")BigDecimal longitude,
@@ -68,6 +48,7 @@ public class RestaurantController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiOperation(value = "유저들의 카테고리 기반 식당 카드 7장 조회" , notes = "유저들 카테고리를 기반으로 하여 7개의 주변 식당 목록을 반환합니다.")
     @GetMapping("/api/v1/restaurants7")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam @NotBlank String id,

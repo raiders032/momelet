@@ -19,7 +19,9 @@ public class AppProperties {
     public static class Auth {
         private String tokenSecret;
 
-        private long tokenExpirationMsec;
+        private long refreshTokenExpirationMsec;
+
+        private long accessTokenExpirationMsec;
     }
 
     public static final class OAuth2 {
