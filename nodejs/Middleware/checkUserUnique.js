@@ -7,9 +7,13 @@ export default (io, socket, next) => {
   if (SingleObject.UserRepository.existById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
     logger.info(id + " is overlapped user. Disconnect exsisting user");
+    const { socketId } = SingleObject.UserRepository.findById(id);
+    console.log("소켓 아이디: " + socketId);
     const user =
       io.sockets.connected[SingleObject.UserRepository.findById(id).socketId];
-    user.disconnect(true);
+    console.log("구조 알아보기" + io.sockets.connected);
+    if (user !== undefined) user.disconnect(true);
+    SingleObject.UserRepository.delete(socketId);
   }
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
 
