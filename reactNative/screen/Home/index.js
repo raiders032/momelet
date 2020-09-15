@@ -13,7 +13,7 @@ import WaitingRoomForStart from '../Together/WaitingRoomForStart';
 
 const Stack = createStackNavigator();
 
-function App({ userToken }) {
+function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -22,9 +22,6 @@ function App({ userToken }) {
           component={Alone}
           options={{
             headerShown: false,
-          }}
-          initialParams={{
-            userToken,
           }}
         />
         <Stack.Screen name="Together" component={Together} options={{ headerShown: false }} />

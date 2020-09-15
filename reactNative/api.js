@@ -33,14 +33,14 @@ const makeRequest = async (method, path, config, data = '') => {
 };
 
 export const apis = {
-  getRestaurant: (latitude, longitude, id, token) =>
-    makeRequest('get', `v2/restaurants/users/${id}/categories`, {
+  getRestaurant: (latitude, longitude, id) =>
+    makeRequest('get', `v1/restaurants/users/${id}/categories`, {
       params: { latitude, longitude, radius: 0.01 },
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },
     }),
-  getUserMe: (token) => makeRequest('get', 'v1/users/me', {}),
+  getUserMe: () => makeRequest('get', 'v1/users/me', {}),
   editUser: (id, categories, imageUrl, name, token) => {
     const body = new FormData();
 
@@ -73,9 +73,7 @@ export const apis = {
           Authorization: `Bearer ${refreshToken}`,
         },
       },
-      {
-        jwt: refreshToken,
-      }
+      {}
     );
   },
 };

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 
 import socket from '../../../socket';
+import getInvalidToken from '../../../utils/getInvalidToken';
 import printSocketEvent from '../../../utils/printEvent';
 import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 
@@ -53,7 +54,9 @@ export default ({ navigation, route }) => {
     //   setUsers(null);
     // };
   }, []);
-  const onClick = (latitude = 37.5447048, longitude = 127.0663154) => {
+  const onClick = async (latitude = 37.5447048, longitude = 127.0663154) => {
+    const jwtToken = await getInvalidToken();
+
     socket.emit(
       'gameStart',
       JSON.stringify({
@@ -62,9 +65,11 @@ export default ({ navigation, route }) => {
         radius: 0.01,
         latitude,
         longitude,
+        jwt: jwtToken,
       }),
-      (msg) => {
+      async (msg) => {
         printSocketEvent('gameStart', '식당정보 받아옴');
+
         const paseMsg = JSON.parse(msg);
 
         navigation.dispatch(

@@ -8,6 +8,7 @@ import { View, Text } from 'react-native';
 
 import { apis } from '../../api';
 import socket from '../../socket';
+import getInvalidToken from '../../utils/getInvalidToken';
 import printSocketEvent from '../../utils/printEvent';
 import MainPresenter from './MainPresenter';
 
@@ -34,7 +35,7 @@ export default ({ navigation, route }) => {
     restaurants: [],
   });
 
-  if (route.params.isChanged) {
+  if (route.params?.isChanged) {
     setIsChanged((before) => {
       return before ? 0 : 1;
     });
@@ -47,14 +48,13 @@ export default ({ navigation, route }) => {
       restaurants.restaurants.map((restaurant) => Asset.loadAsync(restaurant.imageUrl))
     );
   };
-  const userToken = route.params.userToken;
+
   const getUser = async () => {
     try {
-      const result = await apis.getUserMe(userToken);
+      const result = await apis.getUserMe();
 
       console.log('get User Success \n');
       console.log('로그인한 유저의 정보 ');
-      console.log('    토큰 : ', userToken);
       console.log('    id : ', result.data.data.userInfo.id);
       console.log('    이름 : ', result.data.data.userInfo.name);
       setUser(result.data);
@@ -74,18 +74,14 @@ export default ({ navigation, route }) => {
         );
 
         if (status === 'granted') {
-          const response = await apis.getRestaurant(
-            latitude,
-            longitude,
-            user.data.userInfo.id,
-            userToken
-          );
+          const response = await apis.getRestaurant(latitude, longitude, user.data.userInfo.id);
 
-          console.log('get Restaurant Sucess');
+          console.log('get Restaurant Success');
           // console.log(response);
           setRestaurants({ loading: false, restaurants: response.data.data });
         } else {
           throw new Error('Location permission not granted');
+
           alert('위치 권한이 없어서 실행 할 수 없습니다. 설정에서 위치 권한을 허용해주세요.');
         }
       } catch (e) {
@@ -96,8 +92,10 @@ export default ({ navigation, route }) => {
   const socketConnect = async (latitude, longitude) => {
     if (user !== null) {
       const nowUser = user.data.userInfo;
+      const jwtToken = await getInvalidToken();
 
-      socket.query.JWT = route.params.userToken;
+      // socket.query.JWT = route.params.userToken;
+      socket.query.JWT = jwtToken;
       socket.query.email = nowUser.email;
       socket.query.imageUrl = nowUser.imageUrl;
       socket.query.name = nowUser.name;
@@ -105,7 +103,7 @@ export default ({ navigation, route }) => {
       socket.query.latitude = latitude;
       socket.query.longitude = longitude;
       socket.open();
-      socket.emit('authenticate', { token: route.params.userToken });
+      socket.emit('authenticate', { token: jwtToken });
       socket.on('authenticated', () => {
         console.log('connect!');
       });

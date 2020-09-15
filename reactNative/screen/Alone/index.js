@@ -16,9 +16,6 @@ export default ({ navigation, route }) => {
         options={{
           headerShown: false,
         }}
-        initialParams={{
-          userToken: route.params.userToken,
-        }}
       />
       <Stack.Screen
         name="Mypage"
