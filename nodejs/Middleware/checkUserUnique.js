@@ -7,9 +7,9 @@ export default (io, socket, next) => {
   // const { socketId } = SingleObject.UserRepository.findById(id);
   // console.log("소켓 아이디: " + socketId);
   console.log("구조 알아보기" + io.sockets);
-  for (let i in io.sockets) {
+  for (let i in io.sockets.connected) {
     console.log(i);
-    console.log(io.sockets[i]);
+    console.log(io.sockets.connected[i]);
   }
   if (SingleObject.UserRepository.existById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
