@@ -5,15 +5,13 @@ export default (io, socket, next) => {
   socket.handshake.query.id = parseInt(socket.handshake.query.id);
   const { id } = socket.handshake.query;
 
-  if (!SingleObject.UserRepository.existById(id)) {
+  if (SingleObject.UserRepository.existById(id)) {
     // const user = SingleObject.UserRepository.findById(id);
     logger.info(id + " is overlapped user. Disconnect exsisting user");
     const user =
       io.sockets.connected[SingleObject.UserRepository.findById(id).socketId];
     if (user !== undefined) user.disconnect(true);
-    else {
-      console.log("존재한다!");
-    }
+    SingleObject.UserRepository.delete(socketId);
   }
   SingleObject.UserRepository.add(socket.id, socket.handshake.query);
 
