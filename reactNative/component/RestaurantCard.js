@@ -113,67 +113,34 @@ export default ({ restaurant, header, cover }) => {
   return (
     <Card>
       <View style={{ width: '100%', height: '100%' }}>
-        {isFront ? (
-          <View style={{ height: '65%' }}>
-            <Animated.View
-              style={{
-                width: '100%',
-                height: '100%',
-                transform: [{ rotateY: backInterpolate }],
-                backfaceVisibility: 'hidden',
-                position: 'absolute',
-              }}>
-              <CardBack
-                menus={restaurant.menu}
-                name={restaurant.name}
-                phoneNumber={restaurant.phoneNumber}
-                address={restaurant.roadAddress}
-                lat={restaurant.latitude}
-                lng={restaurant.longitude}
-              />
-            </Animated.View>
-            <Animated.View
-              style={{
-                transform: [{ rotateY: frontInterpolate }],
-                backfaceVisibility: 'hidden',
-              }}>
-              {/* {header} */}
+        <View style={{ height: '65%' }}>
+          <Animated.View
+            style={{
+              transform: [{ rotateY: frontInterpolate }],
+              backfaceVisibility: 'hidden',
+            }}>
+            {/* {header} */}
 
-              <CardImage />
-              {cover}
-            </Animated.View>
-          </View>
-        ) : (
-          <View style={{ height: '65%' }}>
-            <Animated.View
-              style={{
-                transform: [{ rotateY: frontInterpolate }],
-                backfaceVisibility: 'hidden',
-              }}>
-              {/* {header} */}
-
-              <CardImage />
-              {cover}
-            </Animated.View>
-            <Animated.View
-              style={{
-                width: '100%',
-                height: '100%',
-                transform: [{ rotateY: backInterpolate }],
-                backfaceVisibility: 'hidden',
-                position: 'absolute',
-              }}>
-              <CardBack
-                menus={restaurant.menu}
-                name={restaurant.name}
-                phoneNumber={restaurant.phoneNumber}
-                address={restaurant.roadAddress}
-                lat={restaurant.latitude}
-                lng={restaurant.longitude}
-              />
-            </Animated.View>
-          </View>
-        )}
+            <CardImage />
+            {cover}
+          </Animated.View>
+          <Animated.View
+            style={{
+              width: '100%',
+              height: '100%',
+              transform: [{ rotateY: backInterpolate }],
+              backfaceVisibility: 'hidden',
+              position: 'absolute',
+            }}
+            pointerEvents={isFront ? 'none' : 'auto'}>
+            <CardBack
+              menus={restaurant.menu}
+              name={restaurant.name}
+              phoneNumber={restaurant.phoneNumber}
+              address={restaurant.roadAddress}
+            />
+          </Animated.View>
+        </View>
 
         <View style={{ height: '35%', paddingHorizontal: 15 }}>
           <View
