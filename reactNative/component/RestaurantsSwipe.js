@@ -7,7 +7,7 @@ import RestaurantCard from './RestaurantCard';
 import RestaurantHeader from './RestaurantHeader';
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ restaurants }) => {
+export default ({ restaurants, userLocation }) => {
   const [restaurant, setRestaurant] = useState(restaurants);
 
   useEffect(() => {
@@ -120,7 +120,11 @@ export default ({ restaurants }) => {
           // transform: [{ scaleX: scaleXPositionConfig }],
         }}
         {...panResponder.panHandlers}>
-        {secondRestaurant ? <RestaurantCard restaurant={secondRestaurant} /> : <View />}
+        {secondRestaurant ? (
+          <RestaurantCard restaurant={secondRestaurant} userLocation={userLocation} />
+        ) : (
+          <View />
+        )}
       </Animated.View>
       <Animated.View
         style={{
@@ -132,7 +136,11 @@ export default ({ restaurants }) => {
           transform: [{ rotate: rotationValues }, ...position.getTranslateTransform()],
         }}
         {...panResponder.panHandlers}>
-        {firstRestaurant ? <RestaurantCard restaurant={firstRestaurant} /> : <View />}
+        {firstRestaurant ? (
+          <RestaurantCard restaurant={firstRestaurant} userLocation={userLocation} />
+        ) : (
+          <View />
+        )}
       </Animated.View>
       {/* <TouchableOpacity
           style={{ zIndex: zIdx, width: "100%", height: "100%" }}

@@ -34,6 +34,7 @@ export default ({ navigation, route }) => {
     loading: true,
     restaurants: [],
   });
+  const [userLocation, setUserLocation] = useState(null);
 
   if (route.params?.isChanged) {
     setIsChanged((before) => {
@@ -69,23 +70,13 @@ export default ({ navigation, route }) => {
     // console.log(latitude, longitude);
     if (user) {
       try {
-        const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
-          Permissions.LOCATION
-        );
+        const response = await apis.getRestaurant(latitude, longitude, user.data.userInfo.id);
 
-        if (status === 'granted') {
-          const response = await apis.getRestaurant(latitude, longitude, user.data.userInfo.id);
-
-          console.log('get Restaurant Success');
-          // console.log(response);
-          setRestaurants({ loading: false, restaurants: response.data.data });
-        } else {
-          throw new Error('Location permission not granted');
-
-          alert('위치 권한이 없어서 실행 할 수 없습니다. 설정에서 위치 권한을 허용해주세요.');
-        }
+        console.log('get Restaurant Success');
+        // console.log(response);
+        setRestaurants({ loading: false, restaurants: response.data.data });
       } catch (e) {
-        console.log('error In HomeContainer', e);
+        console.log('error In HomeContainer : getUserRestaurant', e);
       }
     }
   };
@@ -105,7 +96,7 @@ export default ({ navigation, route }) => {
       socket.open();
       socket.emit('authenticate', { token: jwtToken });
       socket.on('authenticated', () => {
-        console.log('connect!');
+        // console.log('connect!');
       });
       socket.on('togetherInvitation', (msg) => {
         printSocketEvent('togetherInvitation', msg);
@@ -160,35 +151,36 @@ export default ({ navigation, route }) => {
     }
   };
   const getRestaurantAndSocketConnect = async () => {
-    console.log('here!');
     const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
       Permissions.LOCATION
     );
 
-    console.log(status, permissions, canAskAgain, ios, android);
     if (status === 'granted') {
       const location = await Location.getCurrentPositionAsync({});
+
+      const latitude = 37.5447048;
+      const longitude = 127.0663154;
+
+      await getUserRestaurant(
+        latitude,
+        longitude
+
+        // location.coords.latitude,
+        // location.coords.longitude
+      );
+      // await socketConnect(location.coords.latitude, location.coords.longitude);
+      await socketConnect(latitude, longitude);
+      setUserLocation({ latitude, longitude });
     } else {
       alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
     }
     // const { latitude, longitude } = location.coords;
-    const latitude = 37.5447048;
-    const longitude = 127.0663154;
-
-    await getUserRestaurant(
-      latitude,
-      longitude
-
-      // location.coords.latitude,
-      // location.coords.longitude
-    );
-    // await socketConnect(location.coords.latitude, location.coords.longitude);
-    await socketConnect(latitude, longitude);
   };
 
   useEffect(() => {
     getUser();
   }, [isChanged]);
+
   useEffect(() => {
     getRestaurantAndSocketConnect();
 
@@ -243,6 +235,7 @@ export default ({ navigation, route }) => {
         user={user}
         sendTogetherMessage={sendTogetherMessage}
         coverMessageConfig={coverMessageConfig}
+        userLocation={userLocation}
       />
     );
   }

@@ -9,13 +9,14 @@ import {
   ImageBackground,
 } from 'react-native';
 
+import { calculateDistance } from '../utils/calculateDistance';
 import Card from './Card';
 import CardBack from './CardBack';
 import PresentMenu from './PresentMenu';
 import RestaurantBasicInfo from './RestaurantBasicInfo';
 import SeeMenuButton from './SeeMenuButton';
 
-export default ({ restaurant, header, cover }) => {
+export default ({ restaurant, header, cover, userLocation }) => {
   const [isFront, setIsFront] = useState(true);
   let changeValue = 0;
   const rotation = useRef(new Animated.Value(0)).current;
@@ -109,6 +110,10 @@ export default ({ restaurant, header, cover }) => {
   // const CardFront = React.useCallback(() => {
   //   return ()
   // })
+  const distance = calculateDistance(userLocation, {
+    latitude: restaurant.latitude,
+    longitude: restaurant.longitude,
+  });
 
   return (
     <Card>
@@ -158,7 +163,7 @@ export default ({ restaurant, header, cover }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              <RestaurantBasicInfo title={restaurant.name} distance="500M" point="4.4점" />
+              <RestaurantBasicInfo title={restaurant.name} distance={distance} point="4.4점" />
               <TouchableOpacity style={{ width: '20%', height: '40%' }} onPress={flipCard}>
                 <SeeMenuButton />
               </TouchableOpacity>

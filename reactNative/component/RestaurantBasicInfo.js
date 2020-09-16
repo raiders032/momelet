@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 
 import truncate from '../utils/truncate';
 export default ({ title, distance, point }) => {
+  console.log(distance);
+
   return (
     <View>
       <View style={{ flexDirection: 'row', marginTop: 5 }}>

@@ -12,6 +12,7 @@ export default ({
   sendTogetherMessage,
   coverMessageConfig,
   userChangeCount,
+  userLocation,
 }) => {
   console.log('MainPresenter 렌더');
 
@@ -59,7 +60,11 @@ export default ({
       footer={footer}
       zIndex={coverMessageConfig.zIndex}
       coverMessageConfig={coverMessageConfig}>
-      {restaurants.length > 3 ? <RestaurantsSwipe restaurants={restaurants} /> : <View />}
+      {restaurants.length > 3 ? (
+        <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
+      ) : (
+        <View />
+      )}
     </Basic>
   );
 };
