@@ -138,6 +138,8 @@ export default ({ restaurant, header, cover }) => {
               name={restaurant.name}
               phoneNumber={restaurant.phoneNumber}
               address={restaurant.roadAddress}
+              lng={restaurant.longitude}
+              lat={restaurant.latitude}
             />
           </Animated.View>
         </View>

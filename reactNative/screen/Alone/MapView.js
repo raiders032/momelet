@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 export default ({ route }) => {
+  console.log(route.params);
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
 
   const getUserLocation = async () => {
