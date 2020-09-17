@@ -10,6 +10,7 @@ export default (socket, { id, roomName }) => {
   const room = SingleObject.RoomRepository.findByRoomName(roomName);
   if (room.getIsStarted() === false && room.findUserById(id)) {
     const user = SingleObject.UserRepository.findById(id);
+    user.socket.join(roomName);
     user.updateCanReceive(true);
     data.gameRoomUserList = room
       .getUserList()
@@ -29,7 +30,7 @@ export default (socket, { id, roomName }) => {
 
     data.hostId = room.getHostId();
     response.isOk(data);
-    gameRoomUpdateService(socket, room, id);
+    gameRoomUpdateService(socket, room);
   } else {
     response.isFail(330);
   }

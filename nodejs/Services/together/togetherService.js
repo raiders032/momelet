@@ -13,16 +13,17 @@ const findAroundUsers = (myId, lat, long) => {
   for (let user of users) {
     if (myId !== user.id) {
       if (
-        user["latitude"] >= min_lat &&
-        user["latitude"] <= max_lat &&
-        user["longitude"] >= min_long &&
-        user["longitude"] <= max_long
+        user.joinedRoomName === null &&
+        user.latitude >= min_lat &&
+        user.latitude <= max_lat &&
+        user.longitude >= min_long &&
+        user.longitude <= max_long
       ) {
         aroundUsers.push({
-          id: user["id"],
-          socketId: user["socketId"],
-          name: user["name"],
-          imageUrl: user["imageUrl"],
+          id: user.id,
+          socketId: user.socket.id,
+          name: user.name,
+          imageUrl: user.imageUrl,
         });
       }
     }

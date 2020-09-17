@@ -1,19 +1,7 @@
 import * as SingleObject from "../../SingleObjects.js";
-import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
 import SocketResponse from "../../SocketResponse.js";
-
-const exitExistRoom = (socket, user, id) => {
-  const room = SingleObject.RoomRepository.findByRoomName(user.joinedRoomName);
-  if (room === false) {
-    user.updateJoinedRoomName(null);
-    return;
-  }
-  if (room.deleteUser(user) === 0) {
-    SingleObject.RoomRepository.delete(room.getRoomName());
-    return;
-  }
-  gameRoomUpdateService(socket, room, id);
-};
+import roomLeave from "../util/roomLeave.js";
+import logger from "../../logger.js";
 
 const inviteUsers = (socket, inviteUsers, roomName, host) => {
   const inviteMsg = new SocketResponse();
@@ -36,11 +24,17 @@ export default (socket, { id, inviteTheseUsers }) => {
   roomName = room.getRoomName();
 
   // 기존 접속 방에서 나가기
-  if (user.joinedRoomName !== null) {
-    exitExistRoom(socket, user, id);
+  try {
+    if (user.joinedRoomName !== null) {
+      roomLeave(
+        user,
+        SingleObject.RoomRepository.findByRoomName(user.joinedRoomName)
+      );
+    }
+  } catch (err) {
+    logger.error(err.stack);
   }
   room.addUser(user);
-  user.updateJoinedRoomName(roomName);
 
   let gameRoomUserList, hostId;
   gameRoomUserList = room.getUserInfo();

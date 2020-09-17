@@ -1,16 +1,12 @@
 import logger from "../../logger.js";
 import SocketResponse from "../../SocketResponse.js";
-import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
-export default (socket, room, id) => {
-  logger.info(
-    "gameRoomUpdateService. roomName: " + room.getRoomName() + ", id: " + id
-  );
 
-  // if (room === false || room === undefined) throw new ERR_ROOM_NOT_EXIST();
+export default (socket, room) => {
+  logger.info("gameRoomUpdateService. roomName: " + room.getRoomName());
+
   let response = new SocketResponse();
   let data = {};
 
-  const users = room.getUserList();
   data.gameRoomUserList = room
     .getUserList()
     .filter((user) => user.getCanReceive())
@@ -21,9 +17,14 @@ export default (socket, room, id) => {
   data.hostId = room.getHostId();
   response.isOk(data);
 
-  users
-    .filter((user) => user.getCanReceive() && id !== user.id)
-    .forEach((user) => {
-      socket.to(user.socketId).emit("gameRoomUpdate", JSON.stringify(response));
-    });
+  socket
+    .to(room.getRoomName())
+    .emit("gameRoomUpdate", JSON.stringify(response));
+  // users
+  //   .filter((user) => user.getCanReceive() && id !== user.id)
+  //   .forEach((user) => {
+  //     socket
+  //       .to(user.socket.id)
+  //       .emit("gameRoomUpdate", JSON.stringify(response));
+  //   });
 };

@@ -49,6 +49,7 @@ function startServer() {
     });
 
   app.set("server", server);
+  app.set("io", io);
   return app;
 }
 

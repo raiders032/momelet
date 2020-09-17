@@ -14,7 +14,6 @@ export default (socket, { id, userGameResult, roomName }) => {
 
   if (user.canReceive === true) {
     room.addFinishCount();
-    user.updateCanReceive(false);
     if (userGameResult.length === 7) {
       for (let result of userGameResult) {
         room.addScore(result.id, result.sign);

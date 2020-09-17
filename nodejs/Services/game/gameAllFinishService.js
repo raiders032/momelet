@@ -1,10 +1,10 @@
 import SocketResponse from "../../SocketResponse.js";
+import app from "../../app.js";
 
 export default (socket, room) => {
   let response = new SocketResponse();
   let data = { roomGameResult: {} };
 
-  const users = room.getUserList();
   const cardList = room.getCardList();
   let bestCard = { id: null, like: 0, score: 0 };
   let isLike = false;
@@ -30,12 +30,14 @@ export default (socket, room) => {
   room.endGame();
   room.resetFinishCount();
 
+  const users = room.getUserList();
   setTimeout(() => {
     let retMsg = JSON.stringify(response);
 
-    socket.emit("gameAllFinish", retMsg);
+    app.get("io").of("/").to(room.getRoomName()).emit("gameAllFinish", retMsg);
     users.forEach((user) => {
-      socket.to(user.socketId).emit("gameAllFinish", retMsg);
+      user.socket.leave(room.getRoomName());
+      user.updateCanReceive(false);
     });
   }, 1500);
 };

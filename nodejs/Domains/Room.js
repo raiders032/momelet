@@ -1,3 +1,5 @@
+import gameRoomUpdateService from "../Services/game/gameRoomUpdateService.js";
+
 export default class Room {
   constructor(roomName, userId) {
     this.roomName = roomName;
@@ -14,14 +16,19 @@ export default class Room {
     if (this.isStarted || this.headCount >= this.maxHeadCount) {
       throw "Can't join the room";
     }
+    user.socket.join(this.roomName);
+    user.updateJoinedRoomName(this.roomName);
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
+
+    if (this.headCount > 1) {
+      gameRoomUpdateService(user.socket, this);
+    }
   }
 
   deleteUser(user) {
-    if (this.userList.length <= 0)
-      throw new Error("방 인원이 0명 이므로 삭제할 수 없습니다.");
+    if (this.userList.length <= 0) return 0;
     this.userList.forEach((value, index) => {
       //유저 리스트에서 삭제 할 유저 찾아서 삭제하기
       if (user === value) {

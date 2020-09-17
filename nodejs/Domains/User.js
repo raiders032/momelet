@@ -1,9 +1,7 @@
 export default class User {
-  constructor(
-    socketId,
-    { id, email, name, imageUrl, JWT, latitude, longitude }
-  ) {
-    this.socketId = socketId;
+  constructor(socket, { id, email, name, imageUrl, JWT, latitude, longitude }) {
+    this.socket = socket;
+    // this.socketId = socket.id;
     this.id = id;
     this.email = email;
     this.name = name;

@@ -10,10 +10,10 @@ export default class UserRepository {
     this.socketIdMapper = new Map(); // key: socketId, value: id
   }
 
-  add(socketId, userInfo) {
+  add(socket, userInfo) {
     let { id } = userInfo;
-    this.userRepository.set(id, new User(socketId, userInfo));
-    this.socketIdMapper.set(socketId, userInfo.id);
+    this.userRepository.set(id, new User(socket, userInfo));
+    this.socketIdMapper.set(socket.id, userInfo.id);
   }
 
   delete(socketId) {
