@@ -5,7 +5,7 @@ import roomLeave from "../util/roomLeave.js";
 export default (socket) => {
   // 클래스의 프로퍼티에 직접 접근하고 있음
   const user = SingleObject.UserRepository.findBySocketId(socket.id);
-
+  const id = user.getId();
   try {
     if (user.joinedRoomName !== null) {
       roomLeave(
@@ -20,6 +20,5 @@ export default (socket) => {
   SingleObject.UserRepository.delete(user.socket.id);
 
   // 출력용 문구. 후에 삭제 필요함.
-  const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
-  logger.info("a user disconnected. userList: (" + userList + ")");
+  logger.info(`ID: ${id} disconnect`);
 };
