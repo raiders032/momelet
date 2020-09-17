@@ -13,7 +13,9 @@ services:
       - /home/node/node_logs:/home/node/app/logs
     expose:
       - "3000"
+      - "3001"
     ports:
       - 3000:3000
+      - 3001:3001
     # restart: always
     command: "npm start"
