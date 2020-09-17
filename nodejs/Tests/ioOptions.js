@@ -2,11 +2,10 @@
 const latitude = 37.5447048;
 const longitude = 127.0663154;
 const refreshToken =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNjAwMDczNjQ2LCJleHAiOjE2MDA5Mzc2NDZ9.1VekyY_jSjxsawoiDmtQJhGnoLR6-mNx8ZG4k61QAMhVZ07mKKAc8vDknE6j3iSN3cTJmBzDUomxfUN13cLIiQ";
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsImlhdCI6MTYwMDE2MzAzNCwiZXhwIjoxNjAxMDI3MDM0fQ._1nQrCgvlKfZkki-P1w6vfS98IGWyOOEom8JHGYLFpnAzf4Y0aKIDTVX2MI9f8UgiA3SwAsl_fsjQ7RWt9pLPA";
 const jwtToken =
   // "yJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNTk5NTU2NTczLCJleHAiOjE2MDA0MjA1NzN9.ZP2ughltXma1wIPdv8qtBWO_W_3W__-gKheZhpGdGyOwJ3KwTRvThRyRuz7BSQtiGmjXEP9ZgfOiw1dIdJwEyA";
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNjAwMDczNjQ2LCJleHAiOjE2MDAwNzcyNDZ9.y8ZrGm8sbFu-QZbhzAfGke0nfJsyG_kxQVTaf-5bMUXM0y4tiT9-hK103O3BHSUBD1ewk18veZ_iL5_0BvyPGw";
-
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsImlhdCI6MTYwMDE2MzAzNCwiZXhwIjoxNjAwMTY2NjM0fQ.BPFglemAflgg5ux444OFOQCcL9-oWevb2Q31YqLicqBHb1aKEMZlqMKywr16_aHgXWajH9Bo5yJf8Pw7KDEcuQ";
 export default [
   {
     myId: 1,
@@ -15,11 +14,9 @@ export default [
       email: "jeong@naver.com",
       name: "Seonghoon",
       imageUrl: "naver.com",
-      JWT: jwtToken,
-      latitude: "37.5444086",
       latitude: latitude,
-      longitude: "127.0654405",
       longitude: longitude,
+      jwtToken,
     },
     extraHeaders: { Authorization: `Bearer ${jwtToken}` },
   },
@@ -30,9 +27,9 @@ export default [
       email: "4@naver.com",
       name: "Noh",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: latitude - 0.0025,
       longitude: longitude,
+      jwtToken,
     },
   },
   {
@@ -42,9 +39,9 @@ export default [
       email: "5@naver.com",
       name: "Ha",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: latitude - 0.001,
       longitude: longitude + 0.001,
+      jwtToken,
     },
   },
   {
@@ -54,9 +51,9 @@ export default [
       email: "78@naver.com",
       name: "Kim",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "37.5544086",
       longitude: "127.0754405",
+      jwtToken,
     },
   },
   {
@@ -66,9 +63,9 @@ export default [
       email: "ky@naver.com",
       name: "Kimmy",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -78,9 +75,9 @@ export default [
       email: "78567@naver.com",
       name: "Kang",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -90,9 +87,9 @@ export default [
       email: "44353@naver.com",
       name: "Lee",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -102,9 +99,9 @@ export default [
       email: "101@naver.com",
       name: "Koo",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -114,9 +111,9 @@ export default [
       email: "1111@naver.com",
       name: "Park",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -126,9 +123,9 @@ export default [
       email: "18923987@naver.com",
       name: "Baek",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -138,9 +135,9 @@ export default [
       email: "posepr@naver.com",
       name: "Hosse",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
   {
@@ -150,9 +147,9 @@ export default [
       email: "1t32twe@naver.com",
       name: "Ohh",
       imageUrl: "naver.com",
-      JWT: jwtToken,
       latitude: "38.5544086",
       longitude: "128.0754405",
+      jwtToken,
     },
   },
 ];
