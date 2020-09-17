@@ -65,8 +65,22 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
         <ExtraIcon
           icon={require('../assets/geo.png')}
           text="길찾기"
-          onPress={() => {
-            navigation.navigate('MapView', { lat, lng });
+          onPress={async () => {
+            const canOpen = await Linking.canOpenURL(
+              'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
+            );
+
+            if (!canOpen) {
+              Linking.openURL(
+                'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
+              );
+            } else {
+              if (Platform.OS === 'android') {
+                Linking.openURL('market://details?id=net.daum.android.map');
+              } else if (Platform.OS === 'ios') {
+                Linking.openURL('https://apps.apple.com/us/app/id304608425');
+              }
+            }
           }}
         />
 

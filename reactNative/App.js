@@ -56,6 +56,7 @@ export default function App() {
 
   const _retrieveData = async () => {
     console.log('retrieveDate 실행');
+
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
@@ -141,6 +142,7 @@ export default function App() {
     // tmpReset();
     _retrieveData();
   }, []);
+
   if (assetIsReady && fontsLoaded) {
     if (userToken) {
       return <Home />;
