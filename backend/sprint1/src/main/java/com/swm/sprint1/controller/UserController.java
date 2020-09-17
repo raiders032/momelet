@@ -64,8 +64,10 @@ public class UserController {
                                             @RequestParam @NotEmpty List<String> categories,
                                             @PathVariable Long id) throws IOException {
         logger.debug("updateUserInfo 호출되었습니다.");
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
+        if(!id.equals(userPrincipal.getId())) {
+            logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
+            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+        }
         userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity
                 .ok(new ApiResponse(true, "회원 정보 수정 완료"));
@@ -78,8 +80,10 @@ public class UserController {
                                               @PathVariable Long id,
                                               @Valid @RequestBody CreateUserLikingDto userLikingDto){
         logger.debug("createUserLiking 호출되었습니다.");
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
+        if(!id.equals(userPrincipal.getId())) {
+            logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
+            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+        }
 
         userLikingService.saveUserLiking(userLikingDto);
         return ResponseEntity.created(null)

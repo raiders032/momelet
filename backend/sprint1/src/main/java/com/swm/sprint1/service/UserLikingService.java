@@ -9,6 +9,8 @@ import com.swm.sprint1.repository.restaurant.RestaurantRepository;
 import com.swm.sprint1.repository.user.UserLikingRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,11 @@ public class UserLikingService {
     private final UserLikingRepository userLikingRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
+    private final Logger logger = LoggerFactory.getLogger(UserLikingService.class);
 
     @Transactional
     public void saveUserLiking(CreateUserLikingDto userLikingDto) {
+        logger.debug("saveUserLiking 호출됨");
         User user = userRepository.findById(userLikingDto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", userLikingDto.getUserId()));
 

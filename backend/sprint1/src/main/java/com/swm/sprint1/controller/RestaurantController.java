@@ -44,8 +44,10 @@ public class RestaurantController {
                                                            @RequestParam @DecimalMin("0.001") @DecimalMax("0.02") BigDecimal radius,
                                                            @PathVariable Long id){
         logger.debug("getRestaurantWithUserCategory 호출되었습니다.");
-        if(!id.equals(userPrincipal.getId()))
-            throw new BadRequestException("유효하지 않은 id : " + id);
+        if(!id.equals(userPrincipal.getId())) {
+            logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
+            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+        }
         List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurantDtoResponse(latitude, longitude, radius, userPrincipal.getId());
         ApiResponse response = new ApiResponse(true);
         response.putData("restaurants", restaurants);
