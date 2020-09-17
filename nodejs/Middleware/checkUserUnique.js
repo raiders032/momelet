@@ -10,7 +10,7 @@ export default (io, socket, next) => {
     logger.info(id + " is overlapped user. Disconnect exsisting user");
     const user = SingleObject.UserRepository.findById(id);
     if (user !== undefined) user.socket.disconnect(true);
-    SingleObject.UserRepository.delete(socketId);
+    SingleObject.UserRepository.delete(user.socket.id);
   }
   SingleObject.UserRepository.add(socket, socket.handshake.query);
 
