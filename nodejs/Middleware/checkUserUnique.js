@@ -13,7 +13,7 @@ export default (io, socket, next) => {
     if (user !== undefined) user.disconnect(true);
     SingleObject.UserRepository.delete(socketId);
   }
-  SingleObject.UserRepository.add(socket.id, socket.handshake.query);
+  SingleObject.UserRepository.add(socket, socket.handshake.query);
 
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
   logger.info("a user connected. id: " + id + ", userList: (" + userList + ")");
