@@ -12,9 +12,6 @@ import java.math.BigDecimal;
 public class CreateUserLikingDto {
 
     @NotNull @Min(1)
-    private Long userId;
-
-    @NotNull @Min(1)
     private Long restaurantId;
 
     @NotNull @Min(-180) @Max(180)

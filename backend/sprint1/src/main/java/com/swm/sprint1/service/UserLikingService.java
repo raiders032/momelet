@@ -24,13 +24,13 @@ public class UserLikingService {
     private final Logger logger = LoggerFactory.getLogger(UserLikingService.class);
 
     @Transactional
-    public void saveUserLiking(CreateUserLikingDto userLikingDto) {
+    public void saveUserLiking(Long userId, CreateUserLikingDto userLikingDto) {
         logger.debug("saveUserLiking 호출됨");
-        User user = userRepository.findById(userLikingDto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("user", "id", userLikingDto.getUserId()));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId, "200"));
 
         Restaurant restaurant = restaurantRepository.findById(userLikingDto.getRestaurantId())
-                .orElseThrow(() -> new ResourceNotFoundException("restaurant", "id", userLikingDto.getRestaurantId()));
+                .orElseThrow(() -> new ResourceNotFoundException("restaurant", "id", userLikingDto.getRestaurantId(), "210"));
 
         UserLiking userLiking = UserLiking.builder()
                 .liking(userLikingDto.getLiking())

@@ -168,6 +168,26 @@ public class RestaurantControllerTest {
     }
 
     @Test
+    public void 식당조회_패스파라미터_유저아이디_다르게주기() throws Exception {
+        //given
+        String url = "/api/v1/restaurants/users/100/categories";
+
+        //when
+        MvcResult result = mockMvc.perform(get(url)
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", jwtToken))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        //then
+        String contentAsString = result.getResponse().getContentAsString();
+        ApiResponse apiResponse = objectMapper.readValue(contentAsString, ApiResponse.class);
+        assertThat(apiResponse.getErrorCode()).isEqualTo("104");
+    }
+
+    @Test
     public void 식당카드7조회() throws Exception {
         //given
         String url = "/api/v1/restaurants7";
@@ -210,7 +230,7 @@ public class RestaurantControllerTest {
         ApiResponse apiResponse = objectMapper.readValue(contentAsString, ApiResponse.class);
         List<RestaurantDtoResponse> restaurants = (List<RestaurantDtoResponse>) apiResponse.getData().get("restaurants");
         assertThat(apiResponse.isSuccess()).isFalse();
-        assertThat(apiResponse.getErrorCode()).isEqualTo("303");
+        assertThat(apiResponse.getErrorCode()).isEqualTo("211");
     }
 
     @Test
@@ -231,7 +251,7 @@ public class RestaurantControllerTest {
         //then
         resultActions
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("101"));
+                .andExpect(jsonPath("$.errorCode").value("102"));
     }
 
     @Test
@@ -253,7 +273,7 @@ public class RestaurantControllerTest {
         //then
         resultActions
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("101"));
+                .andExpect(jsonPath("$.errorCode").value("102"));
     }
 
     @Test
@@ -275,7 +295,7 @@ public class RestaurantControllerTest {
         //then
         resultActions
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("101"));
+                .andExpect(jsonPath("$.errorCode").value("102"));
     }
 
     @Test
@@ -294,7 +314,7 @@ public class RestaurantControllerTest {
         //then
         resultActions
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("100"));
+                .andExpect(jsonPath("$.errorCode").value("103"));
     }
 
     @Test
@@ -316,7 +336,7 @@ public class RestaurantControllerTest {
         //then
         resultActions
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("101"));
+                .andExpect(jsonPath("$.errorCode").value("102"));
     }
 
 }

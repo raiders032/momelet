@@ -37,7 +37,7 @@ public class UserService {
     @Transactional
     public void updateUser(Long id, MultipartFile imageFile, String name, List<String> categoies) throws IOException {
         logger.debug("updateUser 호출됨");
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id, "200"));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(categoies);
         String imageUrl;
 

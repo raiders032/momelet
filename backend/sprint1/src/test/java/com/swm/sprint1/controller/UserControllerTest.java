@@ -112,11 +112,33 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
 
         //then
-        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId(), "200"));
         assertThat(findUser.getName()).isEqualTo(name);
         assertThat(findUser.getUserCategories().size()).isEqualTo(3);
         assertThat(findUser.getImageUrl()).startsWith("https://dz1rd925xfsaa.cloudfront.net");
         assertThat(findUser.getImageUrl()).endsWith("_640x640.jpeg");
+    }
+
+    @Test
+    public void 유저정보수정_패스파라미터_잘못된경우() throws Exception {
+        //given
+        String url = "/api/v1/users/98123";
+        String name = "변경된이름";
+        String categories = "한식,일식,중식";
+        MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
+
+        //when
+        ResultActions result = mockMvc.perform(multipart(url)
+                .file(file)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization", jwtToken));
+
+        //then
+        result
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("104"));
     }
 
     @Test
@@ -135,7 +157,7 @@ public class UserControllerTest {
         //then
         result
                 .andExpect(status().isOk());
-        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId(), "200"));
         assertThat(findUser.getName()).isEqualTo(name);
         assertThat(findUser.getUserCategories().size()).isEqualTo(3);
         assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
@@ -159,10 +181,10 @@ public class UserControllerTest {
         //then
         result
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.errorCode").value("101"))
+                .andExpect(jsonPath("$.errorCode").value("102"))
                 .andExpect(jsonPath("$.success").value("false"));
 
-        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId(), "200"));
         assertThat(findUser.getName()).isEqualTo(user.getName());
         assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
     }
@@ -186,10 +208,10 @@ public class UserControllerTest {
         perform
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.errorCode").value("101"))
+                .andExpect(jsonPath("$.errorCode").value("102"))
                 .andExpect(jsonPath("$.success").value("false"));
 
-        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId()));
+        User findUser = userRepository.findById(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId(), "200"));
         assertThat(findUser.getName()).isEqualTo(user.getName());
         assertThat(findUser.getImageUrl()).isEqualTo(user.getImageUrl());
     }
