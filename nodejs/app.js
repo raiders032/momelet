@@ -8,6 +8,7 @@ import gameController from "./Controllers/gameController.js";
 import disconnectController from "./Controllers/disconnectController.js";
 import logger from "./logger.js";
 import dotenv from "dotenv";
+import * as prometheus from "socket.io-prometheus-metrics";
 dotenv.config();
 
 function controller(socket) {
@@ -27,6 +28,7 @@ function startServer() {
     pingInterval: 20000, // 20초에 한 번씩 핑 보내기
     pingTimeout: 10000, // 10초 동안 퐁 기다리기
   });
+  prometheus.metrics(io);
 
   io.use((socket, next) => {
     checkUserUnique(io, socket, next);
