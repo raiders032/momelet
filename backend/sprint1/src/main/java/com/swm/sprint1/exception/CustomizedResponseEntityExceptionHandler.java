@@ -88,13 +88,6 @@ public class CustomizedResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(NotSupportedExtension.class)
-    public final ResponseEntity<ApiResponse> handleNotSupportedExtensions(Exception ex, WebRequest request) {
-        logger.error(ex.getMessage());
-        ApiResponse response = new ApiResponse(false, ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public final ResponseEntity<ApiResponse> handleMissingServletRequestParameterExceptions(Exception ex, WebRequest request){
         logger.error(ex.getMessage());
@@ -106,6 +99,13 @@ public class CustomizedResponseEntityExceptionHandler {
     public final ResponseEntity<ApiResponse> handleConstraintViolationExceptions(Exception ex, WebRequest request){
         logger.error(ex.getMessage());
         ApiResponse response = new ApiResponse(false, "101", ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotSupportedExtension.class)
+    public final ResponseEntity<ApiResponse> handleNotSupportedExtensions(Exception ex, WebRequest request) {
+        logger.error(ex.getMessage());
+        ApiResponse response = new ApiResponse(false,"102", ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

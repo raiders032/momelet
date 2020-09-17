@@ -36,6 +36,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long id, MultipartFile imageFile, String name, List<String> categoies) throws IOException {
+        logger.debug("updateUser 호출됨");
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         List<Category> categories = categoryRepository.findCategoryByCategoryName(categoies);
         String imageUrl;
@@ -49,23 +50,20 @@ public class UserService {
     }
 
     public String uploadImageFile(MultipartFile imageFile) throws IOException {
+        logger.debug("uploadImageFile 호출됨");
         String imageUrl;
         String filename = imageFile.getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf("."));
         List<String> supportedExtension = Arrays.asList(".jpg", ".jpeg", ".png");
         if(!supportedExtension.contains(extension)) {
-            logger.error(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
             throw new NotSupportedExtension(extension + "은 지원하지 않는 확장자입니다. jpg, jpeg, png만 지원합니다.");
         }
         imageUrl = s3Uploader.upload(imageFile, dir);
         return imageUrl;
     }
 
-    public List<String> findCategoryNameByUserId(Long id) {
-        return userCategoryRepository.findCategoryNameByUserId(id);
-    }
-
     public Map<String, Integer> findAllCategoryNameByUserId(Long id) {
+        logger.debug("findAllCategoryNameByUserId 호출됨");
         return userCategoryRepository.findAllCategoryNameByUserId(id);
     }
 

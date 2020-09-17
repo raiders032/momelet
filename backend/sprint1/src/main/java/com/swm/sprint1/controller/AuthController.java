@@ -14,6 +14,7 @@ import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
+import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -101,7 +102,7 @@ public class AuthController {
     public ResponseEntity<?> validateJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
         logger.debug("validateJwtToken 호출되었습니다.");
         if(result.hasErrors()) {
-            logger.error("validateJwtToken binding error : ");
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
             throw new BindingException(result.getFieldError().getDefaultMessage());
         }
         tokenProvider.validateToken(jwtDto.getJwt());
@@ -126,11 +127,15 @@ public class AuthController {
     }
 
     private String getJwtFromRequest(WebRequest request) {
+        logger.debug("getJwtFromRequest 호출되었습니다.");
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-        return null;
+        else{
+            logger.error("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
+            throw new JwtException("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
+        }
     }
 
 }
