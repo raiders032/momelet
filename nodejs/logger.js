@@ -1,7 +1,7 @@
 import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 
-const logDir = "logs";
+const logDir = "../node_logs";
 const { combine, timestamp, printf } = winston.format;
 
 const logFormat = printf((info) => {

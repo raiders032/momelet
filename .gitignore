@@ -58,4 +58,5 @@ backend/sprint1/spy.log
 
 ### nodejs
 nodejs/package-lock.json
-nodejs/logs/
+node_logs/
+
