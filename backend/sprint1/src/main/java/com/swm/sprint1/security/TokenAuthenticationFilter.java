@@ -116,6 +116,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             logger.error("Could not set user authentication in security context", ex);
         }
 
+        logger.debug("TokenAuthenticationFilter 통과");
         filterChain.doFilter(request, response);
     }
 
