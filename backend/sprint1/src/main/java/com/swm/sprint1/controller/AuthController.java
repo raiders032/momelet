@@ -3,7 +3,8 @@ package com.swm.sprint1.controller;
 import com.swm.sprint1.domain.AuthProvider;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.BadRequestException;
-import com.swm.sprint1.exception.BindingException;
+import com.swm.sprint1.exception.CustomJwtException;
+import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.payload.request.JwtDto;
 import com.swm.sprint1.payload.request.LoginRequest;
 import com.swm.sprint1.payload.request.SignUpRequest;
@@ -14,7 +15,6 @@ import com.swm.sprint1.security.CurrentUser;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
-import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,7 +28,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,7 +102,7 @@ public class AuthController {
         logger.debug("validateJwtToken 호출되었습니다.");
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new BindingException(result.getFieldError().getDefaultMessage());
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
         }
         tokenProvider.validateToken(jwtDto.getJwt());
         return ResponseEntity.ok(new ApiResponse(true, "유효한 토큰 입니다."));
@@ -134,7 +133,7 @@ public class AuthController {
         }
         else{
             logger.error("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
-            throw new JwtException("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
+            throw new CustomJwtException("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.", "402");
         }
     }
 

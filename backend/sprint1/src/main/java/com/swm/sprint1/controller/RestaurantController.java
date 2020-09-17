@@ -1,6 +1,6 @@
 package com.swm.sprint1.controller;
 
-import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.RestaurantDtoResponse;
 import com.swm.sprint1.security.CurrentUser;
@@ -46,7 +46,7 @@ public class RestaurantController {
         logger.debug("getRestaurantWithUserCategory 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
         }
         List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurantDtoResponse(latitude, longitude, radius, userPrincipal.getId());
         ApiResponse response = new ApiResponse(true);

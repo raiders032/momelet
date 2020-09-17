@@ -2,6 +2,7 @@ package com.swm.sprint1.controller;
 
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.CreateUserLikingDto;
 import com.swm.sprint1.payload.response.ApiResponse;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,7 +68,7 @@ public class UserController {
         logger.debug("updateUserInfo 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
         }
         userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity
@@ -78,14 +80,19 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createUserLiking(@CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable Long id,
-                                              @Valid @RequestBody CreateUserLikingDto userLikingDto){
+                                              @Valid @RequestBody CreateUserLikingDto userLikingDto,
+                                              BindingResult result){
         logger.debug("createUserLiking 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new BadRequestException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id);
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
         }
 
-        userLikingService.saveUserLiking(userLikingDto);
+        if(result.hasErrors()){
+            throw new RequestParamException(result.getAllErrors().toString(),"102");
+        }
+
+        userLikingService.saveUserLiking(userPrincipal.getId(), userLikingDto);
         return ResponseEntity.created(null)
                 .body(new ApiResponse(true, "유저 의사 표현 저장 완료"));
     }
@@ -103,7 +110,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public User getCurrentUser2(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId(), "200"));
     }
 
 }
