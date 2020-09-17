@@ -2,6 +2,7 @@ package com.swm.sprint1.security;
 
 import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.domain.UserRefreshToken;
+import com.swm.sprint1.exception.CustomJwtException;
 import com.swm.sprint1.repository.user.UserRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -83,7 +84,7 @@ public class TokenProvider {
     public void validateRefreshToken(Long userId, String refreshToken) {
         validateToken(refreshToken);
         if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken))
-            throw new JwtException("유효하지 않은 리프레시 토큰입니다.");
+            throw new CustomJwtException("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.", "403");
 
     }
 }

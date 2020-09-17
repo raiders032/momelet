@@ -97,15 +97,35 @@ public class AuthController {
     }
 
     @ApiOperation(value = "액세스 토큰 유효성 검사", notes = "토큰의 유효성을 검사하고 결과를 반환합니다.")
-    @PostMapping("/api/v1/auth/validation")
-    public ResponseEntity<?> validateJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
-        logger.debug("validateJwtToken 호출되었습니다.");
+    @PostMapping("/api/v1/auth/validation/access")
+    public ResponseEntity<?> validateAccessJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+        logger.debug("validateAccessJwtToken 호출되었습니다.");
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
             throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
         }
         tokenProvider.validateToken(jwtDto.getJwt());
-        return ResponseEntity.ok(new ApiResponse(true, "유효한 토큰 입니다."));
+        return ResponseEntity.ok(new ApiResponse(true, "유효한 액세스 토큰 입니다."));
+    }
+
+    @ApiOperation(value = "리프레시 토큰 유효성 검사", notes = "리프레시 토큰의 유효성을 검사하고 결과를 반환합니다.")
+    @PostMapping("/api/v1/auth/validation/refresh")
+    public ResponseEntity<?> validateRefreshJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+        logger.debug("validateRefreshJwtToken 호출되었습니다.");
+
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        Long userIdFromToken = tokenProvider.getUserIdFromToken(jwtDto.getJwt());
+        Long userFromRequest = jwtDto.getUserId();
+
+        if(!userFromRequest.equals(userIdFromToken))
+            throw new RequestParamException("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.", "104");
+
+        tokenProvider.validateRefreshToken(userFromRequest, jwtDto.getJwt());
+        return ResponseEntity.ok(new ApiResponse(true, "유효한 리프레시 토큰 입니다."));
     }
 
     @ApiOperation(value = "액세스 토큰 & 리프레시 토큰 재발급", notes = "헤더의 리프레시 토큰을 넣어 보내면 새로 갱신된 액세스 토큰과 리프레시 토큰을 발급합니다.")
