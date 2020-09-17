@@ -1,7 +1,6 @@
 // together
 export { default as togetherService } from "./together/togetherService.js";
 export { default as togetherInviteService } from "./together/togetherInviteService.js";
-export { default as togetherInvitationService } from "./together/togetherInvitationService.js";
 
 // game
 export { default as gameRoomJoinService } from "./game/gameRoomJoinService.js";

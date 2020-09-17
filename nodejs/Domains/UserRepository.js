@@ -13,7 +13,6 @@ export default class UserRepository {
   add(socket, userInfo) {
     let { id } = userInfo;
     this.userRepository.set(id, new User(socket, userInfo));
-    console.log("소ㅔㅋㅅ아이디: " + socket.id);
     this.socketIdMapper.set(socket.id, userInfo.id);
   }
 

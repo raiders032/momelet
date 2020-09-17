@@ -20,8 +20,7 @@ export default class Room {
   }
 
   deleteUser(user) {
-    if (this.userList.length <= 0)
-      throw new Error("방 인원이 0명 이므로 삭제할 수 없습니다.");
+    if (this.userList.length <= 0) return 0;
     this.userList.forEach((value, index) => {
       //유저 리스트에서 삭제 할 유저 찾아서 삭제하기
       if (user === value) {
