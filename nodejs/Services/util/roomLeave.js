@@ -5,7 +5,7 @@ export default (user, room) => {
   user.socket.leave(room.getRoomName());
   user.updateJoinedRoomName(null);
   if (room.deleteUser(user) > 0) {
-    gameRoomUpdateService(user.socket, room, user.id);
+    gameRoomUpdateService(user.socket, room);
   } else {
     RoomRepository.delete(room.getRoomName());
   }

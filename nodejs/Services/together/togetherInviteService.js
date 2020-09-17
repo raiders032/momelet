@@ -1,5 +1,4 @@
 import * as SingleObject from "../../SingleObjects.js";
-import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
 import SocketResponse from "../../SocketResponse.js";
 import roomLeave from "../util/roomLeave.js";
 import logger from "../../logger.js";
@@ -36,7 +35,6 @@ export default (socket, { id, inviteTheseUsers }) => {
     logger.error(err.stack);
   }
   room.addUser(user);
-  user.updateJoinedRoomName(roomName);
 
   let gameRoomUserList, hostId;
   gameRoomUserList = room.getUserInfo();

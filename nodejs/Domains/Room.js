@@ -1,3 +1,5 @@
+import gameRoomUpdateService from "../Services/game/gameRoomUpdateService.js";
+
 export default class Room {
   constructor(roomName, userId) {
     this.roomName = roomName;
@@ -14,9 +16,15 @@ export default class Room {
     if (this.isStarted || this.headCount >= this.maxHeadCount) {
       throw "Can't join the room";
     }
+    user.socket.join(this.roomName);
+    user.updateJoinedRoomName(this.roomName);
     user.updateCanReceive(true);
     this.userList.push(user);
     this.headCount++;
+
+    if (this.headCount > 1) {
+      gameRoomUpdateService(user.socket, this);
+    }
   }
 
   deleteUser(user) {

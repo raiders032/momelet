@@ -1,5 +1,4 @@
 import * as SingleObject from "../../SingleObjects.js";
-import gameRoomUpdateService from "./gameRoomUpdateService.js";
 import SocketResponse from "../../SocketResponse.js";
 import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 import roomLeave from "../util/roomLeave.js";
@@ -26,8 +25,6 @@ export default (socket, { id, roomName }) => {
   }
 
   room.addUser(user);
-  gameRoomUpdateService(socket, room, id);
-  user.updateJoinedRoomName(roomName);
 
   data.roomName = roomName;
   data.gameRoomUserList = room.getUserInfo();

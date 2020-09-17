@@ -1,5 +1,4 @@
 import * as SingleObject from "../../SingleObjects.js";
-import gameRoomUpdateService from "./gameRoomUpdateService.js";
 import SocketResponse from "../../SocketResponse.js";
 import roomLeave from "../util/roomLeave.js";
 
