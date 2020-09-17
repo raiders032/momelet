@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/home/node/app
       # 호스트 유저도 node
-      - /home/node/node_logs:/home/node/app/logs
+      - /home/node/logs:/home/node/logs
     expose:
       - "3000"
       - "3001"
