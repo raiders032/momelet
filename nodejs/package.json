@@ -1,5 +1,5 @@
 {
-  "name": "momelet - websocket server",
+  "name": "momelet-websocket-server",
   "version": "1.0.0",
   "description": "Websocket server for real-time service using socket-io.",
   "main": "app.js",
