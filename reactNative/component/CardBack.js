@@ -49,9 +49,11 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
             } else {
               number = `tel:${phoneNumber}`;
             }
+
             const canOpen = await Linking.canOpenURL(number);
 
             console.log(number);
+
             if (canOpen) {
               Linking.openURL(number);
             } else {
@@ -74,6 +76,7 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           onPress={() => {
             console.log(address);
             Clipboard.setString(address);
+
             if (Platform.OS == 'android') {
               ToastAndroid.show('주소가 클립보드에 복사 되었습니다.', ToastAndroid.SHORT);
             }
