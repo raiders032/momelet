@@ -24,6 +24,8 @@ export default (socket, room, id) => {
   users
     .filter((user) => user.getCanReceive() && id !== user.id)
     .forEach((user) => {
-      socket.to(user.socketId).emit("gameRoomUpdate", JSON.stringify(response));
+      socket
+        .to(user.socket.id)
+        .emit("gameRoomUpdate", JSON.stringify(response));
     });
 };

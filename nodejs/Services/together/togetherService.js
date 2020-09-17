@@ -19,10 +19,10 @@ const findAroundUsers = (myId, lat, long) => {
         user["longitude"] <= max_long
       ) {
         aroundUsers.push({
-          id: user["id"],
-          socketId: user["socketId"],
-          name: user["name"],
-          imageUrl: user["imageUrl"],
+          id: user.id,
+          socketId: user.socket.id,
+          name: user.name,
+          imageUrl: user.imageUrl,
         });
       }
     }

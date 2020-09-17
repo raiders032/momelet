@@ -35,7 +35,7 @@ export default (socket, room) => {
 
     socket.emit("gameAllFinish", retMsg);
     users.forEach((user) => {
-      socket.to(user.socketId).emit("gameAllFinish", retMsg);
+      socket.to(user.socket.id).emit("gameAllFinish", retMsg);
     });
   }, 1500);
 };

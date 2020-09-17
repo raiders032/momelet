@@ -9,7 +9,7 @@ export default (socket) => {
       user
     );
   }
-  SingleObject.UserRepository.delete(user.socketId);
+  SingleObject.UserRepository.delete(user.socket.id);
 
   // 출력용 문구. 후에 삭제 필요함.
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);

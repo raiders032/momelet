@@ -79,7 +79,7 @@ export default async (
   let headCount = 0;
   users.forEach((user) => {
     if (user.getId() !== room.getHostId()) {
-      socket.to(user.socketId).emit("gameStart", JSON.stringify(response));
+      socket.to(user.socket.id).emit("gameStart", JSON.stringify(response));
     }
     headCount++;
   });
