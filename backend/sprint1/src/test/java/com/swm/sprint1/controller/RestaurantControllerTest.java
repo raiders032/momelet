@@ -131,8 +131,8 @@ public class RestaurantControllerTest {
 
         UserPrincipal userPrincipal = UserPrincipal.create(user1);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-        List<Token> tokens = tokenProvider.createToken(authentication);
-        jwtToken = "Bearer " + tokens.get(0).getJwtToken();
+        String jwtToken = tokenProvider.createAccessToken(authentication).getJwtToken();
+        this.jwtToken = "Bearer " + jwtToken;
 
         latitude = BigDecimal.valueOf(37.5409583).toString();
         longitude = BigDecimal.valueOf(127.0684707).toString();

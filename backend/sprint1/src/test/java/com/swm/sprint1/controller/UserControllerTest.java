@@ -84,8 +84,8 @@ public class UserControllerTest {
 
         UserPrincipal userPrincipal = UserPrincipal.create(user);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-        List<Token> tokens = tokenProvider.createToken(authentication);
-        jwtToken = "Bearer " + tokens.get(0).getJwtToken();
+        Token accessToken = tokenProvider.createAccessToken(authentication);
+        jwtToken = "Bearer " + accessToken.getJwtToken();
     }
 
     @After

@@ -18,7 +18,7 @@ import javax.validation.ConstraintViolationException;
 @RestController
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {
-    
+
     private final Logger logger = LoggerFactory.getLogger(CustomizedResponseEntityExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
@@ -62,7 +62,7 @@ public class CustomizedResponseEntityExceptionHandler {
     public final ResponseEntity<ApiResponse> handleRestaurantLessThan7Exceptions(Exception ex, WebRequest request) {
         logger.error(ex.getMessage());
         ApiResponse response = new ApiResponse(false,"211", ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(JwtException.class)
