@@ -60,19 +60,23 @@ export default function App() {
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
-      if (dateCheck(refreshToken.refreshTokenExpiredDate)) {
+      if (!dateCheck(refreshToken.refreshTokenExpiredDate)) {
         const newRefreshToken = await apis.refreshToken();
-        const tokenInfo = {
-          accessToken: newRefreshToken.data.data.tokens.accessToken.jwtToken,
-          accessTokenExpiryDate: newRefreshToken.data.data.tokens.accessToken.formattedExpiryDate,
-          refreshToken: newRefreshToken.data.data.tokens.refreshToken.jwtToken,
-          refreshTokenExpiryDate: newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
-        };
 
-        console.log(tokenInfo);
+        if (!newRefreshToken.data.errorCode) {
+          const tokenInfo = {
+            accessToken: newRefreshToken.data.data.tokens.accessToken.jwtToken,
+            accessTokenExpiryDate: newRefreshToken.data.data.tokens.accessToken.formattedExpiryDate,
+            refreshToken: newRefreshToken.data.data.tokens.refreshToken.jwtToken,
+            refreshTokenExpiryDate:
+              newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
+          };
 
-        setTokenInSecure(tokenInfo);
-        setUserToken(newRefreshToken.data.data.tokens.accessToken.jwtToken);
+          console.log(tokenInfo);
+
+          setTokenInSecure(tokenInfo);
+          setUserToken(newRefreshToken.data.data.tokens.accessToken.jwtToken);
+        }
       } else {
         //리프레쉬 토큰이 만료되었기 때문에 로그인 화면으로 돌아감 / userToken 을 건들지 않기 때문에 가능 로그인 화면으로 자연스럽게 가게된다
       }

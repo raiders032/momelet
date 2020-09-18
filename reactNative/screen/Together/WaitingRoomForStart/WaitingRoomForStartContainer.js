@@ -39,6 +39,7 @@ export default ({ navigation, route }) => {
     });
     socket.on('gameStart', (msg) => {
       printSocketEvent('gameStart', '식당 정보 받아옴');
+
       const paseMsg = JSON.parse(msg);
 
       navigation.dispatch(
@@ -54,6 +55,7 @@ export default ({ navigation, route }) => {
     //   setUsers(null);
     // };
   }, []);
+
   const onClick = async (latitude = 37.5447048, longitude = 127.0663154) => {
     const jwtToken = await getInvalidToken();
 
@@ -68,7 +70,7 @@ export default ({ navigation, route }) => {
         jwt: jwtToken,
       }),
       async (msg) => {
-        printSocketEvent('gameStart', '식당정보 받아옴');
+        printSocketEvent('gameStart', msg);
 
         const paseMsg = JSON.parse(msg);
 

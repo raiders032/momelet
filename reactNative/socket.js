@@ -1,12 +1,11 @@
 import * as Location from 'expo-location';
+import { Restart } from 'fiction-expo-restart';
 import { React } from 'react';
 import { Platform } from 'react-native';
 import io from 'socket.io-client';
-
 // 여기 서는 요청에 대한 콜백 처리는 하지 않고 브로드 캐스트 메세지 수신하는 거에 대해서만 다룸.
 
 console.log('Socket Call');
-const a = 3;
 
 const socket = io(
   'http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:3000',
@@ -29,5 +28,12 @@ const socket = io(
     autoConnect: false,
   }
 );
+
+socket.on('disconnect', (msg) => {
+  alert('서버와의 연결이 끊어졌습니다');
+  setTimeout(() => {
+    Restart();
+  }, 1000);
+});
 
 export default socket;

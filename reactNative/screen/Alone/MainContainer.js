@@ -18,6 +18,7 @@ export default ({ navigation, route }) => {
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState(null);
   const [isChanged, setIsChanged] = useState(1);
+  // const [isDisconnect, setIsDisconnect] = useState(false);
   const [coverMessageConfig, setCoverMessageConfig] = useState({
     zIndex: -1,
     bodyMessage: (
@@ -98,8 +99,13 @@ export default ({ navigation, route }) => {
       socket.on('authenticated', () => {
         // console.log('connect!');
       });
+      // socket.on('disconnect', (msg) => {
+      //   console.log('MainContainer / 디스커넥트 발생', msg);
+      //   // Restart();
+      // });
       socket.on('togetherInvitation', (msg) => {
         printSocketEvent('togetherInvitation', msg);
+
         const paseMsg = JSON.parse(msg);
 
         setCoverMessageConfig((before) => {
@@ -126,6 +132,7 @@ export default ({ navigation, route }) => {
 
               socket.emit('gameRoomJoin', JSON.stringify(sendMsg), (msg) => {
                 printSocketEvent('gameRoomJoin', msg);
+
                 const paseMsg = JSON.parse(msg);
                 const { roomName, gameRoomUserList, hostId } = paseMsg.data;
                 const sendMsg = {
@@ -137,6 +144,7 @@ export default ({ navigation, route }) => {
                 setCoverMessageConfig((before) => {
                   return { ...before, zIndex: -1 };
                 });
+
                 if (paseMsg.success === true) {
                   navigation.navigate('WaitingRoomForStart', {
                     msg: sendMsg,
@@ -209,6 +217,7 @@ export default ({ navigation, route }) => {
 
     socket.emit('together', JSON.stringify(sendMsg), (msg) => {
       printSocketEvent('together', msg);
+
       const paseMsg = JSON.parse(msg);
 
       navigation.navigate('Together', {

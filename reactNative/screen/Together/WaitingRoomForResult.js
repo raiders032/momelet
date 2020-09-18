@@ -41,6 +41,7 @@ export default ({ navigation, route }) => {
 
     socket.on('gameAllFinish', (msg) => {
       printSocketEvent('gameAllFinish', msg);
+
       const paseMsg = JSON.parse(msg);
 
       navigation.dispatch(
@@ -49,6 +50,7 @@ export default ({ navigation, route }) => {
           restaurant: route.params.restaurant,
           roomName: route.params.roomName,
           userId: route.params.userId,
+          userLocation: route.params.userLocation,
         })
       );
     });

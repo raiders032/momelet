@@ -8,6 +8,9 @@ import GameRoomPresenter from './GameRoomPresenter';
 export default ({ navigation, route }) => {
   console.log('게임룸(컨테이너) 렌더');
 
+  const latitude = 37.5447048;
+  const longitude = 127.0663154;
+  const userLocation = { latitude, longitude };
   const restaurants = route.params.msg.restaurants;
   const [gameReadyAndMessage, setGameReadyAndMessage] = useState({
     isReady: 1,
@@ -23,6 +26,7 @@ export default ({ navigation, route }) => {
       setGameReadyAndMessage({ isReady: -1, message: '0' });
     }, 500);
   }
+
   const gameFinish = (gameResult) => {
     const sendMsg = {
       id: route.params.userId,
@@ -41,6 +45,7 @@ export default ({ navigation, route }) => {
           restaurant: restaurants,
           userId: route.params.userId,
           roomName: route.params.roomName,
+          userLocation,
         })
       );
     });
@@ -52,6 +57,7 @@ export default ({ navigation, route }) => {
       infoText={gameReadyAndMessage.message}
       zIndex={gameReadyAndMessage.isReady}
       gameFinish={gameFinish}
+      userLocation={userLocation}
     />
   );
 };
