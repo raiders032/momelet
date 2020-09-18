@@ -1,9 +1,10 @@
 package com.swm.sprint1.security;
 
 import com.swm.sprint1.config.AppProperties;
-import com.swm.sprint1.domain.UserRefreshToken;
 import com.swm.sprint1.exception.CustomJwtException;
+import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.repository.user.UserRefreshTokenRepository;
+import com.swm.sprint1.repository.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,12 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import java.util.*;
+import java.util.Date;
 
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class TokenProvider {
@@ -28,12 +27,12 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
 
-    public List<Token> createToken(Authentication authentication) {
+    private final UserRepository userRepository;
+
+    public Token createAccessToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getId();
         Date now = new Date();
         Date accessExpiryDate = new Date(now.getTime() + appProperties.getAuth().getAccessTokenExpirationMsec());
-        Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpirationMsec());
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
         String accessTokenString = Jwts.builder()
@@ -44,6 +43,15 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS512, encodedJwt)
                 .compact() ;
 
+        return  new Token(accessTokenString, accessExpiryDate);
+    }
+
+    public Token createRefreshToken(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Date now = new Date();
+        Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpirationMsec());
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
+
         String refreshTokenString = Jwts.builder()
                 .setSubject(Long.toString(userPrincipal.getId()))
                 .claim("type", "refresh")
@@ -52,16 +60,7 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS512, encodedJwt)
                 .compact();
 
-        Optional<UserRefreshToken> byUserId = userRefreshTokenRepository.findByUserId(userId);
-
-        if(byUserId.isPresent())
-            byUserId.get().updateRefreshToken(refreshTokenString);
-        else
-            userRefreshTokenRepository.save(new UserRefreshToken(userId, refreshTokenString));
-
-        Token accessToken = new Token(accessTokenString, accessExpiryDate);
-        Token refreshToken = new Token(refreshTokenString, refreshExpiryDate);
-        return Arrays.asList(accessToken, refreshToken);
+        return new Token(refreshTokenString, refreshExpiryDate);
     }
 
     public Long getUserIdFromToken(String token) {
@@ -97,16 +96,25 @@ public class TokenProvider {
         validateToken(accessToken);
     }
 
-    public void validateRefreshToken(Long userId, String refreshToken) {
+    public Long validateRefreshToken(String refreshToken) {
         if(!getTypeFromToken(refreshToken).equals("refresh")) {
             logger.error("토큰 타입이 불일치 합니다. refresh token이 필요합니다");
             throw new CustomJwtException("토큰 타입이 불일치 합니다. refresh token이 필요합니다.", "404");
         }
+
+        Long userId = getUserIdFromToken(refreshToken);
+
+        if(!userRepository.existsById(userId)){
+            logger.error("토큰에 기록된 유저("+userId +")가 존재하지 않습니다.");
+            throw new ResourceNotFoundException("user", "id", userId, "200");
+        }
+
         validateToken(refreshToken);
+
         if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken)) {
             logger.error("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.");
             throw new CustomJwtException("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.", "403");
         }
-
+        return userId;
     }
 }

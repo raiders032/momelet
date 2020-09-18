@@ -15,9 +15,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class JwtDto {
 
-    @NotNull @Min(1)
-    private Long userId;
-
     @ApiParam(value = "jwt 토큰", required = true)
     @NotBlank(message = "jwt 토큰이 비어있습니다.")
     private String jwt;

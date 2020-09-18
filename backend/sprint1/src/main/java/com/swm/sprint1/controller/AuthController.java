@@ -11,20 +11,19 @@ import com.swm.sprint1.payload.request.SignUpRequest;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.repository.user.UserRepository;
-import com.swm.sprint1.security.CurrentUser;
+import com.swm.sprint1.security.CustomUserDetailsService;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
-import com.swm.sprint1.security.UserPrincipal;
+import com.swm.sprint1.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -34,11 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
+
+    private final AuthService authService;
 
     private final TokenProvider tokenProvider;
 
@@ -48,7 +48,72 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CustomUserDetailsService customUserDetailsService;
+
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    @ApiOperation(value = "액세스 토큰 재발급", notes = "새로 갱신된 액세스 토큰을 발급합니다.")
+    @PostMapping("/api/v1/auth/access-token")
+    public ResponseEntity<?> refreshAccessToken(@Valid @RequestBody JwtDto jwtDto , BindingResult result){
+        logger.debug("refreshAccessToken 호출되었습니다.");
+
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        Token accessToken = authService.refreshAccessToken(jwtDto);
+
+        ApiResponse response = new ApiResponse(true, "액세스 토큰 갱신 완료");
+        response.putData("accessToken", accessToken);
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "액세스 토큰 & 리프레시 토큰 재발급", notes = "새로 갱신된 액세스 토큰과 리프레시 토큰을 발급합니다.")
+    @PostMapping("/api/v1/auth/refresh-token")
+    public ResponseEntity<?> refreshAccessAndRefreshTokens(@Valid @RequestBody JwtDto jwtDto , BindingResult result){
+        logger.debug("refreshAccessAndRefreshTokens 호출되었습니다.");
+
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        AuthResponse authResponse = authService.refreshAccessAndRefreshToken(jwtDto);
+
+        ApiResponse response = new ApiResponse(true, "액세스 & 리프레시 토큰 갱신 완료");
+        response.putData("tokens", authResponse);
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "액세스 토큰 유효성 검사", notes = "토큰의 유효성을 검사하고 결과를 반환합니다.")
+    @PostMapping("/api/v1/auth/validation/access")
+    public ResponseEntity<?> validateAccessJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+
+        logger.debug("validateAccessJwtToken 호출되었습니다.");
+
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        tokenProvider.validateAccessToken(jwtDto.getJwt());
+        return ResponseEntity.ok(new ApiResponse(true, "유효한 액세스 토큰 입니다."));
+    }
+
+    @ApiOperation(value = "리프레시 토큰 유효성 검사", notes = "리프레시 토큰의 유효성을 검사하고 결과를 반환합니다.")
+    @PostMapping("/api/v1/auth/validation/refresh")
+    public ResponseEntity<?> validateRefreshJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+        logger.debug("validateRefreshJwtToken 호출되었습니다.");
+
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        tokenProvider.validateRefreshToken(jwtDto.getJwt());
+        return ResponseEntity.ok(new ApiResponse(true, "유효한 리프레시 토큰 입니다."));
+    }
 
     @ApiOperation(value = "유저 로그인", notes = "로그인 하고 응답으로 액세스 토큰과 리프레시 토큰을 발급합니다.")
     @PostMapping("/api/v1/auth/login")
@@ -61,8 +126,9 @@ public class AuthController {
                 )
         );
 
-        List<Token> token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token.get(0), token.get(1)));
+        Token accessToken = tokenProvider.createAccessToken(authentication);
+        Token refreshToken = tokenProvider.createRefreshToken(authentication);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
     @ApiOperation(value = "유저 생성", notes = "유저를 생성합니다. 응답으로 액세스 토큰과 리프레시 토큰을 발급합니다..")
@@ -92,77 +158,9 @@ public class AuthController {
                 )
         );
 
-        List<Token> token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token.get(0), token.get(1)));
-    }
-
-    @ApiOperation(value = "액세스 토큰 유효성 검사", notes = "토큰의 유효성을 검사하고 결과를 반환합니다.")
-    @PostMapping("/api/v1/auth/validation/access")
-    public ResponseEntity<?> validateAccessJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
-
-        logger.debug("validateAccessJwtToken 호출되었습니다.");
-
-        preValidateToken(jwtDto, result);
-
-        tokenProvider.validateAccessToken(jwtDto.getJwt());
-        return ResponseEntity.ok(new ApiResponse(true, "유효한 액세스 토큰 입니다."));
-    }
-
-
-
-    @ApiOperation(value = "리프레시 토큰 유효성 검사", notes = "리프레시 토큰의 유효성을 검사하고 결과를 반환합니다.")
-    @PostMapping("/api/v1/auth/validation/refresh")
-    public ResponseEntity<?> validateRefreshJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
-        logger.debug("validateRefreshJwtToken 호출되었습니다.");
-
-        preValidateToken(jwtDto, result);
-
-        tokenProvider.validateRefreshToken(jwtDto.getUserId(), jwtDto.getJwt());
-        return ResponseEntity.ok(new ApiResponse(true, "유효한 리프레시 토큰 입니다."));
-    }
-
-    @ApiOperation(value = "액세스 토큰 & 리프레시 토큰 재발급", notes = "헤더의 리프레시 토큰을 넣어 보내면 새로 갱신된 액세스 토큰과 리프레시 토큰을 발급합니다.")
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping("/api/v1/auth/refresh")
-    public ResponseEntity<?> refreshJwtToken(@CurrentUser UserPrincipal userPrincipal,
-                                             WebRequest request){
-        logger.debug("refreshJwtToken 호출되었습니다.");
-        String jwtFromRequest = getJwtFromRequest(request);
-        tokenProvider.validateRefreshToken(userPrincipal.getId(), jwtFromRequest);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Token> tokens = tokenProvider.createToken(authentication);
-
-        ApiResponse response = new ApiResponse(true, "토큰 갱신 완료");
-       response.putData("tokens", new AuthResponse(tokens.get(0), tokens.get(1)));
-        return ResponseEntity.ok(response);
-    }
-
-    private String getJwtFromRequest(WebRequest request) {
-        logger.debug("getJwtFromRequest 호출되었습니다.");
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        else{
-            logger.error("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
-            throw new CustomJwtException("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.", "402");
-        }
-    }
-
-    public void preValidateToken(@RequestBody @Valid JwtDto jwtDto, BindingResult result) {
-        if(result.hasErrors()) {
-            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
-        }
-
-        Long userIdFromToken = tokenProvider.getUserIdFromToken(jwtDto.getJwt());
-        Long userFromRequest = jwtDto.getUserId();
-
-        if(!userFromRequest.equals(userIdFromToken)) {
-            logger.error("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.");
-            throw new RequestParamException("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.", "104");
-        }
+        Token accessToken = tokenProvider.createAccessToken(authentication);
+        Token refreshToken = tokenProvider.createRefreshToken(authentication);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
 }
