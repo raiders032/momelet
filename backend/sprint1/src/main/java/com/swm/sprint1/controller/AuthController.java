@@ -102,32 +102,22 @@ public class AuthController {
 
         logger.debug("validateAccessJwtToken 호출되었습니다.");
 
-        if(result.hasErrors()) {
-            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
-        }
+        preValidateToken(jwtDto, result);
 
         tokenProvider.validateAccessToken(jwtDto.getJwt());
         return ResponseEntity.ok(new ApiResponse(true, "유효한 액세스 토큰 입니다."));
     }
+
+
 
     @ApiOperation(value = "리프레시 토큰 유효성 검사", notes = "리프레시 토큰의 유효성을 검사하고 결과를 반환합니다.")
     @PostMapping("/api/v1/auth/validation/refresh")
     public ResponseEntity<?> validateRefreshJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
         logger.debug("validateRefreshJwtToken 호출되었습니다.");
 
-        if(result.hasErrors()) {
-            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
-        }
+        preValidateToken(jwtDto, result);
 
-        Long userIdFromToken = tokenProvider.getUserIdFromToken(jwtDto.getJwt());
-        Long userFromRequest = jwtDto.getUserId();
-
-        if(!userFromRequest.equals(userIdFromToken))
-            throw new RequestParamException("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.", "104");
-
-        tokenProvider.validateRefreshToken(userFromRequest, jwtDto.getJwt());
+        tokenProvider.validateRefreshToken(jwtDto.getUserId(), jwtDto.getJwt());
         return ResponseEntity.ok(new ApiResponse(true, "유효한 리프레시 토큰 입니다."));
     }
 
@@ -157,6 +147,21 @@ public class AuthController {
         else{
             logger.error("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.");
             throw new CustomJwtException("요청 헤더 Authorization에 jwt 토큰이 없거나 Bearer로 시작하지 않습니다.", "402");
+        }
+    }
+
+    public void preValidateToken(@RequestBody @Valid JwtDto jwtDto, BindingResult result) {
+        if(result.hasErrors()) {
+            logger.error("JwtDto 바인딩 에러가 발생했습니다.");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+        }
+
+        Long userIdFromToken = tokenProvider.getUserIdFromToken(jwtDto.getJwt());
+        Long userFromRequest = jwtDto.getUserId();
+
+        if(!userFromRequest.equals(userIdFromToken)) {
+            logger.error("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.");
+            throw new RequestParamException("user id from body" + userFromRequest + "user id from token" + userIdFromToken + "일치하지 않습니다.", "104");
         }
     }
 
