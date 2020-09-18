@@ -222,7 +222,7 @@ public class RestaurantControllerTest {
                 .param("latitude", latitude)
                 .param("radius", radius)
                 .header("authorization", jwtToken))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         //then
