@@ -6,6 +6,8 @@ import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.util.CookieUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -33,6 +35,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
+
     @Autowired
     OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
@@ -43,6 +47,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        logger.debug("OAuth2AuthenticationSuccessHandler 호출 됨");
         String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {

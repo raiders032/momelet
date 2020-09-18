@@ -2,9 +2,9 @@ package com.swm.sprint1.security;
 
 import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.domain.UserRefreshToken;
+import com.swm.sprint1.exception.CustomJwtException;
 import com.swm.sprint1.repository.user.UserRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Transactional
 @RequiredArgsConstructor
@@ -40,18 +37,20 @@ public class TokenProvider {
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
         String accessTokenString = Jwts.builder()
-                        .setSubject(Long.toString(userPrincipal.getId()))
-                        .setIssuedAt(new Date())
-                        .setExpiration(accessExpiryDate)
-                        .signWith(SignatureAlgorithm.HS512, encodedJwt)
-                        .compact() ;
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .claim("type", "access")
+                .setIssuedAt(new Date())
+                .setExpiration(accessExpiryDate)
+                .signWith(SignatureAlgorithm.HS512, encodedJwt)
+                .compact() ;
 
         String refreshTokenString = Jwts.builder()
-                       .setSubject(Long.toString(userPrincipal.getId()))
-                       .setIssuedAt(new Date())
-                       .setExpiration(refreshExpiryDate)
-                       .signWith(SignatureAlgorithm.HS512, encodedJwt)
-                       .compact();
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .claim("type", "refresh")
+                .setIssuedAt(new Date())
+                .setExpiration(refreshExpiryDate)
+                .signWith(SignatureAlgorithm.HS512, encodedJwt)
+                .compact();
 
         Optional<UserRefreshToken> byUserId = userRefreshTokenRepository.findByUserId(userId);
 
@@ -75,15 +74,39 @@ public class TokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
+    public String getTypeFromToken(String token) {
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
+        Claims claims = Jwts.parser()
+                .setSigningKey(encodedJwt)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("type").toString();
+    }
+
     public void validateToken(String authToken) {
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
         Jwts.parser().setSigningKey(encodedJwt).parseClaimsJws(authToken);
     }
 
+    public void validateAccessToken(String accessToken){
+        if(!getTypeFromToken(accessToken).equals("access")) {
+            logger.error("토큰 타입이 불일치 합니다. accsse token이 필요합니다");
+            throw new CustomJwtException("토큰 타입이 불일치 합니다. accsse token이 필요합니다.", "404");
+        }
+        validateToken(accessToken);
+    }
+
     public void validateRefreshToken(Long userId, String refreshToken) {
+        if(!getTypeFromToken(refreshToken).equals("refresh")) {
+            logger.error("토큰 타입이 불일치 합니다. refresh token이 필요합니다");
+            throw new CustomJwtException("토큰 타입이 불일치 합니다. refresh token이 필요합니다.", "404");
+        }
         validateToken(refreshToken);
-        if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken))
-            throw new JwtException("유효하지 않은 리프레시 토큰입니다.");
+        if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken)) {
+            logger.error("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.");
+            throw new CustomJwtException("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.", "403");
+        }
 
     }
 }
