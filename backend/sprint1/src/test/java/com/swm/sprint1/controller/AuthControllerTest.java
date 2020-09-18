@@ -3,7 +3,9 @@ package com.swm.sprint1.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swm.sprint1.domain.AuthProvider;
 import com.swm.sprint1.domain.User;
+import com.swm.sprint1.domain.UserRefreshToken;
 import com.swm.sprint1.payload.request.JwtDto;
+import com.swm.sprint1.repository.user.UserRefreshTokenRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
@@ -26,7 +28,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashSet;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +48,8 @@ public class AuthControllerTest {
     private TokenProvider tokenProvider;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private UserRefreshTokenRepository userRefreshTokenRepository;
 
     private final Logger logger = LoggerFactory.getLogger(AuthControllerTest.class);
 
@@ -56,7 +62,7 @@ public class AuthControllerTest {
     private String otherRefreshToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2NjkiLCJpYXQiOjE2MDAzMzM3NjQsImV4cCI6MTYwMTE5Nzc2NH0.nq62nW5_0E3zECG9lpR9LDuxjlp4WRu7fGegN74Ph0-8pQ3XZihIOcz98UvxBqIMubJHu8_Oj8YtQ_lRyuhn2g";
 
     @Before
-    public void init() {
+    public void init() throws InterruptedException {
         user = User.builder()
                 .name("유저1")
                 .email("user1@test.com")
@@ -74,7 +80,7 @@ public class AuthControllerTest {
         List<Token> preTokens = tokenProvider.createToken(authentication);
         preAccessToken = preTokens.get(0).getJwtToken();
         preRefreshToken = preTokens.get(1).getJwtToken();
-
+        sleep(1000);
         List<Token> tokens = tokenProvider.createToken(authentication);
         accessToken = tokens.get(0).getJwtToken();
         refreshToken= tokens.get(1).getJwtToken();
@@ -84,6 +90,7 @@ public class AuthControllerTest {
     public void clear() {
         logger.info("유저 리포지토 비우기");
         userRepository.deleteAll();
+        userRefreshTokenRepository.deleteAll();
     }
 
     @Test
@@ -145,12 +152,36 @@ public class AuthControllerTest {
         ResultActions result = mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(content));
+                .content(content))
+                .andDo(print());
 
         //then
         result
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("403"));
+    }
+
+    @Test
+    public void 리프레시_토큰_검증_액세스토큰보내기() throws Exception {
+        //given
+        String uri = "/api/v1/auth/validation/refresh";
+        JwtDto jwtDto = JwtDto.builder()
+                .userId(user.getId())
+                .jwt(accessToken)
+                .build();
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+
+        //then
+        result
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"));
     }
 }

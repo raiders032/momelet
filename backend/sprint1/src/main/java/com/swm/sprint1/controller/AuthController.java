@@ -99,12 +99,15 @@ public class AuthController {
     @ApiOperation(value = "액세스 토큰 유효성 검사", notes = "토큰의 유효성을 검사하고 결과를 반환합니다.")
     @PostMapping("/api/v1/auth/validation/access")
     public ResponseEntity<?> validateAccessJwtToken(@Valid @RequestBody JwtDto jwtDto, BindingResult result){
+
         logger.debug("validateAccessJwtToken 호출되었습니다.");
+
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
             throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
         }
-        tokenProvider.validateToken(jwtDto.getJwt());
+
+        tokenProvider.validateAccessToken(jwtDto.getJwt());
         return ResponseEntity.ok(new ApiResponse(true, "유효한 액세스 토큰 입니다."));
     }
 
