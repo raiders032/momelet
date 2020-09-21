@@ -84,8 +84,6 @@ const setTokenInSecure = async (tokenInfo) => {
 };
 
 const getInvalidToken = async () => {
-  console.log('getInvalidToken: ');
-
   const accessTokenInfo = JSON.parse(await SecureStore.getItemAsync('access_TokenInfo'));
 
   if (dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
@@ -94,10 +92,12 @@ const getInvalidToken = async () => {
     return accessTokenInfo.accessToken;
   } else {
     console.log('엑세스 토큰 죽음');
+
     const refreshTokenInfo = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
     if (dateCheck(refreshTokenInfo.refreshTokenExpiredDate)) {
       console.log('리프레시 토큰 살아있음');
+
       const newRefreshToken = await refreshTokenFunc();
 
       const tokenInfo = {

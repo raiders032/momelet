@@ -46,6 +46,7 @@ export default ({ navigation, route }) => {
 
     socket.emit('gameRoomJoinAgain', JSON.stringify(sendMsg), (msg) => {
       printSocketEvent('gameROmmJoinAgain', msg);
+
       const newMsg = {
         ...JSON.parse(msg).data,
         roomName: route.params.roomName,
@@ -68,6 +69,7 @@ export default ({ navigation, route }) => {
       selected={route.params.msg.roomGameResult.likeCount}
       onClick={onClick}
       footerClick={footerClick}
+      userLocation={route.params.userLocation}
     />
   );
 };

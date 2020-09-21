@@ -8,7 +8,8 @@ import CardTopCover from '../../../component/CardTopCover';
 import Footer from '../../../component/Footer';
 import RestaurantCard from '../../../component/RestaurantCard';
 import socket from '../../../socket';
-export default ({ result, total, selected, onClick, footerClick }) => {
+
+export default ({ result, total, selected, onClick, footerClick, userLocation }) => {
   console.log('total, selected : ', total, selected);
 
   // const footer = (
@@ -32,7 +33,7 @@ export default ({ result, total, selected, onClick, footerClick }) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <RestaurantCard restaurant={result} cover={cover} />
+        <RestaurantCard restaurant={result} cover={cover} userLocation={userLocation} />
       </View>
     </Basic>
   );

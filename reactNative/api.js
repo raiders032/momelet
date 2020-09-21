@@ -11,6 +11,7 @@ const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
 
   console.log(path);
+
   if (path === 'v1/auth/refresh') {
     tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
   } else {
@@ -28,7 +29,9 @@ const makeRequest = async (method, path, config, data = '') => {
       data,
     });
   } catch (error) {
-    console.error(`error in api call1 : ${path}`, error);
+    // console.error(`error in api call1 : ${path}`, error);
+
+    return error.response;
   }
 };
 

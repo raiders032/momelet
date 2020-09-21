@@ -5,6 +5,7 @@ import MainContainer from './MainContainer';
 import MapView from './MapView';
 import Mypage from './Mypage';
 import NameEdit from './NameEdit';
+
 const Stack = createStackNavigator();
 
 export default ({ navigation, route }) => {

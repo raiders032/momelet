@@ -70,7 +70,9 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
               'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
             );
 
-            if (!canOpen) {
+            console.log('카카오맵을 열수 있음?', canOpen);
+
+            if (canOpen) {
               Linking.openURL(
                 'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
               );

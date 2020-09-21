@@ -12,10 +12,12 @@ import {
 import Basic from '../../../component/Basic';
 import RestaurantCard from '../../../component/RestaurantCard';
 import RestaurantHeader from '../../../component/RestaurantHeader';
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ restaurants, zIndex, infoText, gameFinish }) => {
+export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => {
   console.log('GameRoomPresenter render');
+
   const timeFinish = useRef(false);
   const [restaurant, setRestaurant] = useState(restaurants);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
@@ -158,6 +160,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
     timeFinish.current = true;
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
+
     const timeout = setTimeout(timeGo, 1000);
     const timeoutCardDown = setTimeout(cardGoDown, 16000);
 
@@ -165,6 +168,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
       clearTimeout(timeoutCardDown);
     };
   }, [restaurant]);
+
   const header = (
     <RestaurantHeader dislikeOpacity={dislikeOpacityConfig} likeOpacity={likeOpacityConfig} />
   );
@@ -235,7 +239,11 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
               transform: [{ scaleX: scaleXPositionConfig }],
             }}
             {...panResponder.panHandlers}>
-            {secondRestaurant ? <RestaurantCard restaurant={secondRestaurant} /> : <View />}
+            {secondRestaurant ? (
+              <RestaurantCard restaurant={secondRestaurant} userLocation={userLocation} />
+            ) : (
+              <View />
+            )}
           </Animated.View>
           <Animated.View
             style={{
@@ -248,7 +256,11 @@ export default ({ restaurants, zIndex, infoText, gameFinish }) => {
             }}
             {...panResponder.panHandlers}>
             {firstRestaurant ? (
-              <RestaurantCard restaurant={firstRestaurant} header={header} />
+              <RestaurantCard
+                restaurant={firstRestaurant}
+                header={header}
+                userLocation={userLocation}
+              />
             ) : (
               <View />
             )}
