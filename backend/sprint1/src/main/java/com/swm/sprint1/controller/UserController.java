@@ -1,7 +1,6 @@
 package com.swm.sprint1.controller;
 
 import com.swm.sprint1.domain.User;
-import com.swm.sprint1.exception.BadRequestException;
 import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.CreateUserLikingDto;
@@ -68,7 +67,7 @@ public class UserController {
         logger.debug("updateUserInfo 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "103");
         }
         userService.updateUser(id, imageFile, name, categories);
         return ResponseEntity
@@ -85,7 +84,7 @@ public class UserController {
         logger.debug("createUserLiking 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "103");
         }
 
         if(result.hasErrors()){

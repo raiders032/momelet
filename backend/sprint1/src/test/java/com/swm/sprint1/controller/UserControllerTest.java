@@ -7,11 +7,13 @@ import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.response.ApiResponse;
+import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.repository.category.CategoryRepository;
 import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.security.UserPrincipal;
+import com.swm.sprint1.service.AuthService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,16 +40,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UserControllerTest {
-
-    @Autowired
-    private TokenProvider tokenProvider;
 
     @Autowired
     private UserRepository userRepository;
@@ -58,13 +57,16 @@ public class UserControllerTest {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
     private User user;
 
-    private String jwtToken;
+    private String accessToken, refreshToken;
 
     @Before
     public void init() {
@@ -77,15 +79,16 @@ public class UserControllerTest {
                 .userCategories(new HashSet<>())
                 .emailVerified(false)
                 .build();
+
         userRepository.save(user);
 
         List<Category> all = categoryRepository.findAll();
         user.updateUserInfo(all);
 
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-        Token accessToken = tokenProvider.createAccessToken(authentication);
-        jwtToken = "Bearer " + accessToken.getJwtToken();
+        AuthResponse accessAndRefreshToken = authService.createAccessAndRefreshToken(user.getId());
+        accessToken = accessAndRefreshToken.getAccessToken().getJwtToken();
+        refreshToken = accessAndRefreshToken.getRefreshToken().getJwtToken();
+
     }
 
     @After
@@ -97,21 +100,23 @@ public class UserControllerTest {
     @Test
     public void 유저정보수정() throws Exception {
         //given
-        logger.info("유저정보수정 테스트 시작");
         String url = "/api/v1/users/" + user.getId();
         String name = "변경된이름";
         String categories = "한식,일식,중식";
         MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+        ResultActions result = mockMvc.perform(multipart(url)
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken))
-                .andExpect(status().isOk());
+                .header("Authorization", "Bearer " + accessToken));
 
         //then
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"));
+
         User findUser = userRepository.findUserWithUserCategory(this.user.getId()).orElseThrow(() -> new ResourceNotFoundException("user", "id", this.user.getId(), "200"));
         assertThat(findUser.getName()).isEqualTo(name);
         assertThat(findUser.getUserCategories().size()).isEqualTo(3);
@@ -132,13 +137,13 @@ public class UserControllerTest {
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken));
+                .header("Authorization", "Bearer " + accessToken));
 
         //then
         result
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("104"));
+                .andExpect(jsonPath("$.errorCode").value("103"));
     }
 
     @Test
@@ -152,7 +157,7 @@ public class UserControllerTest {
         ResultActions result = mockMvc.perform(multipart(url)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken));
+                .header("Authorization", "Bearer " + accessToken));
 
         //then
         result
@@ -176,7 +181,7 @@ public class UserControllerTest {
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken));
+                .header("Authorization", "Bearer " + accessToken));
 
         //then
         result
@@ -202,7 +207,7 @@ public class UserControllerTest {
                 .file(file)
                 .param("name", name)
                 .param("categories", categories)
-                .header("Authorization", jwtToken));
+                .header("Authorization", "Bearer " + accessToken));
 
         //then
         perform
@@ -217,12 +222,39 @@ public class UserControllerTest {
     }
 
     @Test
+    public void 유저정보수정_토큰_Bearer_빼고_요청() throws Exception {
+        //given
+        String url = "/api/v1/users/" + user.getId();
+        String name = "변경된이름";
+        String categories = "한식,일식,중식";
+        MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
+
+        //when
+        ResultActions result = mockMvc.perform(multipart(url)
+                .file(file)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization" , accessToken)
+        );
+
+        //then
+        result
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("402"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void 유저정보조회() throws Exception {
         //given
         String url = "/api/v1/users/me";
 
         //when
-        MvcResult result = mockMvc.perform(get(url).header("authorization", jwtToken))
+        MvcResult result = mockMvc.perform(
+                get(url)
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -245,4 +277,25 @@ public class UserControllerTest {
         assertThat(categoires.get("분식")).isEqualTo(0);
         assertThat(categoires.get("패스트푸드")).isEqualTo(0);
     }
+
+    @Test
+    public void 유저정보조회_토큰_Bearer_빼고_요청() throws Exception {
+        //given
+        String url = "/api/v1/users/me";
+
+        //when
+        ResultActions result = mockMvc.perform(
+                get(url)
+                .header("Authorization" , accessToken)
+        );
+
+        //then
+        result
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("402"))
+                .andExpect(status().isUnauthorized());
+    }
+
 }
