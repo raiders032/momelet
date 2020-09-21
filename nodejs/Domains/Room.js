@@ -1,4 +1,5 @@
 import gameRoomUpdateService from "../Services/game/gameRoomUpdateService.js";
+import { ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH } from "../Errors/GameError.js";
 
 export default class Room {
   constructor(roomName, userId) {
@@ -55,6 +56,7 @@ export default class Room {
 
   addScore(id, like) {
     const card = this.cardList.get(id);
+    if (card === undefined) throw new ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH();
     if (like === "y") {
       card.like += 1;
       card.score += 2;

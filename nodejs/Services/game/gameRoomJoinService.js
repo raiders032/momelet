@@ -1,6 +1,5 @@
 import * as SingleObject from "../../SingleObjects.js";
 import SocketResponse from "../../SocketResponse.js";
-import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
 import roomLeave from "../util/roomLeave.js";
 import logger from "../../logger.js";
 

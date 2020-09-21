@@ -1,15 +1,14 @@
 import * as SingleObject from "../../SingleObjects.js";
 import SocketResponse from "../../SocketResponse.js";
-import { ERR_ROOM_NOT_EXIST } from "../../Errors/RepositoryError.js";
+import { ERR_ROOM_NOT_FOUND } from "../../Errors/RepositoryError.js";
 import {
   ERR_GAME_ALREADY_STARTED,
   ERR_HOST_NOT_CORRECT,
-  ERR_NOT_ENOUGH_RESTAURANT_CARD,
 } from "../../Errors/GameError.js";
 import getRestaurantCard from "../util/getRestaurantCard.js";
 
 const checkCanStart = (room, id) => {
-  if (room === false) throw new ERR_ROOM_NOT_EXIST();
+  if (room === false) throw new ERR_ROOM_NOT_FOUND();
   if (room.getIsStarted() === true) throw new ERR_GAME_ALREADY_STARTED();
   if (room.getHostId() !== id) throw new ERR_HOST_NOT_CORRECT();
   return true;
@@ -39,7 +38,6 @@ export default async (
   try {
     cards = await getRestaurantCard(
       users.filter((user) => user.getCanReceive()),
-      id,
       radius,
       latitude,
       longitude,
@@ -50,16 +48,11 @@ export default async (
     throw err;
   }
 
-  if (cards.length === 7) {
-    let cardList = new Map();
-    for (let i = 0; i < 7; i++) {
-      cardList.set(cards[i].id, { score: 0, like: 0 });
-    }
-    room.updateCardList(cardList);
-  } else {
-    rollBackRoom();
-    throw new ERR_NOT_ENOUGH_RESTAURANT_CARD();
+  let cardList = new Map();
+  for (let i = 0; i < 7; i++) {
+    cardList.set(cards[i].id, { score: 0, like: 0 });
   }
+  room.updateCardList(cardList);
 
   // room.userList가 Array이기 때문에 순회하며 delete를 할 수 없음
   // 따라서 userList에서 삭제될 유저만 Array로 새로 만들어서 삭제를 진행함.
