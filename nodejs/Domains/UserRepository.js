@@ -1,8 +1,5 @@
 import User from "./User.js";
-import {
-  ERR_USER_ID_NOT_FOUND,
-  ERR_USER_SOCKET_ID_NOT_FOUND,
-} from "../Errors/RepositoryError.js";
+import { ERR_USER_NOT_FOUND } from "../Errors/RepositoryError.js";
 
 export default class UserRepository {
   constructor() {
@@ -22,13 +19,12 @@ export default class UserRepository {
   }
 
   findById(id) {
-    if (!this.userRepository.has(id)) throw new ERR_USER_ID_NOT_FOUND();
+    if (!this.userRepository.has(id)) throw new ERR_USER_NOT_FOUND();
     return this.userRepository.get(id);
   }
 
   findBySocketId(socketId) {
-    if (!this.socketIdMapper.has(socketId))
-      throw new ERR_USER_SOCKET_ID_NOT_FOUND();
+    if (!this.socketIdMapper.has(socketId)) throw new ERR_USER_NOT_FOUND();
     return this.userRepository.get(this.socketIdMapper.get(socketId));
   }
 
