@@ -75,8 +75,6 @@ export default function App() {
               newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
           };
 
-          console.log(tokenInfo);
-
           setTokenInSecure(tokenInfo);
           setUserToken(newRefreshToken.data.data.tokens.accessToken.jwtToken);
         }

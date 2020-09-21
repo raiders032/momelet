@@ -19,7 +19,7 @@ const makeRequest = async (method, path, config, data = '') => {
   }
 
   try {
-    return await axios({
+    const result = await axios({
       url: `${apiUrl}/api/${path}`,
       method,
       headers: {
@@ -28,6 +28,8 @@ const makeRequest = async (method, path, config, data = '') => {
       ...config,
       data,
     });
+
+    return result;
   } catch (error) {
     // console.error(`error in api call1 : ${path}`, error);
 
@@ -47,17 +49,24 @@ export const apis = {
   editUser: (id, categories, imageUrl, name, token) => {
     const body = new FormData();
 
-    const photo = {
-      name: `profileImage${id}.jpg`,
-      type: 'image/jpeg',
+    let photo;
 
-      uri: imageUrl.replace('file://', ''),
-    };
+    if (imageUrl) {
+      photo = {
+        name: `profileImage${id}.jpg`,
+        type: 'image/jpeg',
+
+        uri: imageUrl.replace('file://', ''),
+      };
+    } else {
+      photo = null;
+    }
+
     const categoryToString = categories.join();
 
-    // console.log(categoryToString);
     body.append('categories', categoryToString);
     body.append('name', name);
+
     body.append('imageFile', photo);
     // body.append("imageFile", null);
     // console.log(body);
