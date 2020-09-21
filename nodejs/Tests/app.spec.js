@@ -96,9 +96,9 @@ describe("Connecting Server", () => {
 
       const msgObject = parsedMsg["data"];
 
-      msgObject.should.have.properties("roomName", "hostId");
+      msgObject.should.have.properties("roomName", "hostName");
       msgObject["roomName"].should.startWith(ioOptions[0].myId);
-      msgObject["hostId"].should.equal(ioOptions[0].myId);
+      msgObject["hostName"].should.equal(ioOptions[0].query.name);
 
       roomName = msgObject["roomName"];
 

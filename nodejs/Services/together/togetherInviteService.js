@@ -7,7 +7,7 @@ const inviteUsers = (socket, inviteUsers, roomName, host) => {
   const inviteMsg = new SocketResponse();
   inviteMsg.isOk({
     roomName,
-    hostId: host.id,
+    hostName: host.getName(),
   });
   for (let user of inviteUsers) {
     socket.to(user).emit("togetherInvitation", JSON.stringify(inviteMsg));
@@ -46,6 +46,7 @@ export default (socket, { id, inviteTheseUsers }) => {
 
   response.isOk(data);
   // 유저 초대
+  logger.info("togetherInvite로 생성한 방이름: " + roomName);
   inviteUsers(socket, inviteTheseUsers, roomName, user);
   return response;
 };

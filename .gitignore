@@ -59,4 +59,5 @@ backend/sprint1/spy.log
 ### nodejs
 nodejs/package-lock.json
 logs
-
+dc.yml
+prometheus.yml
