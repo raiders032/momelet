@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,7 @@ public class RestaurantController {
         logger.debug("getRestaurantWithUserCategory 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
             logger.error("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.");
-            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "104");
+            throw new RequestParamException("jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :" + id, "103");
         }
         List<RestaurantDtoResponse> restaurants = restaurantService.findRestaurantDtoResponse(latitude, longitude, radius, userPrincipal.getId());
         ApiResponse response = new ApiResponse(true);
@@ -59,7 +60,7 @@ public class RestaurantController {
     @GetMapping("/api/v1/restaurants7")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getRestaurant7SimpleCategoryBased(@RequestParam @NotBlank String id,
-                                                               @RequestParam @DecimalMin("123") @DecimalMax("133")BigDecimal longitude,
+                                                               @RequestParam @NotNull @DecimalMin("123") @DecimalMax("133")BigDecimal longitude,
                                                                @RequestParam @DecimalMin("32") @DecimalMax("43")BigDecimal latitude,
                                                                @RequestParam @DecimalMin("0.001") @DecimalMax("0.02") BigDecimal radius){
         logger.debug("getRestaurant7SimpleCategoryBased 호출되었습니다.");
