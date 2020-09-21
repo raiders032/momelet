@@ -68,15 +68,15 @@ export const apis = {
     const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'))
       .refreshToken;
 
+    console.log(refreshToken);
+
     return makeRequest(
       'post',
-      'v1/auth/refresh',
+      'v1/auth/refresh-token',
+      {},
       {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      },
-      {}
+        jwt: refreshToken,
+      }
     );
   },
 };

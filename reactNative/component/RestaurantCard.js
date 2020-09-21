@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { calculateDistance } from '../utils/calculateDistance';
+import logging from '../utils/logging';
 import Card from './Card';
 import CardBack from './CardBack';
 import PresentMenu from './PresentMenu';
@@ -43,12 +44,20 @@ export default ({ restaurant, header, cover, userLocation }) => {
   // const isFlipping = useRef(false);
   let isFlipping = false;
 
-  const flipCard = () => {
+  const flipCard = async () => {
     // if (isFlipping) {
     //   return;
     // }
 
     // isFlipping = true;
+    await logging({
+      eventName: 'BTN_SEEMENU',
+      config: {
+        name: 'seeMenuButton',
+        screen: 'Home',
+        purpose: 'Viewing importance of menu in restaurant',
+      },
+    });
 
     if (changeValue >= 90) {
       Animated.timing(rotation, {

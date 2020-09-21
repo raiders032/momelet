@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import Basic from '../../component/Basic';
 import RestaurantsSwipe from '../../component/RestaurantsSwipe';
 import socket from '../../socket';
+import logging from '../../utils/logging';
 
 export default ({
   restaurants,
@@ -38,7 +39,15 @@ export default ({
         <Text style={{ fontFamily: 'Godo' }}>같이하기</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
+        onPress={async () => {
+          logging({
+            eventName: 'BTN_MYPAGE',
+            config: {
+              name: 'mypaegButton',
+              screen: 'Home',
+              purpose: 'how often clicked button mypage',
+            },
+          });
           navigation.navigate('Mypage', {
             user: user.data.userInfo,
             userChangeCount,
