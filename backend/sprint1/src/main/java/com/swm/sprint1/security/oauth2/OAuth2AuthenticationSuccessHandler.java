@@ -1,14 +1,15 @@
 package com.swm.sprint1.security.oauth2;
 
 
-import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.exception.BadRequestException;
+import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.security.Token;
-import com.swm.sprint1.security.TokenProvider;
+import com.swm.sprint1.security.UserPrincipal;
+import com.swm.sprint1.service.AuthService;
 import com.swm.sprint1.util.CookieUtils;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -20,30 +21,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 import static com.swm.sprint1.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
+@RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
-
-    private AppProperties appProperties;
-
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final AuthService authService;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     private final Logger logger = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
-
-    @Autowired
-    OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.tokenProvider = tokenProvider;
-        this.appProperties = appProperties;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -71,9 +61,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        Token accessToken = tokenProvider.createAccessToken(authentication);
-        Token refreshToken = tokenProvider.createRefreshToken(authentication);
-        
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        AuthResponse accessAndRefreshToken = authService.createAccessAndRefreshToken(userPrincipal.getId());
+        Token accessToken = accessAndRefreshToken.getAccessToken();
+        Token refreshToken = accessAndRefreshToken.getRefreshToken();
+
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("accessToken",accessToken.getJwtToken())
                 .queryParam("accessTokenExpiryDate", formatter.format(accessToken.getExpiryDate()))
