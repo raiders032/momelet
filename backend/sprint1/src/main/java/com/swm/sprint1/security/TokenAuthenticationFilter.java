@@ -2,6 +2,7 @@ package com.swm.sprint1.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.payload.response.ApiResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -58,6 +59,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .errorCode("400")
                             .message("Invalid JWT signature")
                             .build();
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(convertObjectToJson(apiResponse));
                     return;
@@ -69,6 +71,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .errorCode("401")
                             .message("Invalid JWT token")
                             .build();
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(convertObjectToJson(apiResponse));
                     return;
@@ -80,6 +83,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .errorCode("402")
                             .message("Expired JWT token")
                             .build();
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(convertObjectToJson(apiResponse));
                     return;
@@ -91,6 +95,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .errorCode("403")
                             .message("IUnsupported JWT token")
                             .build();
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(convertObjectToJson(apiResponse));
                     return;
@@ -102,6 +107,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .errorCode("404")
                             .message("Invalid JWT token")
                             .build();
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write(convertObjectToJson(apiResponse));
                     return;
@@ -114,6 +120,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (RequestParamException ex){
+            logger.error(ex.getMessage());
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .dateTime(LocalDateTime.now().toString())
+                    .success(false)
+                    .errorCode("402")
+                    .message(ex.getMessage())
+                    .build();
+            response.setContentType("application/json;charset=UTF-8");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(convertObjectToJson(apiResponse));
+            return;
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
@@ -124,8 +142,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken)) {
+            if (bearerToken.startsWith("Bearer "))
+                return bearerToken.substring(7);
+            else
+                throw new RequestParamException("jwt token은 Bearer로 시작해야 합니다", "402");
         }
         return null;
     }

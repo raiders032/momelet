@@ -10,7 +10,6 @@ import com.swm.sprint1.payload.request.SignUpRequest;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.repository.user.UserRepository;
-import com.swm.sprint1.security.CustomUserDetailsService;
 import com.swm.sprint1.security.Token;
 import com.swm.sprint1.security.TokenProvider;
 import com.swm.sprint1.service.AuthService;
@@ -44,8 +43,6 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final CustomUserDetailsService customUserDetailsService;
-
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @ApiOperation(value = "액세스 토큰 재발급", notes = "새로 갱신된 액세스 토큰을 발급합니다.")
@@ -55,7 +52,7 @@ public class AuthController {
 
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "102");
         }
 
         Token accessToken = authService.refreshAccessToken(jwtDto);
@@ -72,7 +69,7 @@ public class AuthController {
 
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "102");
         }
 
         AuthResponse authResponse = authService.refreshAccessAndRefreshToken(jwtDto);
@@ -90,7 +87,7 @@ public class AuthController {
 
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "102");
         }
 
         tokenProvider.validateAccessToken(jwtDto.getJwt());
@@ -104,7 +101,7 @@ public class AuthController {
 
         if(result.hasErrors()) {
             logger.error("JwtDto 바인딩 에러가 발생했습니다.");
-            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "103");
+            throw new RequestParamException("JwtDto 바인딩 에러가 발생했습니다.", "102");
         }
 
         tokenProvider.validateRefreshToken(jwtDto.getJwt());

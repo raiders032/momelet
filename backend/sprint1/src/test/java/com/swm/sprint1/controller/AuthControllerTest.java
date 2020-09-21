@@ -101,6 +101,7 @@ public class AuthControllerTest {
     @Test
     public void 액세스_토큰_갱신() throws Exception {
         //given
+        sleep(1000);
         String uri = "/api/v1/auth/access-token";
         JwtDto jwtDto = new JwtDto(refreshToken);
         String content = objectMapper.writeValueAsString(jwtDto);
@@ -116,10 +117,12 @@ public class AuthControllerTest {
 
         String responseContent = result.getResponse().getContentAsString();
         ApiResponse apiResponse = objectMapper.readValue(responseContent, ApiResponse.class);
-        String jwt = (String) ((HashMap<String, Object>) apiResponse.getData().get("accessToken")).get("jwtToken");
+        String refreshedToken = (String) ((HashMap<String, Object>) apiResponse.getData().get("accessToken")).get("jwtToken");
 
         //then
-        assertThat(tokenProvider.getUserIdFromToken(jwt)).isEqualTo(user.getId());
+        assertThat(tokenProvider.getUserIdFromToken(refreshedToken)).isEqualTo(user.getId());
+        assertThat(userRefreshTokenRepository.existsByUserIdAndRefreshToken(user.getId(), refreshToken)).isTrue();
+        assertThat(accessToken).isNotEqualTo(refreshedToken);
     }
 
     @Test
@@ -181,13 +184,12 @@ public class AuthControllerTest {
 
     @Test
     public void 액세스_리프레시_토큰_갱신() throws Exception {
-        sleep(1000);
         //given
+        sleep(1000);
         String uri = "/api/v1/auth/refresh-token";
         JwtDto jwtDto = new JwtDto(refreshToken);
         String content = objectMapper.writeValueAsString(jwtDto);
 
-        logger.info("액세스_리프레시_토큰_갱신 호출 전");
         //when
         MvcResult result = mockMvc.perform(
                 post(uri)
@@ -199,7 +201,6 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.data.tokens.refreshToken").exists())
                 .andReturn();
 
-        logger.info("액세스_리프레시_토큰_갱신 호출 후");
         String responseContent = result.getResponse().getContentAsString();
         ApiResponse apiResponse = objectMapper.readValue(responseContent, ApiResponse.class);
         String newAccessToken = (String) ((HashMap<String, Object>)((HashMap<String, Object>) apiResponse.getData().get("tokens")).get("accessToken")).get("jwtToken");
@@ -210,8 +211,8 @@ public class AuthControllerTest {
         assertThat(tokenProvider.getUserIdFromToken(newRefreshToken)).isEqualTo(user.getId());
         assertThat(userRefreshTokenRepository.existsByUserIdAndRefreshToken(user.getId(), newRefreshToken)).isTrue();
         assertThat(userRefreshTokenRepository.existsByUserIdAndRefreshToken(user.getId(), refreshToken)).isFalse();
-        //assertThat(refreshToken).isNotEqualTo(newRefreshToken);
-        //assertThat(accessToken).isNotEqualTo(newAccessToken);
+        assertThat(refreshToken).isNotEqualTo(newRefreshToken);
+        assertThat(accessToken).isNotEqualTo(newAccessToken);
     }
 
     @Test

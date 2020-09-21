@@ -28,7 +28,7 @@ public class CustomizedResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentNotValidException.class, NotSupportedExtension.class})
+    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentNotValidException.class, NotSupportedExtension.class, MissingServletRequestParameterException.class})
     public final ResponseEntity<ApiResponse> handleConstraintViolationExceptions(Exception ex, WebRequest request){
         logger.error(ex.getMessage());
         ApiResponse response = new ApiResponse(false, "102", ex.getMessage(), request.getDescription(false));
@@ -40,13 +40,6 @@ public class CustomizedResponseEntityExceptionHandler {
         logger.error(ex.getMessage());
         RequestParamException exception = (RequestParamException)ex;
         ApiResponse response = new ApiResponse(false, exception.getErrorCode(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public final ResponseEntity<ApiResponse> handleMissingServletRequestParameterExceptions(Exception ex, WebRequest request){
-        logger.error(ex.getMessage());
-        ApiResponse response = new ApiResponse(false, "103", ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
