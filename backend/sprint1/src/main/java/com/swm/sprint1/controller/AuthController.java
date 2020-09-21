@@ -3,7 +3,6 @@ package com.swm.sprint1.controller;
 import com.swm.sprint1.domain.AuthProvider;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.BadRequestException;
-import com.swm.sprint1.exception.CustomJwtException;
 import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.payload.request.JwtDto;
 import com.swm.sprint1.payload.request.LoginRequest;
@@ -23,14 +22,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 

@@ -76,5 +76,24 @@ public class AuthService {
         return new AuthResponse(accessToken, refreshToken);
     }
 
+    @Transactional
+    public AuthResponse createAccessAndRefreshToken(Long userId, long accessExpiryDate, long refreshExpiryDate) {
+
+        UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        Token accessToken = tokenProvider.createAccessToken(authentication, accessExpiryDate);
+        Token refreshToken = tokenProvider.createRefreshToken(authentication, refreshExpiryDate);
+
+        Optional<UserRefreshToken> byUserId = userRefreshTokenRepository.findByUserId(userId);
+
+        if(byUserId.isPresent())
+            byUserId.get().updateRefreshToken(refreshToken.getJwtToken());
+        else
+            userRefreshTokenRepository.save(new UserRefreshToken(userId, refreshToken.getJwtToken()));
+
+        return new AuthResponse(accessToken, refreshToken);
+    }
+
 
 }

@@ -48,14 +48,19 @@ public class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private TokenProvider tokenProvider;
-    @Autowired
-    private ObjectMapper objectMapper;
+
     @Autowired
     private UserRefreshTokenRepository userRefreshTokenRepository;
+
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Autowired
     private AuthService authService;
 
@@ -63,16 +68,12 @@ public class AuthControllerTest {
 
     private User user;
 
-    private String preAccessToken, accessToken;
+    private String accessToken;
 
-    private String preRefreshToken, refreshToken;
-
-    private String otherRefreshToken;
-
-    private String otherAccessToken;
+    private String refreshToken;
 
     @Before
-    public void init() throws InterruptedException {
+    public void init() {
         user = User.builder()
                 .name("유저1")
                 .email("user1@test.com")
@@ -83,40 +84,11 @@ public class AuthControllerTest {
                 .emailVerified(false)
                 .build();
 
-        User user2 = User.builder()
-                .name("유저2")
-                .email("user2@test.com")
-                .imageUrl("imageUrl")
-                .provider(AuthProvider.local)
-                .providerId("test")
-                .userCategories(new HashSet<>())
-                .emailVerified(false)
-                .build();
-
         userRepository.save(user);
-        userRepository.save(user2);
 
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-
-        AuthResponse authResponse = authService.createAccessAndRefreshToken(user.getId());
-        preAccessToken = authResponse.getAccessToken().getJwtToken();
-        preRefreshToken = authResponse.getRefreshToken().getJwtToken();
-
-        UserPrincipal userPrincipal2 = UserPrincipal.create(user2);
-        UsernamePasswordAuthenticationToken authentication2 = new UsernamePasswordAuthenticationToken(userPrincipal2, null, userPrincipal2.getAuthorities());
-
-        AuthResponse authResponse2 = authService.createAccessAndRefreshToken(user2.getId());
-        otherAccessToken = authResponse2.getAccessToken().getJwtToken();
-        otherRefreshToken = authResponse2.getRefreshToken().getJwtToken();
-
-        sleep(1000);
-
-        AuthResponse authResponse3 = authService.createAccessAndRefreshToken(user.getId());
-        accessToken = authResponse3.getAccessToken().getJwtToken();
-        refreshToken = authResponse3.getRefreshToken().getJwtToken();
-
-        sleep(1000);
+        AuthResponse Auth = authService.createAccessAndRefreshToken(user.getId());
+        accessToken = Auth.getAccessToken().getJwtToken();
+        refreshToken = Auth.getRefreshToken().getJwtToken();
     }
 
     @After
@@ -151,7 +123,65 @@ public class AuthControllerTest {
     }
 
     @Test
+    public void 액세스_토큰_갱신_만료된_리프레시_토큰_보내기_400() throws Exception {
+        //given
+        String uri = "/api/v1/auth/access-token";
+        AuthResponse accessAndRefreshToken = authService.createAccessAndRefreshToken(user.getId(),0, 0);
+        JwtDto jwtDto = new JwtDto(accessAndRefreshToken.getRefreshToken().getJwtToken());
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("400"));
+    }
+
+    @Test
+    public void 액세스_토큰_갱신_이전_리프레시_토큰_보내기_403() throws Exception {
+        //given
+        sleep(1000);
+        authService.createAccessAndRefreshToken(user.getId());
+        String uri = "/api/v1/auth/access-token";
+        JwtDto jwtDto = new JwtDto(refreshToken);
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("403"));
+    }
+
+    @Test
+    public void 액세스_토큰_갱신_액세스_토큰_보내기_404() throws Exception {
+        //given
+        String uri = "/api/v1/auth/access-token";
+        JwtDto jwtDto = new JwtDto(accessToken);
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"));
+    }
+
+    @Test
     public void 액세스_리프레시_토큰_갱신() throws Exception {
+        sleep(1000);
         //given
         String uri = "/api/v1/auth/refresh-token";
         JwtDto jwtDto = new JwtDto(refreshToken);
@@ -184,6 +214,62 @@ public class AuthControllerTest {
         //assertThat(accessToken).isNotEqualTo(newAccessToken);
     }
 
+    @Test
+    public void 액세스_리프레시_토큰_갱신_만료된_리프레시_토큰_보내기_400() throws Exception {
+        //given
+        String uri = "/api/v1/auth/refresh-token";
+        AuthResponse accessAndRefreshToken = authService.createAccessAndRefreshToken(user.getId(),0, 0);
+        JwtDto jwtDto = new JwtDto(accessAndRefreshToken.getRefreshToken().getJwtToken());
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("400"));
+    }
+
+    @Test
+    public void 액세스_리프레시_토큰_갱신_이전_리프레시_토큰_보내기_403() throws Exception {
+        //given
+        sleep(1000);
+        authService.createAccessAndRefreshToken(user.getId());
+        String uri = "/api/v1/auth/refresh-token";
+        JwtDto jwtDto = new JwtDto(refreshToken);
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("403"));
+    }
+
+    @Test
+    public void 액세스_리프레시_토큰_갱신_액세스_토큰_보내기_404() throws Exception {
+        //given
+        String uri = "/api/v1/auth/refresh-token";
+        JwtDto jwtDto = new JwtDto(accessToken);
+        String content = objectMapper.writeValueAsString(jwtDto);
+
+        //when
+        ResultActions result = mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content));
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"));
+    }
 
     @Test
     public void 리프레시_토큰_검증() throws Exception {
@@ -207,11 +293,13 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void 리프레시_토큰_검증_이전_리프레시_토큰() throws Exception {
+    public void 리프레시_토큰_검증_이전_리프레시_토큰_403() throws Exception {
         //given
+        sleep(1000);
+        authService.createAccessAndRefreshToken(user.getId());
         String uri = "/api/v1/auth/validation/refresh";
         JwtDto jwtDto = JwtDto.builder()
-                .jwt(preRefreshToken)
+                .jwt(refreshToken)
                 .build();
         String content = objectMapper.writeValueAsString(jwtDto);
 
@@ -224,7 +312,7 @@ public class AuthControllerTest {
 
         //then
         result
-                .andExpect(status().isBadRequest())
+                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("403"));
     }
@@ -246,7 +334,7 @@ public class AuthControllerTest {
 
         //then
         result
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("404"));
     }
@@ -275,9 +363,11 @@ public class AuthControllerTest {
     @Test
     public void 액세스_토큰_검증_이전_액세스_토큰() throws Exception {
         //given
+        sleep(1000);
+        authService.createAccessAndRefreshToken(user.getId());
         String uri = "/api/v1/auth/validation/access";
         JwtDto jwtDto = JwtDto.builder()
-                .jwt(preAccessToken)
+                .jwt(accessToken)
                 .build();
         String content = objectMapper.writeValueAsString(jwtDto);
 
@@ -311,7 +401,7 @@ public class AuthControllerTest {
 
         //then
         result
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("404"));
     }

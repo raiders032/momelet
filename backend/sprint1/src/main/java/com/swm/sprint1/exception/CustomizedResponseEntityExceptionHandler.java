@@ -87,7 +87,7 @@ public class CustomizedResponseEntityExceptionHandler {
         logger.error(ex.getMessage());
         CustomJwtException exception = (CustomJwtException)ex;
         ApiResponse response = new ApiResponse(false, exception.getErrorCode(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(OAuth2AuthenticationProcessingException.class)
