@@ -49,7 +49,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
             if (StringUtils.hasText(jwt)) {
                 try {
-                    tokenProvider.validateToken(jwt);
+                    tokenProvider.validateAccessToken(jwt);
                     logger.debug("jwt token 유효성 검사 완료");
                 } catch (SignatureException exception) {
                     logger.error("Invalid JWT signature");
@@ -105,7 +105,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                             .dateTime(LocalDateTime.now().toString())
                             .success(false)
                             .errorCode("404")
-                            .message("Invalid JWT token")
+                            .message(exception.getMessage())
                             .build();
                     response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());

@@ -169,26 +169,6 @@ public class RestaurantControllerTest {
     }
 
     @Test
-    public void 식당조회_헤더_Bearer_빼고_요청() throws Exception {
-        //given
-        String url = "/api/v1/restaurants/users/" + user1.getId() + "/categories";
-
-        //when
-        ResultActions result = mockMvc.perform(get(url)
-                .param("longitude", longitude)
-                .param("latitude", latitude)
-                .param("radius", radius)
-                .header("authorization", accessToken));
-
-
-        //then
-        result
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("402"));
-    }
-
-    @Test
     public void 식당조회_반경_없이_요청_102() throws Exception {
         //given
         String url = "/api/v1/restaurants/users/"+ user1.getId()+"/categories";
@@ -385,6 +365,47 @@ public class RestaurantControllerTest {
     }
 
     @Test
+    public void 식당조회_헤더_Bearer_빼고_요청() throws Exception {
+        //given
+        String url = "/api/v1/restaurants/users/" + user1.getId() + "/categories";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url)
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", accessToken));
+
+
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("402"));
+    }
+
+    @Test
+    public void 식당조회_헤더에_리프레시토큰_요청() throws Exception {
+        //given
+        String url = "/api/v1/restaurants/users/" + user1.getId() + "/categories";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url)
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", "Bearer " + refreshToken));
+
+        //then
+        result
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"));
+
+    }
+
+    @Test
     public void 식당카드7조회() throws Exception {
         //given
         String url = "/api/v1/restaurants7";
@@ -405,26 +426,6 @@ public class RestaurantControllerTest {
         List<RestaurantDtoResponse> restaurants = (List<RestaurantDtoResponse>) apiResponse.getData().get("restaurants");
         assertThat(restaurants.size()).isEqualTo(7);
         assertThat(restaurants).extracting("categories").doesNotContain("치킨","고기","곱|대창","분식","주점", "양식", "패스트푸드", "세계음식", "찜|탕");
-    }
-
-    @Test
-    public void 식당카드7조회_7장미만_211() throws Exception {
-        //given
-        String url = "/api/v1/restaurants7";
-
-        //when
-        ResultActions result = mockMvc.perform(get(url)
-                .param("id", user4.getId().toString())
-                .param("longitude", longitude)
-                .param("latitude", latitude)
-                .param("radius", radius)
-                .header("authorization", "Bearer " + accessToken));
-
-        //then
-        result
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("211"));
     }
 
     @Test
@@ -628,6 +629,66 @@ public class RestaurantControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 식당카드7조회_7장미만_211() throws Exception {
+        //given
+        String url = "/api/v1/restaurants7";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url)
+                .param("id", user4.getId().toString())
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", "Bearer " + accessToken));
+
+        //then
+        result
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("211"));
+    }
+
+    @Test
+    public void 식당카드7조회_헤더_Bearer_빼고_요청() throws Exception {
+        //given
+        String url = "/api/v1/restaurants7";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url)
+                .param("id", user1.getId() + "," + user2.getId() + "," + user3.getId())
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", accessToken));
+
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("402"));
+    }
+
+    @Test
+    public void 식당카드7조회_헤더_리프레시_토큰_넣어서_요청() throws Exception {
+        //given
+        String url = "/api/v1/restaurants7";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url)
+                .param("id", user1.getId() + "," + user2.getId() + "," + user3.getId())
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .header("authorization", "Bearer " + refreshToken));
+
+        //then
+        result
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"));
     }
 
 }

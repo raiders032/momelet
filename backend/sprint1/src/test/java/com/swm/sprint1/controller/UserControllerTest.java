@@ -247,6 +247,31 @@ public class UserControllerTest {
     }
 
     @Test
+    public void 유저정보수정_헤더에_리프레시토큰_넣고_요청() throws Exception {
+        //given
+        String url = "/api/v1/users/" + user.getId();
+        String name = "변경된이름";
+        String categories = "한식,일식,중식";
+        MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpg", "asdasdasd".getBytes());
+
+        //when
+        ResultActions result = mockMvc.perform(multipart(url)
+                .file(file)
+                .param("name", name)
+                .param("categories", categories)
+                .header("Authorization" , "Bearer " + refreshToken)
+        );
+
+        //then
+        result
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void 유저정보조회() throws Exception {
         //given
         String url = "/api/v1/users/me";
@@ -295,6 +320,26 @@ public class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.errorCode").value("402"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void 유저정보조회_헤더에_리프레시토큰_넣고_요청() throws Exception {
+        //given
+        String url = "/api/v1/users/me";
+
+        //when
+        ResultActions result = mockMvc.perform(
+                get(url)
+                        .header("Authorization" , "Bearer " + refreshToken)
+        );
+
+        //then
+        result
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("404"))
                 .andExpect(status().isUnauthorized());
     }
 
