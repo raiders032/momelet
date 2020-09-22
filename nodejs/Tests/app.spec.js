@@ -483,33 +483,41 @@ describe("Connecting Server", () => {
           {
             id: restaurantsId[0],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[1],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[2],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[3],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[4],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[5],
             sign: "s",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[6],
             sign: "s",
+            elapsedTime: 2,
           },
         ],
         roomName,
+        jwt: ioOptions[1].query.jwtToken,
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -530,33 +538,41 @@ describe("Connecting Server", () => {
           {
             id: restaurantsId[0],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[1],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[2],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[3],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[4],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[5],
             sign: "s",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[6],
             sign: "s",
+            elapsedTime: 2,
           },
         ],
         roomName,
+        jwt: ioOptions[2].query.jwtToken,
       }),
       (msg) => {
         msg.should.be.type("string");
@@ -610,33 +626,41 @@ describe("Connecting Server", () => {
           {
             id: restaurantsId[0],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[1],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[2],
             sign: "y",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[3],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[4],
             sign: "n",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[5],
             sign: "s",
+            elapsedTime: 2,
           },
           {
             id: restaurantsId[6],
             sign: "s",
+            elapsedTime: 2,
           },
         ],
         roomName,
+        jwt: ioOptions[0].query.jwtToken,
       }),
       (msg) => {
         msg.should.be.type("string");
