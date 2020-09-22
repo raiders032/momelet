@@ -21,6 +21,7 @@ function startServer() {
   const app = express();
   const server = app.listen(process.env.PORT, () => {
     logger.info("Server started. listening on *:3000.");
+    logger.info("temp change");
   });
   const io = SocketIO(server, {
     //path: "/momulet",
