@@ -103,7 +103,7 @@ COPY . .
 
 VOLUME [ "/usr/src/logs" ]
 
-EXPOSE 3000
+EXPOSE 3000 9090
 
 USER 1001
 
