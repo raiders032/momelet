@@ -8,7 +8,7 @@ export default ({
   coverMessageRightEvent,
   coverMessageLeftEvent,
 }) => {
-  console.log('뮻', footerMessage);
+  // console.log('뮻', footerMessage);
 
   return (
     <View
