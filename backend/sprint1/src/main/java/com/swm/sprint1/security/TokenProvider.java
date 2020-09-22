@@ -46,10 +46,44 @@ public class TokenProvider {
         return  new Token(accessTokenString, accessExpiryDate);
     }
 
+    public Token createAccessToken(Authentication authentication, long expiryDate) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Date now = new Date();
+        Date accessExpiryDate = new Date(now.getTime() + expiryDate);
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
+
+        String accessTokenString = Jwts.builder()
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .claim("type", "access")
+                .setIssuedAt(new Date())
+                .setExpiration(accessExpiryDate)
+                .signWith(SignatureAlgorithm.HS512, encodedJwt)
+                .compact() ;
+
+        return  new Token(accessTokenString, accessExpiryDate);
+    }
+
     public Token createRefreshToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date();
         Date refreshExpiryDate = new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpirationMsec());
+        String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
+
+        String refreshTokenString = Jwts.builder()
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .claim("type", "refresh")
+                .setIssuedAt(new Date())
+                .setExpiration(refreshExpiryDate)
+                .signWith(SignatureAlgorithm.HS512, encodedJwt)
+                .compact();
+
+        return new Token(refreshTokenString, refreshExpiryDate);
+    }
+
+    public Token createRefreshToken(Authentication authentication, long expiryDate) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Date now = new Date();
+        Date refreshExpiryDate = new Date(now.getTime() + expiryDate);
         String encodedJwt = Base64Utils.encodeToString(appProperties.getAuth().getTokenSecret().getBytes());
 
         String refreshTokenString = Jwts.builder()
@@ -102,14 +136,14 @@ public class TokenProvider {
             throw new CustomJwtException("토큰 타입이 불일치 합니다. refresh token이 필요합니다.", "404");
         }
 
+        validateToken(refreshToken);
+
         Long userId = getUserIdFromToken(refreshToken);
 
         if(!userRepository.existsById(userId)){
             logger.error("토큰에 기록된 유저("+userId +")가 존재하지 않습니다.");
             throw new ResourceNotFoundException("user", "id", userId, "200");
         }
-
-        validateToken(refreshToken);
 
         if(!userRefreshTokenRepository.existsByUserIdAndRefreshToken(userId, refreshToken)) {
             logger.error("유저(" + userId + ") 저장된 리프레시 토큰과 일치하지 않습니다.");
