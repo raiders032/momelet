@@ -14,6 +14,12 @@ export default class UserRepository {
   }
 
   delete(socketId) {
+    console.log("소켓매퍼 목록 출력");
+    this.socketIdMapper.forEach((value, key) => {
+      console.log("소켓아이디: " + key);
+      console.log("유저아이디: " + value);
+    });
+    console.log("안돼! 날 지우지마! 내아이디: " + socketId);
     this.userRepository.delete(this.findBySocketId(socketId).id);
     this.socketIdMapper.delete(socketId);
   }
