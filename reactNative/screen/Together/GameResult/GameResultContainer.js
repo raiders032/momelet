@@ -45,7 +45,7 @@ export default ({ navigation, route }) => {
     };
 
     socket.emit('gameRoomJoinAgain', JSON.stringify(sendMsg), (msg) => {
-      printSocketEvent('gameROmmJoinAgain', msg);
+      printSocketEvent('gameRoomJoinAgain', msg);
 
       const newMsg = {
         ...JSON.parse(msg).data,

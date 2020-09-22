@@ -20,7 +20,10 @@ function App() {
     <NavigationContainer
       onStateChange={(prevState, newState) => {
         console.log(prevState.routes[prevState.index].name);
-        Analytics.setCurrentScreen(prevState.routes[prevState.index].name);
+        Analytics.setCurrentScreen(
+          prevState.routes[prevState.index].name,
+          prevState.routes[prevState.index].name
+        );
       }}>
       <Stack.Navigator>
         <Stack.Screen
