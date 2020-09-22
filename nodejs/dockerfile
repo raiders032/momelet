@@ -93,7 +93,6 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   # smoke test
   && yarn --version
 
-USER 1001
 
 WORKDIR /usr/src/app
 
@@ -104,6 +103,8 @@ RUN npm install
 COPY . .
 
 VOLUME [ "/usr/src/logs" ]
+
+USER 1001
 
 EXPOSE 3000 9090
 
