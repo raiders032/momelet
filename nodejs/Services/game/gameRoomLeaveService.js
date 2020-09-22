@@ -6,13 +6,9 @@ import roomLeave from "../util/roomLeave.js";
 export default (socket, { id, roomName }) => {
   let response = new SocketResponse();
 
-  logger.info("받은 roomName: " + roomName);
-
   let user, room;
   user = SingleObject.UserRepository.findById(id);
   room = SingleObject.RoomRepository.findByRoomName(roomName);
-
-  logger.info("gameRoomLeave에서 찾은 room: " + room);
 
   roomLeave(user, room);
 

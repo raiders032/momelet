@@ -17,7 +17,7 @@ export default (socket, errorHandler) => {
 
   // 같이하기-초대하기
   socket.on("togetherInvite", (msg, ack) => {
-    logger.info("together. msg: " + msg);
+    logger.info("togetherInvite. msg: " + msg);
     let response = errorHandler(() => {
       const { id, inviteTheseUsers } = JSON.parse(msg);
       msgTypeCheck({ number: [id], Array: [inviteTheseUsers] });
