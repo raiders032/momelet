@@ -105,4 +105,4 @@ VOLUME [ "/usr/src/logs" ]
 
 EXPOSE 3000
 
-CMD [ "node" ]
+CMD [ "node" , "app.js"]
