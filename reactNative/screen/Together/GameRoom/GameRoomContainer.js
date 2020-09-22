@@ -37,7 +37,7 @@ export default ({ navigation, route }) => {
     socket.emit('gameUserFinish', JSON.stringify(sendMsg), (msg) => {
       printSocketEvent('gameUserFinish', msg);
 
-      restaurants.forEach((element) => console.log(element.id, element.name));
+      // restaurants.forEach((element) => console.log(element.id, element.name));
 
       navigation.dispatch(
         StackActions.replace('WaitingRoomForResult', {

@@ -18,6 +18,7 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => {
   console.log('GameRoomPresenter render');
 
+  const elapsedTime = useRef(0);
   const timeFinish = useRef(false);
   const [restaurant, setRestaurant] = useState(restaurants);
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
@@ -71,10 +72,18 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     // console.log("response: ", response);
     // console.log("gameResult.current.length", gameResult.current.length);
     if (gameResult.current.length >= 6) {
-      gameResult.current.push({ id: firstRestaurant.id, sign: response });
+      gameResult.current.push({
+        id: firstRestaurant.id,
+        sign: response,
+        elapsedTime: elapsedTime.current,
+      });
       gameFinish(gameResult);
     } else {
-      gameResult.current.push({ id: firstRestaurant.id, sign: response });
+      gameResult.current.push({
+        id: firstRestaurant.id,
+        sign: response,
+        elapsedTime: elapsedTime.current,
+      });
       setRestaurant([secondRestaurant, ...otherRestaurant]);
     }
   };
@@ -120,7 +129,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
 
   const cardGoRight = () => {
     timeFinish.current = false;
-    console.log('Here', timeFinish.current);
+    // console.log('Here', timeFinish.current);
     Animated.timing(position, {
       toValue: {
         x: WIDTH + 50,
@@ -160,11 +169,16 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     timeFinish.current = true;
     position.setValue({ x: 0, y: 0 });
     remainTime.setValue(0);
+    elapsedTime.current = 0;
 
+    const elapsed = setInterval(() => {
+      elapsedTime.current += 1;
+    }, 1000);
     const timeout = setTimeout(timeGo, 1000);
     const timeoutCardDown = setTimeout(cardGoDown, 16000);
 
     return () => {
+      clearInterval(elapsed);
       clearTimeout(timeoutCardDown);
     };
   }, [restaurant]);
