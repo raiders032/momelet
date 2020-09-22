@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>317856883554-m5gmv9qu8kq4e5gf6r168504c8kb3bq2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.317856883554-m5gmv9qu8kq4e5gf6r168504c8kb3bq2</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDoEpJONyWw_vWYX53Wrx6hCBlH12zwuz4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>317856883554</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.recoder.momulet</string>
+	<key>PROJECT_ID</key>
+	<string>momulet-6c0f7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>momulet-6c0f7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:317856883554:ios:6bf2f1eebfa3856d99023b</string>
+	<key>DATABASE_URL</key>
+	<string>https://momulet-6c0f7.firebaseio.com</string>
+</dict>
+</plist>

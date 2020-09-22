@@ -1,10 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Analytics from 'expo-firebase-analytics';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
-import Alone from '../Alone';
-import Together from '../Together';
+import Main from '../Alone/Main';
+import MyPage from '../Alone/Mypage';
+import NameEdit from '../Alone/NameEdit';
 import GameResult from '../Together/GameResult';
 import GameRoom from '../Together/GameRoom';
 import Invite from '../Together/Invite';
@@ -15,16 +17,28 @@ const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onStateChange={(prevState, newState) => {
+        console.log(prevState.routes[prevState.index].name);
+        Analytics.setCurrentScreen(prevState.routes[prevState.index].name);
+      }}>
       <Stack.Navigator>
         <Stack.Screen
-          name="Alone"
-          component={Alone}
+          name="Main"
+          component={Main}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Together" component={Together} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Mypage"
+          component={MyPage}
+          options={{
+            title: '',
+            headerBackTitle: '뒤로',
+          }}
+        />
+        <Stack.Screen name="NameEdit" component={NameEdit} />
         <Stack.Screen
           name="Invite"
           component={Invite}
@@ -32,7 +46,6 @@ function App() {
             headerShown: true,
             title: '초대하기',
           }}
-          // initialParams={route.params}
         />
         <Stack.Screen
           name="WaitingRoomForStart"
@@ -40,8 +53,8 @@ function App() {
           options={{
             headerShown: true,
             title: '대기실',
-            headerTitleAlign: 'center',
             headerLeft: () => <View />,
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen

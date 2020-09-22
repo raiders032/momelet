@@ -6,10 +6,11 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
-import { apis } from '../../api';
-import socket from '../../socket';
-import getInvalidToken from '../../utils/getInvalidToken';
-import printSocketEvent from '../../utils/printEvent';
+import { apis } from '../../../api';
+import socket from '../../../socket';
+import getInvalidToken from '../../../utils/getInvalidToken';
+import logging from '../../../utils/logging';
+import printSocketEvent from '../../../utils/printEvent';
 import MainPresenter from './MainPresenter';
 
 // 홈 식당 카드의 api 호출 데이터 전달
@@ -192,14 +193,21 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     getRestaurantAndSocketConnect();
 
-    return () => {
-      socket.disconnect();
-    };
+    return () => {};
   }, [user]);
   // useEffect(() => {}, [user]);
 
   //같이 하기 버튼 클릭시
   const sendTogetherMessage = async () => {
+    await logging({
+      eventName: 'BTN_TOGETHER',
+      config: {
+        name: 'togetherButton',
+        screen: 'Home',
+        purpose: 'how often clicked button together',
+      },
+    });
+
     const nowUser = user;
 
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
@@ -220,7 +228,7 @@ export default ({ navigation, route }) => {
 
       const paseMsg = JSON.parse(msg);
 
-      navigation.navigate('Together', {
+      navigation.navigate('Invite', {
         msg: paseMsg.data,
         user: user.data.userInfo,
       });

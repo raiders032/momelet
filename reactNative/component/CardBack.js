@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, Dimensions, Linking, Platform, Clipboard, ToastAndroid } from 'react-native';
 
+import logging from '../utils/logging';
 import truncate from '../utils/truncate';
 import ExtraIcon from './ExtraIcon';
 import Menu from './Menu';
@@ -42,6 +43,15 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           icon={require('../assets/call.png')}
           text="전화하기"
           onPress={async () => {
+            await logging({
+              eventName: 'BTN_CALL',
+              config: {
+                name: 'callButton',
+                screen: 'Home|Together',
+                purpose: 'how many people click call button',
+              },
+            });
+
             let number;
 
             if (Platform.OS !== 'android') {
@@ -51,8 +61,6 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
             }
 
             const canOpen = await Linking.canOpenURL(number);
-
-            console.log(number);
 
             if (canOpen) {
               Linking.openURL(number);
@@ -66,6 +74,15 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           icon={require('../assets/geo.png')}
           text="길찾기"
           onPress={async () => {
+            await logging({
+              eventName: 'BTN_MAP',
+              config: {
+                name: 'seeMapButton',
+                screen: 'Home|Together',
+                purpose: 'how many people click map button',
+              },
+            });
+
             const canOpen = await Linking.canOpenURL(
               'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
             );
@@ -89,12 +106,22 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
         <ExtraIcon
           icon={require('../assets/copy.png')}
           text="주소복사"
-          onPress={() => {
-            console.log(address);
+          onPress={async () => {
+            await logging({
+              eventName: 'BTN_COPY_ADDRESS',
+              config: {
+                name: 'copyAddressButton',
+                screen: 'Home|Together',
+                purpose: 'how many people click copy button',
+              },
+            });
+
             Clipboard.setString(address);
 
             if (Platform.OS == 'android') {
               ToastAndroid.show('주소가 클립보드에 복사 되었습니다.', ToastAndroid.SHORT);
+            } else {
+              alert('주소가 클립보드에 복사 되었습니다.');
             }
           }}
         />

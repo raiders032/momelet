@@ -6,43 +6,22 @@ import dateCheck from './dateCheck';
 
 const { apiUrl } = getEnvVars();
 
-class Token {
-  static getRefreshToken = async () => {
-    const token = await SecureStore.getItemAsync('refresh_TokenInfo').refreshToken;
-
-    return JSON.parse(token);
-  };
-
-  setRefreshToken = async () => {};
-}
-
 const getAccessToken = async () => {
-  const token = await SecureStore.getItemAsync('access_TokenInfo').refreshToken;
+  const token = await SecureStore.getItemAsync('refresh_TokenInfo').refreshToken;
 
   return JSON.parse(token);
 };
 
-const makeRequest = async (method, path, config, data = '') => {
-  let tmpToken;
-
-  if (path === 'v1/auth/refresh') {
-    tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
-  } else {
-    tmpToken = await getInvalidToken();
-  }
-
+const makeRequest = async (method, path, data = '') => {
   try {
     return await axios({
       url: `${apiUrl}/api/${path}`,
       method,
-      headers: {
-        Authorization: `Bearer ${tmpToken}`,
-      },
-      ...config,
       data,
     });
   } catch (error) {
-    console.error(`error in api call2 : ${path}`, error);
+    console.log(error.response);
+    // console.error(`error in api call2 : ${path}`, error);
   }
 };
 
@@ -51,18 +30,9 @@ const refreshTokenFunc = async () => {
 
   console.log('refreshToken: ', refreshToken);
 
-  return makeRequest(
-    'post',
-    'v1/auth/refresh',
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    },
-    {
-      jwt: refreshToken,
-    }
-  );
+  return makeRequest('post', 'v1/auth/access-token', {
+    jwt: refreshToken,
+  });
 };
 
 const setTokenInSecure = async (tokenInfo) => {
@@ -71,14 +41,6 @@ const setTokenInSecure = async (tokenInfo) => {
     JSON.stringify({
       accessToken: tokenInfo.accessToken,
       accessTokenExpiredDate: tokenInfo.accessTokenExpiryDate,
-    })
-  );
-
-  await SecureStore.setItemAsync(
-    'refresh_TokenInfo',
-    JSON.stringify({
-      refreshToken: tokenInfo.refreshToken,
-      refreshTokenExpiredDate: tokenInfo.refreshTokenExpiryDate,
     })
   );
 };
@@ -101,16 +63,13 @@ const getInvalidToken = async () => {
       const newRefreshToken = await refreshTokenFunc();
 
       const tokenInfo = {
-        accessToken: newRefreshToken.data.data.tokens.accessToken.jwtToken,
-        accessTokenExpiryDate: newRefreshToken.data.data.tokens.accessToken.formattedExpiryDate,
-        refreshToken: newRefreshToken.data.data.tokens.refreshToken.jwtToken,
-        refreshTokenExpiryDate: newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
+        accessToken: newRefreshToken.data.data.accessToken.jwtToken,
+        accessTokenExpiryDate: newRefreshToken.data.data.accessToken.formattedExpiryDate,
       };
 
-      console.log('tokenInfo: ', tokenInfo);
       setTokenInSecure(tokenInfo);
 
-      return newRefreshToken.data.data.tokens.accessToken.jwtToken;
+      return newRefreshToken.data.data.accessToken.jwtToken;
     }
   }
 };

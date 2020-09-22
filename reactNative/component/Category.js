@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
+
 export default ({ size, image, categoryName, onPress }) => {
   return (
     <TouchableOpacity onPress={() => onPress(categoryName)}>
