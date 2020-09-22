@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 
-import Basic from '../../component/Basic';
-import RestaurantsSwipe from '../../component/RestaurantsSwipe';
-import socket from '../../socket';
-import logging from '../../utils/logging';
+import Basic from '../../../component/Basic';
+import RestaurantsSwipe from '../../../component/RestaurantsSwipe';
+import socket from '../../../socket';
+import logging from '../../../utils/logging';
 
 export default ({
   restaurants,

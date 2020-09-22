@@ -40,7 +40,7 @@ export default ({ navigation, route }) => {
 
       const result = await apis.editUser(user.id, preprocessCategories, imageUrl, user.name, token);
 
-      // console.log('mypageContainer 내부, api result 확인 ', result.data);
+      console.log('mypageContainer 내부, api result 확인 ', result.data);
 
       if (!result.data.success) {
         if (result.data.errorCode === '102') {

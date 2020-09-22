@@ -6,11 +6,11 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
-import { apis } from '../../api';
-import socket from '../../socket';
-import getInvalidToken from '../../utils/getInvalidToken';
-import logging from '../../utils/logging';
-import printSocketEvent from '../../utils/printEvent';
+import { apis } from '../../../api';
+import socket from '../../../socket';
+import getInvalidToken from '../../../utils/getInvalidToken';
+import logging from '../../../utils/logging';
+import printSocketEvent from '../../../utils/printEvent';
 import MainPresenter from './MainPresenter';
 
 // 홈 식당 카드의 api 호출 데이터 전달
@@ -228,7 +228,7 @@ export default ({ navigation, route }) => {
 
       const paseMsg = JSON.parse(msg);
 
-      navigation.navigate('Together', {
+      navigation.navigate('Invite', {
         msg: paseMsg.data,
         user: user.data.userInfo,
       });
