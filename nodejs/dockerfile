@@ -2,8 +2,8 @@ FROM alpine:3.9
 
 ENV NODE_VERSION 12.18.4
 
-RUN addgroup -g 1001 node \
-  && adduser -u 1001 -G node -s /bin/sh -D node \
+RUN addgroup -g 1000 node \
+  && adduser -u 1000 -G node -s /bin/sh -D node \
   && apk add --no-cache \
   libstdc++ \
   && apk add --no-cache --virtual .build-deps \
@@ -104,5 +104,7 @@ COPY . .
 VOLUME [ "/usr/src/logs" ]
 
 EXPOSE 3000
+
+USER 1001
 
 CMD [ "node" , "app.js"]

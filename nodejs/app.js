@@ -28,9 +28,8 @@ function startServer() {
     pingInterval: 20000, // 20초에 한 번씩 핑 보내기
     pingTimeout: 10000, // 10초 동안 퐁 기다리기
   });
-  prometheus.metrics(io, {
-    port: 3001,
-  });
+  //default port 9090
+  prometheus.metrics(io);
 
   io.use((socket, next) => {
     checkUserUnique(io, socket, next);
