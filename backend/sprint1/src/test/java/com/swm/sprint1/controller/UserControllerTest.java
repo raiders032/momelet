@@ -1,18 +1,16 @@
 package com.swm.sprint1.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swm.sprint1.domain.AuthProvider;
-import com.swm.sprint1.domain.Category;
-import com.swm.sprint1.domain.User;
+import com.swm.sprint1.domain.*;
 import com.swm.sprint1.exception.ResourceNotFoundException;
+import com.swm.sprint1.payload.request.UserLikingDto;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.repository.category.CategoryRepository;
+import com.swm.sprint1.repository.user.UserLikingRepository;
 import com.swm.sprint1.repository.user.UserRepository;
-import com.swm.sprint1.security.Token;
-import com.swm.sprint1.security.TokenProvider;
-import com.swm.sprint1.security.UserPrincipal;
 import com.swm.sprint1.service.AuthService;
 import org.junit.After;
 import org.junit.Before;
@@ -25,20 +23,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.assertj.core.api.Assertions.offset;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,26 +45,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class UserControllerTest {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    @Autowired private CategoryRepository categoryRepository;
 
-    @Autowired
-    private AuthService authService;
+    @Autowired private UserLikingRepository userLikingRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private AuthService authService;
+
+    @Autowired private ObjectMapper objectMapper;
 
     private final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
     private User user;
 
     private String accessToken, refreshToken;
+
+    private BigDecimal latitude, longitude;
 
     @Before
     public void init() {
@@ -89,11 +86,14 @@ public class UserControllerTest {
         accessToken = accessAndRefreshToken.getAccessToken().getJwtToken();
         refreshToken = accessAndRefreshToken.getRefreshToken().getJwtToken();
 
+        latitude = BigDecimal.valueOf(37.5435750);
+        longitude = BigDecimal.valueOf(127.0704190);
     }
 
     @After
     public void clear() {
         logger.info("유저 리포지토 비우기");
+        userLikingRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -343,4 +343,332 @@ public class UserControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    public void 의사표현_저장_정상작동_확인() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        BigDecimal latitude = BigDecimal.valueOf(37.5435750);
+        BigDecimal longitude = BigDecimal.valueOf(127.0704190);
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        MvcResult mvcResult = resultActions
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andReturn();
+
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        ApiResponse apiResponse = objectMapper.readValue(contentAsString, ApiResponse.class);
+        Integer userLikingId = (Integer) apiResponse.getData().get("userLikingId");
+        UserLiking userLiking = userLikingRepository.findUserLikingByIdWithRestaurant(Long.valueOf(userLikingId)).orElseThrow(() -> new ResourceNotFoundException("userLiking", "id", userLikingId, "250"));
+
+        //then
+        assertThat(userLiking.getRestaurant().getId()).isEqualTo(restaurantId);
+        assertThat(userLiking.getElapsedTime()).isEqualTo(elapsedTime);
+        assertThat(userLiking.getUserLatitude()).isEqualByComparingTo(latitude);
+        assertThat(userLiking.getUserLongitude()).isEqualByComparingTo(longitude);
+        assertThat(userLiking.getLiking()).isEqualTo(Liking.LIKE);
+    }
+
+    @Test
+    public void 의사표현_저장_식당아이디_없이_요청하기() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_존재하지_않는_식당_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 10000L;
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("210"));
+    }
+
+    @Test
+    public void 의사표현_저장_위도_없이_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_위도_범위_초과_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        BigDecimal latitude = BigDecimal.valueOf(400.0000000);
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_위도_범위_미만_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        BigDecimal latitude = BigDecimal.valueOf(-400.0000000);
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_경도_없이_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_경도_범위_초과_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        BigDecimal longitude = BigDecimal.valueOf(400.000000);
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_경도_범위_미만_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        BigDecimal longitude = BigDecimal.valueOf(-400.000000);
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_의사표현_없이_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .elapsedTime(elapsedTime)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
+
+    @Test
+    public void 의사표현_저장_경과시간_없이_요청() throws Exception {
+        //given
+        String uri = "/api/v1/users/" + user.getId() + "/liking";
+        Long restaurantId = 1L;
+        Integer elapsedTime = 5;
+        UserLikingDto userLikingDto = UserLikingDto.builder()
+                .restaurantId(restaurantId)
+                .liking(Liking.LIKE)
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .build();
+        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                post(uri)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(content)
+                        .header("Authorization", "Bearer " + accessToken));
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.errorCode").value("102"));
+    }
 }

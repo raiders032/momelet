@@ -4,7 +4,7 @@ import com.swm.sprint1.domain.Restaurant;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.domain.UserLiking;
 import com.swm.sprint1.exception.ResourceNotFoundException;
-import com.swm.sprint1.payload.request.CreateUserLikingDto;
+import com.swm.sprint1.payload.request.UserLikingDto;
 import com.swm.sprint1.repository.restaurant.RestaurantRepository;
 import com.swm.sprint1.repository.user.UserLikingRepository;
 import com.swm.sprint1.repository.user.UserRepository;
@@ -24,7 +24,7 @@ public class UserLikingService {
     private final Logger logger = LoggerFactory.getLogger(UserLikingService.class);
 
     @Transactional
-    public void saveUserLiking(Long userId, CreateUserLikingDto userLikingDto) {
+    public Long saveUserLiking(Long userId, UserLikingDto userLikingDto) {
         logger.debug("saveUserLiking 호출됨");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId, "200"));
@@ -38,8 +38,9 @@ public class UserLikingService {
                 .user(user)
                 .userLatitude(userLikingDto.getUserLatitude())
                 .userLongitude(userLikingDto.getUserLongitude())
+                .elapsedTime(userLikingDto.getElapsedTime())
                 .build();
 
-        userLikingRepository.save(userLiking);
+        return userLikingRepository.save(userLiking).getId();
     }
 }

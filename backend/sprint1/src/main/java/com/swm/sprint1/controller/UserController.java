@@ -3,7 +3,7 @@ package com.swm.sprint1.controller;
 import com.swm.sprint1.domain.User;
 import com.swm.sprint1.exception.RequestParamException;
 import com.swm.sprint1.exception.ResourceNotFoundException;
-import com.swm.sprint1.payload.request.CreateUserLikingDto;
+import com.swm.sprint1.payload.request.UserLikingDto;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.UserInfoDto;
 import com.swm.sprint1.repository.user.UserRepository;
@@ -79,7 +79,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createUserLiking(@CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable Long id,
-                                              @Valid @RequestBody CreateUserLikingDto userLikingDto,
+                                              @Valid @RequestBody UserLikingDto userLikingDto,
                                               BindingResult result){
         logger.debug("createUserLiking 호출되었습니다.");
         if(!id.equals(userPrincipal.getId())) {
@@ -91,9 +91,11 @@ public class UserController {
             throw new RequestParamException(result.getAllErrors().toString(),"102");
         }
 
-        userLikingService.saveUserLiking(userPrincipal.getId(), userLikingDto);
-        return ResponseEntity.created(null)
-                .body(new ApiResponse(true, "유저 의사 표현 저장 완료"));
+        Long userLikingId = userLikingService.saveUserLiking(userPrincipal.getId(), userLikingDto);
+
+        ApiResponse apiResponse = new ApiResponse(true, "유저 의사 표현 저장 완료");
+        apiResponse.putData("userLikingId", userLikingId);
+        return ResponseEntity.created(null).body(apiResponse);
     }
 
     @ApiOperation(value = "유저의 목록을 반환")
