@@ -1,0 +1,31 @@
+#!groovy
+env.tfstate
+env.submitter = ''
+env.projectid
+
+
+pipeline {
+  agent any
+  
+  stages {
+    stage ("Git Checkout") {
+      steps {
+        checkout cicd  
+      }
+    }	
+
+
+    /*************** 2-2-3. 정적분석(SonarQube) 실행 ******************/
+    
+    stage("SonarQube analysis") {
+        steps {
+            withSonarQubeEnv("sonarqube"){
+                sh './gradlew sonarqube'
+            }
+        }
+    }
+    
+    /*********************************************************************/    
+    
+
+}
