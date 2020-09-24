@@ -1,5 +1,6 @@
 package com.swm.sprint1.domain;
 
+import com.swm.sprint1.domain.base.DateEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class UserRefreshToken {
+public class UserRefreshToken extends DateEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_refresh_token_id")
