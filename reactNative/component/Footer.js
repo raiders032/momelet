@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
+
 export default ({ text, onClick, style, activation = true }) => {
   return (
     <TouchableOpacity onPress={onClick} disabled={!activation}>

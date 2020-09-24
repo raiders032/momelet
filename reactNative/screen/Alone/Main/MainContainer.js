@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
 import { apis } from '../../../api';
+import Empty from '../../../component/Empty';
 import socket from '../../../socket';
 import getInvalidToken from '../../../utils/getInvalidToken';
 import logging from '../../../utils/logging';
@@ -19,6 +20,8 @@ export default ({ navigation, route }) => {
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState(null);
   const [isChanged, setIsChanged] = useState(1);
+  const [tmpConnect, setTmpConnect] = useState(false);
+  let count = 0;
   // const [isDisconnect, setIsDisconnect] = useState(false);
   const [coverMessageConfig, setCoverMessageConfig] = useState({
     zIndex: -1,
@@ -88,7 +91,9 @@ export default ({ navigation, route }) => {
       const nowUser = user.data.userInfo;
       const jwtToken = await getInvalidToken();
 
+      console.log('aaaa', latitude, longitude);
       // socket.query.JWT = route.params.userToken;
+
       socket.query.JWT = jwtToken;
       socket.query.email = nowUser.email;
       socket.query.imageUrl = nowUser.imageUrl;
@@ -167,9 +172,16 @@ export default ({ navigation, route }) => {
 
     if (status === 'granted') {
       const location = await Location.getCurrentPositionAsync({});
+      let latitude;
+      let longitude;
 
-      const latitude = 37.5447048;
-      const longitude = 127.0663154;
+      if (tmpConnect) {
+        latitude = 37.5447048;
+        longitude = 127.0663154;
+      } else {
+        latitude = location.coords.latitude;
+        longitude = location.coords.longitude;
+      }
 
       await getUserRestaurant(
         latitude,
@@ -178,8 +190,8 @@ export default ({ navigation, route }) => {
         // location.coords.latitude,
         // location.coords.longitude
       );
-      // await socketConnect(location.coords.latitude, location.coords.longitude);
       await socketConnect(latitude, longitude);
+      // await socketConnect(location.coords.latitude, location.coords.longitude);
       setUserLocation({ latitude, longitude });
     } else {
       alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
@@ -218,12 +230,28 @@ export default ({ navigation, route }) => {
     // latitude , longitude 있음 , 나중에 사용 바람.!!!!
 
     const location = await Location.getCurrentPositionAsync({});
+    let latitude;
+    let longitude;
+
+    if (tmpConnect) {
+      latitude = 37.5447048;
+      longitude = 127.0663154;
+    } else {
+      latitude = location.coords.latitude;
+      longitude = location.coords.longitude;
+    }
+
+    // console.log(latitude, longitude);
+
+    // const latitude = location.coords.latitude;
+    // const longitude = location.coords.longitude;
+    console.log(count);
 
     const sendMsg = {
       id: socket.query.id,
-      latitude: 37.5447048,
-      longitude: 127.0663154,
-
+      latitude,
+      longitude,
+      count: count++,
       // latitude: location.coords.latitude,
       // longitude: location.coords.longitude,
     };

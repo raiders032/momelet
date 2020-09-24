@@ -7,7 +7,9 @@ import Footer from '../../../component/Footer';
 import WaitBox from '../../../component/WaitBox';
 import socket from '../../../socket';
 
-export default ({ users, onClick, activation }) => {
+export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
+  console.log(isGetRestaurantSuccess);
+
   const abc = [];
   const footer = (
     <Footer
