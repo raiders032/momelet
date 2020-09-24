@@ -13,6 +13,7 @@ const onPress = async (afterLogin, where) => {
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl('')}`;
 
   console.log(Linking.makeUrl(''));
+
   const _removeLinkingListener = () => {
     Linking.removeEventListener('url', _handleRedirect);
   };
@@ -35,11 +36,13 @@ const onPress = async (afterLogin, where) => {
   if (supported) {
     try {
       addLinkingListener();
+
       const result = await WebBrowser.openBrowserAsync(URL);
 
       if (Constants.platform.ios) {
         _removeLinkingListener();
       }
+
       console.log('Login Success');
     } catch (error) {
       console.error('error in login', error);
@@ -79,12 +82,12 @@ export default function App({ afterLogin }) {
 
   const bgY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -height / 4],
+    outputRange: [0, -height / 2.5],
   });
 
   const textInputY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [height / 4, 0],
+    outputRange: [height / 2.5, 0],
   });
 
   return (
@@ -106,7 +109,7 @@ export default function App({ afterLogin }) {
         </Svg>
       </Animated.View>
 
-      <View style={{ height: height / 4, justifyContent: 'center' }}>
+      <View style={{ height: height / 2.5, justifyContent: 'center' }}>
         <Animated.View
           style={{
             ...styles.button,
@@ -120,10 +123,11 @@ export default function App({ afterLogin }) {
 
         <Animated.View
           style={{
-            height: height / 4,
+            height: height / 2.5,
             ...StyleSheet.absoluteFill,
             justifyContent: 'center',
             transform: [{ translateY: textInputY }],
+            backgroundColor: '#f7f7f7',
           }}>
           <Animated.View style={{ ...styles.closeButton, opacity: animatedObj }}>
             <TouchableOpacity onPress={cancelPress}>
@@ -132,23 +136,113 @@ export default function App({ afterLogin }) {
           </Animated.View>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
+              height: '100%',
+              width: '100%',
+
+              marginTop: 40,
             }}>
-            <TouchableOpacity onPress={() => onPress(afterLogin, 'google')}>
-              <View style={{ ...styles.loginButton, borderColor: 'red' }}>
-                <Text>G</Text>
+            <TouchableOpacity
+              onPress={() => onPress(afterLogin, 'google')}
+              style={{ justifyContent: 'center', alignItems: 'center', height: '30%' }}>
+              <View
+                style={{
+                  width: '80%',
+                  backgroundColor: 'white',
+                  height: '70%',
+                  borderRadius: 10,
+                  flexDirection: 'row',
+
+                  paddingTop: 3,
+                }}>
+                <Svg
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '30%',
+                  }}>
+                  <Image href={require('../../assets/google.png')} height="90%" />
+                </Svg>
+                <View
+                  style={{
+                    right: 0,
+                    justifyContent: 'center',
+                    height: '100%',
+                    width: '70%',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ fontSize: 18, fontWeight: '600' }}>구글로 시작하기</Text>
+                </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPress(afterLogin, 'kakao')}>
-              <View style={{ ...styles.loginButton, borderColor: 'orange' }}>
-                <Text>K</Text>
+            <TouchableOpacity
+              onPress={() => onPress(afterLogin, 'naver')}
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '30%',
+              }}>
+              <View
+                style={{
+                  width: '80%',
+                  backgroundColor: '#5fbb41',
+                  height: '70%',
+                  borderRadius: 10,
+                  flexDirection: 'row',
+
+                  paddingTop: 3,
+                }}>
+                <Svg style={{ width: '30%' }}>
+                  <Image
+                    href={require('../../assets/naver.png')}
+                    height="90%"
+                    preserveAspectRatio="xMidYMid"
+                    clipPath="url(#clip)"
+                  />
+                </Svg>
+                <View
+                  style={{
+                    right: 0,
+                    justifyContent: 'center',
+                    height: '100%',
+                    width: '70%',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>
+                    네이버로 시작하기
+                  </Text>
+                </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onPress(afterLogin, 'naver')}>
-              {/* <TouchableOpacity onPress={() => setUserToken("google")}> */}
-              <View style={{ ...styles.loginButton, borderColor: 'green' }}>
-                <Text>N</Text>
+            <TouchableOpacity
+              onPress={() => onPress(afterLogin, 'kakao')}
+              style={{ justifyContent: 'center', alignItems: 'center', height: '30%' }}>
+              <View
+                style={{
+                  width: '80%',
+                  backgroundColor: '#f5e44f',
+                  height: '70%',
+                  borderRadius: 10,
+                  flexDirection: 'row',
+                  paddingTop: 3,
+                }}>
+                <Svg style={{ width: '30%' }}>
+                  <Image
+                    href={require('../../assets/kakao.png')}
+                    height="90%"
+                    preserveAspectRatio="xMidYMid"
+                    clipPath="url(#clip)"
+                  />
+                </Svg>
+                <View
+                  style={{
+                    right: 0,
+                    justifyContent: 'center',
+                    height: '100%',
+                    width: '70%',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ fontSize: 18, fontWeight: '600' }}>카카오로 시작하기</Text>
+                </View>
               </View>
             </TouchableOpacity>
           </View>
@@ -176,6 +270,7 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 0.2,
     shadowOffset: { width: 8, height: 8 },
+    top: 20,
   },
   textInput: {
     backgroundColor: 'white',

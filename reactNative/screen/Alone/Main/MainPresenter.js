@@ -17,6 +17,7 @@ export default ({
   userLocation,
 }) => {
   console.log('MainPresenter 렌더');
+  console.log(restaurants);
 
   const msg = { id: 2, latitude: 37.5, longitude: 127.49999 };
 
@@ -70,15 +71,13 @@ export default ({
       footer={footer}
       zIndex={coverMessageConfig.zIndex}
       coverMessageConfig={coverMessageConfig}>
-      {/* {restaurants.length > 3 ? (
+      {}
+      {!restaurants || restaurants.length <= 0 ? (
+        <Empty />
+      ) : restaurants.length > 3 ? (
         <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       ) : (
         <View />
-      )} */}
-      {!restaurants ? (
-        <Empty />
-      ) : (
-        <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       )}
     </Basic>
   );

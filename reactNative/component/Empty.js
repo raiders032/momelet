@@ -7,6 +7,7 @@ import Card from './Card';
 export default ({ setTmpConnect, setIsChanged }) => {
   // const latitude = 37.5447048;
   // const longitude = 127.0663154;
+  console.log('Hello');
 
   return (
     <View

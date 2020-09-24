@@ -9,7 +9,9 @@ import Menu from './Menu';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ menus, name, phoneNumber, address, lat, lng }) => {
+export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) => {
+  console.log(lat, lng, userLocation.latitude, userLocation.longitude);
+
   const navigation = useNavigation();
   let isProcessing = false;
 
@@ -102,7 +104,7 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
 
             if (canOpen) {
               Linking.openURL(
-                'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
+                `kakaomap://route?sp=${userLocation.latitude},${userLocation.longitude}&ep=${lat},${lng}&by=FOOT`
               );
             } else {
               if (Platform.OS === 'android') {

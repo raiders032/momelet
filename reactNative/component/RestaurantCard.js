@@ -155,6 +155,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
               address={restaurant.roadAddress}
               lng={restaurant.longitude}
               lat={restaurant.latitude}
+              userLocation={userLocation}
             />
           </Animated.View>
         </View>

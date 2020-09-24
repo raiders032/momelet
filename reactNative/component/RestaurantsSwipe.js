@@ -5,6 +5,7 @@ import Basic from './Basic';
 import Card from './Card';
 import RestaurantCard from './RestaurantCard';
 import RestaurantHeader from './RestaurantHeader';
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ restaurants, userLocation }) => {
@@ -13,6 +14,7 @@ export default ({ restaurants, userLocation }) => {
   useEffect(() => {
     setRestaurant(restaurants);
   }, [restaurants]);
+
   const [firstRestaurant, secondRestaurant, ...otherRestaurant] = restaurant;
 
   const position = new Animated.ValueXY({ x: 0, y: 0 });
@@ -20,6 +22,7 @@ export default ({ restaurants, userLocation }) => {
   useEffect(() => {
     position.setValue({ x: 0, y: 0 });
   });
+
   const rotationValues = position.x.interpolate({
     inputRange: [-200, 0, 200],
     outputRange: ['-13deg', '0deg', '13deg'],
