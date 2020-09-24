@@ -50,7 +50,7 @@ export default async (
 
   let cardList = new Map();
   for (let i = 0; i < 7; i++) {
-    cardList.set(cards[i].id, { score: 0, like: 0 });
+    cardList.set(cards[i].id, { score: 0, liking: 0 });
   }
   room.updateCardList(cardList);
 

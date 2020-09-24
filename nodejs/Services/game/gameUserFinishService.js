@@ -51,7 +51,7 @@ export default async (socket, { id, userGameResult, roomName, jwt }) => {
     room.addFinishCount();
     if (userGameResult.length === 7) {
       for (let result of userGameResult) {
-        room.addScore(result.id, result.sign, jwt);
+        room.addScore(result.restaurantId, result.liking);
       }
       try {
         await sendUserLikingData(user, userGameResult, jwt);

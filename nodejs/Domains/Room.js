@@ -54,15 +54,15 @@ export default class Room {
     this.cardList.clear();
   }
 
-  addScore(id, like) {
-    const card = this.cardList.get(id);
+  addScore(restaurantId, liking) {
+    const card = this.cardList.get(restaurantId);
     if (card === undefined) throw new ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH();
-    if (like === "y") {
-      card.like += 1;
+    if (liking === "LIKE") {
+      card.liking += 1;
       card.score += 2;
-    } else if (like === "n") {
+    } else if (liking === "DISLIKE") {
       card.score += 0;
-    } else if (like === "s") {
+    } else if (liking === "SOSO") {
       card.score += 1;
     }
   }

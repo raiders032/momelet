@@ -12,10 +12,10 @@ export default (socket, room) => {
   cardList.forEach((card, key) => {
     if (card.score > bestCard.score) {
       bestCard.score = card.score;
-      bestCard.like = card.like;
+      bestCard.like = card.liking;
       bestCard.id = key;
     }
-    if (card.like > 0) isLike = true;
+    if (card.liking > 0) isLike = true;
   });
 
   if (!isLike) {
