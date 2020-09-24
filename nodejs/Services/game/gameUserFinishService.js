@@ -9,23 +9,10 @@ const sendUserLikingData = async (user, userGameResult, jwt) => {
   const userLikingDto = {
     userLongitude: user.longitude,
     userLatitude: user.latitude,
-    userLiking: [],
+    userLiking: userGameResult,
   };
-  userGameResult.forEach((result) => {
-    userLikingDto.userLiking.push({
-      elapsedTime: result.elapsedTime,
-      restaurantId: result.id,
-      liking: (() => {
-        if (result.sign === "y") return "LIKE";
-        else if (result.sign === "n") return "DISLIKE";
-        else if (result.sign === "s") return "SOSO";
-        else return "a";
-      })(),
-    });
-  });
 
   try {
-    console.log(JSON.stringify(userLikingDto));
     await axios.post(
       process.env.SERVER_URL + `/api/v1/users/${user.id}/liking`,
       JSON.stringify(userLikingDto),
