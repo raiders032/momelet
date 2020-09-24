@@ -1,18 +1,26 @@
 import { StackActions } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import socket from '../../../socket';
 import printSocketEvent from '../../../utils/printEvent';
 import InvitePresenter from './InvitePresenter';
+
 export default ({ navigation, route }) => {
   const tmpUsers = route.params.msg.aroundUsers;
-
+  let isSendMsg = false;
   const [users, setUsers] = useState(
     tmpUsers.map((user) => {
       return { ...user, selected: false };
     })
   );
   const onClick = () => {
+    console.log(isSendMsg);
+
+    if (isSendMsg) return;
+
+    isSendMsg = true;
+    console.log('이벤트 발생', isSendMsg);
+
     const result = [];
 
     users.forEach((user) => {
@@ -29,6 +37,7 @@ export default ({ navigation, route }) => {
       }),
       (msg) => {
         printSocketEvent('togetherInvite', msg);
+
         const paseMsg = JSON.parse(msg);
 
         navigation.dispatch(

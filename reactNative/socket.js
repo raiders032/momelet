@@ -8,7 +8,7 @@ import io from 'socket.io-client';
 console.log('Socket Call');
 
 const socket = io(
-  'http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:3000',
+  'http://ec2-3-34-208-67.ap-northeast-2.compute.amazonaws.com:3000',
   // 'http://localhost:3000',
   // "http://localhost:8002",
   {
@@ -16,7 +16,6 @@ const socket = io(
       id: null,
       email: null,
       JWT: null,
-
       name: null,
       imageUrl: null,
       latitude: 37.5,

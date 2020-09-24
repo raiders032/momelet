@@ -12,10 +12,15 @@ export default ({ navigation, route }) => {
   const [user, setUser] = useState(route.params.user);
   const [coverMessageZIndex, setCoverMessageZIndex] = useState(-1);
   const [isImageEdit, setIsImageEdit] = useState(false);
+  let isSaving = false;
 
   console.log('유저 정보:', user);
 
   const onClickFooter = async () => {
+    if (isSaving) return;
+
+    isSaving = true;
+
     const token = await AsyncStorage.getItem('@userToken');
     const preprocessCategories = [];
 
@@ -55,6 +60,7 @@ export default ({ navigation, route }) => {
       }
     }
 
+    isSaving = false;
     // navigation.dispatch(StackActions.pop(1));
     // navigation.dispatch(
     //   StackActions.replace("Main", {

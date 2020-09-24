@@ -18,6 +18,7 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => {
   console.log('GameRoomPresenter render');
 
+  let isProcessing = false;
   const elapsedTime = useRef(0);
   const timeFinish = useRef(false);
   const [restaurant, setRestaurant] = useState(restaurants);
@@ -56,6 +57,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     outputRange: [1, 0],
   });
   const cardGoDown = () => {
+    if (isProcessing) return;
+
+    isProcessing = true;
     // console.log("cardGoDownAnimation");
     Animated.timing(position, {
       toValue: {
@@ -128,6 +132,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
   });
 
   const cardGoRight = () => {
+    if (isProcessing) return;
+
+    isProcessing = true;
     timeFinish.current = false;
     // console.log('Here', timeFinish.current);
     Animated.timing(position, {
@@ -142,6 +149,9 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     });
   };
   const cardGoLeft = () => {
+    if (isProcessing) return;
+
+    isProcessing = true;
     Animated.timing(position, {
       toValue: {
         x: -WIDTH - 50,
