@@ -93,6 +93,6 @@ export default ({ navigation, route }) => {
       </Basic>
     );
   } else {
-    return <Noresult />;
+    return <Noresult roomName={route.params.roomName} userId={route.params.userId} />;
   }
 };

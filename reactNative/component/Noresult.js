@@ -1,14 +1,51 @@
-import React from 'react';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 
+import socket from '../socket';
+import printSocketEvent from '../utils/printEvent';
 import Basic from './Basic';
 import Card from './Card';
 import Footer from './Footer';
 
-export default ({}) => {
+export default ({ roomName, userId }) => {
+  let isSendMsg = false;
+  const navigation = useNavigation();
+
+  console.log(roomName, userId);
+
   // const latitude = 37.5447048;
   // const longitude = 127.0663154;
-  const footer = <Footer style={{ backgroundColor: 'white' }} text="다시하기" />;
+  const onClickFooter = () => {
+    if (isSendMsg) return;
+
+    isSendMsg = true;
+
+    const sendMsg = {
+      id: userId,
+      roomName,
+    };
+
+    socket.emit('gameRoomJoinAgain', JSON.stringify(sendMsg), (msg) => {
+      printSocketEvent('gameROmmJoinAgain', msg);
+
+      const newMsg = {
+        ...JSON.parse(msg).data,
+        roomName,
+      };
+
+      console.log(newMsg);
+      navigation.dispatch(
+        StackActions.replace('WaitingRoomForStart', {
+          msg: newMsg,
+          myId: userId,
+        })
+      );
+    });
+  };
+  const footer = (
+    <Footer style={{ backgroundColor: 'white' }} text="다시하기" onClick={onClickFooter} />
+  );
 
   return (
     <View style={{ flex: 1 }}>

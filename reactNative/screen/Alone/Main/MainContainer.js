@@ -93,6 +93,7 @@ export default ({ navigation, route }) => {
 
       console.log('aaaa', latitude, longitude);
       // socket.query.JWT = route.params.userToken;
+
       socket.query.JWT = jwtToken;
       socket.query.email = nowUser.email;
       socket.query.imageUrl = nowUser.imageUrl;
@@ -189,8 +190,8 @@ export default ({ navigation, route }) => {
         // location.coords.latitude,
         // location.coords.longitude
       );
-      // await socketConnect(location.coords.latitude, location.coords.longitude);
       await socketConnect(latitude, longitude);
+      // await socketConnect(location.coords.latitude, location.coords.longitude);
       setUserLocation({ latitude, longitude });
     } else {
       alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
@@ -277,8 +278,6 @@ export default ({ navigation, route }) => {
 
   if (restaurants.loading) {
     return <View />;
-  } else if (!restaurants.restaurants.restaurants) {
-    return <Empty setTmpConnect={setTmpConnect} setIsChanged={setIsChanged} />;
   } else {
     return (
       <MainPresenter

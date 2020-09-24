@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 
 import Basic from '../../../component/Basic';
+import Empty from '../../../component/Empty';
 import RestaurantsSwipe from '../../../component/RestaurantsSwipe';
 import socket from '../../../socket';
 import logging from '../../../utils/logging';
@@ -69,10 +70,15 @@ export default ({
       footer={footer}
       zIndex={coverMessageConfig.zIndex}
       coverMessageConfig={coverMessageConfig}>
-      {restaurants.length > 3 ? (
+      {/* {restaurants.length > 3 ? (
         <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       ) : (
         <View />
+      )} */}
+      {!restaurants ? (
+        <Empty />
+      ) : (
+        <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       )}
     </Basic>
   );
