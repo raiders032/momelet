@@ -83,6 +83,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
   const CardImage = React.useCallback(() => {
     return (
       <Image
+        // source={{ uri: restaurant.thumUrl }} // @FIXME restaurant.thumbUrl
         source={{ uri: restaurant.thumUrl }} // @FIXME restaurant.thumbUrl
         // source={{
         //   uri: "https://d22j25xnhsuyth.cloudfront.net/profile-image/test7.jpg",

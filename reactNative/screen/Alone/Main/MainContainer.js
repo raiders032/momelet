@@ -37,6 +37,7 @@ export default ({ navigation, route }) => {
     restaurants: [],
   });
   const [userLocation, setUserLocation] = useState(null);
+  let isSendTogetherMsg = false;
 
   if (route.params?.isChanged) {
     setIsChanged((before) => {
@@ -198,7 +199,11 @@ export default ({ navigation, route }) => {
   // useEffect(() => {}, [user]);
 
   //같이 하기 버튼 클릭시
+
   const sendTogetherMessage = async () => {
+    if (isSendTogetherMsg) return;
+
+    isSendTogetherMsg = true;
     await logging({
       eventName: 'BTN_TOGETHER',
       config: {
@@ -232,7 +237,9 @@ export default ({ navigation, route }) => {
         msg: paseMsg.data,
         user: user.data.userInfo,
       });
+      isSendTogetherMsg = false;
     });
+
     // const sendMsg = { id: nowUser.id, latitude: number, longitude: number }
     // socket.emit("together", JSON.stringify(msg), (msg) => {
     //   navigation.navigate("Together", { msg, user: user.data.userInfo });

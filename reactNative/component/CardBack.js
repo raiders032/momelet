@@ -11,6 +11,7 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ menus, name, phoneNumber, address, lat, lng }) => {
   const navigation = useNavigation();
+  let isProcessing = false;
 
   return (
     <View>
@@ -43,6 +44,10 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           icon={require('../assets/call.png')}
           text="전화하기"
           onPress={async () => {
+            if (isProcessing) return;
+
+            isProcessing = true;
+
             await logging({
               eventName: 'BTN_CALL',
               config: {
@@ -67,6 +72,8 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
             } else {
               console.log('해당 url을 열수 없습니다!');
             }
+
+            isProcessing = false;
           }}
         />
 
@@ -74,6 +81,10 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           icon={require('../assets/geo.png')}
           text="길찾기"
           onPress={async () => {
+            if (isProcessing) return;
+
+            isProcessing = true;
+
             await logging({
               eventName: 'BTN_MAP',
               config: {
@@ -100,6 +111,8 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
                 Linking.openURL('https://apps.apple.com/us/app/id304608425');
               }
             }
+
+            isProcessing = false;
           }}
         />
 
@@ -107,6 +120,9 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
           icon={require('../assets/copy.png')}
           text="주소복사"
           onPress={async () => {
+            if (isProcessing) return;
+
+            isProcessing = true;
             await logging({
               eventName: 'BTN_COPY_ADDRESS',
               config: {
@@ -123,6 +139,8 @@ export default ({ menus, name, phoneNumber, address, lat, lng }) => {
             } else {
               alert('주소가 클립보드에 복사 되었습니다.');
             }
+
+            isProcessing = false;
           }}
         />
       </View>

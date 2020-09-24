@@ -21,7 +21,7 @@ export default ({ navigation, route }) => {
 
   // console.log(route.params);
   const resultId = route.params.msg.roomGameResult.id;
-
+  let isSendMsg = false;
   const result = route.params.restaurant.filter((restaurant) => {
     return restaurant.id == resultId;
   });
@@ -39,6 +39,10 @@ export default ({ navigation, route }) => {
     navigation.navigate('Main');
   };
   const footerClick = () => {
+    if (isSendMsg) return;
+
+    isSendMsg = true;
+
     const sendMsg = {
       id: route.params.userId,
       roomName: route.params.roomName,

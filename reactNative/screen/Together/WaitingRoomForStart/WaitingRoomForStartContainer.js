@@ -8,6 +8,8 @@ import printSocketEvent from '../../../utils/printEvent';
 import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 
 export default ({ navigation, route }) => {
+  let isSendMsg = false;
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -57,6 +59,10 @@ export default ({ navigation, route }) => {
   }, []);
 
   const onClick = async (latitude = 37.5447048, longitude = 127.0663154) => {
+    if (isSendMsg) return;
+
+    isSendMsg = true;
+
     const jwtToken = await getInvalidToken();
 
     socket.emit(
