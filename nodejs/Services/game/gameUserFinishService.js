@@ -25,13 +25,21 @@ const sendUserLikingData = async (user, userGameResult, jwt) => {
   });
 
   try {
+    console.log(JSON.stringify(userLikingDto));
     await axios.post(
       process.env.SERVER_URL + `/api/v1/users/${user.id}/liking`,
       JSON.stringify(userLikingDto),
-      { headers: "Bearer " + jwt }
+      {
+        headers: {
+          Authorization: "Bearer " + jwt,
+          "Content-Type": "application/json",
+        },
+      }
     );
   } catch (err) {
+    logger.error(err.stack);
     let errObj = new Error();
+
     if (err.response) {
       errObj.message = err.response.data.message;
       errObj.errorCode = err.response.data.errorCode;
@@ -59,7 +67,7 @@ export default async (socket, { id, userGameResult, roomName, jwt }) => {
         room.addScore(result.id, result.sign, jwt);
       }
       try {
-        sendUserLikingData(user, userGameResult);
+        await sendUserLikingData(user, userGameResult, jwt);
       } catch (err) {
         // continue
       }

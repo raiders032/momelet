@@ -36,7 +36,7 @@ export default (socket, errorHandler) => {
   // 게임시작
   socket.on("gameStart", async (msg, ack) => {
     logger.info("gameStart. msg: " + msg);
-    let response = await errorHandlerAsync(async () => {
+    let response = await errorHandlerAsync(() => {
       const { id, roomName, radius, latitude, longitude, jwt } = JSON.parse(
         msg
       );
@@ -45,7 +45,7 @@ export default (socket, errorHandler) => {
         string: [roomName, jwt],
       });
 
-      return await gameStartService(socket, {
+      return gameStartService(socket, {
         id,
         roomName,
         radius,
@@ -60,7 +60,7 @@ export default (socket, errorHandler) => {
   // 유저 한명 게임 종료
   socket.on("gameUserFinish", async (msg, ack) => {
     logger.info("gameRoomUserFinish. msg: " + msg);
-    let response = await errorHandlerAsync(async () => {
+    let response = await errorHandlerAsync(() => {
       const { id, userGameResult, roomName, jwt } = JSON.parse(msg);
       msgTypeCheck({
         number: [id],
