@@ -9,6 +9,7 @@ import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 
 export default ({ navigation, route }) => {
   let isSendMsg = false;
+  const [isGetRestaurantSuccess, setIsGetRestaurantSuccess] = useState(true);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -80,22 +81,31 @@ export default ({ navigation, route }) => {
 
         const paseMsg = JSON.parse(msg);
 
-        navigation.dispatch(
-          StackActions.replace('GameRoom', {
-            msg: paseMsg.data,
-            roomName: route.params.msg.roomName,
-            userId: route.params.myId,
-          })
-        );
+        if (!paseMsg.success) {
+          setIsGetRestaurantSuccess(false);
+        } else {
+          navigation.dispatch(
+            StackActions.replace('GameRoom', {
+              msg: paseMsg.data,
+              roomName: route.params.msg.roomName,
+              userId: route.params.myId,
+            })
+          );
+        }
       }
     );
   };
+
+  if (!isGetRestaurantSuccess) {
+    alert('식당 카드를 들고 올수 없습니다. 카테고리를 더 추가해보세요.');
+  }
 
   return (
     <WaitingRoomForStartPresenter
       users={users}
       onClick={onClick}
       activation={route.params.msg.hostId === route.params.myId}
+      isGetRestaurantSuccess={isGetRestaurantSuccess}
     />
   );
 };

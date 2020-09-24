@@ -69,7 +69,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove('soso');
+      afterCardMove('SOSO');
     });
   };
   const afterCardMove = (response) => {
@@ -77,15 +77,15 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     // console.log("gameResult.current.length", gameResult.current.length);
     if (gameResult.current.length >= 6) {
       gameResult.current.push({
-        id: firstRestaurant.id,
-        sign: response,
+        restaurantId: firstRestaurant.id,
+        liking: response,
         elapsedTime: elapsedTime.current,
       });
       gameFinish(gameResult);
     } else {
       gameResult.current.push({
-        id: firstRestaurant.id,
-        sign: response,
+        restaurantId: firstRestaurant.id,
+        liking: response,
         elapsedTime: elapsedTime.current,
       });
       setRestaurant([secondRestaurant, ...otherRestaurant]);
@@ -106,7 +106,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
           duration: 200,
           useNativeDriver: false,
         }).start(() => {
-          afterCardMove('n');
+          afterCardMove('DISLIKE');
         });
       } else if (dx <= -150) {
         Animated.timing(position, {
@@ -117,7 +117,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
           duration: 100,
           useNativeDriver: false,
         }).start(() => {
-          afterCardMove('y');
+          afterCardMove('LIKE');
         });
       } else {
         Animated.spring(position, {
@@ -145,7 +145,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove('n');
+      afterCardMove('DISLIKE');
     });
   };
   const cardGoLeft = () => {
@@ -160,7 +160,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
       duration: 500,
       useNativeDriver: false,
     }).start(() => {
-      afterCardMove('y');
+      afterCardMove('LIKE');
     });
   };
   const timeGo = () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-export default ({ children }) => {
+
+export default ({ children, style }) => {
   return (
     <View
       style={{
@@ -12,6 +13,7 @@ export default ({ children }) => {
         shadowOpacity: 2,
         shadowColor: 'grey',
         elevation: 15,
+        ...style,
       }}>
       {children}
     </View>

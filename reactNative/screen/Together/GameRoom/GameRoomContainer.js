@@ -2,6 +2,7 @@ import { StackActions } from '@react-navigation/native';
 import React, { useState } from 'react';
 
 import socket from '../../../socket';
+import getInvalidToken from '../../../utils/getInvalidToken';
 import printSocketEvent from '../../../utils/printEvent';
 import GameRoomPresenter from './GameRoomPresenter';
 
@@ -27,11 +28,13 @@ export default ({ navigation, route }) => {
     }, 500);
   }
 
-  const gameFinish = (gameResult) => {
+  const gameFinish = async (gameResult) => {
+    const jwt = await getInvalidToken();
     const sendMsg = {
       id: route.params.userId,
       userGameResult: gameResult.current,
       roomName: route.params.roomName,
+      jwt,
     };
 
     socket.emit('gameUserFinish', JSON.stringify(sendMsg), (msg) => {
