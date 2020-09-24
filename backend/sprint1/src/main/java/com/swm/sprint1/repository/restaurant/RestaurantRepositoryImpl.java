@@ -169,6 +169,16 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom{
         return jpaResultMapper.list(query, RestaurantDtoResponse.class);
     }
 
+    @Override
+    public List<Restaurant> findAllByIdOrderByIdAsc(List<Long> restaurantId) {
+        return queryFactory
+                .select(restaurant)
+                .from(restaurant)
+                .where(restaurant.id.in(restaurantId))
+                .orderBy(restaurant.id.asc())
+                .fetch();
+    }
+
     private BooleanExpression latitudeBetween(BigDecimal latitude, BigDecimal length){
         return latitude != null ? restaurant.latitude.between(latitude.subtract(length), latitude.add(length)) : null;
     }

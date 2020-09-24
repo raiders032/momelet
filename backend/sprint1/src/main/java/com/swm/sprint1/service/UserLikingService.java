@@ -5,6 +5,7 @@ import com.swm.sprint1.domain.User;
 import com.swm.sprint1.domain.UserLiking;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.UserLikingDto;
+import com.swm.sprint1.payload.request.UserLikingReqeust;
 import com.swm.sprint1.repository.restaurant.RestaurantRepository;
 import com.swm.sprint1.repository.user.UserLikingRepository;
 import com.swm.sprint1.repository.user.UserRepository;
@@ -13,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,23 +29,33 @@ public class UserLikingService {
     private final Logger logger = LoggerFactory.getLogger(UserLikingService.class);
 
     @Transactional
-    public Long saveUserLiking(Long userId, UserLikingDto userLikingDto) {
+    public List<Long> saveUserLiking(Long userId, UserLikingReqeust userLikingReqeust) {
         logger.debug("saveUserLiking 호출됨");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId, "200"));
 
-        Restaurant restaurant = restaurantRepository.findById(userLikingDto.getRestaurantId())
-                .orElseThrow(() -> new ResourceNotFoundException("restaurant", "id", userLikingDto.getRestaurantId(), "210"));
+        List<UserLikingDto> userLikingList = userLikingReqeust.getUserLiking();
+        List<Long> restaurantIds = userLikingList.stream().map(UserLikingDto::getRestaurantId).collect(Collectors.toList());
+        List<Restaurant> restaurants = restaurantRepository.findAllByIdOrderByIdAsc(restaurantIds);
+        if(restaurants.size() != 7){
+            throw new ResourceNotFoundException("restaurant", "id", "식당  존재하지 않는 식당 아이디가 포함되어 있습니다.","210");
+        }
+        List<UserLiking> userLikings = new ArrayList<>();
 
-        UserLiking userLiking = UserLiking.builder()
-                .liking(userLikingDto.getLiking())
-                .restaurant(restaurant)
-                .user(user)
-                .userLatitude(userLikingDto.getUserLatitude())
-                .userLongitude(userLikingDto.getUserLongitude())
-                .elapsedTime(userLikingDto.getElapsedTime())
-                .build();
+        for (int i = 0; i < 7; i++) {
+            UserLiking userLiking = UserLiking.builder()
+                    .user(user)
+                    .restaurant(restaurants.get(i))
+                    .liking(userLikingList.get(i).getLiking())
+                    .userLatitude(userLikingReqeust.getUserLatitude())
+                    .userLongitude(userLikingReqeust.getUserLongitude())
+                    .elapsedTime(userLikingList.get(i).getElapsedTime())
+                    .build();
 
-        return userLikingRepository.save(userLiking).getId();
+            userLikings.add(userLiking);
+        }
+
+        List<UserLiking> savedUserLikings = userLikingRepository.saveAll(userLikings);
+        return savedUserLikings.stream().map(UserLiking::getId).collect(Collectors.toList());
     }
 }

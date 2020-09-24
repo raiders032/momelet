@@ -1,11 +1,10 @@
 package com.swm.sprint1.controller;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swm.sprint1.domain.*;
 import com.swm.sprint1.exception.ResourceNotFoundException;
 import com.swm.sprint1.payload.request.UserLikingDto;
+import com.swm.sprint1.payload.request.UserLikingReqeust;
 import com.swm.sprint1.payload.response.ApiResponse;
 import com.swm.sprint1.payload.response.AuthResponse;
 import com.swm.sprint1.repository.category.CategoryRepository;
@@ -14,6 +13,7 @@ import com.swm.sprint1.repository.user.UserRepository;
 import com.swm.sprint1.service.AuthService;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -29,13 +29,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.offset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +44,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UserControllerTest {
+
+    private static BigDecimal latitude;
+
+    private static BigDecimal longitude;
+
+    private static UserLikingReqeust userLikingReqeust;
+
+    private static List<UserLikingDto> userLikingDtoList= new ArrayList<>();
 
     @Autowired private MockMvc mockMvc;
 
@@ -63,7 +71,30 @@ public class UserControllerTest {
 
     private String accessToken, refreshToken;
 
-    private BigDecimal latitude, longitude;
+
+
+   @BeforeClass
+    public static void init_once(){
+        latitude = BigDecimal.valueOf(37.5435750);
+        longitude = BigDecimal.valueOf(127.0704190);
+
+        for (int i = 0; i < 7; i++) {
+            UserLikingDto likingDto = UserLikingDto.builder()
+                    .liking(Liking.LIKE)
+                    .elapsedTime(i)
+                    .restaurantId(i +1L)
+                    .build();
+            userLikingDtoList.add(likingDto);
+        }
+
+        userLikingReqeust = UserLikingReqeust.builder()
+                .userLatitude(latitude)
+                .userLongitude(longitude)
+                .userLiking(userLikingDtoList)
+                .build();
+        latitude = BigDecimal.valueOf(37.5435750);
+        longitude = BigDecimal.valueOf(127.0704190);
+    }
 
     @Before
     public void init() {
@@ -85,9 +116,6 @@ public class UserControllerTest {
         AuthResponse accessAndRefreshToken = authService.createAccessAndRefreshToken(user.getId());
         accessToken = accessAndRefreshToken.getAccessToken().getJwtToken();
         refreshToken = accessAndRefreshToken.getRefreshToken().getJwtToken();
-
-        latitude = BigDecimal.valueOf(37.5435750);
-        longitude = BigDecimal.valueOf(127.0704190);
     }
 
     @After
@@ -347,18 +375,7 @@ public class UserControllerTest {
     public void 의사표현_저장_정상작동_확인() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        BigDecimal latitude = BigDecimal.valueOf(37.5435750);
-        BigDecimal longitude = BigDecimal.valueOf(127.0704190);
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
-                .userLatitude(latitude)
-                .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
-                .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+        String content = objectMapper.writeValueAsString(userLikingReqeust);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -374,29 +391,40 @@ public class UserControllerTest {
 
         String contentAsString = mvcResult.getResponse().getContentAsString();
         ApiResponse apiResponse = objectMapper.readValue(contentAsString, ApiResponse.class);
-        Integer userLikingId = (Integer) apiResponse.getData().get("userLikingId");
-        UserLiking userLiking = userLikingRepository.findUserLikingByIdWithRestaurant(Long.valueOf(userLikingId)).orElseThrow(() -> new ResourceNotFoundException("userLiking", "id", userLikingId, "250"));
+        List<Long> userLikingId = ((List<Integer>) apiResponse.getData().get("userLikingId")).stream().map(Long::new).collect(Collectors.toList());
 
-        //then
-        assertThat(userLiking.getRestaurant().getId()).isEqualTo(restaurantId);
-        assertThat(userLiking.getElapsedTime()).isEqualTo(elapsedTime);
-        assertThat(userLiking.getUserLatitude()).isEqualByComparingTo(latitude);
-        assertThat(userLiking.getUserLongitude()).isEqualByComparingTo(longitude);
-        assertThat(userLiking.getLiking()).isEqualTo(Liking.LIKE);
+        userLikingId.stream().forEach( id->{
+            UserLiking userLiking = userLikingRepository.findUserLikingByIdWithRestaurant(id).orElseThrow(() -> new ResourceNotFoundException("userLiking", "id", userLikingId, "250"));
+            assertThat(userLiking.getId()).isIn(userLikingId);
+            assertThat(userLiking.getElapsedTime()).isBetween(0,6);
+            assertThat(userLiking.getUserLatitude()).isEqualByComparingTo(latitude);
+            assertThat(userLiking.getUserLongitude()).isEqualByComparingTo(longitude);
+            assertThat(userLiking.getLiking()).isEqualTo(Liking.LIKE);
+        });
     }
 
     @Test
     public void 의사표현_저장_식당아이디_없이_요청하기() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .liking(Liking.LIKE)
+        List<UserLikingDto> userLikingDtoList = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            UserLikingDto likingDto = UserLikingDto.builder()
+                    .liking(Liking.LIKE)
+                    .elapsedTime(i)
+                    .build();
+
+            userLikingDtoList.add(likingDto);
+        }
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -405,26 +433,36 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
-    public void 의사표현_저장_존재하지_않는_식당_요청() throws Exception {
+    public void 의사표현_저장_존재하지_않는_식당_요청하기() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 10000L;
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+        List<UserLikingDto> userLikingDtoList = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            UserLikingDto likingDto = UserLikingDto.builder()
+                    .liking(Liking.LIKE)
+                    .restaurantId(129037123907123L)
+                    .elapsedTime(i)
+                    .build();
+
+            userLikingDtoList.add(likingDto);
+        }
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -433,26 +471,25 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("210"));
+                .andExpect(jsonPath("$.errorCode").value("210"))
+                .andReturn();
     }
 
     @Test
     public void 의사표현_저장_위도_없이_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -461,28 +498,26 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
     public void 의사표현_저장_위도_범위_초과_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        BigDecimal latitude = BigDecimal.valueOf(400.0000000);
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
-                .userLatitude(latitude)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
+                .userLatitude(BigDecimal.valueOf(400))
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -491,28 +526,26 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
-    public void 의사표현_저장_위도_범위_미만_요청() throws Exception {
+    public void 의사표현_저장_위도_미만_초과_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        BigDecimal latitude = BigDecimal.valueOf(-400.0000000);
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
-                .userLatitude(latitude)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
+                .userLatitude(BigDecimal.valueOf(-400))
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -521,26 +554,25 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
     public void 의사표현_저장_경도_없이_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -549,28 +581,26 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
     public void 의사표현_저장_경도_범위_초과_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        BigDecimal longitude = BigDecimal.valueOf(400.000000);
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
-                .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLongitude(BigDecimal.valueOf(400))
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -579,28 +609,26 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
     public void 의사표현_저장_경도_범위_미만_요청() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        BigDecimal longitude = BigDecimal.valueOf(-400.000000);
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
-                .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLongitude(BigDecimal.valueOf(-400))
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -609,26 +637,36 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
+        MvcResult mvcResult = resultActions
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
-    public void 의사표현_저장_의사표현_없이_요청() throws Exception {
+    public void 의사표현_저장_의사표현_없이_요청하기() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
+        List<UserLikingDto> userLikingDtoList = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            UserLikingDto likingDto = UserLikingDto.builder()
+                    .restaurantId(i+1L)
+                    .elapsedTime(i)
+                    .build();
+
+            userLikingDtoList.add(likingDto);
+        }
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
                 .userLongitude(longitude)
-                .elapsedTime(elapsedTime)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -637,26 +675,35 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
-                .andDo(print())
+        MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
 
     @Test
-    public void 의사표현_저장_경과시간_없이_요청() throws Exception {
+    public void 의사표현_저장_경과시간_없이_요청하기() throws Exception {
         //given
         String uri = "/api/v1/users/" + user.getId() + "/liking";
-        Long restaurantId = 1L;
-        Integer elapsedTime = 5;
-        UserLikingDto userLikingDto = UserLikingDto.builder()
-                .restaurantId(restaurantId)
-                .liking(Liking.LIKE)
+        List<UserLikingDto> userLikingDtoList = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            UserLikingDto likingDto = UserLikingDto.builder()
+                    .restaurantId(i+1L)
+                    .liking(Liking.LIKE)
+                    .build();
+
+            userLikingDtoList.add(likingDto);
+        }
+
+        UserLikingReqeust wrongRequest = UserLikingReqeust.builder()
                 .userLatitude(latitude)
                 .userLongitude(longitude)
+                .userLiking(userLikingDtoList)
                 .build();
-        String content = objectMapper.writeValueAsString(userLikingDto);
+
+        String content = objectMapper.writeValueAsString(wrongRequest);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -665,10 +712,11 @@ public class UserControllerTest {
                         .content(content)
                         .header("Authorization", "Bearer " + accessToken));
         //then
-        resultActions
-                .andDo(print())
+        MvcResult mvcResult = resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value("false"))
-                .andExpect(jsonPath("$.errorCode").value("102"));
+                .andExpect(jsonPath("$.errorCode").value("102"))
+                .andReturn();
     }
+
 }
