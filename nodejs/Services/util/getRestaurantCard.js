@@ -41,7 +41,7 @@ export default async (users, radius, latitude, longitude, jwt) => {
           errObj.errorCode = err.response.data.errorCode;
           throw errObj;
         }
-      } else if (error.request) {
+      } else if (err.request) {
         // 0.15초 간격으로 3번까지 재요청
         if (i < 2) {
           await (() => {
