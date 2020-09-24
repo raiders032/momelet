@@ -2,9 +2,9 @@
 const latitude = 37.5447048;
 const longitude = 127.0663154;
 const refreshToken =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNjAwNzY4MjE3LCJleHAiOjE2MDE2MzIyMTd9._Uwk8cbr5j0DFiX3z7uZgVvUUztT4yGoLoYgbvGQKB9lgR6S3CoGA7qbXAJLNiVMn6cKjuSw722BXjoxcz86eg";
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNjAwNDA4MTQ4LCJleHAiOjE2MDEyNzIxNDh9.fJdaVeJxVWcMmXBawcNi0DDtXHiAo-JcDuaIkZ_vg8n7MoSMnDhOcTYCfD3qcg69orNuLuDoNPJoK1TMKgz5Dw";
 const jwtToken =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE2MDA3NjgyMTcsImV4cCI6MTYwMDc3MTgxN30.szox7WU8BsmL-E36jknZ6nVfs6gcZ-eR-qYLUQhOlls5faQzrM8MUX_8RJ68RtKSb34PXiYMUGLwAz_VIMLblg";
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE2MDA5MzAzMjAsImV4cCI6MTYwMDkzMzkyMH0.9OjoOwNf4REvply6H7MOtK0lR7VlSgCTuRR68HNpAo0ME7AZH2pDLiycjQYxFV11Jj3b_HgTkb4sNxe0yCcFAQ";
 // "yJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE2MDA2NzQ5NTgsImV4cCI6MTYwMDY3ODU1OH0.rfpVhmv4yOKI0ewfP7P76nvgesYP02Wk1JV9Z7O9uX-gRUitsqK3_3MgJ9AX-F_1IRDfN08JaNJQLnSjSUTsoQ";
 
 export default [
@@ -34,9 +34,9 @@ export default [
     },
   },
   {
-    myId: 5,
+    myId: 21,
     query: {
-      id: 5,
+      id: 21,
       email: "5@naver.com",
       name: "Ha",
       imageUrl: "naver.com",
