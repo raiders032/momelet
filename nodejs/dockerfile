@@ -100,12 +100,12 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
-
-VOLUME [ "/usr/src/logs" ]
-
 USER 1001
 
 EXPOSE 3000 9090
+
+COPY . .
+
+VOLUME [ "/usr/src/logs" ]
 
 CMD [ "node" , "app.js"]
