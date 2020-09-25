@@ -6,7 +6,6 @@ export default (socket) => {
   const { id } = socket.handshake.query;
 
   if (SingleObject.UserRepository.existById(id)) {
-    // const user = SingleObject.UserRepository.findById(id);
     logger.info(id + " is overlapped user. Disconnect exsisting user");
     const user = SingleObject.UserRepository.findById(id);
 
@@ -14,6 +13,5 @@ export default (socket) => {
   }
   SingleObject.UserRepository.add(socket, socket.handshake.query);
 
-  const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
-  logger.info("a user connected. id: " + id + ", userList: (" + userList + ")");
+  logger.info("a user connected. id: " + id);
 };
