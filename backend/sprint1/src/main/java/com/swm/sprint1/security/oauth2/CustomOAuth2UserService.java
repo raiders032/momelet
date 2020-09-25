@@ -1,6 +1,7 @@
 package com.swm.sprint1.security.oauth2;
 
 
+import com.swm.sprint1.config.AppProperties;
 import com.swm.sprint1.domain.AuthProvider;
 import com.swm.sprint1.domain.Category;
 import com.swm.sprint1.domain.User;
@@ -27,6 +28,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final AppProperties appProperties;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -62,7 +64,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2UserInfo.getEmail();
         String imageUrl = oAuth2UserInfo.getImageUrl();
         if(imageUrl == null)
-            imageUrl="http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/default.png";
+            imageUrl = appProperties.getS3().getDefaultImageUri() + appProperties.getS3().getDefaultNumber() +appProperties.getS3().getDefaultExtension();
         List<Category> categories = categoryRepository.findAll();
         User user = new User(name, email, imageUrl, provider, providerId, categories);
         return userRepository.save(user);
