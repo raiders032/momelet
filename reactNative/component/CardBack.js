@@ -10,8 +10,6 @@ import Menu from './Menu';
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) => {
-  console.log(lat, lng, userLocation.latitude, userLocation.longitude);
-
   const navigation = useNavigation();
   let isProcessing = false;
 

@@ -18,6 +18,8 @@ import RestaurantBasicInfo from './RestaurantBasicInfo';
 import SeeMenuButton from './SeeMenuButton';
 
 export default ({ restaurant, header, cover, userLocation }) => {
+  const baseUrl = 'https://cdn.pixabay.com/photo/2020/06/29/10/55/pizza-5352320__480.png';
+
   const [isFront, setIsFront] = useState(true);
   let changeValue = 0;
   const rotation = useRef(new Animated.Value(0)).current;
@@ -84,7 +86,15 @@ export default ({ restaurant, header, cover, userLocation }) => {
     return (
       <Image
         // source={{ uri: restaurant.thumUrl }} // @FIXME restaurant.thumbUrl
-        source={{ uri: restaurant.thumUrl }} // @FIXME restaurant.thumbUrl
+        source={
+          restaurant.thumUrl == baseUrl
+            ? { uri: baseUrl }
+            : {
+                uri:
+                  'https://search.pstatic.net/common/?autoRotate=true&type=w560_sharpen&quality=90&src=' +
+                  restaurant.thumUrl,
+              }
+        } // @FIXME restaurant.thumbUrl
         // source={{
         //   uri: "https://d22j25xnhsuyth.cloudfront.net/profile-image/test7.jpg",
         // }}

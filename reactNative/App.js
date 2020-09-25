@@ -137,7 +137,7 @@ export default function App() {
       require('./assets/geo.png'),
     ]);
 
-    const fontAssets = cacheFonts([FontAwesome.font]);
+    const fontAssets = cacheFonts([FontAwesome.font, { Godo: require('./assets/GodoM.ttf') }]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   };
