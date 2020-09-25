@@ -49,7 +49,7 @@ export default async (socket, { id, userGameResult, roomName, jwt }) => {
 
   if (user.canReceive === true) {
     room.addFinishCount();
-    if (userGameResult.length === 7) {
+    if (userGameResult.length >= 7) {
       for (let result of userGameResult) {
         room.addScore(result.restaurantId, result.liking);
       }
