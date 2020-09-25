@@ -1,6 +1,6 @@
 import { RoomRepository } from "../../SingleObjects.js";
 import gameRoomUpdateService from "../game/gameRoomUpdateService.js";
-import { ERR_ROOM_NOT_FOUND } from "../../Errors/RepositoryError";
+import { ERR_ROOM_NOT_FOUND } from "../../Errors/RepositoryError.js";
 
 export default (user, room) => {
   if (room === false) {
