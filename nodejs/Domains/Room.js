@@ -1,5 +1,9 @@
 import gameRoomUpdateService from "../Services/game/gameRoomUpdateService.js";
-import { ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH } from "../Errors/GameError.js";
+import {
+  ERR_GAME_ALREADY_STARTED,
+  ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH,
+  ERR_GAME_ROOM_IS_FULL,
+} from "../Errors/GameError.js";
 
 export default class Room {
   constructor(roomName, userId) {
@@ -14,9 +18,13 @@ export default class Room {
   }
 
   addUser(user) {
-    if (this.isStarted || this.headCount >= this.maxHeadCount) {
-      throw "Can't join the room";
+    if (this.isStarted) {
+      throw new ERR_GAME_ALREADY_STARTED();
     }
+    if (this.headCount >= this.maxHeadCount) {
+      throw new ERR_GAME_ROOM_IS_FULL();
+    }
+
     user.socket.join(this.roomName);
     user.updateJoinedRoomName(this.roomName);
     user.updateCanReceive(true);

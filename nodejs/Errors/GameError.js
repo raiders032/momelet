@@ -21,9 +21,17 @@ class ERR_HOST_NOT_CORRECT extends Error {
 class ERR_GET_RESTAURANT_CARD_FAIL extends Error {
   constructor(
     message = "ERR_GET_RESTAURANT_CARD_FAIL",
-    errorCode = 500,
+    errorCode = 302,
     ...params
   ) {
+    super(...params);
+    this.message = message;
+    this.errorCode = errorCode;
+  }
+}
+
+class ERR_GAME_ROOM_IS_FULL extends Error {
+  constructor(message = "ERR_GAME_ROOM_IS_FULL", errorCode = 303, ...params) {
     super(...params);
     this.message = message;
     this.errorCode = errorCode;
@@ -58,6 +66,7 @@ export {
   ERR_GAME_ALREADY_STARTED,
   ERR_HOST_NOT_CORRECT,
   ERR_GET_RESTAURANT_CARD_FAIL,
+  ERR_GAME_ROOM_IS_FULL,
   ERR_NOT_ENOUGH_GAME_RESULT,
   ERR_GAME_RESULT_RESTAURANT_ID_NOT_MATCH,
 };
