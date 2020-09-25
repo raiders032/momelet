@@ -61,7 +61,7 @@ export default function App() {
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
-      if (dateCheck(refreshToken.refreshTokenExpiredDate)) {
+      if (!dateCheck(refreshToken.refreshTokenExpiredDate)) {
         const newRefreshToken = await apis.refreshToken();
 
         console.log(newRefreshToken.data);
@@ -137,7 +137,7 @@ export default function App() {
       require('./assets/geo.png'),
     ]);
 
-    const fontAssets = cacheFonts([FontAwesome.font]);
+    const fontAssets = cacheFonts([FontAwesome.font, { Godo: require('./assets/GodoM.ttf') }]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
   };

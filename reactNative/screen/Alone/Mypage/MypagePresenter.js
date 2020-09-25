@@ -107,6 +107,7 @@ export default ({
                   }}
                   onSubmitEditing={({ nativeEvent: { text } }) => {
                     setIsNameEdit(false);
+
                     if (text) {
                       setUser((before) => {
                         const changedUser = { ...before, name: text };

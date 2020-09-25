@@ -168,21 +168,21 @@ export default ({ categories, setUser }) => {
         <Category
           size={categoryLayout.height}
           image={
-            categories['찜,탕']
+            categories['찜|탕']
               ? require('../assets/categories/hotpotS.png')
               : require('../assets/categories/hotpot.png')
           }
-          categoryName="찜,탕"
+          categoryName="찜|탕"
           onPress={categoryClicked}
         />
         <Category
           size={categoryLayout.height}
           image={
-            categories['곱,대창']
+            categories['곱|대창']
               ? require('../assets/categories/chitterlingsS.png')
               : require('../assets/categories/chitterlings.png')
           }
-          categoryName="곱,대창"
+          categoryName="곱|대창"
           onPress={categoryClicked}
         />
       </View>
