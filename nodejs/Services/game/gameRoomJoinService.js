@@ -13,9 +13,6 @@ export default (socket, { id, roomName }) => {
 
   // 기존 접속 방에서 나가기
   try {
-    logger.info(
-      "gameRoomJoinService에서 user.joinedRoomName: " + user.joinedRoomName
-    );
     if (user.joinedRoomName !== null) {
       roomLeave(
         user,
@@ -31,6 +28,7 @@ export default (socket, { id, roomName }) => {
   data.roomName = roomName;
   data.gameRoomUserList = room.getUserInfo();
   data.hostId = room.getHostId();
+
   response.isOk(data);
   return response;
 };
