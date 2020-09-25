@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
+import { set } from 'react-native-reanimated';
 
 import { calculateDistance } from '../utils/calculateDistance';
 import logging from '../utils/logging';
@@ -31,6 +32,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
   useEffect(() => {
     rotation.setValue(0);
     // setIsFront("false");
+    setIsFront(true);
   }, [restaurant]);
 
   const frontInterpolate = rotation.interpolate({

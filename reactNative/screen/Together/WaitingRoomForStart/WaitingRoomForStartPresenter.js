@@ -8,6 +8,8 @@ import WaitBox from '../../../component/WaitBox';
 import socket from '../../../socket';
 
 export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
+  console.log('wait', activation);
+
   const abc = [];
   const footer = (
     <Footer

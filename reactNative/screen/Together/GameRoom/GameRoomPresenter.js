@@ -73,7 +73,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
   const afterCardMove = (response) => {
     // console.log("response: ", response);
     // console.log("gameResult.current.length", gameResult.current.length);
-    if (gameResult.current.length >= 6) {
+    if (gameResult.current.length == 6) {
       gameResult.current.push({
         restaurantId: firstRestaurant.id,
         liking: response,

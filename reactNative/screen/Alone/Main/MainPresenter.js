@@ -71,7 +71,7 @@ export default ({
       {}
       {!restaurants || restaurants.length <= 0 ? (
         <Empty />
-      ) : restaurants.length > 3 ? (
+      ) : restaurants.length > 0 ? (
         <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       ) : (
         <View />

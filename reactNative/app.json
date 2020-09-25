@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "momulet",
-    "slug": "momulet",
+    "name": "momelet",
+    "slug": "momelet",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/appicon.png",
     "splash": {
       "image": "./assets/logo.png",
       "resizeMode": "contain",
@@ -15,7 +15,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.recoder.momulet",
+      "bundleIdentifier": "com.recoder.momelet",
       "supportsTablet": false,
       "infoPlist": {
         "LSApplicationQueriesSchemes": ["kakaomap"]
@@ -25,7 +25,7 @@
     },
 
     "android": {
-      "package": "com.recoder.momulet",
+      "package": "com.recoder.momelet",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1
     },

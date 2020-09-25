@@ -10,6 +10,7 @@ import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 export default ({ navigation, route }) => {
   let isSendMsg = false;
   const [isGetRestaurantSuccess, setIsGetRestaurantSuccess] = useState(true);
+  let hostId = route.params.msg.hostId;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,6 +39,8 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     socket.on('gameRoomUpdate', (msg) => {
       printSocketEvent('gameRoomUpdate', msg);
+      hostId = JSON.parse(msg).data.hostId;
+      console.log(hostId);
       setUsers(JSON.parse(msg).data.gameRoomUserList);
     });
     socket.on('gameStart', (msg) => {
@@ -104,7 +107,7 @@ export default ({ navigation, route }) => {
     <WaitingRoomForStartPresenter
       users={users}
       onClick={onClick}
-      activation={route.params.msg.hostId === route.params.myId}
+      activation={hostId === route.params.myId}
       isGetRestaurantSuccess={isGetRestaurantSuccess}
     />
   );
