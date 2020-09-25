@@ -31,9 +31,9 @@ function startServer() {
   //default port 9090
   prometheus.metrics(io, { collectDefaultMetrics: true });
 
-  io.use((socket, next) => {
-    checkUserUnique(io, socket, next);
-  });
+  // io.use((socket, next) => {
+  //   checkUserUnique(io, socket, next);
+  // });
 
   io.sockets
     .on(
@@ -44,6 +44,7 @@ function startServer() {
       })
     )
     .on("authenticated", (socket) => {
+      checkUserUnique(socket);
       controller(socket);
     });
 

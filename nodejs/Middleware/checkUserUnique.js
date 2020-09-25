@@ -1,7 +1,7 @@
 import * as SingleObject from "../SingleObjects.js";
 import logger from "../logger.js";
 
-export default (io, socket, next) => {
+export default (socket) => {
   socket.handshake.query.id = parseInt(socket.handshake.query.id);
   const { id } = socket.handshake.query;
 
@@ -16,5 +16,4 @@ export default (io, socket, next) => {
 
   const userList = SingleObject.UserRepository.findAll().map((user) => user.id);
   logger.info("a user connected. id: " + id + ", userList: (" + userList + ")");
-  next();
 };
