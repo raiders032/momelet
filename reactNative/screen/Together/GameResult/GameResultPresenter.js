@@ -10,8 +10,6 @@ import RestaurantCard from '../../../component/RestaurantCard';
 import socket from '../../../socket';
 
 export default ({ result, total, selected, onClick, footerClick, userLocation }) => {
-  console.log('total, selected : ', total, selected);
-
   // const footer = (
   //   <View
   //     style={{ height: "100%", justifyContent: "center", alignItems: "center" }}

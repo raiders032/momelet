@@ -7,8 +7,6 @@ import printSocketEvent from '../../../utils/printEvent';
 import GameRoomPresenter from './GameRoomPresenter';
 
 export default ({ navigation, route }) => {
-  console.log('게임룸(컨테이너) 렌더');
-
   const latitude = 37.5447048;
   const longitude = 127.0663154;
   const userLocation = { latitude, longitude };

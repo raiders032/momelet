@@ -38,7 +38,6 @@ export default function App() {
 
   // userToken 가져오는 함수
   const setTokenInSecure = async (tokenInfo) => {
-    console.log('App.js의 setTokenInSecure 함수 내부', tokenInfo);
     await SecureStore.setItemAsync(
       'access_TokenInfo',
       JSON.stringify({
@@ -56,15 +55,11 @@ export default function App() {
   };
 
   const _retrieveData = async () => {
-    console.log('retrieveDate 실행');
-
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
-      if (!dateCheck(refreshToken.refreshTokenExpiredDate)) {
+      if (dateCheck(refreshToken.refreshTokenExpiredDate)) {
         const newRefreshToken = await apis.refreshToken();
-
-        console.log(newRefreshToken.data);
 
         if (!newRefreshToken.data.errorCode) {
           const tokenInfo = {
@@ -161,7 +156,7 @@ export default function App() {
           setAssetIsReady(true);
         }}
         onError={(error) => {
-          console.error('error in load asset', error);
+          // console.error('error in load asset', error);
         }}
       />
     );

@@ -98,8 +98,6 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
               'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
             );
 
-            console.log('카카오맵을 열수 있음?', canOpen);
-
             if (canOpen) {
               Linking.openURL(
                 `kakaomap://route?sp=${userLocation.latitude},${userLocation.longitude}&ep=${lat},${lng}&by=FOOT`

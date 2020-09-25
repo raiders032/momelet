@@ -7,6 +7,7 @@ import Basic from '../../../component/Basic';
 import Card from '../../../component/Card';
 import Footer from '../../../component/Footer';
 import socket from '../../../socket';
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ users, setUsers, onClick }) => {

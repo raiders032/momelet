@@ -20,7 +20,7 @@ const makeRequest = async (method, path, data = '') => {
       data,
     });
   } catch (error) {
-    console.log(error.response);
+    // console.log(error.response);
     // console.error(`error in api call2 : ${path}`, error);
   }
 };
@@ -28,7 +28,7 @@ const makeRequest = async (method, path, data = '') => {
 const refreshTokenFunc = async () => {
   const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
 
-  console.log('refreshToken: ', refreshToken);
+  // console.log('refreshToken: ', refreshToken);
 
   return makeRequest('post', 'v1/auth/access-token', {
     jwt: refreshToken,
@@ -49,16 +49,16 @@ const getInvalidToken = async () => {
   const accessTokenInfo = JSON.parse(await SecureStore.getItemAsync('access_TokenInfo'));
 
   if (dateCheck(accessTokenInfo.accessTokenExpiredDate)) {
-    console.log('엑세스 토큰 살아잇음');
+    // console.log('엑세스 토큰 살아잇음');
 
     return accessTokenInfo.accessToken;
   } else {
-    console.log('엑세스 토큰 죽음');
+    // console.log('엑세스 토큰 죽음');
 
     const refreshTokenInfo = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
     if (dateCheck(refreshTokenInfo.refreshTokenExpiredDate)) {
-      console.log('리프레시 토큰 살아있음');
+      // console.log('리프레시 토큰 살아있음');
 
       const newRefreshToken = await refreshTokenFunc();
 

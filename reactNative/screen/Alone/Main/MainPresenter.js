@@ -16,9 +16,6 @@ export default ({
   userChangeCount,
   userLocation,
 }) => {
-  console.log('MainPresenter 렌더');
-  console.log(restaurants);
-
   const msg = { id: 2, latitude: 37.5, longitude: 127.49999 };
 
   const footer = (

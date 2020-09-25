@@ -12,7 +12,7 @@ const onPress = async (afterLogin, where) => {
   const { apiUrl } = getEnvVars();
   const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl('')}`;
 
-  console.log(Linking.makeUrl(''));
+  console.log('screen:Login 리다이렉트 url', Linking.makeUrl(''));
 
   const _removeLinkingListener = () => {
     Linking.removeEventListener('url', _handleRedirect);
@@ -115,6 +115,7 @@ export default function App({ afterLogin }) {
             ...styles.button,
             opacity: buttonOpacity,
             transform: [{ translateY: buttonY }],
+            elevation: 8,
           }}>
           <TouchableOpacity onPress={changeStart}>
             <Text style={{ fontFamily: 'Godo', fontSize: 30, fontWeight: 'bold' }}>로그인</Text>
@@ -151,7 +152,7 @@ export default function App({ afterLogin }) {
                   height: '70%',
                   borderRadius: 10,
                   flexDirection: 'row',
-
+                  elevation: 8,
                   paddingTop: 3,
                 }}>
                 <Svg
@@ -188,7 +189,7 @@ export default function App({ afterLogin }) {
                   height: '70%',
                   borderRadius: 10,
                   flexDirection: 'row',
-
+                  elevation: 8,
                   paddingTop: 3,
                 }}>
                 <Svg style={{ width: '30%' }}>
@@ -224,6 +225,7 @@ export default function App({ afterLogin }) {
                   borderRadius: 10,
                   flexDirection: 'row',
                   paddingTop: 3,
+                  elevation: 8,
                 }}>
                 <Svg style={{ width: '30%' }}>
                   <Image

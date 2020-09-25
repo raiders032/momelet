@@ -16,8 +16,6 @@ import RestaurantHeader from '../../../component/RestaurantHeader';
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => {
-  console.log('GameRoomPresenter render');
-
   let isProcessing = false;
   const elapsedTime = useRef(0);
   const timeFinish = useRef(false);

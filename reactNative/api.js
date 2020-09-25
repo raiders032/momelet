@@ -10,7 +10,7 @@ const { apiUrl } = getEnvVars();
 const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
 
-  console.log(path);
+  // console.log(path);
 
   if (path === 'v1/auth/refresh') {
     tmpToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo')).refreshToken;
@@ -77,7 +77,7 @@ export const apis = {
     const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'))
       .refreshToken;
 
-    console.log(refreshToken);
+    // console.log(refreshToken);
 
     return makeRequest(
       'post',

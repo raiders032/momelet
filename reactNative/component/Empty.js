@@ -7,7 +7,6 @@ import Card from './Card';
 export default ({ setTmpConnect, setIsChanged }) => {
   // const latitude = 37.5447048;
   // const longitude = 127.0663154;
-  console.log('Hello');
 
   return (
     <View
@@ -27,10 +26,7 @@ export default ({ setTmpConnect, setIsChanged }) => {
           }}>
           <Text style={{ fontFamily: 'Godo', fontSize: 24 }}>찾을 수 없습니다.</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log('hello');
-          }}>
+        <TouchableOpacity onPress={() => {}}>
           <View style={{ marginTop: 10, width: 10, height: 10 }} />
         </TouchableOpacity>
       </Card>

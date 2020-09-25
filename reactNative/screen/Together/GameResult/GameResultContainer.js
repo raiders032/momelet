@@ -56,7 +56,6 @@ export default ({ navigation, route }) => {
         roomName: route.params.roomName,
       };
 
-      console.log(newMsg);
       navigation.dispatch(
         StackActions.replace('WaitingRoomForStart', {
           msg: newMsg,

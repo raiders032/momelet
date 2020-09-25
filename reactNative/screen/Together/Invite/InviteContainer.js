@@ -1,4 +1,5 @@
 import { StackActions } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 import React, { useEffect, useState } from 'react';
 
 import socket from '../../../socket';
@@ -6,6 +7,10 @@ import printSocketEvent from '../../../utils/printEvent';
 import InvitePresenter from './InvitePresenter';
 
 export default ({ navigation, route }) => {
+  useEffect(() => {
+    Analytics.setCurrentScreen('invite', 'invite');
+  }, []);
+
   const tmpUsers = route.params.msg.aroundUsers;
   let isSendMsg = false;
   const [users, setUsers] = useState(
@@ -14,12 +19,9 @@ export default ({ navigation, route }) => {
     })
   );
   const onClick = () => {
-    console.log(isSendMsg);
-
     if (isSendMsg) return;
 
     isSendMsg = true;
-    console.log('이벤트 발생', isSendMsg);
 
     const result = [];
 
@@ -28,7 +30,7 @@ export default ({ navigation, route }) => {
         result.push(user.socketId);
       }
     });
-    console.log('초대할려는 유저 목록 : ', result);
+
     socket.emit(
       'togetherInvite',
       JSON.stringify({

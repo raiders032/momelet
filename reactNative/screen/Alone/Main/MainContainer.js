@@ -60,15 +60,15 @@ export default ({ navigation, route }) => {
     try {
       const result = await apis.getUserMe();
 
-      console.log('get User Success \n');
-      console.log('로그인한 유저의 정보 ');
-      console.log('    id : ', result.data.data.userInfo.id);
-      console.log('    이름 : ', result.data.data.userInfo.name);
+      // console.log('get User Success \n');
+      // console.log('로그인한 유저의 정보 ');
+      // console.log('    id : ', result.data.data.userInfo.id);
+      // console.log('    이름 : ', result.data.data.userInfo.name);
       setUser(result.data);
 
       return { ...result.data };
     } catch (error) {
-      console.log('error in get user', error);
+      // console.log('error in get user', error);
     }
   };
 
@@ -78,11 +78,11 @@ export default ({ navigation, route }) => {
       try {
         const response = await apis.getRestaurant(latitude, longitude, user.data.userInfo.id);
 
-        console.log('get Restaurant Success');
+        // console.log('get Restaurant Success');
         // console.log(response);
         setRestaurants({ loading: false, restaurants: response.data.data });
       } catch (e) {
-        console.log('error In HomeContainer : getUserRestaurant', e);
+        // console.log('error In HomeContainer : getUserRestaurant', e);
       }
     }
   };
@@ -91,7 +91,6 @@ export default ({ navigation, route }) => {
       const nowUser = user.data.userInfo;
       const jwtToken = await getInvalidToken();
 
-      console.log('aaaa', latitude, longitude);
       // socket.query.JWT = route.params.userToken;
 
       socket.query.JWT = jwtToken;
@@ -175,7 +174,7 @@ export default ({ navigation, route }) => {
       let latitude;
       let longitude;
 
-      if (!tmpConnect) {
+      if (tmpConnect) {
         latitude = 37.5447048;
         longitude = 127.0663154;
       } else {
@@ -245,7 +244,6 @@ export default ({ navigation, route }) => {
 
     // const latitude = location.coords.latitude;
     // const longitude = location.coords.longitude;
-    console.log(count);
 
     const sendMsg = {
       id: socket.query.id,

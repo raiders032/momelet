@@ -12,8 +12,6 @@ export default ({ roomName, userId }) => {
   let isSendMsg = false;
   const navigation = useNavigation();
 
-  console.log(roomName, userId);
-
   // const latitude = 37.5447048;
   // const longitude = 127.0663154;
   const onClickFooter = () => {
@@ -34,7 +32,6 @@ export default ({ roomName, userId }) => {
         roomName,
       };
 
-      console.log(newMsg);
       navigation.dispatch(
         StackActions.replace('WaitingRoomForStart', {
           msg: newMsg,
