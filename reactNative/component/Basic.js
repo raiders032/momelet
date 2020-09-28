@@ -15,11 +15,12 @@ export default ({
   children,
   footer,
 }) => {
-  // console.log(coverMessageConfig);
+  // console.log(footer);U
+
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ height: '90%', backgroundColor: '#FEEE7D' }}>{children}</View>
-      <View style={{ height: '10%', backgroundColor: 'white' }}>{footer}</View>
+      <View style={{ flex: 1, backgroundColor: '#FEEE7D' }}>{children}</View>
+      <View style={{ height: 56, backgroundColor: 'white' }}>{footer}</View>
       <CoverMessage
         zIndex={coverMessageConfig.zIndex}
         bodyMessage={coverMessageConfig.bodyMessage}

@@ -1,3 +1,4 @@
+import { Entypo } from '@expo/vector-icons';
 import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -141,6 +142,12 @@ export default ({ restaurant, header, cover, userLocation }) => {
     <Card>
       <View style={{ width: '100%', height: '100%' }}>
         <View style={{ height: '65%' }}>
+          <Entypo
+            name="heart-outlined"
+            size={30}
+            color="white"
+            style={{ position: 'absolute', top: 20, right: 20, zIndex: 100 }}
+          />
           <Animated.View
             style={{
               transform: [{ rotateY: frontInterpolate }],

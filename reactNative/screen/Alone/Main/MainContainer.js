@@ -239,7 +239,7 @@ export default ({ navigation, route }) => {
     let latitude;
     let longitude;
 
-    if (tmpConnect) {
+    if (!tmpConnect) {
       latitude = 37.5447048;
       longitude = 127.0663154;
     } else {
