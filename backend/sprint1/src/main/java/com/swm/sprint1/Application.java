@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableConfigurationProperties(AppProperties.class)
 @SpringBootApplication
-public class Sprint1Application {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Sprint1Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
