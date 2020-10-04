@@ -5,6 +5,12 @@ files:
     destination: /home/ubuntu/build
     overwirte: yes
 
+permissions: # CodeDeploy에서 EC2서버로 넘겨준 파일들을 모두 ec2-user권한을 갖도록 합니다.
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
 hooks:
   BeforeInstall:
     - location: deploy-before.sh
