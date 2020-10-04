@@ -1,0 +1,130 @@
+2020-10-04 | 14:31:44.840 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[1].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[2].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[3].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[6].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[0].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[4].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[5].liking: must not be null
+2020-10-04 | 14:31:45.203 | Test worker          | ERROR | c.s.s.c.UserController    | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.
+2020-10-04 | 14:31:45.203 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :98123
+2020-10-04 | 14:31:45.623 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | restaurant not found with id : '식당  존재하지 않는 식당 아이디가 포함되어 있습니다.'
+2020-10-04 | 14:31:45.898 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | updateUserInfo.categories: must not be empty
+2020-10-04 | 14:31:46.246 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 14:31:46.564 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must be less than or equal to 90
+2020-10-04 | 14:31:49.051 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 14:31:49.343 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must not be null
+2020-10-04 | 14:31:49.645 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | updateUserInfo.name: must not be blank
+2020-10-04 | 14:31:51.670 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must be greater than or equal to -90
+2020-10-04 | 14:31:51.957 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must be less than or equal to 180
+2020-10-04 | 14:31:53.160 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[5].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[2].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[3].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[4].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[0].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[6].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[1].elapsedTime: must not be null
+2020-10-04 | 14:31:54.182 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 14:31:54.183 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 14:31:55.081 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must be greater than or equal to -180
+2020-10-04 | 14:31:55.301 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 14:31:55.301 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 14:31:55.572 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[2].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[6].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[0].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[4].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[1].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[3].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[5].restaurantId: must not be null
+2020-10-04 | 14:31:55.848 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must not be null
+2020-10-04 | 14:31:59.021 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.longitude: must be greater than or equal to 122
+2020-10-04 | 14:32:01.003 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'radius' is not present
+2020-10-04 | 14:32:02.229 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.latitude: must be less than or equal to 43
+2020-10-04 | 14:32:02.626 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 14:32:02.626 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 14:32:03.069 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.radius: must be greater than or equal to 0.001
+2020-10-04 | 14:32:03.483 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 14:32:03.911 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'latitude' is not present
+2020-10-04 | 14:32:05.147 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.id: must not be blank
+2020-10-04 | 14:32:07.025 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.latitude: must be greater than or equal to 32
+2020-10-04 | 14:32:08.207 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'longitude' is not present
+2020-10-04 | 14:32:08.644 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.longitude: must be greater than or equal to 123
+2020-10-04 | 14:32:09.489 | Test worker          | ERROR | .s.c.RestaurantController | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.
+2020-10-04 | 14:32:09.490 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :100
+2020-10-04 | 14:32:10.324 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.radius: must be less than or equal to 0.02
+2020-10-04 | 14:32:10.892 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'latitude' is not present
+2020-10-04 | 14:32:11.350 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'radius' is not present
+2020-10-04 | 14:32:11.819 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.latitude: must be greater than or equal to 32
+2020-10-04 | 14:32:13.119 | Test worker          | ERROR | c.s.s.s.RestaurantService | ID:          | 선택된 식당 카드가 7장 미만입니다.
+2020-10-04 | 14:32:13.150 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 선택된 식당 카드가 7장 미만입니다.
+2020-10-04 | 14:32:13.589 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.radius: must be greater than or equal to 0.001
+2020-10-04 | 14:32:14.231 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.radius: must be less than or equal to 0.02
+2020-10-04 | 14:32:15.272 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.longitude: must be less than or equal to 133
+2020-10-04 | 14:32:16.843 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 14:32:16.843 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 14:32:17.384 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.latitude: must be less than or equal to 43
+2020-10-04 | 14:32:17.795 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.longitude: must be less than or equal to 133
+2020-10-04 | 14:32:18.179 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 14:32:18.604 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'longitude' is not present
+2020-10-04 | 14:32:18.908 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Expired JWT token
+2020-10-04 | 14:32:21.075 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 14:32:21.114 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 14:32:22.446 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(5980) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 14:32:22.446 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(5980) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 14:32:25.848 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 14:32:25.861 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 14:32:28.662 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(5987) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 14:32:28.679 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(5987) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 14:32:28.941 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Expired JWT token
+2020-10-04 | 14:32:29.133 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 14:32:29.134 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 14:32:29.308 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 14:32:29.308 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 14:32:30.621 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(5991) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 14:32:30.652 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(5991) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:05:43.569 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[4].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[2].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[0].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[3].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[6].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[1].liking: must not be null, createUserLiking.userLikingReqeust.userLiking[5].liking: must not be null
+2020-10-04 | 15:05:43.945 | Test worker          | ERROR | c.s.s.c.UserController    | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.
+2020-10-04 | 15:05:43.946 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :98123
+2020-10-04 | 15:05:44.396 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | restaurant not found with id : '식당  존재하지 않는 식당 아이디가 포함되어 있습니다.'
+2020-10-04 | 15:05:44.737 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | updateUserInfo.categories: must not be empty
+2020-10-04 | 15:05:45.108 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 15:05:45.449 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must be less than or equal to 90
+2020-10-04 | 15:05:47.848 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 15:05:48.298 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must not be null
+2020-10-04 | 15:05:48.618 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | updateUserInfo.name: must not be blank
+2020-10-04 | 15:05:51.471 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLatitude: must be greater than or equal to -90
+2020-10-04 | 15:05:51.770 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must be less than or equal to 180
+2020-10-04 | 15:05:52.275 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[6].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[0].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[1].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[3].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[2].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[4].elapsedTime: must not be null, createUserLiking.userLikingReqeust.userLiking[5].elapsedTime: must not be null
+2020-10-04 | 15:05:53.086 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 15:05:53.086 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 15:05:53.363 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must be greater than or equal to -180
+2020-10-04 | 15:05:53.598 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 15:05:53.599 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 15:05:53.881 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLiking[4].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[5].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[3].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[6].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[0].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[2].restaurantId: must not be null, createUserLiking.userLikingReqeust.userLiking[1].restaurantId: must not be null
+2020-10-04 | 15:05:54.733 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | createUserLiking.userLikingReqeust.userLongitude: must not be null
+2020-10-04 | 15:05:55.862 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.longitude: must be greater than or equal to 122
+2020-10-04 | 15:05:57.113 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'radius' is not present
+2020-10-04 | 15:05:57.577 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.latitude: must be less than or equal to 43
+2020-10-04 | 15:05:57.990 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 15:05:57.990 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 15:05:58.460 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.radius: must be greater than or equal to 0.001
+2020-10-04 | 15:05:58.866 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 15:06:00.215 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'latitude' is not present
+2020-10-04 | 15:06:00.655 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.id: must not be blank
+2020-10-04 | 15:06:01.736 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.latitude: must be greater than or equal to 32
+2020-10-04 | 15:06:02.817 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'longitude' is not present
+2020-10-04 | 15:06:04.183 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.longitude: must be greater than or equal to 123
+2020-10-04 | 15:06:04.657 | Test worker          | ERROR | .s.c.RestaurantController | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다.
+2020-10-04 | 15:06:04.657 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | jwt token의 유저 아이디와 path param 유저 아이디가 일치하지 않습니다. :100
+2020-10-04 | 15:06:05.405 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.radius: must be less than or equal to 0.02
+2020-10-04 | 15:06:06.335 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'latitude' is not present
+2020-10-04 | 15:06:06.781 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'radius' is not present
+2020-10-04 | 15:06:07.285 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.latitude: must be greater than or equal to 32
+2020-10-04 | 15:06:07.799 | Test worker          | ERROR | c.s.s.s.RestaurantService | ID:          | 선택된 식당 카드가 7장 미만입니다.
+2020-10-04 | 15:06:07.835 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 선택된 식당 카드가 7장 미만입니다.
+2020-10-04 | 15:06:09.046 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.radius: must be greater than or equal to 0.001
+2020-10-04 | 15:06:09.517 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.radius: must be less than or equal to 0.02
+2020-10-04 | 15:06:09.984 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.longitude: must be less than or equal to 133
+2020-10-04 | 15:06:11.248 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 15:06:11.249 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 15:06:11.817 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurant7SimpleCategoryBased.latitude: must be less than or equal to 43
+2020-10-04 | 15:06:12.231 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | getRestaurantWithUserCategory.longitude: must be less than or equal to 133
+2020-10-04 | 15:06:12.567 | Test worker          | ERROR | TokenAuthenticationFilter | ID:          | jwt token은 Bearer로 시작해야 합니다
+2020-10-04 | 15:06:12.963 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Required BigDecimal parameter 'longitude' is not present
+2020-10-04 | 15:06:13.229 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Expired JWT token
+2020-10-04 | 15:06:13.834 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 15:06:13.860 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 15:06:15.507 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(6409) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:06:15.507 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(6409) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:06:18.558 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 15:06:18.576 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 15:06:21.382 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(6416) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:06:21.395 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(6416) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:06:21.687 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | Expired JWT token
+2020-10-04 | 15:06:21.859 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다
+2020-10-04 | 15:06:21.859 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. accsse token이 필요합니다.
+2020-10-04 | 15:06:22.034 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다
+2020-10-04 | 15:06:22.035 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 토큰 타입이 불일치 합니다. refresh token이 필요합니다.
+2020-10-04 | 15:06:23.312 | Test worker          | ERROR | c.s.s.s.TokenProvider     | ID:          | 유저(6420) 저장된 리프레시 토큰과 일치하지 않습니다.
+2020-10-04 | 15:06:23.339 | Test worker          | ERROR | nseEntityExceptionHandler | ID:          | 유저(6420) 저장된 리프레시 토큰과 일치하지 않습니다.
