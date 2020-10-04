@@ -12,6 +12,9 @@ permissions:
     group: jenkins
 
 hooks:
+  BeforeInstall:
+    - location: deploy-before.sh
+      runas: ubuntu
   ApplicationStart:
     - location: deploy.sh
       timeout: 60
