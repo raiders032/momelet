@@ -5,12 +5,6 @@ files:
     destination: /home/ubuntu/build
     overwirte: yes
 
-permissions:
-  - object: /
-    pattern: "**"
-    owner: jenkins
-    group: jenkins
-
 hooks:
   BeforeInstall:
     - location: deploy-before.sh
