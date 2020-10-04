@@ -1,0 +1,50 @@
+# docker-compose.yml
+version: '3'
+volumes: 
+  grafana_data:
+  prometheus_data:
+
+services:
+  spring:
+    container_name: spring
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./spring_log:/logs
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile-jenkins
+    container_name: jenkins
+    restart: always
+    volumes:
+      - ./jenkins/data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 10000:8080
+      - 50000:50000
+  
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - 9090:9090
+    restart: always
+  
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - 3030:3000
+    depends_on:
+      - prometheus
+    restart: always
