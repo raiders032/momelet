@@ -1,4 +1,5 @@
 #!/bin/bash
+
 REPOSITORY = /home/ubuntu/build
 PROJECT_NAME = sprint1 
 
