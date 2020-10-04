@@ -1,18 +1,27 @@
-ORIGIN_JAR_PATH='/home/jenkins/member-batch/deploy/*.jar'
-ORIGIN_JAR_NAME=$(basename ${ORIGIN_JAR_PATH})
-TARGET_PATH='/home/jenkins/member-batch/application.jar'
-JAR_BOX_PATH='/home/jenkins/member-batch/jar/'
+REPOSITORY=/home/ubuntu
+BACKENDPATH=recorder/backend/sprint1
+PROJECT_NAME=recorder
+PROGRAM_NAME=sprint1
 
-echo "  > 배포 JAR: "${ORIGIN_JAR_NAME}
+echo ">현재 구동중인 애플리케이션 pid확인"
 
-echo "  > chmod 770 ${ORIGIN_JAR_PATH}"
-sudo chmod 770 ${ORIGIN_JAR_PATH}
+CURRENT_PID=$(pgrep -f ${PROGRAM_NAME}.*.jar)
 
-echo "  > cp ${ORIGIN_JAR_PATH} ${JAR_BOX_PATH}"
-sudo cp ${ORIGIN_JAR_PATH} ${JAR_BOX_PATH}
+echo "현재 구동중인 애플리케이션 pid: @CURRENT_PID"
 
-echo "  > chown -h jenkins:jenkins ${JAR_BOX_PATH}${ORIGIN_JAR_NAME}"
-sudo chown -h jenkins:jenkins ${JAR_BOX_PATH}${ORIGIN_JAR_NAME}
+if [ -z "$CURRENT_PID" ]; then
+    echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+    echo "> kill -15 $CURRENT_PID"
+    kill -15 $CURRENT_PID
+    sleep 5
+fi
 
-echo "  > sudo ln -s -f ${JAR_BOX_PATH}${ORIGIN_JAR_NAME} ${TARGET_PATH}"
-sudo ln -s -f ${JAR_BOX_PATH}${ORIGIN_JAR_NAME} ${TARGET_PATH}
+echo "> 새 어플리케이션 배포"
+
+JAR_NAME=$(ls -tr $REPOSITORY/ | grep jar | tail -n 1)
+
+echo "> JAR Name: $JAR_NAME"
+
+nohup java -jar \
+        $REPOSITORY/$JAR_NAME 2>&1 &
