@@ -1,4 +1,4 @@
-REPOSITORY=/home/ubuntu
+REPOSITORY=/home/ubuntu/build
 BACKENDPATH=recorder/backend/sprint1
 PROJECT_NAME=recorder
 PROGRAM_NAME=sprint1
