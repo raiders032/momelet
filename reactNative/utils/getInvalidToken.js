@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import getEnvVars from '../enviroment';
+// import getEnvVars from '../enviroment';
 import dateCheck from './dateCheck';
 
-const { apiUrl } = getEnvVars();
+// const { apiUrl } = getEnvVars();
 
 const getAccessToken = async () => {
   const token = await SecureStore.getItemAsync('refresh_TokenInfo').refreshToken;
@@ -15,7 +15,7 @@ const getAccessToken = async () => {
 const makeRequest = async (method, path, data = '') => {
   try {
     return await axios({
-      url: `${apiUrl}/api/${path}`,
+      url: `http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/api/${path}`,
       method,
       data,
     });

@@ -1,4 +1,3 @@
-import { Entypo } from '@expo/vector-icons';
 import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -12,7 +11,7 @@ import {
 import { set } from 'react-native-reanimated';
 
 import { calculateDistance } from '../utils/calculateDistance';
-import logging from '../utils/logging';
+// import logging from '../utils/logging';
 import Card from './Card';
 import CardBack from './CardBack';
 import PresentMenu from './PresentMenu';
@@ -55,14 +54,14 @@ export default ({ restaurant, header, cover, userLocation }) => {
     // }
 
     // isFlipping = true;
-    await logging({
-      eventName: 'BTN_SEEMENU',
-      config: {
-        name: 'seeMenuButton',
-        screen: 'Home',
-        purpose: 'Viewing importance of menu in restaurant',
-      },
-    });
+    // await logging({
+    //   eventName: 'BTN_SEEMENU',
+    //   config: {
+    //     name: 'seeMenuButton',
+    //     screen: 'Home',
+    //     purpose: 'Viewing importance of menu in restaurant',
+    //   },
+    // });
 
     if (changeValue >= 90) {
       Animated.timing(rotation, {
@@ -142,12 +141,6 @@ export default ({ restaurant, header, cover, userLocation }) => {
     <Card>
       <View style={{ width: '100%', height: '100%' }}>
         <View style={{ height: '65%' }}>
-          <Entypo
-            name="heart-outlined"
-            size={30}
-            color="white"
-            style={{ position: 'absolute', top: 20, right: 20, zIndex: 100 }}
-          />
           <Animated.View
             style={{
               transform: [{ rotateY: frontInterpolate }],
@@ -204,7 +197,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
               height: '55%',
               justifyContent: 'center',
             }}>
-            <Text style={{ fontFamily: 'Godo', fontSize: 18, marginBottom: 10 }}>대표메뉴</Text>
+            <Text style={{ fontSize: 18, marginBottom: 10 }}>대표메뉴</Text>
             {restaurant.menu[0] && (
               <PresentMenu menu={restaurant.menu[0].name} price={restaurant.menu[0].price} />
             )}

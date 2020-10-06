@@ -10,7 +10,7 @@ import { apis } from '../../../api';
 import Empty from '../../../component/Empty';
 import socket from '../../../socket';
 import getInvalidToken from '../../../utils/getInvalidToken';
-import logging from '../../../utils/logging';
+// import logging from '../../../utils/logging';
 import printSocketEvent from '../../../utils/printEvent';
 import MainPresenter from './MainPresenter';
 
@@ -222,14 +222,14 @@ export default ({ navigation, route }) => {
     if (isSendTogetherMsg) return;
 
     isSendTogetherMsg = true;
-    await logging({
-      eventName: 'BTN_TOGETHER',
-      config: {
-        name: 'togetherButton',
-        screen: 'Home',
-        purpose: 'how often clicked button together',
-      },
-    });
+    // await logging({
+    //   eventName: 'BTN_TOGETHER',
+    //   config: {
+    //     name: 'togetherButton',
+    //     screen: 'Home',
+    //     purpose: 'how often clicked button together',
+    //   },
+    // });
 
     const nowUser = user;
 

@@ -5,12 +5,14 @@ import React, { useRef } from 'react';
 import { Animated, StyleSheet, View, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Svg, { Image } from 'react-native-svg';
 
-import getEnvVars from '../../enviroment';
+// import getEnvVars from '../../enviroment';
 
 const { width, height } = Dimensions.get('window');
 const onPress = async (afterLogin, where) => {
-  const { apiUrl } = getEnvVars();
-  const URL = `${apiUrl}/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl('')}`;
+  // const { apiUrl } = getEnvVars();
+  const URL = `http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
+    ''
+  )}`;
 
   console.log('screen:Login 리다이렉트 url', Linking.makeUrl(''));
 
@@ -118,7 +120,7 @@ export default function App({ afterLogin }) {
             elevation: 8,
           }}>
           <TouchableOpacity onPress={changeStart}>
-            <Text style={{ fontFamily: 'Godo', fontSize: 30, fontWeight: 'bold' }}>로그인</Text>
+            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>로그인</Text>
           </TouchableOpacity>
         </Animated.View>
 

@@ -18,13 +18,13 @@ export default ({ setTmpConnect, setIsChanged }) => {
       }}>
       <Card style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Image source={require('../assets/momulet.png')} />
-        <Text style={{ fontFamily: 'Godo', fontSize: 24, marginTop: 10 }}>식당 카드를</Text>
+        <Text style={{ fontSize: 24, marginTop: 10 }}>식당 카드를</Text>
         <TouchableOpacity
           onPress={() => {
             // setTmpConnect(true);
             // setIsChanged((before) => before + 1);
           }}>
-          <Text style={{ fontFamily: 'Godo', fontSize: 24 }}>찾을 수 없습니다.</Text>
+          <Text style={{ fontSize: 24 }}>찾을 수 없습니다.</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {}}>
           <View style={{ marginTop: 10, width: 10, height: 10 }} />

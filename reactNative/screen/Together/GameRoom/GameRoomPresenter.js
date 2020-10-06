@@ -302,7 +302,6 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
         }}>
         <Text
           style={{
-            fontFamily: 'Godo',
             fontSize: 24,
             color: 'white',
           }}>

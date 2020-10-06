@@ -30,7 +30,7 @@ export default ({ index, setUsers, user }) => {
         />
         <Text
           style={{
-            fontFamily: 'NotoSansCJKkr',
+            // fontFamily: 'NotoSansCJKkr',
             fontSize: HEIGHT / 40,
             marginLeft: WIDTH / 22,
           }}>

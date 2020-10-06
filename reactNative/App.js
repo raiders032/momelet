@@ -32,8 +32,7 @@ export default function App() {
   const [userToken, setUserToken] = useState(null);
 
   const [fontsLoaded] = Font.useFonts({
-    Godo: require('./assets/GodoM.ttf'),
-    NotoSansCJKkr: require('./assets/NotoSansMonoCJKkr-Regular.otf'),
+    // NotoSansCJKkr: require('./assets/NotoSansMonoCJKkr-Regular.otf'),
   });
 
   // userToken 가져오는 함수
@@ -89,20 +88,20 @@ export default function App() {
 
   const _loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
-      require('./assets/bg.jpg'),
-      require('./assets/like.png'),
-      require('./assets/soso.png'),
-      require('./assets/dislike.png'),
-      require('./assets/likeIn.png'),
-      require('./assets/sosoIn.png'),
-      require('./assets/dislikeIn.png'),
+      // require('./assets/bg.jpg'),
+      // require('./assets/like.png'),
+      // require('./assets/soso.png'),
+      // require('./assets/dislike.png'),
+      // require('./assets/likeIn.png'),
+      // require('./assets/sosoIn.png'),
+      // require('./assets/dislikeIn.png'),
       // require('./assets/likeOut.png'),
       // require('./assets/sosoOut.png'),
       // require('./assets/dislikeOut.png'),
-      require('./assets/momulet.png'),
-      require('./assets/home.png'),
-      require('./assets/imageEdit.png'),
-      require('./assets/nameEdit.png'),
+      // require('./assets/momulet.png'),
+      // require('./assets/home.png'),
+      // require('./assets/imageEdit.png'),
+      // require('./assets/nameEdit.png'),
       // require('./assets/categories/korean.png'),
       // require('./assets/categories/koreanS.png'),
       // require('./assets/categories/beer.png'),
@@ -127,14 +126,14 @@ export default function App() {
       // require('./assets/categories/westernS.png'),
       // require('./assets/categories/world.png'),
       // require('./assets/categories/worldS.png'),
-      require('./assets/call.png'),
-      require('./assets/copy.png'),
-      require('./assets/geo.png'),
+      // require('./assets/call.png'),
+      // require('./assets/copy.png'),
+      // require('./assets/geo.png'),
     ]);
 
-    const fontAssets = cacheFonts([FontAwesome.font, { Godo: require('./assets/GodoM.ttf') }]);
+    // const fontAssets = cacheFonts([FontAwesome.font]);
 
-    await Promise.all([...imageAssets, ...fontAssets]);
+    return true;
   };
 
   useEffect(() => {
@@ -156,7 +155,7 @@ export default function App() {
           setAssetIsReady(true);
         }}
         onError={(error) => {
-          // console.error('error in load asset', error);
+          console.error('error in load asset', error);
         }}
       />
     );

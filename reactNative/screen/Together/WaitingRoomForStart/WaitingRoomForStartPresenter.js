@@ -43,12 +43,11 @@ export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
               style={
                 Platform.OS === 'ios'
                   ? {
-                      fontFamily: 'NotoSansCJKkr',
+                      // fontFamily: 'NotoSansCJKkr',
                       fontSize: 15,
                       marginTop: 10,
                     }
                   : {
-                      fontFamily: 'Godo',
                       fontSize: 15,
                       marginTop: 10,
                     }

@@ -39,13 +39,13 @@ export default ({
             borderRadius: 10,
           }}>
           <View style={{ alignItems: 'center', height: '60%', justifyContent: 'center' }}>
-            <Text style={{ fontFamily: 'Godo', fontSize: 15 }}>이미지 용량이 너무 커서</Text>
-            <Text style={{ fontFamily: 'Godo', fontSize: 15 }}>작업을 수행 할 수 없습니다.</Text>
+            <Text style={{ fontSize: 15 }}>이미지 용량이 너무 커서</Text>
+            <Text style={{ fontSize: 15 }}>작업을 수행 할 수 없습니다.</Text>
           </View>
 
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity style={{ padding: 10 }} onPress={coverMessageEnterButtonEvent}>
-              <Text style={{ fontFamily: 'Godo', color: 'blue' }}>확인</Text>
+              <Text style={{ color: 'blue' }}>확인</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -101,7 +101,7 @@ export default ({
                   placeholder={user.name}
                   style={{
                     fontSize: 18,
-                    fontFamily: 'Godo',
+
                     // backgroundColor: "yellow",
                     textAlign: 'right',
                   }}
@@ -122,7 +122,6 @@ export default ({
                 <Text
                   style={{
                     fontSize: 18,
-                    fontFamily: 'Godo',
 
                     textAlign: 'left',
                   }}>

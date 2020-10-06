@@ -14,7 +14,7 @@ export default ({ text, onClick, style, activation = true }) => {
           // backgroundColor: { footerColor },
           ...style,
         }}>
-        <Text style={{ fontFamily: 'Godo', fontSize: 24 }}>{text}</Text>
+        <Text style={{ fontSize: 24 }}>{text}</Text>
       </View>
     </TouchableOpacity>
   );
