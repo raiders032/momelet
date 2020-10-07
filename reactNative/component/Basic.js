@@ -20,7 +20,16 @@ export default ({
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: '#FEEE7D' }}>{children}</View>
-      <View style={{ height: 56, backgroundColor: 'white' }}>{footer}</View>
+      {/* <View style={{ height: 56, backgroundColor: 'white' }}>{footer}</View> */}
+      <View
+        style={{
+          height: 56,
+          backgroundColor: 'white',
+          // borderTopWidth: 0.3,
+          // borderColor: 'grey',
+        }}>
+        {footer}
+      </View>
       <CoverMessage
         zIndex={coverMessageConfig.zIndex}
         bodyMessage={coverMessageConfig.bodyMessage}

@@ -2,6 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
+import * as Permissions from 'expo-permissions';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, AsyncStorage, Image, View } from 'react-native';
@@ -30,7 +31,7 @@ const cacheFonts = (fonts) => {
 export default function App() {
   const [assetIsReady, setAssetIsReady] = useState(false);
   const [userToken, setUserToken] = useState(null);
-
+  const [locationPermission, setLocationPermissions] = useState(false);
   const [fontsLoaded] = Font.useFonts({
     // NotoSansCJKkr: require('./assets/NotoSansMonoCJKkr-Regular.otf'),
   });
@@ -57,7 +58,7 @@ export default function App() {
     try {
       const refreshToken = JSON.parse(await SecureStore.getItemAsync('refresh_TokenInfo'));
 
-      if (!dateCheck(refreshToken.refreshTokenExpiredDate)) {
+      if (dateCheck(refreshToken.refreshTokenExpiredDate)) {
         const newRefreshToken = await apis.refreshToken();
 
         if (!newRefreshToken.data.errorCode) {
@@ -135,15 +136,29 @@ export default function App() {
 
     return true;
   };
+  const getPermission = async () => {
+    const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
+      Permissions.LOCATION
+    );
+
+    if (status === 'granted') {
+      setLocationPermissions(true);
+    }
+  };
 
   useEffect(() => {
     // tmpReset();
     _retrieveData();
+    getPermission();
   }, []);
 
   if (assetIsReady && fontsLoaded) {
     if (userToken) {
-      return <Home />;
+      if (locationPermission) {
+        return <Home />;
+      } else {
+        alert('위치 권한이 없어 어플을 실행 할 수 없습니다.');
+      }
     } else {
       return <Login afterLogin={afterLogin} />;
     }

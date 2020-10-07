@@ -21,7 +21,7 @@ export default ({ navigation, route }) => {
   const [user, setUser] = useState(null);
   const [isChanged, setIsChanged] = useState(1);
   const [tmpConnect, setTmpConnect] = useState(false);
-  let count = 0;
+  const count = 0;
   // const [isDisconnect, setIsDisconnect] = useState(false);
   const [coverMessageConfig, setCoverMessageConfig] = useState({
     zIndex: -1,
@@ -172,38 +172,39 @@ export default ({ navigation, route }) => {
     }
   };
   const getRestaurantAndSocketConnect = async () => {
-    const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
-      Permissions.LOCATION
-    );
+    // const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(
+    //   Permissions.LOCATION
+    // );
 
-    if (status === 'granted') {
-      const location = await Location.getCurrentPositionAsync({});
-      let latitude;
-      let longitude;
+    // if (status === 'granted') {
+    const location = await Location.getCurrentPositionAsync({});
+    let latitude;
+    let longitude;
 
-      if (!tmpConnect) {
-        latitude = 37.5447048;
-        longitude = 127.0663154;
-      } else {
-        latitude = location.coords.latitude;
-        longitude = location.coords.longitude;
-      }
-
-      await getUserRestaurant(
-        latitude,
-        longitude
-
-        // location.coords.latitude,
-        // location.coords.longitude
-      );
-      // await socketConnect(latitude, longitude);
-      // await socketConnect(location.coords.latitude, location.coords.longitude);
-      setUserLocation({ latitude, longitude });
+    if (!tmpConnect) {
+      latitude = 37.5447048;
+      longitude = 127.0663154;
     } else {
-      alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
+      latitude = location.coords.latitude;
+      longitude = location.coords.longitude;
     }
-    // const { latitude, longitude } = location.coords;
+
+    await getUserRestaurant(
+      latitude,
+      longitude
+
+      // location.coords.latitude,
+      // location.coords.longitude
+    );
+    // await socketConnect(latitude, longitude);
+    // await socketConnect(location.coords.latitude, location.coords.longitude);
+    setUserLocation({ latitude, longitude });
   };
+  // else {
+  //   alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
+  // }
+  // const { latitude, longitude } = location.coords;
+  // };
 
   useEffect(() => {
     getUser();

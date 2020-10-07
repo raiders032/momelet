@@ -176,6 +176,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
           <View
             style={{
               height: '45%',
+              // backgroundColor: 'black',
             }}>
             <View
               style={{
@@ -185,6 +186,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                // backgroundColor: 'black',
               }}>
               <RestaurantBasicInfo title={restaurant.name} distance={distance} point="4.4점" />
               <TouchableOpacity style={{ width: '20%', height: '40%' }} onPress={flipCard}>
