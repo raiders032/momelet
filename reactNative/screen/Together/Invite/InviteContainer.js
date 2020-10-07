@@ -1,5 +1,5 @@
 import { StackActions } from '@react-navigation/native';
-import * as Analytics from 'expo-firebase-analytics';
+// import * as Analytics from 'expo-firebase-analytics';
 import React, { useEffect, useState } from 'react';
 
 import socket from '../../../socket';
@@ -7,9 +7,9 @@ import printSocketEvent from '../../../utils/printEvent';
 import InvitePresenter from './InvitePresenter';
 
 export default ({ navigation, route }) => {
-  useEffect(() => {
-    Analytics.setCurrentScreen('invite', 'invite');
-  }, []);
+  // useEffect(() => {
+  //   Analytics.setCurrentScreen('invite', 'invite');
+  // }, []);
 
   const tmpUsers = route.params.msg.aroundUsers;
   let isSendMsg = false;

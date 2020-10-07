@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, Dimensions, Linking, Platform, Clipboard, ToastAndroid } from 'react-native';
 
-import logging from '../utils/logging';
+// import logging from '../utils/logging';
 import truncate from '../utils/truncate';
 import ExtraIcon from './ExtraIcon';
 import Menu from './Menu';
@@ -48,14 +48,14 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
 
             isProcessing = true;
 
-            await logging({
-              eventName: 'BTN_CALL',
-              config: {
-                name: 'callButton',
-                screen: 'Home|Together',
-                purpose: 'how many people click call button',
-              },
-            });
+            // await logging({
+            //   eventName: 'BTN_CALL',
+            //   config: {
+            //     name: 'callButton',
+            //     screen: 'Home|Together',
+            //     purpose: 'how many people click call button',
+            //   },
+            // });
 
             let number;
 
@@ -85,14 +85,14 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
 
             isProcessing = true;
 
-            await logging({
-              eventName: 'BTN_MAP',
-              config: {
-                name: 'seeMapButton',
-                screen: 'Home|Together',
-                purpose: 'how many people click map button',
-              },
-            });
+            // await logging({
+            //   eventName: 'BTN_MAP',
+            //   config: {
+            //     name: 'seeMapButton',
+            //     screen: 'Home|Together',
+            //     purpose: 'how many people click map button',
+            //   },
+            // });
 
             const canOpen = await Linking.canOpenURL(
               'kakaomap://route?sp=37.537229,127.005515&ep=37.4979502,127.0276368&by=FOOT'
@@ -121,14 +121,14 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
             if (isProcessing) return;
 
             isProcessing = true;
-            await logging({
-              eventName: 'BTN_COPY_ADDRESS',
-              config: {
-                name: 'copyAddressButton',
-                screen: 'Home|Together',
-                purpose: 'how many people click copy button',
-              },
-            });
+            // await logging({
+            //   eventName: 'BTN_COPY_ADDRESS',
+            //   config: {
+            //     name: 'copyAddressButton',
+            //     screen: 'Home|Together',
+            //     purpose: 'how many people click copy button',
+            //   },
+            // });
 
             Clipboard.setString(address);
 

@@ -56,9 +56,9 @@ export default ({ roomName, userId }) => {
           }}>
           <Card style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Image source={require('../assets/momulet.png')} />
-            <Text style={{ fontFamily: 'Godo', fontSize: 24, marginTop: 10 }}>아무도 좋아요를</Text>
+            <Text style={{ fontSize: 24, marginTop: 10 }}>아무도 좋아요를</Text>
 
-            <Text style={{ fontFamily: 'Godo', fontSize: 24 }}>누르지 않았어요 ㅠㅠ</Text>
+            <Text style={{ fontSize: 24 }}>누르지 않았어요 ㅠㅠ</Text>
           </Card>
         </View>
       </Basic>

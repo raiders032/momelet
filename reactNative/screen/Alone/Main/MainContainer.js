@@ -10,7 +10,7 @@ import { apis } from '../../../api';
 import Empty from '../../../component/Empty';
 import socket from '../../../socket';
 import getInvalidToken from '../../../utils/getInvalidToken';
-import logging from '../../../utils/logging';
+// import logging from '../../../utils/logging';
 import printSocketEvent from '../../../utils/printEvent';
 import MainPresenter from './MainPresenter';
 
@@ -79,7 +79,14 @@ export default ({ navigation, route }) => {
         const response = await apis.getRestaurant(latitude, longitude, user.data.userInfo.id);
 
         // console.log('get Restaurant Success');
-        // console.log(response);
+
+        if (Object.keys(response.data.data).length > 0) {
+          if (!socket.connected) {
+            console.log('hello');
+            await socketConnect(latitude, longitude);
+          }
+        }
+
         setRestaurants({ loading: false, restaurants: response.data.data });
       } catch (e) {
         // console.log('error In HomeContainer : getUserRestaurant', e);
@@ -174,7 +181,7 @@ export default ({ navigation, route }) => {
       let latitude;
       let longitude;
 
-      if (tmpConnect) {
+      if (!tmpConnect) {
         latitude = 37.5447048;
         longitude = 127.0663154;
       } else {
@@ -189,7 +196,7 @@ export default ({ navigation, route }) => {
         // location.coords.latitude,
         // location.coords.longitude
       );
-      await socketConnect(latitude, longitude);
+      // await socketConnect(latitude, longitude);
       // await socketConnect(location.coords.latitude, location.coords.longitude);
       setUserLocation({ latitude, longitude });
     } else {
@@ -215,14 +222,14 @@ export default ({ navigation, route }) => {
     if (isSendTogetherMsg) return;
 
     isSendTogetherMsg = true;
-    await logging({
-      eventName: 'BTN_TOGETHER',
-      config: {
-        name: 'togetherButton',
-        screen: 'Home',
-        purpose: 'how often clicked button together',
-      },
-    });
+    // await logging({
+    //   eventName: 'BTN_TOGETHER',
+    //   config: {
+    //     name: 'togetherButton',
+    //     screen: 'Home',
+    //     purpose: 'how often clicked button together',
+    //   },
+    // });
 
     const nowUser = user;
 
@@ -232,7 +239,7 @@ export default ({ navigation, route }) => {
     let latitude;
     let longitude;
 
-    if (tmpConnect) {
+    if (!tmpConnect) {
       latitude = 37.5447048;
       longitude = 127.0663154;
     } else {
@@ -249,9 +256,9 @@ export default ({ navigation, route }) => {
       id: socket.query.id,
       latitude,
       longitude,
-      count: count++,
+      // count: count++,
       // latitude: location.coords.latitude,
-      // longitude: location.coords.longitude,
+      // longiude: location.coords.longitude,
     };
 
     socket.emit('together', JSON.stringify(sendMsg), (msg) => {

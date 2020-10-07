@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "momulet",
-    "slug": "momulet",
-    "version": "1.0.0",
+    "name": "momelet",
+    "slug": "momelet",
+    "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/appicon.png",
     "splash": {
       "image": "./assets/logo.png",
       "resizeMode": "contain",
@@ -15,35 +15,19 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.recoder.momulet",
+      "bundleIdentifier": "com.recoder.momelet",
       "supportsTablet": false,
       "infoPlist": {
         "LSApplicationQueriesSchemes": ["kakaomap"]
       },
-      "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.3"
     },
 
     "android": {
-      "package": "com.recoder.momulet",
-      "googleServicesFile": "./google-services.json",
+      "package": "com.recoder.momelet",
       "versionCode": 1
     },
-    "web": {
-      "favicon": "./assets/favicon.png",
-      "config": {
-        "firebase": {
-          "apiKey": "AIzaSyDFb-PKsAiBih07Cm4tfNVf74ZbIl19BzY",
-          "authDomain": "momulet-6c0f7.firebaseapp.com",
-          "databaseURL": "https://momulet-6c0f7.firebaseio.com",
-          "projectId": "momulet-6c0f7",
-          "storageBucket": "momulet-6c0f7.appspot.com",
-          "messagingSenderId": "317856883554",
-          "appId": "1:317856883554:web:9d0af421f0012dfd99023b",
-          "measurementId": "G-STVK3M25Q5"
-        }
-      }
-    },
-    "scheme": "exp"
+
+    "scheme": "momelet"
   }
 }

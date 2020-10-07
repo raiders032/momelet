@@ -23,7 +23,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
           alignItems: 'flex-start',
           opacity: dislikeOpacity,
         }}>
-        <Image
+        {/* <Image
           source={require('../assets/dislikeOut.png')}
           style={{
             height: '100%',
@@ -40,7 +40,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
             marginLeft: WIDTH / 40,
             marginTop: WIDTH / 40,
           }}
-        />
+        /> */}
         <Text
           style={{
             marginLeft: WIDTH / 20,
@@ -61,7 +61,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
           alignItems: 'flex-start',
           opacity: likeOpacity,
         }}>
-        <Image
+        {/* <Image
           source={require('../assets/likeOut.png')}
           style={{
             height: '100%',
@@ -78,7 +78,7 @@ export default ({ dislikeOpacity, likeOpacity }) => {
             marginLeft: WIDTH / 40,
             marginTop: WIDTH / 40,
           }}
-        />
+        /> */}
         <Text
           style={{
             marginLeft: WIDTH / 20,

@@ -6,7 +6,7 @@ export default ({ text, onClick, style, activation = true }) => {
     <TouchableOpacity onPress={onClick} disabled={!activation}>
       <View
         style={{
-          height: '100%',
+          height: 56,
           justifyContent: 'center',
           alignItems: 'center',
           // backgroundColor: { footerColor },
@@ -14,7 +14,7 @@ export default ({ text, onClick, style, activation = true }) => {
           // backgroundColor: { footerColor },
           ...style,
         }}>
-        <Text style={{ fontFamily: 'Godo', fontSize: 24 }}>{text}</Text>
+        <Text style={{ fontSize: 24 }}>{text}</Text>
       </View>
     </TouchableOpacity>
   );

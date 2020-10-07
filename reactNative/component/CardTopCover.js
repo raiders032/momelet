@@ -25,7 +25,6 @@ export default ({ total, selected, onClick }) => {
           }}>
           <Text
             style={{
-              fontFamily: 'Godo',
               color: '#fff271',
               fontSize: 20,
               marginBottom: HEIGHT / 22,
@@ -34,16 +33,13 @@ export default ({ total, selected, onClick }) => {
           </Text>
           <Text
             style={{
-              fontFamily: 'Godo',
               color: 'white',
               fontSize: 18,
               marginBottom: 10,
             }}>
             {total}명중 {selected}명의
           </Text>
-          <Text style={{ fontFamily: 'Godo', color: 'white', fontSize: 18 }}>
-            선택을 받았습니다.
-          </Text>
+          <Text style={{ color: 'white', fontSize: 18 }}>선택을 받았습니다.</Text>
         </View>
         <View
           style={{
@@ -67,7 +63,6 @@ export default ({ total, selected, onClick }) => {
             />
             <Text
               style={{
-                fontFamily: 'Godo',
                 color: 'white',
                 fontSize: 18,
                 top: 2,

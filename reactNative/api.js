@@ -2,10 +2,11 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
-import getEnvVars from './enviroment';
+// import getEnvVars from './enviroment';
 import getInvalidToken from './utils/getInvalidToken';
 
-const { apiUrl } = getEnvVars();
+// const { apiUrl } = getEnvVars();
+// console.log(apiUrl);
 
 const makeRequest = async (method, path, config, data = '') => {
   let tmpToken;
@@ -20,7 +21,7 @@ const makeRequest = async (method, path, config, data = '') => {
 
   try {
     const result = await axios({
-      url: `${apiUrl}/api/${path}`,
+      url: `http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/api/${path}`,
       method,
       headers: {
         Authorization: `Bearer ${tmpToken}`,

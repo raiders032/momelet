@@ -5,7 +5,7 @@ import Basic from '../../../component/Basic';
 import Empty from '../../../component/Empty';
 import RestaurantsSwipe from '../../../component/RestaurantsSwipe';
 import socket from '../../../socket';
-import logging from '../../../utils/logging';
+// import logging from '../../../utils/logging';
 
 export default ({
   restaurants,
@@ -35,18 +35,18 @@ export default ({
           paddingLeft: 20,
           paddingRight: 20,
         }}>
-        <Text style={{ fontFamily: 'Godo' }}>같이하기</Text>
+        <Text style={{}}>같이하기</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={async () => {
-          logging({
-            eventName: 'BTN_MYPAGE',
-            config: {
-              name: 'mypaegButton',
-              screen: 'Home',
-              purpose: 'how often clicked button mypage',
-            },
-          });
+          // logging({
+          //   eventName: 'BTN_MYPAGE',
+          //   config: {
+          //     name: 'mypaegButton',
+          //     screen: 'Home',
+          //     purpose: 'how often clicked button mypage',
+          //   },
+          // });
           navigation.navigate('Mypage', {
             user: user.data.userInfo,
             userChangeCount,
@@ -58,7 +58,7 @@ export default ({
           paddingLeft: 20,
           paddingRight: 20,
         }}>
-        <Text style={{ fontFamily: 'Godo' }}>내 설정</Text>
+        <Text style={{}}>내 설정</Text>
       </TouchableOpacity>
     </View>
   );
@@ -71,7 +71,7 @@ export default ({
       {}
       {!restaurants || restaurants.length <= 0 ? (
         <Empty />
-      ) : restaurants.length > 3 ? (
+      ) : restaurants.length > 0 ? (
         <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
       ) : (
         <View />

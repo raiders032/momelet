@@ -8,7 +8,7 @@ export default ({ title, distance, point }) => {
     <View>
       <View style={{ flexDirection: 'row', marginTop: 5 }}>
         <View style={{ marginRight: 4 }}>
-          <Text style={{ fontFamily: 'Godo', fontSize: 17 }}>{truncate(title, 10)}</Text>
+          <Text style={{ fontSize: 17 }}>{truncate(title, 10)}</Text>
         </View>
         <View
           style={{
@@ -21,7 +21,7 @@ export default ({ title, distance, point }) => {
           <Text>{distance}</Text>
         </View>
       </View>
-      <Text style={{ fontFamily: 'NotoSansCJKkr' }}>평점 {point}</Text>
+      <Text style={{}}>평점 {point}</Text>
     </View>
   );
 };

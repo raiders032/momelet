@@ -8,6 +8,8 @@ import WaitBox from '../../../component/WaitBox';
 import socket from '../../../socket';
 
 export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
+  console.log('wait', activation);
+
   const abc = [];
   const footer = (
     <Footer
@@ -41,12 +43,11 @@ export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
               style={
                 Platform.OS === 'ios'
                   ? {
-                      fontFamily: 'NotoSansCJKkr',
+                      // fontFamily: 'NotoSansCJKkr',
                       fontSize: 15,
                       marginTop: 10,
                     }
                   : {
-                      fontFamily: 'Godo',
                       fontSize: 15,
                       marginTop: 10,
                     }

@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
+import { set } from 'react-native-reanimated';
 
 import { calculateDistance } from '../utils/calculateDistance';
-import logging from '../utils/logging';
+// import logging from '../utils/logging';
 import Card from './Card';
 import CardBack from './CardBack';
 import PresentMenu from './PresentMenu';
@@ -31,6 +32,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
   useEffect(() => {
     rotation.setValue(0);
     // setIsFront("false");
+    setIsFront(true);
   }, [restaurant]);
 
   const frontInterpolate = rotation.interpolate({
@@ -52,14 +54,14 @@ export default ({ restaurant, header, cover, userLocation }) => {
     // }
 
     // isFlipping = true;
-    await logging({
-      eventName: 'BTN_SEEMENU',
-      config: {
-        name: 'seeMenuButton',
-        screen: 'Home',
-        purpose: 'Viewing importance of menu in restaurant',
-      },
-    });
+    // await logging({
+    //   eventName: 'BTN_SEEMENU',
+    //   config: {
+    //     name: 'seeMenuButton',
+    //     screen: 'Home',
+    //     purpose: 'Viewing importance of menu in restaurant',
+    //   },
+    // });
 
     if (changeValue >= 90) {
       Animated.timing(rotation, {
@@ -195,7 +197,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
               height: '55%',
               justifyContent: 'center',
             }}>
-            <Text style={{ fontFamily: 'Godo', fontSize: 18, marginBottom: 10 }}>대표메뉴</Text>
+            <Text style={{ fontSize: 18, marginBottom: 10 }}>대표메뉴</Text>
             {restaurant.menu[0] && (
               <PresentMenu menu={restaurant.menu[0].name} price={restaurant.menu[0].price} />
             )}

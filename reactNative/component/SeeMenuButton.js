@@ -14,7 +14,6 @@ export default () => {
       }}>
       <Text
         style={{
-          fontFamily: 'Godo',
           fontStyle: 'normal',
           lineHeight: 18,
           color: '#3b3b3b',
