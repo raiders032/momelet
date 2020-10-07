@@ -256,9 +256,9 @@ export default ({ navigation, route }) => {
       id: socket.query.id,
       latitude,
       longitude,
-      count: count++,
+      // count: count++,
       // latitude: location.coords.latitude,
-      // longitude: location.coords.longitude,
+      // longiude: location.coords.longitude,
     };
 
     socket.emit('together', JSON.stringify(sendMsg), (msg) => {
