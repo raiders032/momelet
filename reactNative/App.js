@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -133,9 +134,10 @@ export default function App() {
       // require('./assets/geo.png'),
     ]);
 
-    // const fontAssets = cacheFonts([FontAwesome.font]);
+    const fontAssets = cacheFonts([FontAwesome.font, AntDesign.font]);
 
-    return true;
+    return Promise.all(fontAssets);
+    // return true;
   };
   const getPermission = async () => {
     const { status, permissions, canAskAgain, ios, android } = await Permissions.askAsync(

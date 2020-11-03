@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 
@@ -35,6 +36,7 @@ export default ({
           // paddingLeft: 20,
           // paddingRight: 20,
         }}>
+        {/* <AntDesign name="home" size={24} color="black" /> */}
         <Text style={{}}>같이하기</Text>
       </TouchableOpacity>
       <TouchableOpacity
