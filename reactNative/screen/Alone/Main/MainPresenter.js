@@ -32,8 +32,8 @@ export default ({
         style={{
           height: '100%',
           justifyContent: 'center',
-          paddingLeft: 20,
-          paddingRight: 20,
+          // paddingLeft: 20,
+          // paddingRight: 20,
         }}>
         <Text style={{}}>같이하기</Text>
       </TouchableOpacity>
@@ -55,17 +55,77 @@ export default ({
         // onPress={sendTmpMsg3}
         style={{
           justifyContent: 'center',
-          paddingLeft: 20,
-          paddingRight: 20,
+          // paddingLeft: 20,
+          // paddingRight: 20,
         }}>
         <Text style={{}}>내 설정</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={async () => {
+          // logging({
+          //   eventName: 'BTN_MYPAGE',
+          //   config: {
+          //     name: 'mypaegButton',
+          //     screen: 'Home',
+          //     purpose: 'how often clicked button mypage',
+          //   },
+          // });
+          navigation.navigate('Bookmark');
+        }}
+        // onPress={sendTmpMsg3}
+        style={{
+          justifyContent: 'center',
+          // paddingLeft: 20,
+          // paddingRight: 20,
+        }}>
+        <Text style={{}}>즐겨찾기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={async () => {
+          // logging({
+          //   eventName: 'BTN_MYPAGE',
+          //   config: {
+          //     name: 'mypaegButton',
+          //     screen: 'Home',
+          //     purpose: 'how often clicked button mypage',
+          //   },
+          // });
+          navigation.navigate('Search');
+        }}
+        // onPress={sendTmpMsg3}
+        style={{
+          justifyContent: 'center',
+          // paddingLeft: 20,
+          // paddingRight: 20,
+        }}>
+        <Text style={{}}>검색</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={async () => {
+          // logging({
+          //   eventName: 'BTN_MYPAGE',
+          //   config: {
+          //     name: 'mypaegButton',
+          //     screen: 'Home',
+          //     purpose: 'how often clicked button mypage',
+          //   },
+          // });
+          navigation.navigate('Main');
+        }}
+        // onPress={sendTmpMsg3}
+        style={{
+          justifyContent: 'center',
+          // paddingLeft: 20,
+          // paddingRight: 20,
+        }}>
+        <Text style={{}}>홈</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <Basic
-      footer={footer}
+      // footer={footer}
       zIndex={coverMessageConfig.zIndex}
       coverMessageConfig={coverMessageConfig}>
       {}

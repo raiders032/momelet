@@ -70,6 +70,7 @@ export default function App() {
               newRefreshToken.data.data.tokens.refreshToken.formattedExpiryDate,
           };
 
+          console.log('토큰정보 : ', tokenInfo);
           setTokenInSecure(tokenInfo);
           setUserToken(newRefreshToken.data.data.tokens.accessToken.jwtToken);
         }

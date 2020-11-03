@@ -2,26 +2,19 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import truncate from '../utils/truncate';
+import Distance from './Distance';
+import Rating from './Rating';
 
 export default ({ title, distance, point }) => {
   return (
     <View>
-      <View style={{ flexDirection: 'row', marginTop: 5 }}>
+      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
         <View style={{ marginRight: 4 }}>
           <Text style={{ fontSize: 17 }}>{truncate(title, 10)}</Text>
         </View>
-        <View
-          style={{
-            backgroundColor: '#e4e4e4',
-            borderRadius: 4,
-            width: 55,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Text>{distance}</Text>
-        </View>
+        <Distance style={{ width: 55 }} distance={distance} />
       </View>
-      <Text style={{}}>평점 {point}</Text>
+      <Rating rating="4.4" scale={15} />
     </View>
   );
 };

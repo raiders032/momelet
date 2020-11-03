@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "momelet",
+    "name": "모믈렛",
     "slug": "momelet",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/appicon.png",
     "splash": {
@@ -18,9 +18,13 @@
       "bundleIdentifier": "com.recoder.momelet",
       "supportsTablet": false,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["kakaomap"]
+        "LSApplicationQueriesSchemes": ["kakaomap"],
+        
       },
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
+      
+      
+      
     },
 
     "android": {

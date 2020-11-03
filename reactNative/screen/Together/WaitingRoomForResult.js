@@ -5,7 +5,6 @@ import { View, Text, Image, Animated, TouchableOpacity } from 'react-native';
 import Basic from '../../component/Basic';
 import Card from '../../component/Card';
 import Footer from '../../component/Footer';
-import Noresult from '../../component/Noresult';
 import socket from '../../socket';
 import printSocketEvent from '../../utils/printEvent';
 

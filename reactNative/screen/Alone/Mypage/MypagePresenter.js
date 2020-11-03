@@ -60,7 +60,8 @@ export default ({
         <View
           style={{
             height: '30%',
-
+            // backgroundColor: 'red',
+            paddingTop: 20,
             justifyContent: 'center',
             alignItems: 'center',
           }}>

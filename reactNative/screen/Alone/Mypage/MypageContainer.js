@@ -2,14 +2,19 @@ import { StackActions } from '@react-navigation/native';
 import { Buffer } from 'buffer';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AsyncStorage } from 'react-native';
 
 import { apis } from '../../../api';
+import { Context } from '../../../store';
 import MypagePresenter from './MypagePresenter';
 
 export default ({ navigation, route }) => {
-  const [user, setUser] = useState(route.params.user);
+  const { state, dispatch } = useContext(Context);
+
+  console.log('마이페이지', state);
+
+  const [user, setUser] = useState(state.user);
   const [coverMessageZIndex, setCoverMessageZIndex] = useState(-1);
   const [isImageEdit, setIsImageEdit] = useState(false);
   let isSaving = false;

@@ -3,12 +3,13 @@ import { Asset } from 'expo-asset';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as SecureStore from 'expo-secure-store';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text } from 'react-native';
 
 import { apis } from '../../../api';
 import Empty from '../../../component/Empty';
 import socket from '../../../socket';
+import { Context } from '../../../store';
 import getInvalidToken from '../../../utils/getInvalidToken';
 // import logging from '../../../utils/logging';
 import printSocketEvent from '../../../utils/printEvent';
@@ -17,6 +18,8 @@ import MainPresenter from './MainPresenter';
 // 홈 식당 카드의 api 호출 데이터 전달
 
 export default ({ navigation, route }) => {
+  const { state, dispatch } = useContext(Context);
+
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState(null);
   const [isChanged, setIsChanged] = useState(1);
@@ -66,6 +69,8 @@ export default ({ navigation, route }) => {
       // console.log('    이름 : ', result.data.data.userInfo.name);
       setUser(result.data);
 
+      dispatch({ type: 'USER_UPDATE', userProfile: result.data.data.userInfo });
+
       return { ...result.data };
     } catch (error) {
       // console.log('error in get user', error);
@@ -82,7 +87,7 @@ export default ({ navigation, route }) => {
 
         if (Object.keys(response.data.data).length > 0) {
           if (!socket.connected) {
-            console.log('hello');
+            // console.log('hello');
             await socketConnect(latitude, longitude);
           }
         }
@@ -200,12 +205,15 @@ export default ({ navigation, route }) => {
     // await socketConnect(location.coords.latitude, location.coords.longitude);
     setUserLocation({ latitude, longitude });
   };
+
   // else {
   //   alert('위치 권한이 없어서 실행 할 수 없습니다. 앱 설정에서 위치 권한을 허용해주세요.');
   // }
   // const { latitude, longitude } = location.coords;
   // };
-
+  useEffect(() => {
+    navigation.navigate('Together');
+  }, []);
   useEffect(() => {
     getUser();
   }, [isChanged]);

@@ -1,6 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, Dimensions, Linking, Platform, Clipboard, ToastAndroid } from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  Linking,
+  Platform,
+  Clipboard,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
 
 // import logging from '../utils/logging';
 import truncate from '../utils/truncate';
@@ -20,7 +29,6 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
           height: '70%',
           alignItems: 'center',
           padding: 15,
-          // backgroundColor: "blue",
         }}>
         <Text style={{ fontSize: HEIGHT / 30, marginBottom: 25 }}>{name}</Text>
 

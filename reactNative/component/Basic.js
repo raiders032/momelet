@@ -14,14 +14,18 @@ export default ({
   },
   children,
   footer,
+  style,
 }) => {
   // console.log(footer);U
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: '#FEEE7D' }}>{children}</View>
-      {/* <View style={{ height: 56, backgroundColor: 'white' }}>{footer}</View> */}
-      <View
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, backgroundColor: '#FEEE7D', ...style }}>{children}</View>
+      {/* <View style={{ flex: 1, backgroundColor: 'yellow', ...style }}>{children}</View> */}
+      {/* <View style={{ flex: 1, backgroundColor: 'white' }}>{children}</View> */}
+      {footer ? <View style={{ height: 56, backgroundColor: 'white' }}>{footer}</View> : <></>}
+
+      {/* <View
         style={{
           height: 56,
           backgroundColor: 'white',
@@ -29,7 +33,7 @@ export default ({
           // borderColor: 'grey',
         }}>
         {footer}
-      </View>
+      </View> */}
       <CoverMessage
         zIndex={coverMessageConfig.zIndex}
         bodyMessage={coverMessageConfig.bodyMessage}
