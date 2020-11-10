@@ -39,6 +39,10 @@ const makeRequest = async (method, path, config, data = '') => {
 };
 
 export const apis = {
+  addBookmark: (restaurantId) => makeRequest('post', `v1/bookmarks/restaurants/${restaurantId}`),
+  deleteBookmark: (restaurantId) =>
+    makeRequest('delete', `v1/bookmarks/restaurants/${restaurantId}`),
+  getBookmark: () => makeRequest('get', 'v1/bookmarks?page=0&size=20'),
   getRestaurant: (latitude, longitude, id) =>
     makeRequest('get', `v1/restaurants/users/${id}/categories`, {
       params: { latitude, longitude, radius: 0.01 },

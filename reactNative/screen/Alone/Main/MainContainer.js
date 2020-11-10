@@ -3,7 +3,7 @@ import { Asset } from 'expo-asset';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as SecureStore from 'expo-secure-store';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { View, Text } from 'react-native';
 
 import { apis } from '../../../api';
@@ -19,7 +19,7 @@ import MainPresenter from './MainPresenter';
 
 export default ({ navigation, route }) => {
   const { state, dispatch } = useContext(Context);
-
+  const BookMarkArray = useRef([]);
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState(null);
   const [isChanged, setIsChanged] = useState(1);
@@ -68,7 +68,7 @@ export default ({ navigation, route }) => {
       // console.log('    id : ', result.data.data.userInfo.id);
       // console.log('    이름 : ', result.data.data.userInfo.name);
       setUser(result.data);
-
+      // console.log(result.data);
       dispatch({ type: 'USER_UPDATE', userProfile: result.data.data.userInfo });
 
       return { ...result.data };
@@ -211,7 +211,16 @@ export default ({ navigation, route }) => {
   // }
   // const { latitude, longitude } = location.coords;
   // };
+  const getBookMark = async () => {
+    const response = await apis.getBookmark();
+
+    BookMarkArray.current = response.data.data.bookmarks.content;
+    console.log(response.data.data.bookmarks.content);
+  };
+
   useEffect(() => {
+    getBookMark();
+
     navigation.navigate('Together');
   }, []);
   useEffect(() => {
@@ -302,6 +311,7 @@ export default ({ navigation, route }) => {
         sendTogetherMessage={sendTogetherMessage}
         coverMessageConfig={coverMessageConfig}
         userLocation={userLocation}
+        BookMarkArray={BookMarkArray}
       />
     );
   }

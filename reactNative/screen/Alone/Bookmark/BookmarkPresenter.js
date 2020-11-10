@@ -5,7 +5,9 @@ import BookMarkRestaurant from '../../../component/BookMarkRestaurant';
 import { Context } from '../../../store';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ user, onClickEditProfileButton }) => {
+export default ({ user, onClickEditProfileButton, BookmarkRestaurant }) => {
+  console.log('BookmarkRestaurant: ', BookmarkRestaurant.current);
+
   const [filterSelected, setFilterSelected] = useState(0);
 
   return (

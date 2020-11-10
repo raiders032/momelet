@@ -16,8 +16,11 @@ export default ({
   coverMessageConfig,
   userChangeCount,
   userLocation,
+  BookMarkArray,
 }) => {
   const msg = { id: 2, latitude: 37.5, longitude: 127.49999 };
+
+  // console.log('BookMarkArray: ', BookMarkArray);
 
   const footer = (
     <View
@@ -134,7 +137,11 @@ export default ({
       {!restaurants || restaurants.length <= 0 ? (
         <Empty />
       ) : restaurants.length > 0 ? (
-        <RestaurantsSwipe restaurants={restaurants} userLocation={userLocation} />
+        <RestaurantsSwipe
+          BookMarkArray={BookMarkArray}
+          restaurants={restaurants}
+          userLocation={userLocation}
+        />
       ) : (
         <View />
       )}

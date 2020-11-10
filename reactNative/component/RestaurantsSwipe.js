@@ -8,8 +8,9 @@ import RestaurantHeader from './RestaurantHeader';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
-export default ({ restaurants, userLocation }) => {
+export default ({ restaurants, userLocation, BookMarkArray }) => {
   const [restaurant, setRestaurant] = useState(restaurants);
+  const BookmarkArrayId = useRef([]);
 
   useEffect(() => {
     setRestaurant(restaurants);
@@ -20,8 +21,13 @@ export default ({ restaurants, userLocation }) => {
   const position = new Animated.ValueXY({ x: 0, y: 0 });
 
   useEffect(() => {
+    BookmarkArrayId.current = [];
+    BookMarkArray.current.map((obj) => {
+      BookmarkArrayId.current.push(obj.id);
+    });
+
     position.setValue({ x: 0, y: 0 });
-  });
+  }, []);
 
   const rotationValues = position.x.interpolate({
     inputRange: [-200, 0, 200],
@@ -124,7 +130,11 @@ export default ({ restaurants, userLocation }) => {
         }}
         {...panResponder.panHandlers}>
         {secondRestaurant ? (
-          <RestaurantCard restaurant={secondRestaurant} userLocation={userLocation} />
+          <RestaurantCard
+            restaurant={secondRestaurant}
+            userLocation={userLocation}
+            BookmarkArrayId={BookmarkArrayId}
+          />
         ) : (
           <View />
         )}
@@ -140,7 +150,11 @@ export default ({ restaurants, userLocation }) => {
         }}
         {...panResponder.panHandlers}>
         {firstRestaurant ? (
-          <RestaurantCard restaurant={firstRestaurant} userLocation={userLocation} />
+          <RestaurantCard
+            restaurant={firstRestaurant}
+            userLocation={userLocation}
+            BookmarkArrayId={BookmarkArrayId}
+          />
         ) : (
           <View />
         )}

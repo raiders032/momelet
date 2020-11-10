@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -19,6 +20,7 @@ export default ({ users, setUsers, onClick }) => {
         {users.map((user, index) => {
           return <AroundUser key={index} index={index} setUsers={setUsers} user={user} />;
         })}
+        <Ionicons name="ios-heart-empty" size={24} color="black" />
       </View>
     </Basic>
   );

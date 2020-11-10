@@ -1,5 +1,4 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -26,6 +25,8 @@ const cacheImages = (images) => {
 
 // 폰트 캐싱 함수
 const cacheFonts = (fonts) => {
+  // console.log('fonts: ', fonts);
+
   return fonts.map((font) => Font.loadAsync(font));
 };
 
@@ -34,6 +35,8 @@ export default function App() {
   const [userToken, setUserToken] = useState(null);
   const [locationPermission, setLocationPermissions] = useState(false);
   const [fontsLoaded] = Font.useFonts({
+    // FontAwesome,
+    // AntDesign: require('@expo/vector-icons/fonts/AntDesign.ttf'),
     // NotoSansCJKkr: require('./assets/NotoSansMonoCJKkr-Regular.otf'),
   });
 
@@ -90,6 +93,8 @@ export default function App() {
   };
 
   const _loadAssetsAsync = async () => {
+    console.log('here');
+
     const imageAssets = cacheImages([
       // require('./assets/bg.jpg'),
       // require('./assets/like.png'),
@@ -135,6 +140,8 @@ export default function App() {
     ]);
 
     const fontAssets = cacheFonts([FontAwesome.font, AntDesign.font]);
+
+    // await Font.loadAsync({ FontAwesome: require("../node_modules/") });
 
     return Promise.all(fontAssets);
     // return true;

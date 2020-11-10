@@ -1,3 +1,7 @@
+// import { AntDesign } from '@expo/vector-icons';
+// import * as FontAwesome from '@expo/vector-icon';
+// import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -10,6 +14,7 @@ import {
 } from 'react-native';
 import { set } from 'react-native-reanimated';
 
+import { apis } from '../api';
 import { calculateDistance } from '../utils/calculateDistance';
 // import logging from '../utils/logging';
 import Card from './Card';
@@ -18,7 +23,11 @@ import PresentMenu from './PresentMenu';
 import RestaurantBasicInfo from './RestaurantBasicInfo';
 import SeeMenuButton from './SeeMenuButton';
 
-export default ({ restaurant, header, cover, userLocation }) => {
+export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) => {
+  const [isBookmark, setIsBookmark] = useState(() => {
+    return BookmarkArrayId.current.includes(restaurant.id);
+  });
+
   const baseUrl = 'https://cdn.pixabay.com/photo/2020/06/29/10/55/pizza-5352320__480.png';
 
   const [isFront, setIsFront] = useState(true);
@@ -33,6 +42,7 @@ export default ({ restaurant, header, cover, userLocation }) => {
     rotation.setValue(0);
     // setIsFront("false");
     setIsFront(true);
+    setIsBookmark(() => BookmarkArrayId.current.includes(restaurant.id));
   }, [restaurant]);
 
   const frontInterpolate = rotation.interpolate({
@@ -60,7 +70,8 @@ export default ({ restaurant, header, cover, userLocation }) => {
     //     name: 'seeMenuButton',
     //     screen: 'Home',
     //     purpose: 'Viewing importance of menu in restaurant',
-    //   },
+    //   },import { FontAwesome } from '@expo/vector-icons';
+
     // });
 
     if (changeValue >= 90) {
@@ -149,6 +160,30 @@ export default ({ restaurant, header, cover, userLocation }) => {
             {/* {header} */}
 
             <CardImage />
+            {/* <AntDesign name="heart" size={24} color="black" /> */}
+            <TouchableOpacity
+              style={{ position: 'absolute', alignSelf: 'flex-end', bottom: 0 }}
+              onPress={async () => {
+                if (isBookmark) {
+                  const result = await apis.deleteBookmark(restaurant.id);
+
+                  setIsBookmark(false);
+                  console.log('result: ', result.data);
+                } else {
+                  const result = await apis.addBookmark(restaurant.id);
+
+                  BookmarkArrayId.current.push(restaurant.id);
+                  console.log(restaurant.id);
+                  setIsBookmark(true);
+                  console.log('result: ', result.data);
+                }
+              }}>
+              {isBookmark ? (
+                <AntDesign name="heart" size={30} color="red" />
+              ) : (
+                <AntDesign name="heart" size={30} color="grey" style={{ alignSelf: 'flex-end' }} />
+              )}
+            </TouchableOpacity>
             {cover}
           </Animated.View>
           <Animated.View
