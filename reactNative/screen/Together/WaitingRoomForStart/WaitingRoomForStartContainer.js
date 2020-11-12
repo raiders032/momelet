@@ -8,6 +8,8 @@ import printSocketEvent from '../../../utils/printEvent';
 import WaitingRoomForStartPresenter from './WaitingRoomForStartPresenter';
 
 export default ({ navigation, route }) => {
+  // console.log(route);
+
   let isSendMsg = false;
   const [isGetRestaurantSuccess, setIsGetRestaurantSuccess] = useState(true);
   // let hostId = route.params.msg.hostId;
@@ -15,6 +17,17 @@ export default ({ navigation, route }) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('GameSetting', {
+              myId: route.params.myId,
+              roomName: route.params.msg.roomName,
+            })
+          }>
+          <Text style={{ marginLeft: 10 }}>설정하기</Text>
+        </TouchableOpacity>
+      ),
       headerRight: () => (
         <TouchableOpacity
           style={{ paddingRight: 10 }}

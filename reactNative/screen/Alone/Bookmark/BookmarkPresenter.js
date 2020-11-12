@@ -3,10 +3,12 @@ import { View, Text, Image, Dimensions, TouchableOpacity, ScrollView } from 'rea
 
 import BookMarkRestaurant from '../../../component/BookMarkRestaurant';
 import { Context } from '../../../store';
+import { calculateDistance } from '../../../utils/calculateDistance';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ user, onClickEditProfileButton, BookmarkRestaurant }) => {
-  console.log('BookmarkRestaurant: ', BookmarkRestaurant.current);
+export default ({ user, onClickEditProfileButton, bookmarkRestaurant, userLocation }) => {
+  // console.log('userLocation: ', userLocation);
+  // console.log('BookmarkRestaurant: ', bookmarkRestaurant);
 
   const [filterSelected, setFilterSelected] = useState(0);
 
@@ -140,13 +142,28 @@ export default ({ user, onClickEditProfileButton, BookmarkRestaurant }) => {
               </View>
             </TouchableOpacity>
           </View>
+          {bookmarkRestaurant.map((restaurant) => {
+            const distance = calculateDistance(userLocation, {
+              latitude: restaurant.latitude,
+              longitude: restaurant.longitude,
+            });
+
+            return (
+              <BookMarkRestaurant
+                key={restaurant.id}
+                name={restaurant.name}
+                thumUrl={restaurant.thumUrl}
+                like={restaurant.like}
+                distance={distance}
+              />
+            );
+          })}
+          {/* <BookMarkRestaurant />
           <BookMarkRestaurant />
           <BookMarkRestaurant />
           <BookMarkRestaurant />
           <BookMarkRestaurant />
-          <BookMarkRestaurant />
-          <BookMarkRestaurant />
-          <BookMarkRestaurant />
+          <BookMarkRestaurant /> */}
         </View>
       </View>
     </ScrollView>

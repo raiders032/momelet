@@ -215,7 +215,7 @@ export default ({ navigation, route }) => {
     const response = await apis.getBookmark();
 
     BookMarkArray.current = response.data.data.bookmarks.content;
-    console.log(response.data.data.bookmarks.content);
+    // console.log(response.data.data.bookmarks.content);
   };
 
   useEffect(() => {

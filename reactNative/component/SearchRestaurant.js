@@ -2,6 +2,9 @@ import React from 'react';
 import { Image, View, Text, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import { calculateDistance } from '../utils/calculateDistance';
+import imageResize from '../utils/imageResize';
+import truncate from '../utils/truncate';
 import Distance from './Distance';
 import PresentMenu from './PresentMenu';
 import Rating from './Rating';
@@ -9,7 +12,7 @@ import SeletedButton from './SeletedButton';
 import UnSeletedButton from './UnSeletedButton';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default () => {
+export default ({ name, thumUrl, restaurantLocation, userLocation }) => {
   return (
     <TouchableOpacity>
       <View
@@ -42,8 +45,7 @@ export default () => {
                 resizeMode: 'cover',
               }}
               source={{
-                uri:
-                  'https://dimg.donga.com/a/500/0/90/5/ugc/CDB/29STREET/Article/5e/b2/04/e8/5eb204e81752d2738236.jpg',
+                uri: imageResize(thumUrl),
               }}
             />
           </View>
@@ -54,7 +56,7 @@ export default () => {
               marginLeft: 4,
               justifyContent: 'space-between',
             }}>
-            <Text style={{ fontSize: 17, fontWeight: '500' }}>착한피자 사당방배점</Text>
+            <Text style={{ fontSize: 15, fontWeight: '500' }}>{truncate(name, 13)}</Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -63,7 +65,7 @@ export default () => {
                 marginVertical: 5,
               }}>
               <Rating rating="4.3" scale={12} />
-              <Distance distance="300M" />
+              <Distance distance={calculateDistance(userLocation, restaurantLocation)} />
             </View>
             <PresentMenu menu="치즈피자" price="7000" fontSize={10} />
             <PresentMenu menu="화덕피자" price="9000" fontSize={10} />

@@ -20,6 +20,7 @@ function TabBar() {
         name="Main"
         component={Main}
         options={{
+          // unmountOnBlur: true,
           // title: '홈',
           tabBarIcon: ({ focused }) => {
             if (focused) {
@@ -44,6 +45,7 @@ function TabBar() {
         name="Search"
         component={Search}
         options={{
+          unmountOnBlur: true,
           // title: '검색',
           tabBarIcon: ({ focused }) => {
             if (focused) {
@@ -95,6 +97,7 @@ function TabBar() {
         component={Bookmark}
         options={{
           // title: '북마크',
+          unmountOnBlur: true,
           tabBarIcon: ({ focused }) => {
             if (focused) {
               return (

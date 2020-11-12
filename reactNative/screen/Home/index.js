@@ -14,6 +14,7 @@ import Search from '../Alone/Search';
 import Together from '../Together';
 import GameResult from '../Together/GameResult';
 import GameRoom from '../Together/GameRoom';
+import GameSetting from '../Together/GameSetting';
 import Invite from '../Together/Invite';
 import WaitingRoomForResult from '../Together/WaitingRoomForResult';
 import WaitingRoomForStart from '../Together/WaitingRoomForStart';
@@ -67,6 +68,7 @@ function App() {
               headerShown: false,
             }}
           />
+          <Stack.Screen name="GameSetting" component={GameSetting} />
         </Stack.Navigator>
 
         {/* <Stack.Navigator>

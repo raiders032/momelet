@@ -12,7 +12,7 @@ import InvitePresenter from './InvitePresenter';
 export default ({ navigation, route }) => {
   const { state } = useContext(Context);
 
-  console.log('route: ', route, state);
+  // console.log('route: ', route, state);
   useEffect(() => {});
 
   // useEffect(() => {
@@ -21,7 +21,7 @@ export default ({ navigation, route }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    console.log(route);
+    // console.log(route);
 
     let latitude;
     let longitude;
