@@ -16,6 +16,10 @@ import RestaurantHeader from '../../../component/RestaurantHeader';
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
 export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => {
+  // restaurants.map((obj) => {
+  //   console.log(obj.name);
+  // });
+
   let isProcessing = false;
   const elapsedTime = useRef(0);
   const timeFinish = useRef(false);
@@ -173,6 +177,12 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
     });
   };
 
+  // useEffect(() => {
+  //   BookmarkArrayId.current = [];
+  //   BookMarkArray.current.map((obj) => {
+  //     BookmarkArrayId.current.push(obj.id);
+  //   });
+  // }, []);
   useEffect(() => {
     timeFinish.current = true;
     position.setValue({ x: 0, y: 0 });
@@ -262,7 +272,11 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
             }}
             {...panResponder.panHandlers}>
             {secondRestaurant ? (
-              <RestaurantCard restaurant={secondRestaurant} userLocation={userLocation} />
+              <RestaurantCard
+                restaurant={secondRestaurant}
+                userLocation={userLocation}
+                // BookmarkArrayId={BookmarkArrayId}
+              />
             ) : (
               <View />
             )}
@@ -282,6 +296,7 @@ export default ({ restaurants, zIndex, infoText, gameFinish, userLocation }) => 
                 restaurant={firstRestaurant}
                 header={header}
                 userLocation={userLocation}
+                // BookmarkArrayId={BookmarkArrayId}
               />
             ) : (
               <View />

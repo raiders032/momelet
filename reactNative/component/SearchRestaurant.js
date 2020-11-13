@@ -12,9 +12,9 @@ import SeletedButton from './SeletedButton';
 import UnSeletedButton from './UnSeletedButton';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ name, thumUrl, restaurantLocation, userLocation }) => {
+export default ({ name, thumUrl, restaurantLocation, userLocation, onPress }) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View
         style={{
           width: '100%',
@@ -65,15 +65,16 @@ export default ({ name, thumUrl, restaurantLocation, userLocation }) => {
                 marginVertical: 5,
               }}>
               <Rating rating="4.3" scale={12} />
-              <Distance distance={calculateDistance(userLocation, restaurantLocation)} />
+              {/* <Distance distance={calculateDistance(userLocation, restaurantLocation)} /> */}
+              <Distance distance="300M" />
             </View>
             <PresentMenu menu="치즈피자" price="7000" fontSize={10} />
             <PresentMenu menu="화덕피자" price="9000" fontSize={10} />
           </View>
-          <View style={{ flex: 1, alignItems: 'flex-end' }}>
-            <SeletedButton />
-            <UnSeletedButton />
-          </View>
+          {/* <View style={{ flex: 1, alignItems: 'flex-end' }}> */}
+          {/* <SeletedButton /> */}
+          {/* <UnSeletedButton /> */}
+          {/* </View> */}
         </View>
       </View>
     </TouchableOpacity>

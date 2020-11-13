@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, Text, Platform, PlatformColor } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -7,30 +7,39 @@ import Footer from '../../../component/Footer';
 import WaitBox from '../../../component/WaitBox';
 import socket from '../../../socket';
 
-export default ({ users, onClick, activation, isGetRestaurantSuccess }) => {
-  console.log('wait', activation);
+export default ({ users, onClick, activation, isGetRestaurantSuccess, crewOnClick, myId }) => {
+  // console.log('wait', activation);
 
+  const [readyState, setReadyState] = useState(() => (activation ? 2 : 1));
   const abc = [];
   const footer = (
     <Footer
+      // onClick={readyState == 0 ? onClick : crewOnClick}
       onClick={() => {
-        onClick();
+        if (readyState == 2) {
+          onClick();
+        } else {
+          crewOnClick(readyState);
+          setReadyState(Math.abs(readyState - 1));
+        }
       }}
-      text="시작하기"
-      activation={activation}
+      style={readyState == 0 ? { backgroundColor: '#F0F0F0' } : {}}
+      text={readyState == 2 ? '시작하기' : readyState == 1 ? '준비하기' : '준비완료'}
+      // activation={activation}
     />
   );
 
   //임시로 테스트 하기 위해서 11 개만 만들고 밑에 추가로 하나 만듬.
   for (let i = 0; i < 12; i++) {
     if (i < users.length) {
+      console.log(users, myId);
       abc.push(
         <WaitBox key={i}>
           <View
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: 'white',
+              backgroundColor: users[i].isReady ? '#F0F0F0' : 'white',
               borderRadius: 18,
               justifyContent: 'center',
               alignItems: 'center',

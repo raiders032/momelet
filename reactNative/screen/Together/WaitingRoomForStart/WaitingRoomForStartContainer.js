@@ -76,6 +76,19 @@ export default ({ navigation, route }) => {
     // };
   }, []);
 
+  const crewOnClick = (readyState = 0) => {
+    socket.emit(
+      'getReady',
+      JSON.stringify({
+        id: route.params.myId,
+        roomName: route.params.msg.roomName,
+        isReady: readyState,
+      }),
+      (msg) => {
+        printSocketEvent('getReady', msg);
+      }
+    );
+  };
   const onClick = async (latitude = 37.5447048, longitude = 127.0663154) => {
     if (isSendMsg) return;
 
@@ -123,6 +136,8 @@ export default ({ navigation, route }) => {
       onClick={onClick}
       activation={hostId === route.params.myId}
       isGetRestaurantSuccess={isGetRestaurantSuccess}
+      crewOnClick={crewOnClick}
+      myId={route.params.myId}
     />
   );
 };

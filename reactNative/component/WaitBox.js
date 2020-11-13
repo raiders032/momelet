@@ -10,7 +10,7 @@ export default ({ children }) => {
         width: WIDTH / 4 + 20,
         height: WIDTH / 4 + 20,
         backgroundColor: '#efefef',
-        // backgroundColor: "black",
+        // backgroundColor: 'black',
         borderRadius: 18,
       }}>
       {children}

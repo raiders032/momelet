@@ -1,6 +1,7 @@
 import { StackActions } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
+import { apis } from '../../../api';
 import socket from '../../../socket';
 import getInvalidToken from '../../../utils/getInvalidToken';
 import printSocketEvent from '../../../utils/printEvent';
@@ -9,12 +10,27 @@ import GameRoomPresenter from './GameRoomPresenter';
 export default ({ navigation, route }) => {
   const latitude = 37.5447048;
   const longitude = 127.0663154;
+  const BookmarkArrayId = useRef([]);
   const userLocation = { latitude, longitude };
   const restaurants = route.params.msg.restaurants;
   const [gameReadyAndMessage, setGameReadyAndMessage] = useState({
     isReady: 1,
     message: '준비~',
   });
+  const getBookMark = async () => {
+    const response = await apis.getBookmark();
+
+    response.data.data.bookmarks.content.map((obj) => {
+      // console.log('obj: ', obj);
+      BookmarkArrayId.current.push(obj.restaurantId);
+    });
+    // BookMarkArrayId.current = response.data.data.bookmarks.content;
+    // console.log(response.data.data.bookmarks.content);
+  };
+
+  useEffect(() => {
+    getBookMark();
+  }, []);
 
   if (gameReadyAndMessage.isReady == 1) {
     setTimeout(() => {
@@ -59,6 +75,7 @@ export default ({ navigation, route }) => {
       zIndex={gameReadyAndMessage.isReady}
       gameFinish={gameFinish}
       userLocation={userLocation}
+      // BookmarkArrayId={BookmarkArrayId}
     />
   );
 };

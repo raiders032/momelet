@@ -11,6 +11,8 @@ export default ({
   setRestaurant,
   userLocation,
 }) => {
+  // console.log(userLocation);
+
   return (
     <TextInput
       style={{
@@ -28,16 +30,17 @@ export default ({
         //   latitude: location.coords.latitude,
         //   longitude: location.coords.longitude,
         // };
-        // const userLocation = {
-        //   latitude: 37.5447048,
-        //   longitude: 127.0663154,
-        // };
+        const userLocation = {
+          latitude: 37.5447048,
+          longitude: 127.0663154,
+        };
         const result = await apis.searchRestaurant(
           value,
           userLocation.latitude,
           userLocation.longitude
         );
 
+        // console.log(result.data.data.restaurants.content);
         setRestaurant(result.data.data.restaurants.content);
       }}
     />

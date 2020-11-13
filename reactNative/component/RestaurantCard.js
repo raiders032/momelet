@@ -24,9 +24,10 @@ import RestaurantBasicInfo from './RestaurantBasicInfo';
 import SeeMenuButton from './SeeMenuButton';
 
 export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) => {
-  const [isBookmark, setIsBookmark] = useState(() => {
-    return BookmarkArrayId.current.includes(restaurant.id);
-  });
+  // console.log(BookmarkArrayId);
+  console.log('BookmarkArrayId: ', BookmarkArrayId);
+
+  const [isBookmark, setIsBookmark] = useState('');
 
   const baseUrl = 'https://cdn.pixabay.com/photo/2020/06/29/10/55/pizza-5352320__480.png';
 
@@ -42,7 +43,7 @@ export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) =>
     rotation.setValue(0);
     // setIsFront("false");
     setIsFront(true);
-    setIsBookmark(() => BookmarkArrayId.current.includes(restaurant.id));
+    setIsBookmark(() => BookmarkArrayId?.current.includes(restaurant.id));
   }, [restaurant]);
 
   const frontInterpolate = rotation.interpolate({
@@ -161,29 +162,39 @@ export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) =>
 
             <CardImage />
             {/* <AntDesign name="heart" size={24} color="black" /> */}
-            <TouchableOpacity
-              style={{ position: 'absolute', alignSelf: 'flex-end', bottom: 0 }}
-              onPress={async () => {
-                if (isBookmark) {
-                  const result = await apis.deleteBookmark(restaurant.id);
+            {isBookmark !== undefined ? (
+              <TouchableOpacity
+                style={{ position: 'absolute', alignSelf: 'flex-end', bottom: 0 }}
+                onPress={async () => {
+                  if (isBookmark) {
+                    const result = await apis.deleteBookmark(restaurant.id);
 
-                  setIsBookmark(false);
-                  console.log('result: ', result.data);
-                } else {
-                  const result = await apis.addBookmark(restaurant.id);
+                    setIsBookmark(false);
+                    console.log('result: ', result.data);
+                  } else {
+                    const result = await apis.addBookmark(restaurant.id);
 
-                  BookmarkArrayId.current.push(restaurant.id);
-                  console.log(restaurant.id);
-                  setIsBookmark(true);
-                  console.log('result: ', result.data);
-                }
-              }}>
-              {isBookmark ? (
-                <AntDesign name="heart" size={30} color="red" />
-              ) : (
-                <AntDesign name="heart" size={30} color="grey" style={{ alignSelf: 'flex-end' }} />
-              )}
-            </TouchableOpacity>
+                    BookmarkArrayId.current.push(restaurant.id);
+                    console.log(restaurant.id);
+                    setIsBookmark(true);
+                    console.log('result: ', result.data);
+                  }
+                }}>
+                {isBookmark ? (
+                  <AntDesign name="heart" size={30} color="red" />
+                ) : (
+                  <AntDesign
+                    name="heart"
+                    size={30}
+                    color="grey"
+                    style={{ alignSelf: 'flex-end' }}
+                  />
+                )}
+              </TouchableOpacity>
+            ) : (
+              <View />
+            )}
+
             {cover}
           </Animated.View>
           <Animated.View
