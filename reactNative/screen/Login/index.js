@@ -182,7 +182,7 @@ export default function App({ afterLogin }) {
                 </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => onPress(afterLogin, 'google')}
               style={{ justifyContent: 'center', alignItems: 'center', height: '30%' }}>
               <View
@@ -216,7 +216,7 @@ export default function App({ afterLogin }) {
                   </Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => onPress(afterLogin, 'naver')}
               style={{
