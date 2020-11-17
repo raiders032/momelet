@@ -9,19 +9,19 @@ export default ({ navigation, route }) => {
   const getLocation = async () => {
     const location = await Location.getCurrentPositionAsync({});
 
-    // setUserLocation({
-    //   latitude: location.coords.latitude,
-    //   longitude: location.coords.longitude,
-    // });
     setUserLocation({
-      latitude: 37.5447048,
-      longitude: 127.0663154,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     });
+    // setUserLocation({
+    //   latitude: 37.5447048,
+    //   longitude: 127.0663154,
+    // });
   };
 
   useEffect(() => {
     getLocation();
   }, []);
 
-  return <SearchPresenter userLocation={userLocation} />;
+  return <SearchPresenter userLocation={userLocation} navigation={navigation} />;
 };

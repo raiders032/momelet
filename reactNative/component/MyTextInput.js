@@ -17,7 +17,7 @@ export default ({
     <TextInput
       style={{
         width: '90%',
-        height: 30,
+        height: 40,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         padding: 10,

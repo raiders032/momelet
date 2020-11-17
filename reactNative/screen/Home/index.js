@@ -18,6 +18,7 @@ import GameSetting from '../Together/GameSetting';
 import Invite from '../Together/Invite';
 import WaitingRoomForResult from '../Together/WaitingRoomForResult';
 import WaitingRoomForStart from '../Together/WaitingRoomForStart';
+import oneCard from '../oneCard';
 import TabBar from './Tab';
 
 const Stack = createStackNavigator();
@@ -37,6 +38,8 @@ function App() {
           <Stack.Screen name="Tab" component={TabBar} options={{ headerShown: false }} />
           <Stack.Screen name="Mypage" component={MyPage} />
           <Stack.Screen name="Invite" component={Invite} options={{}} />
+          <Stack.Screen name="oneCard" component={oneCard} />
+
           <Stack.Screen
             name="WaitingRoomForStart"
             component={WaitingRoomForStart}

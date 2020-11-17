@@ -10,9 +10,14 @@ import Svg, { Image } from 'react-native-svg';
 const { width, height } = Dimensions.get('window');
 const onPress = async (afterLogin, where) => {
   // const { apiUrl } = getEnvVars();
-  const URL = `http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
-    ''
-  )}`;
+  let URL;
+
+  if (where != 'apple') {
+    URL = `http://ec2-3-34-162-241.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorize/${where}?redirect_uri=${Linking.makeUrl(
+      ''
+    )}`;
+  } else {
+  }
 
   console.log('screen:Login 리다이렉트 url', Linking.makeUrl(''));
 
@@ -84,12 +89,12 @@ export default function App({ afterLogin }) {
 
   const bgY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -height / 2.5],
+    outputRange: [0, -height / 2],
   });
 
   const textInputY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [height / 2.5, 0],
+    outputRange: [height / 2, 0],
   });
 
   return (
@@ -111,7 +116,7 @@ export default function App({ afterLogin }) {
         </Svg>
       </Animated.View>
 
-      <View style={{ height: height / 2.5, justifyContent: 'center' }}>
+      <View style={{ height: height / 2, justifyContent: 'center' }}>
         <Animated.View
           style={{
             ...styles.button,
@@ -174,6 +179,41 @@ export default function App({ afterLogin }) {
                     alignItems: 'center',
                   }}>
                   <Text style={{ fontSize: 18, fontWeight: '600' }}>구글로 시작하기</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => onPress(afterLogin, 'google')}
+              style={{ justifyContent: 'center', alignItems: 'center', height: '30%' }}>
+              <View
+                style={{
+                  width: '80%',
+                  backgroundColor: 'black',
+                  height: '70%',
+                  borderRadius: 10,
+                  flexDirection: 'row',
+                  elevation: 8,
+                  paddingTop: 3,
+                }}>
+                <Svg
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '30%',
+                  }}>
+                  <Image href={require('../../assets/apple_logo.png')} height="90%" width="100%" />
+                </Svg>
+                <View
+                  style={{
+                    right: 0,
+                    justifyContent: 'center',
+                    height: '100%',
+                    width: '70%',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{ fontSize: 18, fontWeight: '600', color: 'white' }}>
+                    Sign in with Apple
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>

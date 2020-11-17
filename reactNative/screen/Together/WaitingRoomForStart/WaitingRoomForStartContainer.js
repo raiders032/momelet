@@ -1,4 +1,5 @@
 import { StackActions } from '@react-navigation/native';
+import * as Location from 'expo-location';
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 
@@ -89,8 +90,10 @@ export default ({ navigation, route }) => {
       }
     );
   };
-  const onClick = async (latitude = 37.5447048, longitude = 127.0663154) => {
+  const onClick = async () => {
     if (isSendMsg) return;
+
+    const location = await Location.getCurrentPositionAsync({});
 
     isSendMsg = true;
 
@@ -102,8 +105,8 @@ export default ({ navigation, route }) => {
         id: route.params.myId,
         roomName: route.params.msg.roomName,
         radius: 0.01,
-        latitude,
-        longitude,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
         jwt: jwtToken,
       }),
       async (msg) => {

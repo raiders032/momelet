@@ -32,6 +32,7 @@ export default ({ navigation }) => {
       user={state.user}
       onClickEditProfileButton={onClickEditProfileButton}
       userLocation={userLocation}
+      navigation={navigation}
     />
   );
 };

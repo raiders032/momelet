@@ -26,7 +26,7 @@ export default ({ restaurants, userLocation, BookMarkArray }) => {
       BookmarkArrayId.current.push(obj.id);
     });
 
-    position.setValue({ x: 0, y: 0 });
+    // position.setValue({ x: 0, y: 0 });
   }, []);
 
   const rotationValues = position.x.interpolate({
@@ -53,23 +53,25 @@ export default ({ restaurants, userLocation, BookMarkArray }) => {
       if (dx >= 150) {
         Animated.timing(position, {
           toValue: {
-            x: WIDTH + 50,
+            x: WIDTH + 20,
             y: dy,
           },
           duration: 200,
           useNativeDriver: false,
         }).start(() => {
+          position.setValue({ x: 0, y: 0 });
           setRestaurant([secondRestaurant, ...otherRestaurant]);
         });
       } else if (dx <= -150) {
         Animated.timing(position, {
           toValue: {
-            x: -WIDTH - 50,
+            x: -WIDTH - 20,
             y: dy,
           },
           duration: 100,
           useNativeDriver: false,
         }).start(() => {
+          position.setValue({ x: 0, y: 0 });
           setRestaurant([secondRestaurant, ...otherRestaurant]);
         });
       } else {

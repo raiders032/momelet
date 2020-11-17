@@ -23,9 +23,20 @@ import PresentMenu from './PresentMenu';
 import RestaurantBasicInfo from './RestaurantBasicInfo';
 import SeeMenuButton from './SeeMenuButton';
 
-export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) => {
+export default ({
+  restaurant,
+  header,
+  cover,
+  userLocation,
+  BookmarkArrayId,
+  isSelected,
+  fromHome = true,
+  cardStyle,
+}) => {
   // console.log(BookmarkArrayId);
-  console.log('BookmarkArrayId: ', BookmarkArrayId);
+  // console.log('BookmarkArrayId: ', BookmarkArrayId);
+
+  console.log('restaurant: ', restaurant);
 
   const [isBookmark, setIsBookmark] = useState('');
 
@@ -43,7 +54,13 @@ export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) =>
     rotation.setValue(0);
     // setIsFront("false");
     setIsFront(true);
-    setIsBookmark(() => BookmarkArrayId?.current.includes(restaurant.id));
+    setIsBookmark(() => {
+      if (BookmarkArrayId != undefined) {
+        return BookmarkArrayId?.current.includes(restaurant.id);
+      } else {
+        return isSelected;
+      }
+    });
   }, [restaurant]);
 
   const frontInterpolate = rotation.interpolate({
@@ -150,7 +167,7 @@ export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) =>
   });
 
   return (
-    <Card>
+    <Card style={cardStyle}>
       <View style={{ width: '100%', height: '100%' }}>
         <View style={{ height: '65%' }}>
           <Animated.View
@@ -174,7 +191,7 @@ export default ({ restaurant, header, cover, userLocation, BookmarkArrayId }) =>
                   } else {
                     const result = await apis.addBookmark(restaurant.id);
 
-                    BookmarkArrayId.current.push(restaurant.id);
+                    BookmarkArrayId?.current.push(restaurant.id);
                     console.log(restaurant.id);
                     setIsBookmark(true);
                     console.log('result: ', result.data);

@@ -5,7 +5,7 @@ import Basic from '../../../component/Basic';
 import MyTextInput from '../../../component/MyTextInput';
 import SearchRestaurant from '../../../component/SearchRestaurant';
 
-export default ({ onSubmit, userLocation }) => {
+export default ({ onSubmit, userLocation, navigation }) => {
   const [value, setValue] = useState('');
   const [restaurant, setRestaurant] = useState([]);
 
@@ -44,6 +44,15 @@ export default ({ onSubmit, userLocation }) => {
                 key={index}
                 userLocation={userLocation}
                 restaurantLocation={{ latitude: obj.latitude, longitude: obj.longitude }}
+                onPress={() => {
+                  navigation.navigate('oneCard', {
+                    restaurant: obj,
+                    isSelected: true,
+                    userLocation,
+                    fromHome: false,
+                    fromSearch: true,
+                  });
+                }}
               />
             );
           })}

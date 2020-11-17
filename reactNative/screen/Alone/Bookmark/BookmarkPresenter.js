@@ -6,7 +6,13 @@ import { Context } from '../../../store';
 import { calculateDistance } from '../../../utils/calculateDistance';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ user, onClickEditProfileButton, bookmarkRestaurant, userLocation }) => {
+export default ({
+  user,
+  onClickEditProfileButton,
+  bookmarkRestaurant,
+  userLocation,
+  navigation,
+}) => {
   // console.log('userLocation: ', userLocation);
   // console.log('BookmarkRestaurant: ', bookmarkRestaurant);
 
@@ -54,7 +60,7 @@ export default ({ user, onClickEditProfileButton, bookmarkRestaurant, userLocati
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
-          <View
+          {/* <View
             style={{
               justifyContent: 'center',
 
@@ -141,7 +147,7 @@ export default ({ user, onClickEditProfileButton, bookmarkRestaurant, userLocati
                 </Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
           {bookmarkRestaurant.map((restaurant) => {
             const distance = calculateDistance(userLocation, {
               latitude: restaurant.latitude,
@@ -155,6 +161,14 @@ export default ({ user, onClickEditProfileButton, bookmarkRestaurant, userLocati
                 thumUrl={restaurant.thumUrl}
                 like={restaurant.like}
                 distance={distance}
+                onPress={() => {
+                  navigation.navigate('oneCard', {
+                    restaurant,
+                    isSelected: true,
+                    userLocation,
+                    fromHome: false,
+                  });
+                }}
               />
             );
           })}

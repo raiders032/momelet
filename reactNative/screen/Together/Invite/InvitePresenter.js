@@ -20,7 +20,7 @@ export default ({ users, setUsers, onClick }) => {
         {users.map((user, index) => {
           return <AroundUser key={index} index={index} setUsers={setUsers} user={user} />;
         })}
-        <Ionicons name="ios-heart-empty" size={24} color="black" />
+        {/* <Ionicons name="ios-heart-empty" size={24} color="black" /> */}
       </View>
     </Basic>
   );

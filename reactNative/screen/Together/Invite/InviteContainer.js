@@ -3,6 +3,7 @@ import { StackActions } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
+// import * as Location from 'expo-location';
 
 import socket from '../../../socket';
 import { Context } from '../../../store';
@@ -13,37 +14,20 @@ export default ({ navigation, route }) => {
   const { state } = useContext(Context);
 
   // console.log('route: ', route, state);
-  useEffect(() => {});
 
   // useEffect(() => {
   //   Analytics.setCurrentScreen('invite', 'invite');
   // }, []);
   const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    // console.log(route);
-
-    let latitude;
-    let longitude;
-    // const location = await Location.getCurrentPositionAsync({});
-
-    // console.log(location);
-
-    if (true) {
-      latitude = 37.5447048;
-      longitude = 127.0663154;
-    } else {
-      // latitude = location.coords.latitude;
-      // longitude = location.coords.longitude;
-    }
-
+  const getLocationAndSendSocketMessage = async () => {
+    const location = await Location.getCurrentPositionAsync({});
     const sendMsg = {
       id: socket.query.id,
-      latitude,
-      longitude,
+      // latitude,
+      // longitude,
       // count: count++,
-      // latitude: location.coords.latitude,
-      // longiude: location.coords.longitude,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     };
 
     socket.emit('together', JSON.stringify(sendMsg), (msg) => {
@@ -58,6 +42,10 @@ export default ({ navigation, route }) => {
         })
       );
     });
+  };
+
+  useEffect(() => {
+    getLocationAndSendSocketMessage();
   }, [route]);
 
   // const tmpUsers = route.params.msg.aroundUsers;

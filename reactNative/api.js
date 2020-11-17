@@ -39,6 +39,7 @@ const makeRequest = async (method, path, config, data = '') => {
 };
 
 export const apis = {
+  getRestaurantById: (restaurantId) => makeRequest('get', `v1/restaurants/${restaurantId}`),
   addBookmark: (restaurantId) => makeRequest('post', `v1/bookmarks/restaurants/${restaurantId}`),
   deleteBookmark: (restaurantId) =>
     makeRequest('delete', `v1/bookmarks/restaurants/${restaurantId}`),
