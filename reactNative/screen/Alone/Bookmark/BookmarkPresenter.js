@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 
+import { apis } from '../../../api';
 import BookMarkRestaurant from '../../../component/BookMarkRestaurant';
 import { Context } from '../../../store';
 import { calculateDistance } from '../../../utils/calculateDistance';
@@ -12,6 +13,10 @@ export default ({
   bookmarkRestaurant,
   userLocation,
   navigation,
+  setBookmarkRestaurant,
+  RestaurantOrderByLike,
+  RestaurantOrderById,
+  RestaurantOrderByDistance,
 }) => {
   // console.log('userLocation: ', userLocation);
   // console.log('BookmarkRestaurant: ', bookmarkRestaurant);
@@ -60,7 +65,7 @@ export default ({
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
-          {/* <View
+          <View
             style={{
               justifyContent: 'center',
 
@@ -78,6 +83,7 @@ export default ({
             <TouchableOpacity
               style={{ width: '34%', height: '100%' }}
               onPress={() => {
+                setBookmarkRestaurant(RestaurantOrderById.current);
                 setFilterSelected(0);
               }}>
               <View
@@ -95,13 +101,14 @@ export default ({
                     fontSize: 18,
                     fontWeight: filterSelected === 0 ? 'bold' : '300',
                   }}>
-                  거리순
+                  최근등록순
                 </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: '34%', height: '100%' }}
               onPress={() => {
+                setBookmarkRestaurant(RestaurantOrderByLike.current);
                 setFilterSelected(1);
               }}>
               <View
@@ -126,6 +133,7 @@ export default ({
             <TouchableOpacity
               style={{ width: '34%', height: '100%' }}
               onPress={() => {
+                setBookmarkRestaurant(RestaurantOrderByDistance.current);
                 setFilterSelected(2);
               }}>
               <View
@@ -143,30 +151,52 @@ export default ({
                     fontSize: 18,
                     fontWeight: filterSelected === 2 ? 'bold' : '300',
                   }}>
-                  최근등록순
+                  거리순
                 </Text>
               </View>
             </TouchableOpacity>
-          </View> */}
-          {bookmarkRestaurant.map((restaurant) => {
+          </View>
+          {bookmarkRestaurant?.map((restaurant) => {
+            // console.log('a', userLocation, restaurant);
+
             const distance = calculateDistance(userLocation, {
               latitude: restaurant.latitude,
               longitude: restaurant.longitude,
             });
 
+            // console.log(distance);
+
             return (
               <BookMarkRestaurant
+                // from="bookmark"
                 key={restaurant.id}
                 name={restaurant.name}
                 thumUrl={restaurant.thumUrl}
-                like={restaurant.like}
+                like={restaurant.likecnt}
                 distance={distance}
                 onPress={() => {
+                  // console.log(bookmarkRestaurant);
+                  // setBookmarkRestaurant(() => {
+                  //   return bookmarkRestaurant.filter((obj) => {
+                  //     return obj.id != restaurant.id;
+                  //   });
+                  // });
                   navigation.navigate('oneCard', {
                     restaurant,
                     isSelected: true,
                     userLocation,
                     fromHome: false,
+                    from: 'bookmark',
+                  });
+                }}
+                onPressHeartButton={async () => {
+                  const result = await apis.deleteBookmark(restaurant.restaurantId);
+
+                  console.log('result: ', result.data);
+                  setBookmarkRestaurant(() => {
+                    return bookmarkRestaurant.filter((obj) => {
+                      return obj.id != restaurant.id;
+                    });
                   });
                 }}
               />

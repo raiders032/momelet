@@ -21,7 +21,7 @@ function TabBar() {
         component={Main}
         options={{
           // unmountOnBlur: true,
-          // title: '홈',
+          title: '홈',
           tabBarIcon: ({ focused }) => {
             if (focused) {
               return (
@@ -46,7 +46,7 @@ function TabBar() {
         component={Search}
         options={{
           unmountOnBlur: true,
-          // title: '검색',
+          title: '검색',
           tabBarIcon: ({ focused }) => {
             if (focused) {
               return (
@@ -72,7 +72,7 @@ function TabBar() {
         options={{
           tabBarVisible: false,
           unmountOnBlur: true,
-          // title: '초대',
+          title: '초대',
           tabBarIcon: ({ focused }) => {
             if (focused) {
               return (
@@ -96,7 +96,7 @@ function TabBar() {
         name="Bookmark"
         component={Bookmark}
         options={{
-          // title: '북마크',
+          title: '북마크',
           unmountOnBlur: true,
           tabBarIcon: ({ focused }) => {
             if (focused) {

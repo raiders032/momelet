@@ -12,7 +12,9 @@ import SeletedButton from './SeletedButton';
 import UnSeletedButton from './UnSeletedButton';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ name, thumUrl, restaurantLocation, userLocation, onPress }) => {
+export default ({ name, thumUrl, restaurantLocation, userLocation, onPress, like, menu }) => {
+  console.log(name, thumUrl, restaurantLocation, userLocation, onPress, like, menu);
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -54,7 +56,7 @@ export default ({ name, thumUrl, restaurantLocation, userLocation, onPress }) =>
               width: WIDTH / 2,
               padding: 3,
               marginLeft: 4,
-              justifyContent: 'space-between',
+              // justifyContent: 'space-between',
             }}>
             <Text style={{ fontSize: 15, fontWeight: '500' }}>{truncate(name, 13)}</Text>
             <View
@@ -64,12 +66,12 @@ export default ({ name, thumUrl, restaurantLocation, userLocation, onPress }) =>
 
                 marginVertical: 5,
               }}>
-              <Rating rating="4.3" scale={12} />
-              {/* <Distance distance={calculateDistance(userLocation, restaurantLocation)} /> */}
-              <Distance distance="300M" />
+              <Rating rating={like} scale={12} />
+              <Distance distance={calculateDistance(userLocation, restaurantLocation)} />
+              {/* <Distance distance="300M" /> */}
             </View>
-            <PresentMenu menu="치즈피자" price="7000" fontSize={10} />
-            <PresentMenu menu="화덕피자" price="9000" fontSize={10} />
+            {menu[0] && <PresentMenu menu={menu[0].name} price={menu[0].price} fontSize={10} />}
+            {menu[1] && <PresentMenu menu={menu[1].name} price={menu[1].price} fontSize={10} />}
           </View>
           {/* <View style={{ flex: 1, alignItems: 'flex-end' }}> */}
           {/* <SeletedButton /> */}

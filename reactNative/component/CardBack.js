@@ -107,6 +107,7 @@ export default ({ menus, name, phoneNumber, address, lat, lng, userLocation }) =
             );
 
             if (canOpen) {
+              console.log('location', userLocation, lat, lng);
               Linking.openURL(
                 `kakaomap://route?sp=${userLocation.latitude},${userLocation.longitude}&ep=${lat},${lng}&by=FOOT`
               );

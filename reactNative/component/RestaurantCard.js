@@ -32,11 +32,12 @@ export default ({
   isSelected,
   fromHome = true,
   cardStyle,
+  from,
 }) => {
   // console.log(BookmarkArrayId);
   // console.log('BookmarkArrayId: ', BookmarkArrayId);
-
-  console.log('restaurant: ', restaurant);
+  // console.log(restaurant);
+  // console.log('restaurant: ', restaurant);
 
   const [isBookmark, setIsBookmark] = useState('');
 
@@ -181,7 +182,7 @@ export default ({
             {/* <AntDesign name="heart" size={24} color="black" /> */}
             {isBookmark !== undefined ? (
               <TouchableOpacity
-                style={{ position: 'absolute', alignSelf: 'flex-end', bottom: 0 }}
+                style={{ position: 'absolute', alignSelf: 'flex-end', bottom: 10, right: 10 }}
                 onPress={async () => {
                   if (isBookmark) {
                     const result = await apis.deleteBookmark(restaurant.id);
@@ -192,20 +193,24 @@ export default ({
                     const result = await apis.addBookmark(restaurant.id);
 
                     BookmarkArrayId?.current.push(restaurant.id);
-                    console.log(restaurant.id);
+                    // console.log(restaurant.id);
                     setIsBookmark(true);
                     console.log('result: ', result.data);
                   }
                 }}>
-                {isBookmark ? (
-                  <AntDesign name="heart" size={30} color="red" />
+                {from != 'bookmark' ? (
+                  isBookmark ? (
+                    <AntDesign name="heart" size={30} color="red" />
+                  ) : (
+                    <AntDesign
+                      name="heart"
+                      size={30}
+                      color="grey"
+                      style={{ alignSelf: 'flex-end' }}
+                    />
+                  )
                 ) : (
-                  <AntDesign
-                    name="heart"
-                    size={30}
-                    color="grey"
-                    style={{ alignSelf: 'flex-end' }}
-                  />
+                  <View />
                 )}
               </TouchableOpacity>
             ) : (
@@ -251,7 +256,11 @@ export default ({
                 justifyContent: 'space-between',
                 // backgroundColor: 'black',
               }}>
-              <RestaurantBasicInfo title={restaurant.name} distance={distance} point="4.4점" />
+              <RestaurantBasicInfo
+                title={restaurant.name}
+                distance={distance}
+                point={restaurant.like}
+              />
               <TouchableOpacity style={{ width: '20%', height: '40%' }} onPress={flipCard}>
                 <SeeMenuButton />
               </TouchableOpacity>

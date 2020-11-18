@@ -129,7 +129,7 @@ export default ({ bookmarkRestaurant, userLocation, myId, roomName, navigation }
                 justifyContent: 'space-between',
                 paddingHorizontal: 10,
               }}>
-              {bookmarkRestaurant.map((restaurant) => {
+              {bookmarkRestaurant?.map((restaurant) => {
                 const distance = calculateDistance(userLocation, {
                   latitude: restaurant.latitude,
                   longitude: restaurant.longitude,
@@ -140,7 +140,7 @@ export default ({ bookmarkRestaurant, userLocation, myId, roomName, navigation }
                     key={restaurant.id}
                     name={restaurant.name}
                     thumUrl={restaurant.thumUrl}
-                    like={restaurant.like}
+                    like={restaurant.likecnt}
                     distance={distance}
                     onPress={() => {
                       if (choosenRestaurants.length >= 2) {
@@ -164,9 +164,9 @@ export default ({ bookmarkRestaurant, userLocation, myId, roomName, navigation }
                 style={{
                   width: '100%',
                   height: 30,
-                  padding: 10,
+                  // padding: 10,
                   alignItems: 'center',
-                  marginBottom: 10,
+                  // marginBottom: 10,
                 }}>
                 <MyTextInput
                   placeholder="식당 이름을 검색해주세요"
@@ -177,12 +177,16 @@ export default ({ bookmarkRestaurant, userLocation, myId, roomName, navigation }
                 />
               </View>
               <View style={{ flex: 1, padding: 10 }}>
-                {searchRestaurant.map((obj, index) => {
+                {searchRestaurant?.map((obj, index) => {
+                  console.log('obj: ', obj);
+
                   return (
                     <SearchRestaurant
                       thumUrl={obj.thumUrl}
                       name={obj.name}
                       key={index}
+                      menu={obj.menu}
+                      like={obj.like}
                       userLocation={userLocation}
                       restaurantLocation={{ latitude: obj.latitude, longitude: obj.longitude }}
                       onPress={() => {

@@ -26,7 +26,7 @@ export default ({ navigation, route }) => {
               roomName: route.params.msg.roomName,
             })
           }>
-          <Text style={{ marginLeft: 10 }}>설정하기</Text>
+          <Text style={{ marginLeft: 10 }}>식당 후보 추가</Text>
         </TouchableOpacity>
       ),
       headerRight: () => (
@@ -93,9 +93,10 @@ export default ({ navigation, route }) => {
   const onClick = async () => {
     if (isSendMsg) return;
 
-    const location = await Location.getCurrentPositionAsync({});
-
     isSendMsg = true;
+    console.log(isSendMsg);
+
+    const location = await Location.getCurrentPositionAsync({});
 
     const jwtToken = await getInvalidToken();
 

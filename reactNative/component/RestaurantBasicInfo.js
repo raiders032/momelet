@@ -14,7 +14,7 @@ export default ({ title, distance, point }) => {
         </View>
         <Distance style={{ width: 55 }} distance={distance} />
       </View>
-      <Rating rating="4.4" scale={15} />
+      <Rating rating={point} scale={15} />
     </View>
   );
 };

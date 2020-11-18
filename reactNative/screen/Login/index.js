@@ -89,12 +89,12 @@ export default function App({ afterLogin }) {
 
   const bgY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -height / 2],
+    outputRange: [0, -height / 2.5],
   });
 
   const textInputY = animatedObj.interpolate({
     inputRange: [0, 1],
-    outputRange: [height / 2, 0],
+    outputRange: [height / 2.5, 0],
   });
 
   return (
@@ -116,7 +116,7 @@ export default function App({ afterLogin }) {
         </Svg>
       </Animated.View>
 
-      <View style={{ height: height / 2, justifyContent: 'center' }}>
+      <View style={{ height: height / 2.5, justifyContent: 'center' }}>
         <Animated.View
           style={{
             ...styles.button,

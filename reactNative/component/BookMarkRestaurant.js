@@ -6,7 +6,7 @@ import Distance from './Distance';
 import Rating from './Rating';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-export default ({ name, like, thumUrl, distance, onPress }) => {
+export default ({ name, like, thumUrl, distance, onPress, onPressHeartButton, from }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -31,7 +31,7 @@ export default ({ name, like, thumUrl, distance, onPress }) => {
             marginTop: 7,
           }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{name}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPressHeartButton}>
             <Image
               source={require('../assets/heart.png')}
               style={{ width: 20, height: 20, resizeMode: 'center' }}
@@ -40,7 +40,7 @@ export default ({ name, like, thumUrl, distance, onPress }) => {
         </View>
         <View style={{ paddingHorizontal: 5, marginTop: 5, flexDirection: 'row' }}>
           <Rating rating={like} scale={15} />
-          <Distance distance={distance} style={{ width: 50, height: 20 }} />
+          {from != 'bookmark' && <Distance distance={distance} style={{ width: 50, height: 20 }} />}
         </View>
       </View>
     </TouchableOpacity>

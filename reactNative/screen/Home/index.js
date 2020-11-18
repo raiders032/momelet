@@ -38,7 +38,7 @@ function App() {
           <Stack.Screen name="Tab" component={TabBar} options={{ headerShown: false }} />
           <Stack.Screen name="Mypage" component={MyPage} />
           <Stack.Screen name="Invite" component={Invite} options={{}} />
-          <Stack.Screen name="oneCard" component={oneCard} />
+          <Stack.Screen name="oneCard" component={oneCard} options={{ title: '식당 상세 정보' }} />
 
           <Stack.Screen
             name="WaitingRoomForStart"

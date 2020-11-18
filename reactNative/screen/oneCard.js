@@ -33,6 +33,7 @@ export default ({ route }) => {
             isSelected={route.params.fromSearch ? false : route.params.isSelected}
             userLocation={route.params.userLocation}
             fromHome={false}
+            from={route.params.from}
           />
         </View>
       </Basic>
