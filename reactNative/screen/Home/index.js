@@ -71,7 +71,11 @@ function App() {
               headerShown: false,
             }}
           />
-          <Stack.Screen name="GameSetting" component={GameSetting} />
+          <Stack.Screen
+            name="GameSetting"
+            component={GameSetting}
+            options={{ title: '식당 후보 추가' }}
+          />
         </Stack.Navigator>
 
         {/* <Stack.Navigator>

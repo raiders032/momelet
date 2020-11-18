@@ -43,9 +43,9 @@ export default ({ navigation, route }) => {
     });
 
     // console.log('filteredWithDistance: ', filteredWithDistance);
-    setBookmarkRestaurant(filteredWithDistance);
-    setUserLocation({ latitude: location.coords.latitude, longitude: location.coords.longitude });
     // setBookmarkRestaurant(filteredWithDistance);
+    setUserLocation({ latitude: location.coords.latitude, longitude: location.coords.longitude });
+    setBookmarkRestaurant(filteredWithDistance);
   };
 
   useEffect(() => {

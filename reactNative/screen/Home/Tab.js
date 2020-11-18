@@ -96,7 +96,7 @@ function TabBar() {
         name="Bookmark"
         component={Bookmark}
         options={{
-          title: '북마크',
+          title: '즐겨찾기',
           unmountOnBlur: true,
           tabBarIcon: ({ focused }) => {
             if (focused) {

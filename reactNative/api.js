@@ -46,7 +46,7 @@ export const apis = {
   getBookmark: (queryParams) =>
     makeRequest('get', `v1/bookmarks?page=0&size=20&&filter=${queryParams}`),
   searchRestaurant: (restaurantName, latitude, longitude, queryParams) =>
-    makeRequest('get', `v1/restaurants/search?page=0&&size=2&&filter=${queryParams}`, {
+    makeRequest('get', `v1/restaurants/search?page=0&&size=20&&filter=${queryParams}`, {
       params: { latitude, longitude, name: restaurantName, radius: 0.01 },
     }),
   getRestaurant: (latitude, longitude, id) =>
